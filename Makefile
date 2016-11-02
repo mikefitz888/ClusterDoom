@@ -2,14 +2,14 @@ CC := g++
 
 SRCDIR := src
 BUILDDIR := build
-TARGET := bin/runner
+TARGET := bin/
  
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -g # -Wall
-LIB := -pthread -lmongoclient -L lib -lboost_thread-mt -lboost_filesystem-mt -lboost_system-mt
-INC := -I include
+LIB := 
+INC := 
 
 $(TARGET): $(OBJECTS)
   @echo " Linking..."

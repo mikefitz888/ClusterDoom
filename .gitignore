@@ -1,0 +1,9 @@
+# Ignore the build and lib directories
+build
+lib/*
+
+# Ignore executables
+bin/*
+
+# Ignore Max files
+.DS_Store

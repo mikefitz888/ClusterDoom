@@ -1,3 +1,6 @@
+#ifndef SMARTPOINTERS_H
+#define SMARTPOINTERS_H
+
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -481,3 +484,5 @@ namespace smartpointers {
         return dynamic_cast<T*>(ptr.get()) != nullptr;
     }
 }
+
+#endif //SMARTPOINTERS_H

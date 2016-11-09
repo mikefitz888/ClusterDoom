@@ -1,63 +1,55 @@
+#ifndef MANAGER_H
+#define MANAGER_H
+
 #include <vector>
-#include "util.h"
+#include <map>
+#include "smartpointers.h"
 
-class Manager {
-	private:
-		std::vector<GameObject*> object_reference_pool;
+namespace manager {
+	using smartpointers::master_ptr;
+	using smartpointers::slave_ptr;
+	
+
+	typedef size_t id_t;
+
+	class Manager : private IRenderable {
+		//std::vector<master_ptr<GameObject>> game_object_pool;
+		std::map<id_t, master_ptr<GameObject>> game_object_pool;
+		std::vector<id_t> free_id_list;
+
+		TowerLogic tower_logic;
+		UnitLogic unit_logic;
+		GameLogic game_logic;
+
 	public:
-		std::vector<Tower*> getTowers();
-		Tower* createTower();
-		void removeTower(Point position);
+		Manager();
 
-		std::vector<Unit*> getUnits(); 
-		Unit* createUnit();
-		void removeUnit();
+		//Tower Methods
+		slave_ptr<Tower> createTower();
+		void destroyTower(slave_ptr<Tower>& tower);
+		std::vector<slave_ptr<Tower>> getTowers() const;
+
+		//Unit Methods
+		slave_ptr<Unit> createUnit();
+		void createUnit(slave_ptr<Unit>& unit);
+		std::vector<slave_ptr<Unit>> getUnits() const;
+
+		//Game Controller Methods (World Logic)
+		slave_ptr<GameObject> createObject();
+		void destroyObject(slave_ptr<GameObject>& obj);
+
+		//Network Methods
+		//void sendEvent();
+		//void receiveEvent();
+
+		//Manager Methods
+		void init() override;
+		void render() override;
+		void renderGUI() override;
+		void release() override;
 
 		void step();
-		void draw();
+	};
 }
 
-//TODO: FUNCTIONS FOR NETWORK INTERFACE
-//TODO: FUNCTIONS FOR WORLDLOGIC
-
-std::vector<Tower*> Manager::getTowers(){
-	return TowerLogic::getTowers();
-}
-
-Tower* Manager::createTower(){
-	Tower* created = TowerLogic::createTower();
-	object_reference_pool.push_back(created);
-	return created;
-}
-
-void Manager::removeTower(Point &position){
-	Tower* removed = TowerLogic::removeTower(Point position);
-	remove(object_reference_pool, removed); //util function, remove item from vector
-}
-
-std::vector<Unit*> Manager::getUnits(){
-	return UnitLogic::getUnits();
-}
-
-Unit* Manager::createUnit(){
-	Unit* created = UnitLogic::createUnit();
-	object_reference_pool.push_back(created);
-	return created;
-}
-
-void Manager::removeUnit(Unit* unit){
-	UnitLogic::removeUnit(unit);
-	remove(object_reference_pool, unit); //util function, remove item from vector
-}
-
-void Manager::step(){
-	TowerLogic::step();
-	UnitLogic::step();
-	WorldLogic::step();
-}
-
-void Manager::draw(){
-	TowerLogic::draw();
-	UnitLogic::draw();
-	WorldLogic::draw();
-}
+#endif //MANAGER_H

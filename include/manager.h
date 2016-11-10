@@ -21,6 +21,10 @@ namespace manager {
 		UnitLogic unit_logic;
 		GameLogic game_logic;
 
+		void addToPool(GameObject* game_object);
+		void removeFromPool(slave_ptr<GameObject>& game_object);
+		id_t getFreePoolKey();
+
 	public:
 		Manager();
 

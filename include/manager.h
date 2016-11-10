@@ -12,14 +12,14 @@ namespace manager {
 
 	typedef size_t id_t;
 
-	class Manager : private IRenderable {
+	class Manager {
 		//std::vector<master_ptr<GameObject>> game_object_pool;
 		std::map<id_t, master_ptr<GameObject>> game_object_pool;
 		std::vector<id_t> free_id_list;
 
 		TowerLogic tower_logic;
 		UnitLogic unit_logic;
-		GameLogic game_logic;
+		GameLogic game_logic; //IRenderable
 
 		void addToPool(GameObject* game_object);
 		void removeFromPool(slave_ptr<GameObject>& game_object);
@@ -47,10 +47,10 @@ namespace manager {
 		//void receiveEvent();
 
 		//Manager Methods
-		void init() override;
-		void render() override;
-		void renderGUI() override;
-		void release() override;
+		void init();
+		void render();
+		void renderGUI();
+		void release();
 
 		void step();
 	};

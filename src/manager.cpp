@@ -54,13 +54,33 @@ namespace manager {
 	}
 
 	// This removes the free key from list so ensure it is used to create a GameObject
-	id_t getFreePoolKey(){
+	id_t Manager::getFreePoolKey(){
 		if(!free_id_list.size()){
 			return game_object_pool.size();
 		}
 		id_t id = free_id_list.back();
 		free_id_list.pop_back();
 		return id;
+	}
+
+	void Manager::init(){
+
+	}
+
+	void Manager::render(){
+
+	}
+
+	void Manager::renderGUI(){
+
+	}
+
+	void Manager::release(){
+		
+	}
+
+	void Manager::step(){
+
 	}
 
 }

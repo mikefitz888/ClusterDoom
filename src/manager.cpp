@@ -5,7 +5,7 @@ namespace manager {
 
 	//Tower Methods
 	slave_ptr<Tower> Manager::createTower(){
-		GameObject* obj = tower_logic::createObject( getFreePoolKey() );
+		GameObject* obj = tower_logic.createObject( getFreePoolKey() );
 		addToPool(obj);
 	}
 
@@ -14,12 +14,12 @@ namespace manager {
 	}
 
 	std::vector<slave_ptr<Tower>> Manager::getTowers() const {
-		return tower_logic::getTowers();
+		return tower_logic.getTowers();
 	}
 
 	//Unit Methods
 	slave_ptr<Unit> Manager::createUnit(){
-		GameObject* obj = unit_logic::createObject( getFreePoolKey() );
+		GameObject* obj = unit_logic.createObject( getFreePoolKey() );
 		addToPool(obj);
 	}
 
@@ -28,12 +28,12 @@ namespace manager {
 	}
 
 	std::vector<slave_ptr<Unit>> Manager::getUnits() const {
-		return unit_logic::getUnits();
+		return unit_logic.getUnits();
 	}
 
 	//Game Controller Methods
 	slave_ptr<GameObject> Manager::createObject(){
-		GameObject* obj = game_logic::createObject( getFreePoolKey() );
+		GameObject* obj = game_logic.createObject( getFreePoolKey() );
 		addToPool(obj);
 	}
 
@@ -63,6 +63,7 @@ namespace manager {
 		return id;
 	}
 
+	//Manager is not IRenderable but is in control of some
 	void Manager::init(){
 
 	}
@@ -76,7 +77,7 @@ namespace manager {
 	}
 
 	void Manager::release(){
-		
+
 	}
 
 	void Manager::step(){

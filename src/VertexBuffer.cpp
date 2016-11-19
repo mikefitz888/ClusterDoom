@@ -1,4 +1,4 @@
-#include "VertexBuffer.h"
+#include "../include/VertexBuffer.h"
 #include <iostream>
 
 namespace graphics {

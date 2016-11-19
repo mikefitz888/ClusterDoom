@@ -4,11 +4,17 @@
 #include <vector>
 #include <map>
 #include "smartpointers.h"
+#include "unitlogic.h"
+#include "towerlogic.h"
+#include "gameobject.h"
+#include "gamecontroller.h"
 
 namespace manager {
 	using smartpointers::master_ptr;
 	using smartpointers::slave_ptr;
-	
+	using tower_logic::TowerLogic;
+	using unit_logic::UnitLogic;
+	using gamecontroller::gamecontroller;
 
 	typedef size_t id_t;
 

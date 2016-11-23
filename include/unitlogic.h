@@ -11,11 +11,9 @@ namespace unitlogic {
 
 	class UnitLogic {
 	public:
-		std::vector<unit_ptr> getUnits() const;
-		Unit* createUnit(int key);
-		Unit* removeUnit(Unit& unit);
-		void step();
-		void draw();
+		inline std::vector<unit_ptr> getUnits() const {return std::vector<unit_ptr>();}
+		inline Unit* createUnit(int key) {return new Unit(key);}
+		inline Unit* removeUnit(Unit& unit) {return new Unit(0);} //placehodor
 	private:
 	};
 }

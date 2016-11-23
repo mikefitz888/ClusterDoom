@@ -6,7 +6,8 @@
 namespace tower {
 	using gameobject::GameObject;
 	class Tower : public GameObject {
-		Tower();
+	public:
+		inline Tower(id_t id) : GameObject(id) { }
 	};
 }
 

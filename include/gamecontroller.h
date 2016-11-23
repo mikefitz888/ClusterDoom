@@ -9,12 +9,12 @@ namespace gamecontroller {
 	using gameobject::GameObject;
 	class GameController : public IRenderable {
 	public:
-		GameController();
-		void init();
-		void render();
-		void renderGUI();
-		void release();
-		GameObject* createObject(int key);
+		inline GameController(){}
+		void init() final override {}
+		void render() final override {}
+		void renderGUI() final override {}
+		void release() final override {}
+		inline GameObject* createObject(int key) {return new GameObject(key);}
 	};
 }
 

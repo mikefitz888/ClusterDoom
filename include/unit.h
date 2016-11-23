@@ -6,7 +6,8 @@
 namespace unit {
 	using gameobject::GameObject;
 	class Unit : public GameObject {
-		Unit();
+	public:
+		inline Unit(id_t id) : GameObject(id) {}
 	};
 }
 

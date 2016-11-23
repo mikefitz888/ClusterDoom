@@ -13,6 +13,10 @@ namespace gameobject {
 	public:
 		inline GameObject(id_t id) : id_(id) {} //Very important to get key from manager (for memory management + networking)
 		inline id_t getID() { return id_; }
+		virtual void render() override {};
+		virtual void init() override {};
+		virtual void renderGUI() override {};
+		virtual void release() override {};
 		inline virtual ~GameObject() {};
 	};
 }

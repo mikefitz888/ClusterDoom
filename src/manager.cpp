@@ -7,6 +7,7 @@ namespace manager {
 	slave_ptr<Tower> Manager::createTower(){
 		GameObject* obj = tower_logic.createTower( getFreePoolKey() );
 		addToPool(obj);
+		//return slave_ptr<Tower>(game_object_pool[obj->getID()]);
 	}
 
 	void Manager::destroyTower(slave_ptr<Tower> tower){
@@ -21,6 +22,7 @@ namespace manager {
 	slave_ptr<Unit> Manager::createUnit(){
 		GameObject* obj = unit_logic.createUnit( getFreePoolKey() );
 		addToPool(obj);
+		//return slave_ptr<Unit>(game_object_pool[obj->getID()]);
 	}
 
 	void Manager::destroyUnit(slave_ptr<Unit>& unit){

@@ -1,4 +1,4 @@
-#include "Network.h"
+#include "../include/network/Network.h"
 
 //// -------------------------------------------------------------------------------- //////
 // NETWORK MANAGER
@@ -48,7 +48,7 @@ void NetworkManager::networkStep() {
 }
 
 void NetworkManager::newConnection(sf::TcpSocket *sfc, sf::IpAddress ip) {
-	NetworkClient *new_client = new NetworkClient(sfc, ip, this);
+	NetworkClient *new_client = new NetworkClient(sfc, ip, this); //NetworkClient(sf::TcpSocket *socket, sf::IpAddress ip, NetworkManager* manager);
 	clients.push_back(new_client);
 	new_client->setID(connection_identifier_max);
 	connection_identifier_max++;
@@ -178,7 +178,7 @@ void NetworkClient::disconnect(char* reason) {
 void NetworkClient::release() {
 
 	// Send disconnect message
-	disconnect("Connection Closed By Server");
+	disconnect((char*) "Connection Closed By Server");
 
 	// Disconnect socket
 	socket->disconnect();

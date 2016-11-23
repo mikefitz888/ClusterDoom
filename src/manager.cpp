@@ -1,30 +1,30 @@
 #include "../include/manager.h"
 
 namespace manager {
-	Manager::Manager() : tower_logic(), unit_logic(), game_logic() { /* Initializer list preferred, less contructor calls */ }
+	Manager::Manager() : tower_logic(), unit_logic() { /* Initializer list preferred, less contructor calls */ }
 
 	//Tower Methods
 	slave_ptr<Tower> Manager::createTower(){
-		GameObject* obj = tower_logic.createObject( getFreePoolKey() );
+		GameObject* obj = tower_logic.createTower( getFreePoolKey() );
 		addToPool(obj);
 	}
 
-	void Manager::destroyTower(slave_ptr<Tower>& tower){
-		removeFromPool(tower);
+	void Manager::destroyTower(slave_ptr<Tower> tower){
+		removeFromPool(smartpointers::static_pointer_cast<GameObject>(tower));
 	}
 
 	std::vector<slave_ptr<Tower>> Manager::getTowers() const {
-		return tower_logic.getTowers();
+		return (this->tower_logic).getTowers();
 	}
 
 	//Unit Methods
 	slave_ptr<Unit> Manager::createUnit(){
-		GameObject* obj = unit_logic.createObject( getFreePoolKey() );
+		GameObject* obj = unit_logic.createUnit( getFreePoolKey() );
 		addToPool(obj);
 	}
 
 	void Manager::destroyUnit(slave_ptr<Unit>& unit){
-		removeFromPool(unit);
+		removeFromPool(smartpointers::static_pointer_cast<GameObject>(unit));
 	}
 
 	std::vector<slave_ptr<Unit>> Manager::getUnits() const {
@@ -43,13 +43,14 @@ namespace manager {
 
 	// Object Pool Methods
 	void Manager::addToPool(GameObject* game_object){
-		game_object_pool.insert(std::pair<id_t, master_ptr<GameObject>>(game_object->getID(), make_master(game_object)));
+		game_object_pool.insert(std::pair<id_t, master_ptr<GameObject>>(game_object->getID(), master_ptr<GameObject>(game_object)));
 	}
 
 	// Destroys the master_ptr
-	void Manager::removeFromPool(slave_ptr<GameObject>& game_object){
+	void Manager::removeFromPool(slave_ptr<GameObject> game_object){
 		id_t id = game_object->getID();
-		delete game_object_pool[id];
+		//TODO: fix required, does not compile
+		//game_object_pool[id].destroy();
 		free_id_list.push_back(id);
 	}
 

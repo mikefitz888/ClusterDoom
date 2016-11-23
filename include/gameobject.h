@@ -4,9 +4,11 @@
 #include "RenderManager.h"
 
 namespace gameobject {
-	using size_t id_t;
+	using graphics::IRenderable;
+	
+	typedef size_t id_t;
 
-	class GameObject : public virtual IRenderable {
+	class GameObject : public IRenderable {
 		const id_t id_;
 	public:
 		GameObject(id_t id); //Very important to get key from manager (for memory management + networking)

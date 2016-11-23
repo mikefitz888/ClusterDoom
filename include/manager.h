@@ -8,13 +8,18 @@
 #include "towerlogic.h"
 #include "gameobject.h"
 #include "gamecontroller.h"
+#include "unit.h"
+#include "tower.h"
 
 namespace manager {
 	using smartpointers::master_ptr;
 	using smartpointers::slave_ptr;
-	using tower_logic::TowerLogic;
-	using unit_logic::UnitLogic;
-	using gamecontroller::gamecontroller;
+	using towerlogic::TowerLogic;
+	using unitlogic::UnitLogic;
+	using gamecontroller::GameController;
+	using unit::Unit;
+	using tower::Tower;
+	using gameobject::GameObject;
 
 	typedef size_t id_t;
 
@@ -25,10 +30,10 @@ namespace manager {
 
 		TowerLogic tower_logic;
 		UnitLogic unit_logic;
-		GameLogic game_logic; //IRenderable
+		GameController game_logic; //IRenderable
 
 		void addToPool(GameObject* game_object);
-		void removeFromPool(slave_ptr<GameObject>& game_object);
+		void removeFromPool(slave_ptr<GameObject> game_object);
 		id_t getFreePoolKey();
 
 	public:
@@ -36,12 +41,12 @@ namespace manager {
 
 		//Tower Methods
 		slave_ptr<Tower> createTower();
-		void destroyTower(slave_ptr<Tower>& tower);
+		void destroyTower(slave_ptr<Tower> tower);
 		std::vector<slave_ptr<Tower>> getTowers() const;
 
 		//Unit Methods
 		slave_ptr<Unit> createUnit();
-		void createUnit(slave_ptr<Unit>& unit);
+		void destroyUnit(slave_ptr<Unit>& unit);
 		std::vector<slave_ptr<Unit>> getUnits() const;
 
 		//Game Controller Methods (World Logic)

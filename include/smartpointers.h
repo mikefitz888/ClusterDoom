@@ -167,6 +167,7 @@ namespace smartpointers {
         inline void reset()
         {
             delete this->payload;
+            this->payload = nullptr;
             if (this->validity) {
                 if (*this->validity == 1) delete this->validity;
                 else {
@@ -202,8 +203,8 @@ namespace smartpointers {
 
         ~master_ptr() { reset(); }
 
-        inline void destroy() {
-            delete this;
+        inline void invalidate() {
+            reset();
         }
 
         inline master_ptr<T>& operator=(master_ptr<T>&& r) noexcept {

@@ -2,7 +2,6 @@
 #define MANAGER_H
 
 #include <vector>
-#include <map>
 #include "smartpointers.h"
 #include "unitlogic.h"
 #include "towerlogic.h"
@@ -10,10 +9,12 @@
 #include "gamecontroller.h"
 #include "unit.h"
 #include "tower.h"
+#include <iostream>
 
 namespace manager {
 	using smartpointers::master_ptr;
 	using smartpointers::slave_ptr;
+	using smartpointers::static_pointer_cast;
 	using towerlogic::TowerLogic;
 	using unitlogic::UnitLogic;
 	using gamecontroller::GameController;
@@ -25,7 +26,7 @@ namespace manager {
 
 	class Manager {
 		//std::vector<master_ptr<GameObject>> game_object_pool;
-		std::map<id_t, master_ptr<GameObject>> game_object_pool;
+		std::vector<master_ptr<GameObject>> game_object_pool;
 		std::vector<id_t> free_id_list;
 
 		TowerLogic tower_logic;
@@ -38,7 +39,6 @@ namespace manager {
 
 	public:
 		Manager();
-
 		//Tower Methods
 		slave_ptr<Tower> createTower();
 		void destroyTower(slave_ptr<Tower> tower);

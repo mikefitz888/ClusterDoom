@@ -78,7 +78,7 @@ public:
 	};
 };
 
-int main() {
+/*int main() {
 
 	// Create new RenderScene
 	IRenderable *scene = new TempRenderScene();
@@ -104,4 +104,4 @@ int main() {
 	RenderManager::release();
 
 	return 0;
-}
+}*/

@@ -69,6 +69,7 @@ void NetworkManager::removeConnection(NetworkClient *network_client) {
 void NetworkManager::release() {
 	for (NetworkClient* it : clients) {
 		it->release();
+		delete it;
 	}
 	listener->close();
 }

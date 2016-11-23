@@ -11,12 +11,10 @@ namespace gameobject {
 	class GameObject : public IRenderable {
 		const id_t id_;
 	public:
-		GameObject(id_t id); //Very important to get key from manager (for memory management + networking)
-		id_t getID();
+		inline GameObject(id_t id) : id_(id) {} //Very important to get key from manager (for memory management + networking)
+		inline id_t getID() { return id_; }
+		inline virtual ~GameObject() {};
 	};
-
-	GameObject::GameObject(id_t id) : id_(id) {}
-	id_t GameObject::getID() { return id_; }
 }
 
 #endif //GAMEOBJECT_H

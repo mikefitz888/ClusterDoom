@@ -7,11 +7,11 @@ namespace manager {
 	slave_ptr<Tower> Manager::createTower(){
 		GameObject* obj = tower_logic.createTower( getFreePoolKey() );
 		addToPool(obj);
-		//return slave_ptr<Tower>(game_object_pool[obj->getID()]);
+		return slave_ptr<Tower>( static_pointer_cast<Tower>(game_object_pool[obj->getID()]) );
 	}
 
 	void Manager::destroyTower(slave_ptr<Tower> tower){
-		removeFromPool(smartpointers::static_pointer_cast<GameObject>(tower));
+		removeFromPool(static_pointer_cast<GameObject>(tower));
 	}
 
 	std::vector<slave_ptr<Tower>> Manager::getTowers() const {
@@ -22,7 +22,7 @@ namespace manager {
 	slave_ptr<Unit> Manager::createUnit(){
 		GameObject* obj = unit_logic.createUnit( getFreePoolKey() );
 		addToPool(obj);
-		//return slave_ptr<Unit>(game_object_pool[obj->getID()]);
+		return slave_ptr<Unit>( static_pointer_cast<Unit>(game_object_pool[obj->getID()]) );
 	}
 
 	void Manager::destroyUnit(slave_ptr<Unit>& unit){
@@ -37,6 +37,7 @@ namespace manager {
 	slave_ptr<GameObject> Manager::createObject(){
 		GameObject* obj = game_logic.createObject( getFreePoolKey() );
 		addToPool(obj);
+		return game_object_pool[obj->getID()];
 	}
 
 	void Manager::destroyObject(slave_ptr<GameObject>& obj){
@@ -45,14 +46,22 @@ namespace manager {
 
 	// Object Pool Methods
 	void Manager::addToPool(GameObject* game_object){
-		game_object_pool.insert(std::pair<id_t, master_ptr<GameObject>>(game_object->getID(), master_ptr<GameObject>(game_object)));
+		id_t id = game_object->getID();
+		if(id < game_object_pool.size()){
+			game_object_pool[id] = master_ptr<GameObject>(game_object);
+		}else{
+			if(id == game_object_pool.size()){
+				game_object_pool.push_back(master_ptr<GameObject>(game_object));
+			}else{
+				std::cout << "Jamie is trash, this is an error btw";
+			}
+		}
 	}
 
 	// Destroys the master_ptr
 	void Manager::removeFromPool(slave_ptr<GameObject> game_object){
 		id_t id = game_object->getID();
-		//TODO: fix required, does not compile
-		//game_object_pool[id].destroy();
+		game_object_pool[id].invalidate();
 		free_id_list.push_back(id);
 	}
 

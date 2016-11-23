@@ -13,13 +13,16 @@
 
 using std::vector;
 
+//Forward Declaration
+class NetworkManager;
+
 /// Network Client
 class NetworkClient {
 	friend class NetworkManager;
 
 private:
 	enum ConnectionState { DISCONNECTED, UNVERIFIED, SECURITY, VERIFIED };
-	NetworkClient(sf::TcpSocket *socket, sf::IpAddress ip, NetworkManager* manager);
+	explicit NetworkClient(sf::TcpSocket *socket, sf::IpAddress ip, NetworkManager* manager);
 
 	int             connection_id = 0;
 	sf::TcpSocket   *socket;

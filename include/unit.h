@@ -3,6 +3,8 @@
 
 #include "gameobject.h"
 
+using gameobject::id_t;
+
 namespace unit {
 	using gameobject::GameObject;
 	class Unit : public GameObject {

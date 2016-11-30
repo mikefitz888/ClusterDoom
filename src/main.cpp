@@ -3,9 +3,9 @@
 #include "../include/RenderManager.h"
 #include <iostream>
 
-
 using manager::Manager;
 using namespace graphics;
+using namespace network;
 
 int main(int argc, char* argv[]){
 	Manager model = Manager();

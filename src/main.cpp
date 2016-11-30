@@ -16,8 +16,9 @@ int main(int argc, char* argv[]){
 
 	// Rendering
 	RenderManager rm;
-	rm.init();
-	rm.setWindowTitle("Clusterdoom");
+	model.initRender(rm);
+	//rm.init();
+	//rm.setWindowTitle("Clusterdoom");
 
 	bool running = true;
 	while (running) {
@@ -25,12 +26,12 @@ int main(int argc, char* argv[]){
 		nm.networkStep();
 
 		// Render
-		running = rm.render();
+		running = model.render();
 	}
 
 	// Cleanup
 	nm.release();
-	rm.release();
+	model.releaseRender();
 
 	return 0;
 }

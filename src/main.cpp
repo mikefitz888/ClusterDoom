@@ -15,8 +15,9 @@ int main(int argc, char* argv[]){
 	NetworkManager nm;
 
 	// Rendering
-	RenderManager::init();
-	RenderManager::setWindowTitle("Clusterdoom");
+	RenderManager rm;
+	rm.init();
+	rm.setWindowTitle("Clusterdoom");
 
 	bool running = true;
 	while (running) {
@@ -24,12 +25,12 @@ int main(int argc, char* argv[]){
 		nm.networkStep();
 
 		// Render
-		running = RenderManager::render();
+		running = rm.render();
 	}
 
 	// Cleanup
 	nm.release();
-	RenderManager::release();
+	rm.release();
 
 	return 0;
 }

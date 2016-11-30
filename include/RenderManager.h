@@ -16,7 +16,7 @@
 */
 
 namespace graphics {
-
+	class RenderManager;
 	class GCamera {
 
 		protected:
@@ -28,8 +28,8 @@ namespace graphics {
 			glm::mat4 view_matrix;
 			glm::mat4 projection_matrix;
 			glm::mat4 vp_matrix;
-
-
+			RenderManager *render_manager;
+			inline GCamera(RenderManager* render_manager_) : render_manager(render_manager_) {}
 
 		public:
 			void setCameraPosition(float x, float y, float z);
@@ -44,7 +44,7 @@ namespace graphics {
 			int width, height;
 
 		public:
-			GCameraOrtho(int width, int height);
+			inline GCameraOrtho(int width_, int height_, RenderManager *render_manager_) : GCamera(render_manager_), width(width_), height(height_) {}
 			virtual void renderCamera();
 	};
 
@@ -68,29 +68,29 @@ namespace graphics {
 	*/
 	class RenderManager {
 
-		protected:
+		//protected:
 
-			static RenderManager render_manager;
+			//static RenderManager render_manager;
 
 		public:
 
-			static void init();
-			static void setWindowFullScreen(bool fullscreen);
-			static void setWindowTitle(const sf::String title);
-			static void setWindowSize(int width, int height);
-			static bool render();
-			static void setActiveShader(sf::Shader *shd);
-			static void setTexture(sf::Texture *tex);
-			static void setTextureExt(sf::Texture *tex, GLuint texture_unit);
-			static void setRenderParent(IRenderable *render_instance);
-			static sf::Shader* createShaderFromFile(const std::string &vertex_shader_filename, const std::string &fragment_shader_filename);
-			static void release();
-			static float getAspect();
-			static void setViewProjection(glm::mat4 *vp_matrix);
+			void init();
+			void setWindowFullScreen(bool fullscreen);
+			void setWindowTitle(const sf::String title);
+			void setWindowSize(int width, int height);
+			bool render();
+			void setActiveShader(sf::Shader *shd);
+			void setTexture(sf::Texture *tex);
+			void setTextureExt(sf::Texture *tex, GLuint texture_unit);
+			void setRenderParent(IRenderable *render_instance);
+			sf::Shader* createShaderFromFile(const std::string &vertex_shader_filename, const std::string &fragment_shader_filename);
+			void release();
+			float getAspect();
+			void setViewProjection(glm::mat4 *vp_matrix);
 
-			static glm::mat4 getWorldMatrix();
-			static void setWorldMatrix(glm::mat4 world_matrix);
-			static void setWorldMatrixIdentity();
+			glm::mat4 getWorldMatrix();
+			void setWorldMatrix(glm::mat4 world_matrix);
+			void setWorldMatrixIdentity();
 
 
 		private:
@@ -99,9 +99,9 @@ namespace graphics {
 			int width = 1280, height = 720;
 			bool fullscreen = false;
 			sf::Window *window;
-			sf::Shader *active_shader;		/* Whilst shaders can be changed, it needs to be done through the RenderManager
+			sf::Shader *active_shader = NULL;		/* Whilst shaders can be changed, it needs to be done through the RenderManager
 											so that binding textures/other graphics resources know which shader uniforms to modify */
-			IRenderable *render_parent;		/* The top-most node in the composite rendering pattern (This should render any children in its own render method)*/
+			IRenderable *render_parent = NULL;		/* The top-most node in the composite rendering pattern (This should render any children in its own render method)*/
 
 			// Transformation + Rendering
 			glm::mat4 world_matrix;			/* Matrix used to represent the current transformation state */

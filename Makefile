@@ -8,7 +8,7 @@ SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -std=c++11 -g -Wall -Wextra -pedantic
-LIB := -L glew/lib -lGL -lGLEW -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
+LIB := -L lib/glew/ -lGL -lGLEW -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
 INC := 
 
 $(TARGET): $(OBJECTS)
@@ -23,8 +23,8 @@ clean:
 	@echo " Cleaning..."; 
 	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
 
-run: 
-	export LD_LIBRARY_PATH=glew/lib; \
+run:
+	export LD_LIBRARY_PATH=$(PWD)/lib/glew/; \
 	$(TARGET)
 
 # Tests

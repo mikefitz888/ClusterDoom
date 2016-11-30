@@ -10,6 +10,7 @@
 #include "unit.h"
 #include "tower.h"
 #include <iostream>
+#include "RenderManager.h"
 
 namespace manager {
 	using smartpointers::master_ptr;
@@ -21,6 +22,7 @@ namespace manager {
 	using unit::Unit;
 	using tower::Tower;
 	using gameobject::GameObject;
+	using graphics::RenderManager;
 
 	typedef size_t id_t;
 
@@ -32,6 +34,8 @@ namespace manager {
 		TowerLogic tower_logic;
 		UnitLogic unit_logic;
 		GameController game_logic; //IRenderable
+
+		RenderManager* render_manager;
 
 		void addToPool(GameObject* game_object);
 		void removeFromPool(slave_ptr<GameObject> game_object);
@@ -58,10 +62,10 @@ namespace manager {
 		//void receiveEvent();
 
 		//Manager Methods
-		void init();
-		void render();
+		inline void initRender(RenderManager &rm) { render_manager=&rm; render_manager->init(); }
+		inline bool render() { return render_manager->render(); }
 		void renderGUI();
-		void release();
+		inline void releaseRender(){ render_manager->release(); }
 
 		void step();
 	};

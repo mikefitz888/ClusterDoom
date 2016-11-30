@@ -76,19 +76,8 @@ namespace manager {
 	}
 
 	//Manager is not IRenderable but is in control of some
-	void Manager::init(){
-
-	}
-
-	void Manager::render(){
-
-	}
 
 	void Manager::renderGUI(){
-
-	}
-
-	void Manager::release(){
 
 	}
 

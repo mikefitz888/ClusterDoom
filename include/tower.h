@@ -2,7 +2,6 @@
 #define TOWER_H
 
 #include "gameobject.h"
-#include "RenderManager.h"
 
 namespace manager {
 	class Manager;

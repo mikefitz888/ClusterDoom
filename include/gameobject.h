@@ -2,7 +2,7 @@
 #define GAMEOBJECT_H
 
 #include "RenderManager.h"
-#include "manager.h"
+#include "VertexBuffer.h"
 
 namespace manager {
 	class Manager;

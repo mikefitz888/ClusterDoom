@@ -2,7 +2,6 @@
 #define GAMEOBJECT_H
 
 #include "RenderManager.h"
-#include "manager.h"
 
 namespace manager {
 	class Manager;

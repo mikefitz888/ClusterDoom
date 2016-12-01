@@ -22,6 +22,7 @@ namespace unitlogic {
 		inline Unit* createUnit(int key) {return new Unit(key, NULL);}
 		//inline master_ptr<GameObject> createUnit(int key) { return make_master<GameObject, Unit>(key); }
 		inline Unit* removeUnit(Unit& unit) {return new Unit(0, NULL);} //placehodor
+		inline void giveSlavePtr(unit_ptr unit){}
 	};
 }
 

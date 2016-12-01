@@ -14,6 +14,7 @@ namespace tower {
 	using manager::Manager;
 
 	class Tower : public GameObject {
+	protected:
 		int x;
 		int y;
 	public:

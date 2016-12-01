@@ -53,7 +53,7 @@ namespace manager {
 			if(id == game_object_pool.size()){
 				game_object_pool.push_back(master_ptr<GameObject>(game_object));
 			}else{
-				std::cout << "Jamie is trash, this is an error btw";
+				std::cout << "Invalid key, investigate.";
 			}
 		}
 	}

@@ -5,16 +5,25 @@
 #include "smartpointers.h"
 #include "unitlogic.h"
 #include "towerlogic.h"
-#include "gameobject.h"
 #include "gamecontroller.h"
-#include "unit.h"
-#include "tower.h"
 #include <iostream>
 #include "RenderManager.h"
 #include "WorldRenderer.h"
 
 namespace worldrenderer {
 	class WorldRenderer;
+}
+
+namespace unit {
+	class Unit;
+}
+
+namespace tower {
+	class Tower;
+}
+
+namespace gameobject {
+	GameObject;
 }
 
 namespace manager {

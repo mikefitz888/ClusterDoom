@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
 
 	// Rendering
 	RenderManager rm;
-	model.initRender(rm);
+	model.initRenderManager(rm);
 	//rm.init();
 	//rm.setWindowTitle("Clusterdoom");
 

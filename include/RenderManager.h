@@ -98,7 +98,7 @@ namespace graphics {
 			GCamera *camera;
 			int width = 1280, height = 720;
 			bool fullscreen = false;
-			sf::Window *window;
+			sf::Window *window = NULL;
 			sf::Shader *active_shader = NULL;		/* Whilst shaders can be changed, it needs to be done through the RenderManager
 											so that binding textures/other graphics resources know which shader uniforms to modify */
 			IRenderable *render_parent = NULL;		/* The top-most node in the composite rendering pattern (This should render any children in its own render method)*/

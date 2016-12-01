@@ -11,6 +11,11 @@
 #include "tower.h"
 #include <iostream>
 #include "RenderManager.h"
+#include "WorldRenderer.h"
+
+namespace worldrenderer {
+	class WorldRenderer;
+}
 
 namespace manager {
 	using smartpointers::master_ptr;
@@ -23,6 +28,7 @@ namespace manager {
 	using tower::Tower;
 	using gameobject::GameObject;
 	using graphics::RenderManager;
+	using worldrenderer::WorldRenderer;
 
 	typedef size_t id_t;
 
@@ -35,7 +41,8 @@ namespace manager {
 		UnitLogic unit_logic;
 		GameController game_logic; //IRenderable
 
-		RenderManager* render_manager;
+		RenderManager* render_manager = NULL;
+		WorldRenderer* world_renderer = NULL;
 
 		void addToPool(GameObject* game_object);
 		void removeFromPool(slave_ptr<GameObject> game_object);
@@ -62,10 +69,11 @@ namespace manager {
 		//void receiveEvent();
 
 		//Manager Methods
-		inline void initRender(RenderManager &rm) { render_manager=&rm; render_manager->init(); }
-		inline bool render() { return render_manager->render(); }
-		void renderGUI();
-		inline void releaseRender(){ render_manager->release(); }
+		void initRenderManager(RenderManager &rm);
+		bool render();
+		RenderManager* getRenderManager();
+		void releaseRender();
+		
 
 		void step();
 	};

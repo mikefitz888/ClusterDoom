@@ -75,14 +75,29 @@ namespace manager {
 		return id;
 	}
 
-	//Manager is not IRenderable but is in control of some
-
-	void Manager::renderGUI(){
+	void Manager::step(){
 
 	}
 
-	void Manager::step(){
-
+	void Manager::initRenderManager(RenderManager &rm) { 
+		render_manager=&rm;
+		world_renderer = new WorldRenderer(this);
+		world_renderer->init();
+	}
+	bool Manager::render() {
+		if(world_renderer != NULL) {
+			world_renderer->render(); 
+			return true; 
+		}
+		return false;
+	}
+	RenderManager* Manager::getRenderManager() { 
+		return render_manager;
+	}
+	void Manager::releaseRender() { 
+		render_manager->release(); 
+		render_manager = NULL;
+		delete world_renderer;
 	}
 
 }

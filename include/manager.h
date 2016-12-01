@@ -30,6 +30,14 @@ namespace towerlogic {
 	class TowerLogic;
 }
 
+namespace unitlogic {
+	class UnitLogic;
+}
+
+namespace gamecontroller {
+	class GameController;
+}
+
 namespace manager {
 	using gameobject::GameObject;
 	using smartpointers::master_ptr;
@@ -50,9 +58,9 @@ namespace manager {
 		std::vector<master_ptr<GameObject>> game_object_pool;
 		std::vector<id_t> free_id_list;
 
-		TowerLogic tower_logic;
-		UnitLogic unit_logic;
-		GameController game_logic; //IRenderable
+		TowerLogic* tower_logic;
+		UnitLogic* unit_logic;
+		GameController* game_logic; //IRenderable
 
 		RenderManager* render_manager = NULL;
 		WorldRenderer* world_renderer = NULL;

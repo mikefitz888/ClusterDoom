@@ -1,11 +1,14 @@
 #include "../include/manager.h"
 
 namespace manager {
-	Manager::Manager() : tower_logic(this), unit_logic(this) { /* Initializer list preferred, less contructor calls */ }
+	Manager::Manager() {
+		tower_logic = new TowerLogic(this);
+		unit_logic = new UnitLogic(this);
+	}
 
 	//Tower Methods
 	slave_ptr<Tower> Manager::createTower(){
-		GameObject* obj = tower_logic.createTower( getFreePoolKey() );
+		GameObject* obj = tower_logic->createTower( getFreePoolKey() );
 		addToPool(obj);
 		return slave_ptr<Tower>( static_pointer_cast<Tower>(game_object_pool[obj->getID()]) );
 	}
@@ -15,12 +18,12 @@ namespace manager {
 	}
 
 	std::vector<slave_ptr<Tower>> Manager::getTowers() const {
-		return (this->tower_logic).getTowers();
+		return (this->tower_logic)->getTowers();
 	}
 
 	//Unit Methods
 	slave_ptr<Unit> Manager::createUnit(){
-		GameObject* obj = unit_logic.createUnit( getFreePoolKey() );
+		GameObject* obj = unit_logic->createUnit( getFreePoolKey() );
 		addToPool(obj);
 		return slave_ptr<Unit>( static_pointer_cast<Unit>(game_object_pool[obj->getID()]) );
 	}
@@ -30,12 +33,12 @@ namespace manager {
 	}
 
 	std::vector<slave_ptr<Unit>> Manager::getUnits() const {
-		return unit_logic.getUnits();
+		return unit_logic->getUnits();
 	}
 
 	//Game Controller Methods
 	slave_ptr<GameObject> Manager::createObject(){
-		GameObject* obj = game_logic.createObject( getFreePoolKey() );
+		GameObject* obj = game_logic->createObject( getFreePoolKey() );
 		addToPool(obj);
 		return game_object_pool[obj->getID()];
 	}

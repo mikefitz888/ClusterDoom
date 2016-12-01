@@ -2,6 +2,7 @@
 #define TOWER_H
 
 #include "gameobject.h"
+#include "manager.h"
 
 namespace manager {
 	class Manager;

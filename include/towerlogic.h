@@ -4,9 +4,14 @@
 #include <vector>
 #include "smartpointers.h"
 #include "tower.h"
+#include "manager.h"
 
 namespace manager {
 	class Manager;
+}
+
+namespace tower {
+	class Tower;
 }
 
 namespace towerlogic {

@@ -4,6 +4,7 @@ namespace manager {
 	Manager::Manager() {
 		tower_logic = new TowerLogic(this);
 		unit_logic = new UnitLogic(this);
+		game_controller = new GameController(this);
 	}
 
 	//Tower Methods
@@ -38,7 +39,7 @@ namespace manager {
 
 	//Game Controller Methods
 	slave_ptr<GameObject> Manager::createObject(){
-		GameObject* obj = game_logic->createObject( getFreePoolKey() );
+		GameObject* obj = game_controller->createObject( getFreePoolKey() );
 		addToPool(obj);
 		return game_object_pool[obj->getID()];
 	}
@@ -79,7 +80,7 @@ namespace manager {
 	}
 
 	void Manager::step(){
-
+		game_controller->step();
 	}
 
 	void Manager::initRenderManager(RenderManager &rm) { 

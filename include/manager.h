@@ -60,7 +60,7 @@ namespace manager {
 
 		TowerLogic* tower_logic;
 		UnitLogic* unit_logic;
-		GameController* game_logic; //IRenderable
+		GameController* game_controller; //IRenderable
 
 		RenderManager* render_manager = NULL;
 		WorldRenderer* world_renderer = NULL;

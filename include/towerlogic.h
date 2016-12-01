@@ -18,9 +18,9 @@ namespace towerlogic {
 		inline std::vector<tower_ptr> getTowers() const {return std::vector<tower_ptr>();}
 		inline Tower* createTower(int key){return new Tower(key, NULL);}
 		tower_ptr createTower();
-		inline Tower* removeTower(int x, int y){return new Tower(0, NULL);} //TODO: this function is placehodor
 		TowerLogic(Manager* m) : manager(m) {}; //Prevent initialization, static class
 	};
 }
 
 #endif //TOWERLOGIC_H
+

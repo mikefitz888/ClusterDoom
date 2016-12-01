@@ -31,6 +31,7 @@ namespace towerlogic {
 }
 
 namespace manager {
+	using gameobject::GameObject;
 	using smartpointers::master_ptr;
 	using smartpointers::slave_ptr;
 	using smartpointers::static_pointer_cast;
@@ -39,7 +40,6 @@ namespace manager {
 	using gamecontroller::GameController;
 	using unit::Unit;
 	using tower::Tower;
-	using gameobject::GameObject;
 	using graphics::RenderManager;
 	using worldrenderer::WorldRenderer;
 
@@ -50,7 +50,7 @@ namespace manager {
 		std::vector<master_ptr<GameObject>> game_object_pool;
 		std::vector<id_t> free_id_list;
 
-		TowerLogic * tower_logic;
+		TowerLogic tower_logic;
 		UnitLogic unit_logic;
 		GameController game_logic; //IRenderable
 
@@ -84,7 +84,7 @@ namespace manager {
 		//Manager Methods
 		void initRenderManager(RenderManager &rm);
 		bool render();
-		RenderManager* getRenderManager();
+		RenderManager* getRenderManager() const;
 		void releaseRender();
 		
 

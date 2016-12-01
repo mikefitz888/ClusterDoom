@@ -4,7 +4,10 @@
 #include <vector>
 #include "smartpointers.h"
 #include "tower.h"
-#include "manager.h"
+
+namespace manager {
+	class Manager;
+}
 
 namespace towerlogic {
 	using tower::Tower;
@@ -16,8 +19,9 @@ namespace towerlogic {
 		Manager * manager;
 	public:
 		inline std::vector<tower_ptr> getTowers() const {return std::vector<tower_ptr>();}
-		inline Tower* createTower(int key){return new Tower(key, NULL);}
+		Tower* createTower(id_t key);
 		tower_ptr createTower();
+		void removeTower(int x, int y);
 		TowerLogic(Manager* m) : manager(m) {}; //Prevent initialization, static class
 	};
 }

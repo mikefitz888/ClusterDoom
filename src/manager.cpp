@@ -1,7 +1,7 @@
 #include "../include/manager.h"
 
 namespace manager {
-	Manager::Manager() : tower_logic(), unit_logic() { /* Initializer list preferred, less contructor calls */ }
+	Manager::Manager() : tower_logic(this), unit_logic(this) { /* Initializer list preferred, less contructor calls */ }
 
 	//Tower Methods
 	slave_ptr<Tower> Manager::createTower(){
@@ -91,7 +91,7 @@ namespace manager {
 		}
 		return false;
 	}
-	RenderManager* Manager::getRenderManager() { 
+	RenderManager* Manager::getRenderManager() const { 
 		return render_manager;
 	}
 	void Manager::releaseRender() { 

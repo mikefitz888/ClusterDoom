@@ -21,7 +21,8 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 
 clean:
 	@echo " Cleaning..."; 
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+	@echo " find $(BUILDDIR) ! -type d -delete"; find $(BUILDDIR) ! -type d -delete; rm $(TARGET)
+#alt for linux systems that don't support -delete: "find $(BUILDDIR) ! -type d -exec rm '{}' \;"
 
 run:
 	export LD_LIBRARY_PATH=$(PWD)/lib/glew/; \

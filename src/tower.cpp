@@ -1,8 +1,8 @@
-#include "../include/tower.h"
+#include "../include/manager.h"
 
 namespace tower {
 	void Tower::init(){
-
+		render_manager = manager->getRenderManager();
 	}
 
 	void Tower::render(){
@@ -14,6 +14,6 @@ namespace tower {
 	}
 
 	void Tower::release(){
-
+		render_manager = NULL;
 	}
 }

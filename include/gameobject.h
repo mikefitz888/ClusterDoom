@@ -8,15 +8,22 @@ namespace manager {
 	class Manager;
 }
 
+namespace graphics {
+	class RenderManager;
+}
+
 namespace gameobject {
 	using graphics::IRenderable;
 	using manager::Manager;
+	using graphics::RenderManager;
 	
 	typedef size_t id_t;
 
 	class GameObject : public IRenderable {
 		const id_t id_;
-		const Manager* manager;
+	protected:
+		Manager* manager;
+		RenderManager* render_manager = NULL;
 	public:
 		inline GameObject(id_t id, Manager* m) : id_(id), manager(m) {} //Very important to get key from manager (for memory management + networking)
 		inline id_t getID() { return id_; }

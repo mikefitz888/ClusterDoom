@@ -26,6 +26,10 @@ namespace gameobject {
 	class GameObject;
 }
 
+namespace towerlogic {
+	class TowerLogic;
+}
+
 namespace manager {
 	using smartpointers::master_ptr;
 	using smartpointers::slave_ptr;
@@ -46,7 +50,7 @@ namespace manager {
 		std::vector<master_ptr<GameObject>> game_object_pool;
 		std::vector<id_t> free_id_list;
 
-		TowerLogic tower_logic;
+		TowerLogic * tower_logic;
 		UnitLogic unit_logic;
 		GameController game_logic; //IRenderable
 

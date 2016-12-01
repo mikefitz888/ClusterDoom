@@ -12,9 +12,9 @@ namespace unitlogic {
 	class UnitLogic {
 	public:
 		inline std::vector<unit_ptr> getUnits() const {return std::vector<unit_ptr>();}
-		inline Unit* createUnit(int key) {return new Unit(key);}
+		inline Unit* createUnit(int key) {return new Unit(key, NULL);}
 		//inline master_ptr<GameObject> createUnit(int key) { return make_master<GameObject, Unit>(key); }
-		inline Unit* removeUnit(Unit& unit) {return new Unit(0);} //placehodor
+		inline Unit* removeUnit(Unit& unit) {return new Unit(0, NULL);} //placehodor
 	private:
 	};
 }

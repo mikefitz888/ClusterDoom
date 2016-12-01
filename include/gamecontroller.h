@@ -14,7 +14,7 @@ namespace gamecontroller {
 		void render() final override {}
 		void renderGUI() final override {}
 		void release() final override {}
-		inline GameObject* createObject(int key) {return new GameObject(key);}
+		inline GameObject* createObject(int key) {return new GameObject(key, NULL);}
 	};
 }
 

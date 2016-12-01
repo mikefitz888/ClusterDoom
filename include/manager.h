@@ -23,7 +23,7 @@ namespace tower {
 }
 
 namespace gameobject {
-	GameObject;
+	class GameObject;
 }
 
 namespace manager {

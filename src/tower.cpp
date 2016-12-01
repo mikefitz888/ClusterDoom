@@ -6,7 +6,7 @@ namespace tower {
 	}
 
 	void Tower::render(){
-
+		std::cout << "Tower Render" << std::endl;
 	}
 
 	void Tower::renderGUI(){

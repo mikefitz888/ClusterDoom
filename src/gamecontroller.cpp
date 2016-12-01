@@ -7,8 +7,11 @@ namespace gamecontroller {
 		return NULL;
 	}
 
+	void GameController::init(){
+		manager->createTower();
+	}
 	
 	void GameController::step(){
-		
+
 	}
 }

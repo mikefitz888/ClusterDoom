@@ -90,13 +90,14 @@ namespace manager {
 		//void receiveEvent();
 
 		//Manager Methods
+		void init();
 		void initRenderManager(RenderManager &rm);
 		bool render();
 		RenderManager* getRenderManager() const;
 		void releaseRender();
 		
 
-		void step();
+		bool step();
 	};
 }
 

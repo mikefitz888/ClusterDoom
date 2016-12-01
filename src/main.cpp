@@ -2,6 +2,7 @@
 #include "../include/network/Network.h"
 #include "../include/RenderManager.h"
 #include <iostream>
+#include <unistd.h>
 
 using manager::Manager;
 using namespace graphics;
@@ -16,17 +17,19 @@ int main(int argc, char* argv[]){
 
 	// Rendering
 	RenderManager rm;
+	model.init();
 	model.initRenderManager(rm);
 	//rm.init();
 	//rm.setWindowTitle("Clusterdoom");
 
 	bool running = true;
-	while (running) {
+	while (true) {
 		// Networking
 		nm.networkStep();
 
-		// Render
-		running = model.render();
+		// Step then Render
+		running = model.step();
+		usleep(200);
 	}
 
 	// Cleanup

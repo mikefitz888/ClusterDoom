@@ -3,6 +3,7 @@
 
 #include "RenderManager.h"
 #include "manager.h"
+#include "towerlogic.h"
 
 namespace manager {
 	class Manager;

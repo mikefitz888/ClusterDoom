@@ -14,12 +14,16 @@ namespace tower {
 	using manager::Manager;
 
 	class Tower : public GameObject {
+		int x;
+		int y;
 	public:
 		inline Tower(id_t id, Manager* m) : GameObject(id, m) { }
 		void init() override;
 		void render() override;
 		void renderGUI() override;
 		void release() override;
+		inline int getX() {return x;};
+		inline int getY() {return y;};
 	};
 }
 

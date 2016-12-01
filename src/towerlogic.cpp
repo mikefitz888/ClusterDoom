@@ -1,6 +1,8 @@
 #include "../include/towerlogic.h"
 
 namespace towerlogic {
+	//using gameobject::id_t;
+
 	tower_ptr TowerLogic::createTower() {
 		return manager->createTower();
 	}

@@ -89,10 +89,10 @@ namespace graphics {
 	void RenderManager::shaderPrepare(sf::Shader *shader) {
 		GLint sh_id = shader->getNativeHandle();
 
-		//glBindAttribLocation(sh_id, 0, "in_Position");
-		//glBindAttribLocation(sh_id, 1, "in_Colour");
-		//glBindAttribLocation(sh_id, 2, "in_TextureCoord");
-		//glBindAttribLocation(sh_id, 3, "in_Normal");
+		glBindAttribLocation(sh_id, 0, "in_Position");
+		glBindAttribLocation(sh_id, 1, "in_Colour");
+		glBindAttribLocation(sh_id, 2, "in_TextureCoord");
+		glBindAttribLocation(sh_id, 3, "in_Normal");
 	}
 
 	// These functions can be used to manipulate the game window

@@ -2,6 +2,8 @@
 #include <stdio.h>
 
 namespace towerlogic {
+
+
 	tower_ptr TowerLogic::createTower() {
 		return manager->createTower();
 	}

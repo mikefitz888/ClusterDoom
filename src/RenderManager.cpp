@@ -7,7 +7,10 @@ namespace graphics {
 	void RenderManager::init() {
 		// Create window
 		createWindow();
-		glewInit();
+		GLenum err = glewInit();
+		if(GLEW_OK != err){
+			std::cout << glewGetErrorString(err) << std::endl;
+		}
 
 		// OpenGL states
 		glClearColor(0.6f, 0.7f, 1.0f, 1.0f);
@@ -87,8 +90,8 @@ namespace graphics {
 	}
 
 	void RenderManager::shaderPrepare(sf::Shader *shader) {
-		GLint sh_id = shader->getNativeHandle();
-
+		GLuint sh_id = shader->getNativeHandle();
+		std::cout << "not loaded -" << sh_id << "-" << std::endl;
 		glBindAttribLocation(sh_id, 0, "in_Position");
 		glBindAttribLocation(sh_id, 1, "in_Colour");
 		glBindAttribLocation(sh_id, 2, "in_TextureCoord");

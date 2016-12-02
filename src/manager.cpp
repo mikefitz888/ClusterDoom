@@ -99,7 +99,8 @@ namespace manager {
 	void Manager::initRenderManager(RenderManager &rm) { 
 		render_manager=&rm;
 		world_renderer = new WorldRenderer(this);
-		world_renderer->init();
+		render_manager->setRenderParent(world_renderer);
+		render_manager->init();
 	}
 	bool Manager::render() {
 		if(render_manager != NULL) {

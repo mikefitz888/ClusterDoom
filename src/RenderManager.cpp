@@ -91,7 +91,7 @@ namespace graphics {
 
 	void RenderManager::shaderPrepare(sf::Shader *shader) {
 		GLuint sh_id = shader->getNativeHandle();
-		std::cout << "not loaded -" << sh_id << "-" << std::endl;
+
 		glBindAttribLocation(sh_id, 0, "in_Position");
 		glBindAttribLocation(sh_id, 1, "in_Colour");
 		glBindAttribLocation(sh_id, 2, "in_TextureCoord");

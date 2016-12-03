@@ -2,7 +2,11 @@
 #include <stdio.h>
 
 namespace towerlogic {
+<<<<<<< HEAD
 
+=======
+	//using gameobject::id_t;
+>>>>>>> 3960a524e51e0ae597cce932fde5416eff1dff5a
 
 	tower_ptr TowerLogic::createTower() {
 		return manager->createTower();

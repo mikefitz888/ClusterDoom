@@ -24,6 +24,7 @@ namespace towerlogic {
 	class TowerLogic {
 		std::vector<tower_ptr> towers;
 		Manager * manager;
+
 	public:
 		inline std::vector<tower_ptr> getTowers() const {return towers;}
 		Tower* createTower(id_t key);

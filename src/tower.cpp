@@ -4,7 +4,7 @@ namespace tower {
 	void Tower::init(){
 		render_manager = manager->getRenderManager();
 		texture = new sf::Texture();
-		if(!texture->loadFromFile("src/Resources/Textures/datboi.jpg")){
+		if(!texture->loadFromFile("src/Resources/Textures/chess_piece_rook.png")){
 			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
 		}else{
 			std::cout << "Loaded Texture" << std::endl;
@@ -17,13 +17,18 @@ namespace tower {
 			std::cout << "Loaded shader" << std::endl;
 		}
 
-		//vbuff = new graphics::VertexBuffer();
-		//vbuff->addQuad(-64.0f, -64.0f, 64.0f, 64.0f);
-		//vbuff->freeze();
+		vbuff = new graphics::VertexBuffer();
+		vbuff->addQuad(-64.0f, -64.0f, 64.0f, 64.0f);
+		vbuff->freeze();
 	}
 
 	void Tower::render(){
-		//std::cout << "Tower Render" << std::endl;
+		render_manager->setActiveShader(shader);
+		render_manager->setTexture(texture);
+		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
+		render_manager->setWorldMatrix(transform);
+
+		vbuff->render();
 	}
 
 	void Tower::renderGUI(){
@@ -32,5 +37,8 @@ namespace tower {
 
 	void Tower::release(){
 		render_manager = NULL;
+		delete vbuff;
+		delete texture;
+		delete shader;
 	}
 }

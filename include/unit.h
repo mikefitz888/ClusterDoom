@@ -15,6 +15,10 @@ namespace unit {
 	class Unit : public GameObject {
 	public:
 		inline Unit(id_t id, Manager* m) : GameObject(id, m) {}
+		void init() override;
+		void render() override;
+		void renderGUI() override;
+		void release() override;
 	};
 }
 

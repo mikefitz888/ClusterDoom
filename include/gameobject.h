@@ -24,6 +24,8 @@ namespace gameobject {
 	protected:
 		Manager* manager;
 		RenderManager* render_manager = NULL;
+		int x = 0;
+		int y = 0;
 	public:
 		inline GameObject(id_t id, Manager* m) : id_(id), manager(m) {} //Very important to get key from manager (for memory management + networking)
 		inline id_t getID() { return id_; }
@@ -32,6 +34,8 @@ namespace gameobject {
 		virtual void renderGUI() override {};
 		virtual void release() override {};
 		inline virtual ~GameObject() {};
+		inline int getX() {return x;};
+		inline int getY() {return y;};
 	};
 }
 

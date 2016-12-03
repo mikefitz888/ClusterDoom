@@ -48,7 +48,8 @@ namespace containers
     };
 
     template <typename T, typename U, typename V> inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const optional<T>& opt) {
-        os << ((bool) opt ? opt.get() : "nothing");
+        if (opt) return os << opt.value();
+        else return os << "nothing";
     }
 }
 #endif //OPTIONAL_H

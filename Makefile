@@ -2,7 +2,7 @@ CC := g++
 
 SRCDIR := src
 BUILDDIR := build
-TARGET := bin/Game
+TARGET := ./Game
  
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))

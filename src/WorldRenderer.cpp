@@ -5,13 +5,18 @@ namespace worldrenderer {
 	void WorldRenderer::init(){
 		render_manager = manager->getRenderManager();
 		std::cout << "init() done" << std::endl;
+
+		std::vector<tower_ptr> towers = manager->getTowers();
+		for(auto &tower : towers){
+			tower->init();
+		}
 	}
 
 	void WorldRenderer::render(){
-		/*std::vector<tower_ptr> towers = manager->getTowers();
+		std::vector<tower_ptr> towers = manager->getTowers();
 		for(auto &tower : towers){
 			tower->render();
-		}*/
+		}
 	}
 
 	void WorldRenderer::renderGUI(){

@@ -3,11 +3,9 @@
 
 #include <iostream>
 #include <memory>
-#include <vector>
-#include <map>
 #include <exception>
 #include <string>
-#include <chrono>
+#include "optional.h"
 
 #ifdef _MSC_VER
 #define not !
@@ -127,6 +125,7 @@ namespace smartpointers {
     */
     template <typename T> class master_ptr {
         template <typename Y> friend class slave_ptr;
+        friend class containers::optional<master_ptr<T>>;
         template <typename Y> friend inline bool operator==(const master_ptr<Y>& lhs, const master_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator!=(const master_ptr<Y>& lhs, const master_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator<(const master_ptr<Y>& lhs, const master_ptr<Y>& rhs);
@@ -165,6 +164,14 @@ namespace smartpointers {
         T* payload;
         int* validity;
         std::string name;
+        
+        // This is a special, and dangerous master_ptr
+        // It is safe from the outside world, but is exposed directly to optionals
+        // This is for the "none" optional.
+        master_ptr() : name("nothing") {
+            validity = nullptr;
+            payload = nullptr;
+        }
 
         inline T* get() const {
             return this->payload;
@@ -239,6 +246,7 @@ namespace smartpointers {
     */
     template <typename T> class slave_ptr {
         template <typename Y> friend class slave_ptr;
+        friend class containers::optional<slave_ptr<T>>;
         template <typename Y> friend inline bool operator==(const slave_ptr<Y>& lhs, const slave_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator!=(const slave_ptr<Y>& lhs, const slave_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator<(const slave_ptr<Y>& lhs, const slave_ptr<Y>& rhs);
@@ -280,6 +288,14 @@ namespace smartpointers {
         T* payload;
         std::string name;
         int* validity;
+        
+        // This is a special, and dangerous slave_ptr
+        // It is safe from the outside world, but is exposed directly to optionals
+        // This is for the "none" optional.
+        slave_ptr() : name("nothing") {
+            this->payload = nullptr;
+            this->validity = nullptr;
+        }
 
         inline T* get() const {
             if (this->valid()) return this->payload;

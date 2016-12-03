@@ -15,6 +15,9 @@ namespace tower {
 	using manager::Manager;
 
 	class Tower : public GameObject {
+		sf::Texture* texture;
+		sf::Shader* shader;
+		graphics::VertexBuffer* vbuff;
 	protected:
 		int x;
 		int y;

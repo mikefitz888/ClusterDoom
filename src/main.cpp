@@ -2,7 +2,7 @@
 #include "../include/network/Network.h"
 #include "../include/RenderManager.h"
 #include <iostream>
-#include <unistd.h>
+//#include <unistd.h>
 
 using manager::Manager;
 using namespace graphics;
@@ -29,7 +29,7 @@ int main(int argc, char* argv[]){
 
 		// Step then Render
 		running = model.step();
-		usleep(200);
+		//usleep(200);
 	}
 
 	// Cleanup

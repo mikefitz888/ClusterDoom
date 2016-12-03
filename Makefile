@@ -2,14 +2,14 @@ CC := g++
 
 SRCDIR := src
 BUILDDIR := build
-TARGET := bin/Game
+TARGET := ./Game
  
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -std=c++11 -g -Wall -Wextra -pedantic
 LIB := -L lib/glew/ -lGL -lGLEW -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
-INC := -I lib/SFML-2.4.1/include/ -I lib/glm/
+INC := #-I lib/SFML-2.4.1/include/ -I lib/glm/
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."

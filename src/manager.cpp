@@ -10,9 +10,11 @@ namespace manager {
 	//Tower Methods
 	slave_ptr<Tower> Manager::createTower(){
 		GameObject* obj = tower_logic->createTower( getFreePoolKey() );
-		obj->init();
 		addToPool(obj);
-		return slave_ptr<Tower>( static_pointer_cast<Tower>(game_object_pool[obj->getID()]) );
+		slave_ptr<Tower> passback = slave_ptr<Tower>( static_pointer_cast<Tower>(game_object_pool[obj->getID()]) );
+		tower_logic->giveSlavePtr(passback);
+		std::cout << "end of tower create manager" << std::endl;
+		return passback;
 	}
 
 	void Manager::destroyTower(slave_ptr<Tower> tower){
@@ -26,9 +28,10 @@ namespace manager {
 	//Unit Methods
 	slave_ptr<Unit> Manager::createUnit(){
 		GameObject* obj = unit_logic->createUnit( getFreePoolKey() );
-		obj->init();
 		addToPool(obj);
-		return slave_ptr<Unit>( static_pointer_cast<Unit>(game_object_pool[obj->getID()]) );
+		slave_ptr<Unit> passback = slave_ptr<Unit>( static_pointer_cast<Unit>(game_object_pool[obj->getID()]) );
+		unit_logic->giveSlavePtr(passback);
+		return passback;
 	}
 
 	void Manager::destroyUnit(slave_ptr<Unit>& unit){
@@ -42,7 +45,6 @@ namespace manager {
 	//Game Controller Methods
 	slave_ptr<GameObject> Manager::createObject(){
 		GameObject* obj = game_controller->createObject( getFreePoolKey() );
-		obj->init();
 		addToPool(obj);
 		return game_object_pool[obj->getID()];
 	}
@@ -94,7 +96,8 @@ namespace manager {
 	void Manager::initRenderManager(RenderManager &rm) { 
 		render_manager=&rm;
 		world_renderer = new WorldRenderer(this);
-		world_renderer->init();
+		render_manager->setRenderParent(world_renderer);
+		render_manager->init();
 	}
 	bool Manager::render() {
 		if(render_manager != NULL) {

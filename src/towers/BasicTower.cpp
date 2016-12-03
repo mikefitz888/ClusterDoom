@@ -10,8 +10,8 @@ namespace tower {
 	};
 
 	BasicTower::BasicTower(id_t key, Manager* m) : Tower(key, m) {
-		x = 200;
-		y = 400;
+		position.x = 200;
+		position.y = 400;
 	}
 
 	void BasicTower::init(){

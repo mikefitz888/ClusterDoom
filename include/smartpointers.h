@@ -9,6 +9,12 @@
 #include <string>
 #include <chrono>
 
+#ifdef _MSC_VER
+#define not !
+#define and &&
+#define or ||
+#endif
+
 namespace smartpointers {
     using std::cout;
     using std::endl;

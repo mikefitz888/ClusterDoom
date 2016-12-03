@@ -25,7 +25,7 @@ namespace tower {
 	void Tower::render(){
 		render_manager->setActiveShader(shader);
 		render_manager->setTexture(texture);
-		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
+		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY(), 0.0));
 		render_manager->setWorldMatrix(transform);
 
 		vbuff->render();
@@ -41,4 +41,7 @@ namespace tower {
 		delete texture;
 		delete shader;
 	}
+
+	//Gameplay Methods
+
 }

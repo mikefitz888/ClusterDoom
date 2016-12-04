@@ -51,14 +51,14 @@ namespace gameobject {
 		virtual void init() override { }
 		virtual void renderGUI() override { }
 		virtual void release() override { }
-		inline void step() {};
+		inline void step() { std::cout << "Step for " << getID() << std::endl; };
 		inline virtual ~GameObject() { }
 
 		inline int getX() const { return position.x; }
 		inline int getY() const { return position.y; }
 
-		inline int setX(int x_) { position.x = x_; }
-		inline int setY(int y_) { position.y = y_; }
+		inline void setX(int x_) { position.x = x_; }
+		inline void setY(int y_) { position.y = y_; }
 	};
 }
 

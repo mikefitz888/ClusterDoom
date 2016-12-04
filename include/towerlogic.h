@@ -26,11 +26,13 @@ namespace towerlogic {
 		Manager * manager;
 
 	public:
+		inline TowerLogic(Manager* m) : manager(m) {};
 		inline std::vector<tower_ptr> getTowers() const {return towers;}
 		Tower* createTower(id_t key);
 		tower_ptr createTower();
 		void removeTower(int x, int y);
-		TowerLogic(Manager* m) : manager(m) {}; //Prevent initialization, static class
+		void removeTower(tower_ptr tower);
+		
 		void giveSlavePtr(tower_ptr tower);
 	};
 }

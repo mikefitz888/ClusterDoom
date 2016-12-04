@@ -9,6 +9,7 @@ namespace manager {
 }
 
 namespace tower {
+	//using containers::optional;
 	using graphics::IRenderable;
 	using gameobject::GameObject;
 	using gameobject::id_t;

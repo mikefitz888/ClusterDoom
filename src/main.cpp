@@ -17,8 +17,10 @@ int main(int argc, char* argv[]){
 
 	// Rendering
 	RenderManager rm;
-	model.init();
+
+	//Render Manager must be initialized first to ensure GL context
 	model.initRenderManager(rm);
+	model.init();
 	//rm.init();
 	//rm.setWindowTitle("Clusterdoom");
 

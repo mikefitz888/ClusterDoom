@@ -14,8 +14,12 @@ namespace unit {
 	using gameobject::unit_ptr;
 	using gameobject::Point;
 	using manager::Manager;
+	//using containers::optional;
 
 	class Unit : public GameObject {
+		sf::Texture* texture;
+		sf::Shader* shader;
+		graphics::VertexBuffer* vbuff;
 	protected:
 		tower_ptr getNearestTower();
 		Point<float> velocity = Point<float>(0, 0);

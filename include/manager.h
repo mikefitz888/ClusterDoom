@@ -95,6 +95,8 @@ namespace manager {
 		bool render();
 		RenderManager* getRenderManager() const;
 		void releaseRender();
+		void renderAll();
+		void stepAll();
 		
 
 		bool step();

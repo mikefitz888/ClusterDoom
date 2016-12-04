@@ -2,27 +2,36 @@
 #define UNITLOGIC_H
 
 #include <vector>
-#include "unit.h"
 #include "smartpointers.h"
+#include "unit.h"
+#include "manager.h"
 
 namespace manager {
 	class Manager;
 }
 
+namespace unit {
+	class Unit;
+}
+
 namespace unitlogic {
 	using unit::Unit;
 	using manager::Manager;
+	using gameobject::id_t;
+
 	typedef smartpointers::slave_ptr<Unit> unit_ptr;
 
 	class UnitLogic {
+		std::vector<unit_ptr> units;
 		Manager* manager;
 	public:
 		inline UnitLogic(Manager* m) : manager(m) {};
-		inline std::vector<unit_ptr> getUnits() const {return std::vector<unit_ptr>();}
-		inline Unit* createUnit(int key) {return new Unit(key, NULL);}
-		//inline master_ptr<GameObject> createUnit(int key) { return make_master<GameObject, Unit>(key); }
-		inline Unit* removeUnit(Unit& unit) {return new Unit(0, NULL);} //placehodor
-		inline void giveSlavePtr(unit_ptr unit){}
+		inline std::vector<unit_ptr> getUnits() const { return units; }
+		Unit* createUnit(id_t key);
+		unit_ptr createUnit();
+		void removeUnit(unit_ptr unit);
+		
+		void giveSlavePtr(unit_ptr unit);
 	};
 }
 

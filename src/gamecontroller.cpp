@@ -8,11 +8,11 @@ namespace gamecontroller {
 	}
 
 	void GameController::init(){
-		std::cout << "Tower created supposedly" << std::endl;
 		manager->createTower();
+		manager->createUnit();
 	}
 	
 	void GameController::step(){
-
+		manager->stepAll();
 	}
 }

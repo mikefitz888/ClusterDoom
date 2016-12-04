@@ -70,7 +70,7 @@ namespace network {
 		}
 	}
 
-	Buffer* NetworkManager::getSendBuffer() {
+	Buffer* NetworkManager::getSendBuffer() const {
 		return send_buffer;
 	}
 
@@ -240,7 +240,7 @@ namespace network {
 		}
 	}
 
-	void NetworkClient::sendPacket(Buffer &buff) {
+	void NetworkClient::sendPacket(Buffer &buff) const {
 
 		int size = buff.tell();
 		if (size > 0) {
@@ -250,7 +250,7 @@ namespace network {
 		}
 	}
 
-	NetworkClient::ConnectionState NetworkClient::getConnectionStatus() {
+	NetworkClient::ConnectionState NetworkClient::getConnectionStatus() const {
 		return connection_state;
 	}
 

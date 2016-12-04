@@ -11,7 +11,7 @@ namespace tower {
 		}
 
 		shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
-		if(shader == NULL){
+		if(shader == nullptr){
 			std::cout << "[ERROR] FAILED TO LOAD SHADER (Tower)" << std::endl;
 		}else{
 			std::cout << "Loaded shader" << std::endl;
@@ -36,7 +36,7 @@ namespace tower {
 	}
 
 	void Tower::release(){
-		render_manager = NULL;
+		render_manager = nullptr;
 		delete vbuff;
 		delete texture;
 		delete shader;

@@ -15,6 +15,6 @@ namespace worldrenderer {
 	}
 
 	void WorldRenderer::release(){
-		render_manager = NULL;
+		render_manager = nullptr;
 	}
 }

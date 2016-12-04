@@ -2,11 +2,11 @@
 
 namespace tower {
 	class BasicTower : Tower {
-		sf::Texture* texture;
+		sf::Texture* texture = nullptr;
 	public:
 		BasicTower(id_t key, Manager* m);
-		void init();
-		void render();
+		void init() override;
+		void render() override;
 	};
 
 	BasicTower::BasicTower(id_t key, Manager* m) : Tower(key, m) {

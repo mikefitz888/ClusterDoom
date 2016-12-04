@@ -14,8 +14,8 @@ namespace worldrenderer {
 	using graphics::RenderManager;
 	using manager::Manager;
 	class WorldRenderer : public IRenderable {
-		Manager* manager = NULL;
-		RenderManager* render_manager = NULL;
+		Manager* manager = nullptr;
+		RenderManager* render_manager = nullptr;
 	public:
 		inline WorldRenderer(Manager* model) : manager(model) {}
 		void init() override;

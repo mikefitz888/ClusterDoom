@@ -27,9 +27,9 @@ namespace towerlogic {
 
 	public:
 		inline TowerLogic(Manager* m) : manager(m) {};
-		inline std::vector<tower_ptr> getTowers() const {return towers;}
-		Tower* createTower(id_t key);
-		tower_ptr createTower();
+		inline std::vector<tower_ptr>& getTowers() {return towers;}
+		Tower* createTower (id_t key) const;
+		tower_ptr createTower() const;
 		void removeTower(int x, int y);
 		void removeTower(tower_ptr tower);
 		

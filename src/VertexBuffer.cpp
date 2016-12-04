@@ -93,19 +93,19 @@ namespace graphics {
 		glBindVertexArray(vertex_array_object_id);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_positions);
-		glVertexAttribPointer(0, Vertex::positionElementCount, GL_FLOAT, false, 0, NULL);
+		glVertexAttribPointer(0, Vertex::positionElementCount, GL_FLOAT, false, 0, nullptr);
 		glEnableVertexAttribArray(0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_colours);
-		glVertexAttribPointer(1, Vertex::colorElementCount, GL_FLOAT, false, 0, NULL);
+		glVertexAttribPointer(1, Vertex::colorElementCount, GL_FLOAT, false, 0, nullptr);
 		glEnableVertexAttribArray(1);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_uvs);
-		glVertexAttribPointer(2, Vertex::textureElementCount, GL_FLOAT, false, 0, NULL);
+		glVertexAttribPointer(2, Vertex::textureElementCount, GL_FLOAT, false, 0, nullptr);
 		glEnableVertexAttribArray(2);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_norms);
-		glVertexAttribPointer(3, Vertex::normalElementCount, GL_FLOAT, false, 0, NULL);
+		glVertexAttribPointer(3, Vertex::normalElementCount, GL_FLOAT, false, 0, nullptr);
 		glEnableVertexAttribArray(3);
 
 		// Mark the model as frozen (i.e. ready to render)
@@ -121,7 +121,7 @@ namespace graphics {
 		unbindBuffers();
 	}
 
-	void VertexBuffer::bindBuffers() {
+	void VertexBuffer::bindBuffers() const {
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_positions);
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_colours);
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_uvs);
@@ -171,7 +171,7 @@ namespace graphics {
 		disableAttributes();
 	}
 
-	void VertexBuffer::renderImmediate() {
+	void VertexBuffer::renderImmediate() const {
 		glBegin(GL_TRIANGLES);
 		for (int i = 0; i < size; i++) {
 			Vec3 a = vertices[i].getXYZ();

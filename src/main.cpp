@@ -25,7 +25,7 @@ int main(int argc, char* argv[]){
 	//rm.setWindowTitle("Clusterdoom");
 
 	bool running = true;
-	while (true) {
+	while (running) {
 		// Networking
 		nm.networkStep();
 

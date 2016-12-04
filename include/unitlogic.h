@@ -27,8 +27,8 @@ namespace unitlogic {
 	public:
 		inline UnitLogic(Manager* m) : manager(m) {};
 		inline std::vector<unit_ptr> getUnits() const { return units; }
-		Unit* createUnit(id_t key);
-		unit_ptr createUnit();
+		Unit* createUnit(id_t key) const;
+		unit_ptr createUnit() const;
 		void removeUnit(unit_ptr unit);
 		
 		void giveSlavePtr(unit_ptr unit);

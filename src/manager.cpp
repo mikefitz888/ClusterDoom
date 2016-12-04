@@ -9,10 +9,10 @@ namespace manager {
 
 	//Tower Methods
 	slave_ptr<Tower> Manager::createTower(){
-		Tower* obj = tower_logic->createTower( getFreePoolKey() );
+		auto obj = tower_logic->createTower( getFreePoolKey() );
 		addToPool(obj);
 		obj->init();
-		slave_ptr<Tower> passback = slave_ptr<Tower>( static_pointer_cast<Tower>(game_object_pool[obj->getID()]) );
+		auto passback = slave_ptr<Tower>( static_pointer_cast<Tower>(game_object_pool[obj->getID()]) );
 		tower_logic->giveSlavePtr(passback);
 		std::cout << "end of tower create manager" << std::endl;
 		return passback;
@@ -22,16 +22,16 @@ namespace manager {
 		removeFromPool(static_pointer_cast<GameObject>(tower));
 	}
 
-	std::vector<slave_ptr<Tower>> Manager::getTowers() const {
+	std::vector<slave_ptr<Tower>>& Manager::getTowers() const {
 		return (this->tower_logic)->getTowers();
 	}
 
 	//Unit Methods
 	slave_ptr<Unit> Manager::createUnit(){
-		GameObject* obj = unit_logic->createUnit( getFreePoolKey() );
+		auto obj = unit_logic->createUnit( getFreePoolKey() );
 		addToPool(obj);
 		obj->init();
-		slave_ptr<Unit> passback = slave_ptr<Unit>( static_pointer_cast<Unit>(game_object_pool[obj->getID()]) );
+		auto passback = slave_ptr<Unit>( static_pointer_cast<Unit>(game_object_pool[obj->getID()]) );
 		unit_logic->giveSlavePtr(passback);
 		return passback;
 	}
@@ -46,7 +46,7 @@ namespace manager {
 
 	//Game Controller Methods
 	slave_ptr<GameObject> Manager::createObject(){
-		GameObject* obj = game_controller->createObject( getFreePoolKey() );
+		auto obj = game_controller->createObject( getFreePoolKey() );
 		addToPool(obj);
 		obj->init();
 		return game_object_pool[obj->getID()];
@@ -58,7 +58,7 @@ namespace manager {
 
 	// Object Pool Methods
 	void Manager::addToPool(GameObject* game_object){
-		id_t id = game_object->getID();
+		auto id = game_object->getID();
 		if(id < game_object_pool.size()){
 			game_object_pool[id] = master_ptr<GameObject>(game_object);
 		}else{
@@ -68,11 +68,13 @@ namespace manager {
 				std::cout << "Invalid key, investigate.";
 			}
 		}
+		std::cout << "Object added to pool with id = " << id << std::endl;
+		std::cout << "Pool size now = " << game_object_pool.size() << std::endl;
 	}
 
 	// Destroys the master_ptr
 	void Manager::removeFromPool(slave_ptr<GameObject> game_object){
-		id_t id = game_object->getID();
+		auto id = game_object->getID();
 		game_object_pool[id].invalidate();
 		free_id_list.push_back(id);
 	}
@@ -87,7 +89,7 @@ namespace manager {
 		return id;
 	}
 
-	void Manager::init(){
+	void Manager::init() const {
 		game_controller->init();
 	}
 
@@ -103,7 +105,7 @@ namespace manager {
 		render_manager->init();
 	}
 
-	bool Manager::render() {
+	bool Manager::render() const {
 		if(render_manager) {
 			return render_manager->render();
 		}

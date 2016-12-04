@@ -35,8 +35,8 @@ namespace graphics {
 			void setCameraPosition(float x, float y, float z);
 			void setCameraDirection(float x, float y, float z);
 			virtual void renderCamera();
-			glm::vec3 getCameraPosition();
-			glm::vec3 getCameraDirection();
+			glm::vec3 getCameraPosition() const;
+			glm::vec3 getCameraDirection() const;
 		};
 
 		class GCameraOrtho : public GCamera {
@@ -45,7 +45,7 @@ namespace graphics {
 
 		public:
 			inline GCameraOrtho(int width_, int height_, RenderManager *render_manager_) : GCamera(render_manager_), width(width_), height(height_) {}
-			virtual void renderCamera();
+			virtual void renderCamera() override;
 	};
 
 	/*
@@ -76,20 +76,20 @@ namespace graphics {
 
 			void init();
 			void setWindowFullScreen(bool fullscreen);
-			void setWindowTitle(const sf::String title);
-			void setWindowSize(int width, int height);
+			void setWindowTitle(const sf::String title) const;
+			void setWindowSize(int width, int height) const;
 			bool render();
 			void setActiveShader(sf::Shader *shd);
 			void setTexture(sf::Texture *tex);
 			void setTextureExt(sf::Texture *tex, GLuint texture_unit);
 			void setRenderParent(IRenderable *render_instance);
 			sf::Shader* createShaderFromFile(const std::string &vertex_shader_filename, const std::string &fragment_shader_filename);
-			void release();
-			float getAspect();
-			void setViewProjection(glm::mat4 *vp_matrix);
+			void release() const;
+			float getAspect() const;
+			void setViewProjection(glm::mat4 *vp_matrix) const;
 
-			glm::mat4 getWorldMatrix();
-			void setWorldMatrix(glm::mat4 world_matrix);
+			glm::mat4 getWorldMatrix() const;
+			void setWorldMatrix(glm::mat4 world_matrix) const;
 			void setWorldMatrixIdentity();
 
 
@@ -98,10 +98,10 @@ namespace graphics {
 			GCamera *camera;
 			int width = 1280, height = 720;
 			bool fullscreen = false;
-			sf::Window *window = NULL;
-			sf::Shader *active_shader = NULL;		/* Whilst shaders can be changed, it needs to be done through the RenderManager
+			sf::Window *window = nullptr;
+			sf::Shader *active_shader = nullptr;		/* Whilst shaders can be changed, it needs to be done through the RenderManager
 											so that binding textures/other graphics resources know which shader uniforms to modify */
-			IRenderable *render_parent = NULL;		/* The top-most node in the composite rendering pattern (This should render any children in its own render method)*/
+			IRenderable *render_parent = nullptr;		/* The top-most node in the composite rendering pattern (This should render any children in its own render method)*/
 
 			// Transformation + Rendering
 			glm::mat4 world_matrix;			/* Matrix used to represent the current transformation state */

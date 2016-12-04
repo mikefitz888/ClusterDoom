@@ -13,7 +13,7 @@ namespace unit {
 		}
 
 		shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
-		if (shader == NULL) {
+		if (shader == nullptr) {
 			std::cout << "[ERROR] FAILED TO LOAD SHADER (Tower)" << std::endl;
 		}
 		else {
@@ -36,14 +36,12 @@ namespace unit {
 	void Unit::release() {}
 
 	void Unit::step() {
-		tower_ptr target = getNearestTower();
-		if (target) {
-			std::cout << "No target" << std::endl;
+		auto target = getNearestTower();
+		if (!target) {
 			return; //NO TARGET
 		}
 
 		float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
-		std::cout << "Distance = " << distance << std::endl;
 		if (distance < 10) {
 			//Attack tower
 		}
@@ -61,10 +59,10 @@ namespace unit {
 		}
 	}
 
-	tower_ptr Unit::getNearestTower()
+	tower_ptr Unit::getNearestTower() const
 	//Not actually implemented correctly, just prototype
 	{
-		std::vector<tower_ptr> towers = manager->getTowers();
+		auto towers = manager->getTowers();
 		for (auto tower : towers) {
 			if (tower->getHealth() > 0) {
 				return tower;

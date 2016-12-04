@@ -6,8 +6,8 @@
 #include "unitlogic.h"
 #include "towerlogic.h"
 #include "gamecontroller.h"
-#include <iostream>
 #include "RenderManager.h"
+#include "VertexBuffer.h"
 #include "WorldRenderer.h"
 
 namespace worldrenderer {
@@ -62,8 +62,8 @@ namespace manager {
 		UnitLogic* unit_logic;
 		GameController* game_controller; //IRenderable
 
-		RenderManager* render_manager = NULL;
-		WorldRenderer* world_renderer = NULL;
+		RenderManager* render_manager = nullptr;
+		WorldRenderer* world_renderer = nullptr;
 
 		void addToPool(GameObject* game_object);
 		void removeFromPool(slave_ptr<GameObject> game_object);
@@ -74,7 +74,7 @@ namespace manager {
 		//Tower Methods
 		slave_ptr<Tower> createTower();
 		void destroyTower(slave_ptr<Tower> tower);
-		std::vector<slave_ptr<Tower>> getTowers() const;
+		std::vector<slave_ptr<Tower>>& getTowers() const;
 
 		//Unit Methods
 		slave_ptr<Unit> createUnit();
@@ -90,9 +90,9 @@ namespace manager {
 		//void receiveEvent();
 
 		//Manager Methods
-		void init();
+		void init() const;
 		void initRenderManager(RenderManager &rm);
-		bool render();
+		bool render() const;
 		RenderManager* getRenderManager() const;
 		void releaseRender();
 		void renderAll();

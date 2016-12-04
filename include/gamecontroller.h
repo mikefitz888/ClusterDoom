@@ -21,8 +21,8 @@ namespace gamecontroller {
 	public:
 		GameController(Manager* m);
 		GameObject* createObject(id_t key);
-		void init();
-		void step();
+		void init() const;
+		void step() const;
 	};
 }
 

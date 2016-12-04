@@ -26,7 +26,7 @@ namespace graphics {
 		camera = new GCameraOrtho(1280, 720, this);
 
 		// Call active parent init
-		if (render_parent != NULL) {
+		if (render_parent != nullptr) {
 			render_parent->init();
 		}
 	}
@@ -59,14 +59,14 @@ namespace graphics {
 		glClearDepth(1.0f);
 
 		// Set active shader and apply universal uniforms
-		if (active_shader != NULL) {
+		if (active_shader != nullptr) {
 			// Also applies matrix and camera updates, so if the shader is changed mid-run, the default camera and world matrix are still ready to go
 			setActiveShader(active_shader);
 		}
 
 
 		// Perform render of parent instance
-		if (render_parent != NULL) {
+		if (render_parent != nullptr) {
 			render_parent->render();
 		}
 
@@ -83,7 +83,7 @@ namespace graphics {
 	sf::Shader* RenderManager::createShaderFromFile(const std::string &vertex_shader_filename, const std::string &fragment_shader_filename) {
 		sf::Shader *sh = new sf::Shader();
 		if (!sh->loadFromFile(vertex_shader_filename, fragment_shader_filename)) {
-			return NULL;
+			return nullptr;
 		}
 		shaderPrepare(sh);
 		return sh;
@@ -106,11 +106,11 @@ namespace graphics {
 		createWindow();
 	}
 
-	void RenderManager::setWindowTitle(const sf::String title) {
+	void RenderManager::setWindowTitle(const sf::String title) const {
 		window->setTitle(title);
 	}
 
-	void RenderManager::setWindowSize(int width, int height) {
+	void RenderManager::setWindowSize(int width, int height) const {
 		width  = width;
 		height = height;
 		window->setSize(sf::Vector2u(width, height));
@@ -118,7 +118,7 @@ namespace graphics {
 
 	// These functions manipulate the current render state
 	void RenderManager::setActiveShader(sf::Shader *shd) {
-		if (shd != NULL) {
+		if (shd != nullptr) {
 			if (shd != active_shader) {
 				active_shader = shd;
 				sf::Shader::bind(active_shader);
@@ -153,19 +153,19 @@ namespace graphics {
 		glBindTexture(GL_TEXTURE_2D, gl_tex_id);
 	}
 
-	void RenderManager::release() {
-		if (render_parent != NULL) {
+	void RenderManager::release() const {
+		if (render_parent != nullptr) {
 			render_parent->release();
 		}
 		window->close();
 		delete window;
 	}
 
-	float RenderManager::getAspect() {
+	float RenderManager::getAspect() const {
 		return width / height;
 	}
 
-	void RenderManager::setViewProjection(glm::mat4 *vp_matrix) {
+	void RenderManager::setViewProjection(glm::mat4 *vp_matrix) const {
 		//active_shader->setUniform("matrixProjection", sf::Glsl::Mat4(glm::value_ptr(vp_matrix)));
 		GLuint _mat_id = glGetUniformLocation(active_shader->getNativeHandle(), "matrixProjection");
 		glUniformMatrix4fv(_mat_id, 1, GL_FALSE, glm::value_ptr(*vp_matrix));
@@ -178,12 +178,12 @@ namespace graphics {
 		std::cout << (*vp_matrix)[3][0] << " " << (*vp_matrix)[3][1] << " " << (*vp_matrix)[3][2] << " " << (*vp_matrix)[3][3] << std::endl;*/
 	}
 
-	glm::mat4 RenderManager::getWorldMatrix() {
+	glm::mat4 RenderManager::getWorldMatrix() const {
 		return world_matrix;
 	}
-	void RenderManager::setWorldMatrix(glm::mat4 world_matrix) {
+	void RenderManager::setWorldMatrix(glm::mat4 world_matrix) const {
 		world_matrix = world_matrix;
-		if (active_shader != NULL) {
+		if (active_shader != nullptr) {
 
 			// Apply the matrix 
 			GLuint _mat_id = glGetUniformLocation(active_shader->getNativeHandle(), "matrixWorld");
@@ -208,10 +208,10 @@ namespace graphics {
 		this->camera_direction.z = z;
 	}
 
-	glm::vec3 GCamera::getCameraPosition() {
+	glm::vec3 GCamera::getCameraPosition() const {
 		return this->camera_position;
 	}
-	glm::vec3 GCamera::getCameraDirection() {
+	glm::vec3 GCamera::getCameraDirection() const {
 		return this->camera_direction;
 	}
 

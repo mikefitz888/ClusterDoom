@@ -30,7 +30,7 @@ namespace tower {
 		void release() override;
 
 		//Gameplay methods
-		inline float getHealth() { return health; }
+		inline float getHealth() const { return health; }
 	};
 }
 

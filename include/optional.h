@@ -25,7 +25,7 @@ namespace containers
         optional() { filled = false; }
         optional(T payload) : payload(std::move(payload)) { filled = true; }
         optional(const optional<T>& other) { filled = other.filled; payload = other.payload; }
-        optional(optional<T>&& other) : payload(std::move(other.payload)) { filled = other.filled; other.filled = false; }
+        optional(optional<T>&& other) noexcept : payload(std::move(other.payload)) { filled = other.filled; other.filled = false; }
 
         inline bool isPresent() const noexcept { return filled; }
         inline T value() const

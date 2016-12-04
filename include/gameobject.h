@@ -42,16 +42,16 @@ namespace gameobject {
 		const id_t id_;
 	protected:
 		Manager* manager;
-		RenderManager* render_manager = NULL;
+		RenderManager* render_manager = nullptr;
 		Point<int> position = Point<int>(0, 0);
 	public:
 		inline GameObject(id_t id, Manager* m) : id_(id), manager(m) {} //Very important to get key from manager (for memory management + networking)
-		inline id_t getID() { return id_; }
+		inline id_t getID() const { return id_; }
 		virtual void render() override { }
 		virtual void init() override { }
 		virtual void renderGUI() override { }
 		virtual void release() override { }
-		inline void step() { std::cout << "Step for " << getID() << std::endl; };
+		inline virtual void step() { };
 		inline virtual ~GameObject() { }
 
 		inline int getX() const { return position.x; }

@@ -43,8 +43,8 @@ namespace network {
 		void listenForData();								// As the NetworkClient is the link between the client and the server, it is responsible for listening to data.
 		void prepareSecurityHash();							// Performs a simple operation on the security_token. This needs to be paralleled by the client.
 		void disconnect(char* reason);						// Call this to force-disconnect a client.
-		void sendPacket(Buffer &buff);						// Sends a packet with the given Buffer to the client represented by NetworkClient
-		ConnectionState getConnectionStatus();				// Returns the connection status of the client.
+		void sendPacket(Buffer &buff) const;						// Sends a packet with the given Buffer to the client represented by NetworkClient
+		ConnectionState getConnectionStatus() const;				// Returns the connection status of the client.
 		void release();										// Force disconnects a socket and cleans up any data.
 	};
 
@@ -66,7 +66,7 @@ namespace network {
 		NetworkManager();
 		void networkStep();
 		void newConnection(sf::TcpSocket *sfc, sf::IpAddress ip);
-		Buffer* getSendBuffer();
+		Buffer* getSendBuffer() const;
 		void sendToAll(Buffer &buff);	// Will broadcast a packet to ALL clients who are fully connected
 		void release();
 

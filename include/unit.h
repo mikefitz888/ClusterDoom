@@ -21,18 +21,18 @@ namespace unit {
 		sf::Shader* shader;
 		graphics::VertexBuffer* vbuff;
 	protected:
-		tower_ptr getNearestTower();
+		tower_ptr getNearestTower() const;
 		Point<float> velocity = Point<float>(0, 0);
 	public:
 		inline Unit(id_t id, Manager* m) : GameObject(id, m) {}
 		//IRenderable methods
-		void init() override;
-		void render() override;
-		void renderGUI() override;
-		void release() override;
+		virtual void init() override;
+		virtual void render() override;
+		virtual void renderGUI() override;
+		virtual void release() override;
 
 		//Gameplay methods
-		void step();
+		virtual void step() override;
 	};
 }
 

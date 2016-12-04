@@ -2,7 +2,6 @@
 #define _BUFFER_H
 
 #include <algorithm>
-#include <iostream>
 #include <string.h>
 typedef unsigned char byte;
 
@@ -18,9 +17,9 @@ private:
 public:
 	inline Buffer();
 	inline void seek(int position);	// Set current head position (0 = base)
-	inline int tell();					// Get current head position
-	inline byte* getPtr();
-	inline int maxSize();
+	inline int tell() const;					// Get current head position
+	inline byte* getPtr() const;
+	inline int maxSize() const;
 
 	template <typename T> inline void write(T data);
 	inline void write_str(const char* string);
@@ -100,15 +99,15 @@ void Buffer::seek(int position) {
 	head = position;
 }
 
-int Buffer::tell() {
+int Buffer::tell() const {
 	return head;
 }
 
-byte* Buffer::getPtr() {
+byte* Buffer::getPtr() const {
 	return buffer;
 }
 
-int Buffer::maxSize() {
+int Buffer::maxSize() const {
 	return max_size;
 }
 

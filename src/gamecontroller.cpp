@@ -4,15 +4,15 @@ namespace gamecontroller {
 	GameController::GameController(Manager* m) : manager(m) {}
 
 	GameObject* GameController::createObject(id_t key){
-		return NULL;
+		return nullptr;
 	}
 
-	void GameController::init(){
+	void GameController::init() const {
 		manager->createTower();
 		manager->createUnit();
 	}
 	
-	void GameController::step(){
+	void GameController::step() const {
 		manager->stepAll();
 	}
 }

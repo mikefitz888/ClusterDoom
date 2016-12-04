@@ -24,7 +24,7 @@ namespace smartpointers {
         InvalidatedSmartPointerException() : exception() {}
         InvalidatedSmartPointerException(std::string name, std::string hint) : exception() { this->name = name; this->hint = hint; }
 
-        virtual const char* what() const throw() {
+        virtual const char* what() const throw() override {
             return ("A " + this->name + " pointer was dereferenced or allocated with a " + this->hint + " that is null").c_str();
         }
     };
@@ -85,7 +85,7 @@ namespace smartpointers {
             this->name = r.name;
         }
 
-        watch_ptr(watch_ptr&& r) {
+        watch_ptr(watch_ptr&& r) noexcept {
             this->payload = r.payload;
             this->name = r.name;
             r.payload = nullptr;
@@ -198,7 +198,7 @@ namespace smartpointers {
             this->name = name;
         }
 
-        master_ptr(master_ptr&& ptr) {
+        master_ptr(master_ptr&& ptr) noexcept {
             this->payload = ptr.payload;
             this->name = ptr.name;
             this->validity = ptr.validity;
@@ -226,8 +226,6 @@ namespace smartpointers {
         inline T& operator[](std::ptrdiff_t i) { return get()[i]; }
 
         inline explicit operator bool () const noexcept { return (bool) get(); }
-
-        int getId() { return this->uid; }
     };
 
     /**
@@ -326,7 +324,7 @@ namespace smartpointers {
             else --*this->validity;
         }
 
-        slave_ptr(slave_ptr&& ptr) {
+        slave_ptr(slave_ptr&& ptr) noexcept {
             this->payload = ptr.payload;
             this->name = ptr.name;
             this->validity = ptr.validity;

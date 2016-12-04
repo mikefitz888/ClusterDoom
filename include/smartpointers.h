@@ -125,7 +125,6 @@ namespace smartpointers {
     */
     template <typename T> class master_ptr {
         template <typename Y> friend class slave_ptr;
-        friend class containers::optional<master_ptr<T>>;
         template <typename Y> friend inline bool operator==(const master_ptr<Y>& lhs, const master_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator!=(const master_ptr<Y>& lhs, const master_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator<(const master_ptr<Y>& lhs, const master_ptr<Y>& rhs);
@@ -165,21 +164,13 @@ namespace smartpointers {
         int* validity;
         std::string name;
         
-        // This is a special, and dangerous master_ptr
-        // It is safe from the outside world, but is exposed directly to optionals
-        // This is for the "none" optional.
-        master_ptr() : name("nothing") {
-            validity = nullptr;
-            payload = nullptr;
-        }
-
         inline T* get() const {
             return this->payload;
         }
 
         inline void reset()
         {
-            delete this->payload;
+            /*if (this->payload != nullptr)*/ delete this->payload;
             this->payload = nullptr;
             if (this->validity) {
                 if (*this->validity == 1) delete this->validity;
@@ -190,12 +181,14 @@ namespace smartpointers {
         }
 
     public:
-        master_ptr(std::nullptr_t ptr) : name("object") {
-            throw InvalidatedSmartPointerException("master", this->name);
+        master_ptr(std::nullptr_t ptr) : /*payload(ptr),*/ name("object") {
+            //this->validity = new int(1);
+            throw InvalidatedSmartPointerException("master", name);
         }
 
-        master_ptr(std::nullptr_t ptr, std::string name) {
-            throw InvalidatedSmartPointerException("master", name);
+        master_ptr(std::nullptr_t ptr, std::string name)/* : payload(ptr)*/ {
+            this->validity = new int(1);
+            //throw InvalidatedSmartPointerException("master", name);
         }
 
         master_ptr(T* ptr) : payload(ptr), name("object") {
@@ -288,14 +281,6 @@ namespace smartpointers {
         T* payload;
         std::string name;
         int* validity;
-        
-        // This is a special, and dangerous slave_ptr
-        // It is safe from the outside world, but is exposed directly to optionals
-        // This is for the "none" optional.
-        slave_ptr() : name("nothing") {
-            this->payload = nullptr;
-            this->validity = nullptr;
-        }
 
         inline T* get() const {
             if (this->valid()) return this->payload;
@@ -315,12 +300,15 @@ namespace smartpointers {
             this->name = ptr.name;
             this->validity = ptr.validity;
             if (*this->validity > 0) ++*this->validity;
-            else throw InvalidatedSmartPointerException("slave", name);
+            else --*this->validity;
+            //else throw InvalidatedSmartPointerException("slave", name);
         }
 
     public:
         slave_ptr(std::nullptr_t ptr) : name("object") {
-            throw InvalidatedSmartPointerException("slave", this->name);
+            //throw InvalidatedSmartPointerException("slave", this->name);
+            this->payload = ptr;
+            this->validity = nullptr;
         }
 
         slave_ptr(const master_ptr<T>& ptr) {
@@ -328,7 +316,8 @@ namespace smartpointers {
             this->name = ptr.name;
             this->validity = ptr.validity;
             if (*this->validity > 0) ++*this->validity;
-            else throw InvalidatedSmartPointerException("slave", this->name);
+            else --*this->validity;
+            //else throw InvalidatedSmartPointerException("slave", this->name);
         }
 
         slave_ptr(const slave_ptr& ptr) {
@@ -348,6 +337,7 @@ namespace smartpointers {
         }
 
         ~slave_ptr() {
+            // Something seems fishy here, surely we must deallocate if we are some -ve number?
             if (this->validity) {
                 if (*this->validity == 1) delete this->validity;
                 else if (*this->validity > 0) --*this->validity;
@@ -356,7 +346,7 @@ namespace smartpointers {
         }
 
         inline bool valid() const {
-            return this->validity && *this->validity > 0;
+            return this->payload && this->validity && *this->validity > 0;
         }
 
         inline slave_ptr<T>& operator=(const slave_ptr<T>& r) noexcept {

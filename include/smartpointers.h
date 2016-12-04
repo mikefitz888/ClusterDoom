@@ -5,7 +5,6 @@
 #include <memory>
 #include <exception>
 #include <string>
-#include "optional.h"
 
 #ifdef _MSC_VER
 #define not !
@@ -239,7 +238,6 @@ namespace smartpointers {
     */
     template <typename T> class slave_ptr {
         template <typename Y> friend class slave_ptr;
-        friend class containers::optional<slave_ptr<T>>;
         template <typename Y> friend inline bool operator==(const slave_ptr<Y>& lhs, const slave_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator!=(const slave_ptr<Y>& lhs, const slave_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator<(const slave_ptr<Y>& lhs, const slave_ptr<Y>& rhs);

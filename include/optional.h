@@ -1,6 +1,8 @@
+#define OPTIONAL_H
 #ifndef OPTIONAL_H
 #define OPTIONAL_H
 #include <exception>
+#include <functional>
 
 namespace containers
 {
@@ -45,6 +47,14 @@ namespace containers
         inline optional& operator=(none_t none) { payload.T::~T(); filled = false; return *this; }
         inline optional& operator=(const optional& other) { filled = other.filled; payload = other.payload; }
         inline optional& operator=(optional&& other) { filled = other.filled; payload = std::move(other.payload); other.filled = false; }
+
+        template <typename Y> optional<Y> apply(std::function<optional<Y>(T)> f)
+        {
+            if (isPresent()) return f(payload);
+            else return optional<Y>();
+        }
+
+        template <typename Y> optional<Y> operator>>(std::function<optional<Y>(T)> f) { return apply<Y>(f); }
     };
 
     template <typename T, typename U, typename V> inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const optional<T>& opt) {

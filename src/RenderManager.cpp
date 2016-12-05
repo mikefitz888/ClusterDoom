@@ -132,10 +132,28 @@ namespace graphics {
 			if (shd != active_shader) {
 				active_shader = shd;
 				sf::Shader::bind(active_shader);
+				bind_colour_uniform();
 			}
 			setWorldMatrix(world_matrix);
 			camera->renderCamera();
 		}
+	}
+
+	void RenderManager::setActiveColour(Colour c) {
+		this->active_colour = c;
+		bind_colour_uniform();
+	}
+	void RenderManager::setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+		this->active_colour = Colour(r, g, b, a);
+		bind_colour_uniform();
+	}
+
+	void RenderManager::bind_colour_uniform() {
+		GLuint _uniform_colour_id = glGetUniformLocation(active_shader->getNativeHandle(), "drawColour");
+		glUniform4f(_uniform_colour_id, (float)this->active_colour.r/255.0, 
+										(float)this->active_colour.g/255.0,
+										(float)this->active_colour.b/255.0,
+										(float)this->active_colour.a/255.0 );
 	}
 
 	void RenderManager::setRenderParent(IRenderable *render_instance) {
@@ -247,6 +265,23 @@ namespace graphics {
 		std::cout << (projection_matrix)[3][0] << " " << (projection_matrix)[3][1] << " " << (projection_matrix)[3][2] << " " << (projection_matrix)[3][3] << std::endl;*/
 
 		render_manager->setViewProjection(&this->vp_matrix);
+	}
+
+	Colour::Colour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+		this->r = r;
+		this->g = g;
+		this->b = b;
+		this->a = a;
+	}
+
+	Colour::Colour(int colour, unsigned char alpha) {
+		this->a = alpha;
+		this->r = (colour >> 16) & 255;
+		this->g = (colour >> 8) & 255;
+		this->b = colour&255;
+	}
+	Colour::Colour(int colour) {
+		Colour(colour, 255);
 	}
 
 	/*GCameraOrtho::GCameraOrtho(int width, int height) {

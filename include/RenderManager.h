@@ -48,6 +48,12 @@ namespace graphics {
 			virtual void renderCamera() override;
 	};
 
+	struct Colour{
+		Colour(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
+		Colour(int colour, unsigned char alpha);
+		Colour(int colour);
+		unsigned char r, g, b, a;
+	};
 	/*
 		IRenderable is an interface defining the core functions required for something that
 		can be rendered.
@@ -85,6 +91,8 @@ namespace graphics {
 			void setTexture(sf::Texture *tex);
 			void setTextureExt(sf::Texture *tex, GLuint texture_unit);
 			void setRenderParent(IRenderable *render_instance);
+			void setActiveColour(Colour c);
+			void setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 			sf::Shader* createShaderFromFile(const std::string &vertex_shader_filename, const std::string &fragment_shader_filename);
 			void release() const;
 			float getAspect() const;
@@ -100,6 +108,7 @@ namespace graphics {
 			GCamera *camera;
 			int width = 1280, height = 720;
 			bool fullscreen = false;
+			Colour active_colour = Colour(255, 255, 255, 255);
 			sf::Window *window = nullptr;
 			sf::Shader *active_shader = nullptr;		/* Whilst shaders can be changed, it needs to be done through the RenderManager
 											so that binding textures/other graphics resources know which shader uniforms to modify */
@@ -111,6 +120,7 @@ namespace graphics {
 			// Methods:
 			void createWindow();
 			static void shaderPrepare(sf::Shader *shader);	/* Performs any openGL operations upon a shader needed to configure it for the rendering environment*/
+			void bind_colour_uniform();
 	};
 }
 

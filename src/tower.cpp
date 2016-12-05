@@ -1,6 +1,7 @@
 #include "../include/manager.h"
 
 namespace tower {
+	using namespace graphics;
 	void Tower::init(){
 		render_manager = manager->getRenderManager();
 
@@ -34,9 +35,11 @@ namespace tower {
 		render_manager->setActiveShader(shader);
 		render_manager->setTexture(texture);
 		
+		render_manager->setActiveColour(Colour(0, 0, 255, 255));
 		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY(), 0.0));
 		render_manager->setWorldMatrix(transform);
 		vbuff->render();
+		render_manager->setActiveColour(Colour(255, 255, 255, 255));
 		
 		render_manager->setTexture(red);
 		float hp = (float) health / 100;
@@ -44,6 +47,7 @@ namespace tower {
 		transform = glm::scale(transform, glm::vec3(hp, 1.0f, 1.0f));
 		render_manager->setWorldMatrix(transform);
 		hpbar_buff->render();
+		
 	}
 
 	void Tower::renderGUI(){

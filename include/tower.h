@@ -35,11 +35,12 @@ namespace tower {
 		virtual void renderGUI() override;
 		virtual void release() override;
 
+		virtual void step();
 		//Gameplay methods
 		inline float getHealth() const { return health; }
 
 		virtual void attack(unit_ptr tower); //Tower attacks unit
-		virtual void attacked(unit_ptr tower); //Unit attacks tower
+		virtual void attacked(GameObject* aggressor); //Unit attacks tower
 	};
 }
 

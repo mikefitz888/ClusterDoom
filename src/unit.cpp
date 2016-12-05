@@ -43,7 +43,7 @@ namespace unit {
 
 		float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
 		if (distance < 2000) {
-			//Attack tower
+			attack(target);
 		}
 		else {
 			//Move to tower
@@ -69,5 +69,17 @@ namespace unit {
 			}
 		}
 		return nullptr;
+	}
+
+	void Unit::attack(tower_ptr tower) {
+		tower->attacked(this);
+	}
+
+	// BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
+	void Unit::attacked(GameObject* aggressor) {
+		
+		if(health <= 0) {
+			destroySelf();
+		}
 	}
 }

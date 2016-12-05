@@ -19,11 +19,15 @@ namespace towerlogic {
 		}
 	}
 
-	void TowerLogic::giveSlavePtr(tower_ptr tower){
-		towers.push_back(tower);
-		//printf("Recieved slave pointer: %d\n", 0);
-		std::cout << "got: -" << towers.size() << "- towers" << std::endl;
-
+	void TowerLogic::giveSlavePtr(tower_ptr towerptr){
+		//Look for free place in towers pool
+		for (auto tower = towers.begin(); tower != towers.end(); ++tower) {
+			if(!(*tower)) {
+				towers.emplace(tower, towerptr);
+				return;
+			}
+		}
+		towers.push_back(towerptr);
 	}
 
 	void TowerLogic::removeTower(int x, int y) {

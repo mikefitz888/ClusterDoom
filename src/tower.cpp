@@ -24,7 +24,7 @@ namespace tower {
 		
 		vbuff->addQuad(-32.0f, -32.0f, 32.0f, 32.0f);
 
-		hpbar_buff->addQuadRGBA(-32.0f, -2.0f, 32.0f, 2.0f, 1.0f, 0.0f, 0.0f, 0.0f);
+		hpbar_buff->addQuadRGBA(-32.0f, -2.0f, 32.0f, 2.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 
 		vbuff->freeze();
 		hpbar_buff->freeze();
@@ -39,7 +39,9 @@ namespace tower {
 		vbuff->render();
 		
 		render_manager->setTexture(red);
+		float hp = (float) health / 100;
 		transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY()-50, 0.0));
+		transform = glm::scale(transform, glm::vec3(hp, 1.0f, 1.0f));
 		render_manager->setWorldMatrix(transform);
 		hpbar_buff->render();
 	}
@@ -56,11 +58,22 @@ namespace tower {
 	}
 
 	//Gameplay Methods
-	void Tower::attack(unit_ptr tower)	{
+	void Tower::step() {
+		
+	}
+	void Tower::attack(unit_ptr unit)	{
 		
 	}
 
-	void Tower::attacked(unit_ptr tower) {
-		
+	// BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
+	void Tower::attacked(GameObject* aggressor) {
+		if (health > 0)
+		{
+			health--;
+			if (health < 0)
+			{
+				health = 0;
+			}
+		}
 	}
 }

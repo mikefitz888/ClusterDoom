@@ -19,7 +19,7 @@ namespace manager {
 	}
 
 	void Manager::destroyTower(slave_ptr<Tower> tower){
-		removeFromPool(static_pointer_cast<GameObject>(tower));
+		removeFromPool(tower->getID());
 	}
 
 	std::vector<slave_ptr<Tower>>& Manager::getTowers() const {
@@ -37,7 +37,7 @@ namespace manager {
 	}
 
 	void Manager::destroyUnit(slave_ptr<Unit>& unit){
-		removeFromPool(smartpointers::static_pointer_cast<GameObject>(unit));
+		removeFromPool(unit->getID());
 	}
 
 	std::vector<slave_ptr<Unit>> Manager::getUnits() const {
@@ -53,7 +53,11 @@ namespace manager {
 	}
 
 	void Manager::destroyObject(slave_ptr<GameObject>& obj){
-		removeFromPool(obj);
+		removeFromPool(obj->getID());
+	}
+
+	void Manager::destroy(GameObject* obj) {
+		removeFromPool(obj->getID());
 	}
 
 	// Object Pool Methods
@@ -73,8 +77,7 @@ namespace manager {
 	}
 
 	// Destroys the master_ptr
-	void Manager::removeFromPool(slave_ptr<GameObject> game_object){
-		auto id = game_object->getID();
+	void Manager::removeFromPool(id_t id){
 		game_object_pool[id].invalidate();
 		free_id_list.push_back(id);
 	}

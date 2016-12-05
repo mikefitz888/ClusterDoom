@@ -68,7 +68,7 @@ namespace manager {
 		WorldRenderer* world_renderer = nullptr;
 
 		void addToPool(GameObject* game_object);
-		void removeFromPool(slave_ptr<GameObject> game_object);
+		void removeFromPool(id_t id);
 		id_t getFreePoolKey();
 
 	public:
@@ -86,6 +86,9 @@ namespace manager {
 		//Game Controller Methods (World Logic)
 		slave_ptr<GameObject> createObject();
 		void destroyObject(slave_ptr<GameObject>& obj);
+
+		//GameObject Methods
+		void destroy(GameObject* obj);
 
 		//Network Methods
 		//void sendEvent();

@@ -444,6 +444,9 @@ namespace smartpointers {
     template <typename T> inline bool operator>=(std::nullptr_t lhs, const slave_ptr<T>& rhs)        { (void) lhs; return not (nullptr < rhs); }
     template <typename T> inline bool operator==(const master_ptr<T>& lhs, const slave_ptr<T>& rhs)  { return lhs.payload == rhs.payload; }
     template <typename T> inline bool operator==(const slave_ptr<T>& lhs, const master_ptr<T>& rhs)  { return lhs.payload == rhs.payload; }
+	//Raw Pointer Equivalence
+	template <typename T> inline bool operator==(const master_ptr<T>& lhs, const T* rhs) { return lhs.payload == rhs; }
+	template <typename T> inline bool operator==(const T* lhs, const master_ptr<T>& rhs) { return lhs == rhs.payload; }
     template <typename T> inline bool operator!=(const master_ptr<T>& lhs, const slave_ptr<T>& rhs)  { return not (lhs == rhs); }
     template <typename T> inline bool operator!=(const slave_ptr<T>& lhs, const master_ptr<T>& rhs)  { return not (lhs == rhs); }
     template <typename T> inline bool operator<(const master_ptr<T>& lhs, const slave_ptr<T>& rhs)   { return std::less<T*>()(lhs.payload, rhs.payload); }

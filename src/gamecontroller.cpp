@@ -21,6 +21,9 @@ namespace gamecontroller {
 
 	void GameController::init() const {
 		spawnTowerAt(400, 200);
+		spawnTowerAt(800, 200);
+		spawnTowerAt(800, 600);
+		spawnTowerAt(400, 600);
 		spawnUnitAt(100, 50);
 	}
 	

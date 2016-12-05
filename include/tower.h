@@ -22,8 +22,10 @@ namespace tower {
 
 	class Tower : public GameObject {
 		sf::Texture* texture;
+		sf::Texture* red;
 		sf::Shader* shader;
 		graphics::VertexBuffer* vbuff;
+		graphics::VertexBuffer* hpbar_buff;
 
 		float health = 100;
 	public:

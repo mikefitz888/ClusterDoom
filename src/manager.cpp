@@ -127,14 +127,14 @@ namespace manager {
 
 	void Manager::renderAll() {
 		for (slave_ptr<GameObject> obj : game_object_pool) {
-			obj->render();
+			if(obj) obj->render();
 		}
 	}
 
 	void Manager::stepAll() {
 		//std::cout << "stepAll()" << std::endl;
 		for (slave_ptr<GameObject> obj : game_object_pool) {
-			obj->step();
+			if(obj) obj->step();
 		}
 	}
 }

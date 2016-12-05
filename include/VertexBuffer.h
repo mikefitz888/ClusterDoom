@@ -90,6 +90,7 @@ namespace graphics {
 			void addVertex(float x, float y, float z, float r, float g, float b, float a, float u, float v, float nx, float ny, float nz);
 			void addFloor(float x1, float y1, float x2, float y2, float z);
 			void addQuad(float x1, float y1, float x2, float y2);
+			void addQuadRGBA(float x1, float y1, float x2, float y2, float r, float g, float b, float a);
 			void addQuadExt(float x1, float y1, float x2, float y2, float tx1, float ty1, float tx2, float ty2);
 
 		private:

@@ -9,20 +9,25 @@ namespace tower {
 			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
 		}
 
+		red = new sf::Texture();
+		if (!red->loadFromFile("src/Resources/Textures/red.png")) {
+			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
+		}
+
 		shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
 		if(shader == nullptr){
 			std::cout << "[ERROR] FAILED TO LOAD SHADER (Tower)" << std::endl;
 		}
 
 		vbuff = new graphics::VertexBuffer();
-		//hpbar_buff = new graphics::VertexBuffer();
+		hpbar_buff = new graphics::VertexBuffer();
 		
 		vbuff->addQuad(-32.0f, -32.0f, 32.0f, 32.0f);
 
-		//hpbar_buff->addQuad(-32.0f, -2.0f, 32.0f, 2.0f);
+		hpbar_buff->addQuadRGBA(-32.0f, -2.0f, 32.0f, 2.0f, 1.0f, 0.0f, 0.0f, 0.0f);
 
 		vbuff->freeze();
-		//hpbar_buff->freeze();
+		hpbar_buff->freeze();
 	}
 
 	void Tower::render(){

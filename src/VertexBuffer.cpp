@@ -223,6 +223,16 @@ namespace graphics {
 		addVertex(x2, y1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1);
 	}
 
+	void VertexBuffer::addQuadRGBA(float x1, float y1, float x2, float y2, float r, float g, float b, float a) {
+		addVertex(x1, y2, 0, r, g, b, a, 0, 1, 0, 0, 1);
+		addVertex(x1, y1, 0, r, g, b, a, 0, 0, 0, 0, 1);
+		addVertex(x2, y1, 0, r, g, b, a, 1, 0, 0, 0, 1);
+
+		addVertex(x2, y2, 0, r, g, b, a, 1, 1, 0, 0, 1);
+		addVertex(x1, y2, 0, r, g, b, a, 0, 1, 0, 0, 1);
+		addVertex(x2, y1, 0, r, g, b, a, 1, 0, 0, 0, 1);
+	}
+
 	void VertexBuffer::addQuadExt(float x1, float y1, float x2, float y2, float tx1, float ty1, float tx2, float ty2) {
 		addVertex(x1, y2, 0, 1, 1, 1, 1, tx1, ty2, 0, 0, 1);
 		addVertex(x1, y1, 0, 1, 1, 1, 1, tx1, ty1, 0, 0, 1);

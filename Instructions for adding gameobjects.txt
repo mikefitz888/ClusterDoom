@@ -1,0 +1,62 @@
+**************************************
+INSTRUCTIONS FOR ADDING TOWERS + UNITS
+**************************************
+	N.B. Just replace tower with unit everywhere below to deal with units
+File locations:
+	Custom Tower Headers: include/Towers/****.h 	(add to start: #include "tower.h" and derive custom class from Tower)
+	Custom Tower Bodies:  src/Towers/****.cpp		(remember to include your custom header)
+
+
+Example:
+----------------------------------------
+namespace tower {
+	class SimpleTower : public Tower {
+		...
+	}
+}
+
+----------------------------------------
+View include/tower.h and include/gameobject.h to see what methods are available
+
+init() is called once, as the object is created
+
+step() and render() are called every frame
+step() controls what the individual object does every frame, render() simply draws the current state
+
+tower.cpp and unit.cpp shows some simple, default functionality that should be overridden in custom classes
+
+Broader Controls
+----------------------------------------
+There is a more general src/gamecontroller.cpp which can be used to spawn towers/units/control general gameplay
+The core of this is also an init() and step() function, which work as expected. Add to this class however you like to improve gameplay
+
+Factory Approach for GameObjects
+--------------------------------
+Once you have created a new Custom class, the program needs to know when/how to create it
+
+This is done by adding an entry to the appropriate classes enum.
+	e.g. tower.h: enum TYPE {BASE}; => enum TYPE {BASE, SIMPLETOWER};
+
+and then modifying the createTower, createUnit methods in src/TowerLogic.cpp, src/UnitLogic.cpp appropriately to deal with new cases
+	e.g. simply add inside the switch statement TowerLogic.cpp:
+		case tower::TYPE::SIMPLETOWER:
+			return new tower::SimpleTower(key, manager);
+
+gamecontroller.cpp can then spawn a tower of that type using:
+	manager->createTower(tower::TYPE::SIMPLETOWER); //This returns a slave_ptr to the created tower
+
+***********************************
+BUT FIRST...
+***********************************
+the base Tower class needs to be improved to be a good, general tower for any others to derive from
+so we'll add to this first.
+
+step() is the fucntion that's called every frame, ignore render() for now
+attack(target) attacks a target
+attacked(target) is called by a target that is attacking you
+
+also all objects have access to a Point<Type> struct {x, y}
+and have the member Point<int> position as (0, 0); by default
+
+----------------------------------------
+Let me know if anything's unclear/missing etc...

@@ -9,12 +9,15 @@ namespace unitlogic {
 		return new Unit(key, manager);
 	}
 
-	void UnitLogic::giveSlavePtr(unit_ptr unit) {
-		units.push_back(unit);
-		unit->setX(490);
-		unit->setY(200);
-		//printf("Recieved slave pointer: %d\n", 0);
-		std::cout << "got: -" << units.size() << "- units" << std::endl;
+	void UnitLogic::giveSlavePtr(unit_ptr unitptr) {
+		//Look for free place in units pool
+		for (auto unit = units.begin(); unit != units.end(); ++unit) {
+			if (!(*unit)) {
+				units.emplace(unit, unitptr);
+				return;
+			}
+		}
+		units.push_back(unitptr);
 	}
 
 	void UnitLogic::removeUnit(unit_ptr unit) {

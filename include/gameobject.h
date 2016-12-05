@@ -59,6 +59,7 @@ namespace gameobject {
 
 		inline void setX(int x_) { position.x = x_; }
 		inline void setY(int y_) { position.y = y_; }
+		inline void setPosition(int x, int y) { setX(x); setY(y); }
 	};
 }
 

@@ -116,6 +116,16 @@ namespace graphics {
 		window->setSize(sf::Vector2u(width, height));
 	}
 
+	int RenderManager::getWindowHeight() const {
+		return height;
+	}
+
+	int RenderManager::getWindowWidth() const {
+		return width;
+	}
+
+
+
 	// These functions manipulate the current render state
 	void RenderManager::setActiveShader(sf::Shader *shd) {
 		if (shd != nullptr) {

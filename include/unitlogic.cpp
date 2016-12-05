@@ -1,11 +1,11 @@
 #include "unitlogic.h"
 
 namespace unitlogic {
-	unit_ptr UnitLogic::createUnit() const {
-		return manager->createUnit();
+	unit_ptr UnitLogic::createUnit(unit::TYPE type) const {
+		return manager->createUnit(type);
 	}
 
-	Unit* UnitLogic::createUnit(id_t key) const {
+	Unit* UnitLogic::createUnit(id_t key, unit::TYPE type) const {
 		return new Unit(key, manager);
 	}
 

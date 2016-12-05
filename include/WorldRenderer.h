@@ -16,6 +16,10 @@ namespace worldrenderer {
 	class WorldRenderer : public IRenderable {
 		Manager* manager = nullptr;
 		RenderManager* render_manager = nullptr;
+
+		sf::Texture* game_bg_texture;
+		sf::Shader* game_bg_shader;
+		graphics::VertexBuffer* vbuff;
 	public:
 		inline WorldRenderer(Manager* model) : manager(model) {}
 		void init() override;

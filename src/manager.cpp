@@ -8,8 +8,8 @@ namespace manager {
 	}
 
 	//Tower Methods
-	slave_ptr<Tower> Manager::createTower(){
-		auto obj = tower_logic->createTower( getFreePoolKey() );
+	slave_ptr<Tower> Manager::createTower(tower::TYPE type){
+		auto obj = tower_logic->createTower(getFreePoolKey(), type );
 		addToPool(obj);
 		obj->init();
 		auto passback = slave_ptr<Tower>( static_pointer_cast<Tower>(game_object_pool[obj->getID()]) );
@@ -27,8 +27,8 @@ namespace manager {
 	}
 
 	//Unit Methods
-	slave_ptr<Unit> Manager::createUnit(){
-		auto obj = unit_logic->createUnit( getFreePoolKey() );
+	slave_ptr<Unit> Manager::createUnit(unit::TYPE type){
+		auto obj = unit_logic->createUnit( getFreePoolKey(), type );
 		addToPool(obj);
 		obj->init();
 		auto passback = slave_ptr<Unit>( static_pointer_cast<Unit>(game_object_pool[obj->getID()]) );

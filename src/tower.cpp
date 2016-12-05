@@ -18,7 +18,7 @@ namespace tower {
 		}
 
 		vbuff = new graphics::VertexBuffer();
-		vbuff->addQuad(-64.0f, -64.0f, 64.0f, 64.0f);
+		vbuff->addQuad(-32.0f, -32.0f, 32.0f, 32.0f);
 		vbuff->freeze();
 	}
 
@@ -43,5 +43,11 @@ namespace tower {
 	}
 
 	//Gameplay Methods
+	void Tower::attack(unit_ptr tower)	{
+		
+	}
 
+	void Tower::attacked(unit_ptr tower) {
+		
+	}
 }

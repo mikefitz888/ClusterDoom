@@ -16,6 +16,8 @@ namespace unit {
 	using manager::Manager;
 	//using containers::optional;
 
+	enum TYPE {BASE, BASIC};
+
 	class Unit : public GameObject {
 		sf::Texture* texture;
 		sf::Shader* shader;

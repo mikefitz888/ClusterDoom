@@ -15,6 +15,8 @@ namespace manager {
 namespace gamecontroller {
 	using gameobject::GameObject;
 	using gameobject::id_t;
+	using gameobject::tower_ptr;
+	using gameobject::unit_ptr;
 	using manager::Manager;
 	class GameController {
 		Manager* manager;
@@ -23,6 +25,8 @@ namespace gamecontroller {
 		GameObject* createObject(id_t key);
 		void init() const;
 		void step() const;
+		tower_ptr spawnTowerAt(int x, int y) const;
+		unit_ptr spawnUnitAt(int x, int y) const;
 	};
 }
 

@@ -16,10 +16,12 @@ namespace worldrenderer {
 
 namespace unit {
 	class Unit;
+	enum TYPE;
 }
 
 namespace tower {
 	class Tower;
+	enum TYPE;
 }
 
 namespace gameobject {
@@ -72,12 +74,12 @@ namespace manager {
 	public:
 		Manager();
 		//Tower Methods
-		slave_ptr<Tower> createTower();
+		slave_ptr<Tower> createTower(tower::TYPE type);
 		void destroyTower(slave_ptr<Tower> tower);
 		std::vector<slave_ptr<Tower>>& getTowers() const;
 
 		//Unit Methods
-		slave_ptr<Unit> createUnit();
+		slave_ptr<Unit> createUnit(unit::TYPE type);
 		void destroyUnit(slave_ptr<Unit>& unit);
 		std::vector<slave_ptr<Unit>> getUnits() const;
 

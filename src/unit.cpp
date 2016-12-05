@@ -21,7 +21,7 @@ namespace unit {
 		}
 
 		vbuff = new graphics::VertexBuffer();
-		vbuff->addQuad(-64.0f, -64.0f, 64.0f, 64.0f);
+		vbuff->addQuad(-16.0f, -16.0f, 16.0f, 16.0f);
 		vbuff->freeze();
 	}
 	void Unit::render() {
@@ -42,7 +42,7 @@ namespace unit {
 		}
 
 		float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
-		if (distance < 10) {
+		if (distance < 2000) {
 			//Attack tower
 		}
 		else {

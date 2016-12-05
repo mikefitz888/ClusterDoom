@@ -78,6 +78,8 @@ namespace graphics {
 			void setWindowFullScreen(bool fullscreen);
 			void setWindowTitle(const sf::String title) const;
 			void setWindowSize(int width, int height) const;
+			int getWindowWidth() const;
+			int getWindowHeight() const;
 			bool render();
 			void setActiveShader(sf::Shader *shd);
 			void setTexture(sf::Texture *tex);

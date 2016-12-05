@@ -12,6 +12,8 @@ namespace manager {
 
 namespace tower {
 	class Tower;
+	class BasicTower;
+	enum TYPE;
 }
 
 namespace towerlogic {
@@ -28,8 +30,8 @@ namespace towerlogic {
 	public:
 		inline TowerLogic(Manager* m) : manager(m) {};
 		inline std::vector<tower_ptr>& getTowers() {return towers;}
-		Tower* createTower (id_t key) const;
-		tower_ptr createTower() const;
+		Tower* createTower (id_t key, tower::TYPE type) const;
+		tower_ptr createTower(tower::TYPE type) const;
 		void removeTower(int x, int y);
 		void removeTower(tower_ptr tower);
 		

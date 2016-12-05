@@ -14,7 +14,11 @@ namespace tower {
 	using gameobject::GameObject;
 	using gameobject::id_t;
 	using gameobject::Point;
+	using gameobject::tower_ptr;
+	using gameobject::unit_ptr;
 	using manager::Manager;
+
+	enum TYPE {BASE, BASIC};
 
 	class Tower : public GameObject {
 		sf::Texture* texture;
@@ -24,13 +28,16 @@ namespace tower {
 		float health = 100;
 	public:
 		inline Tower(id_t id, Manager* m) : GameObject(id, m) { }
-		void init() override;
-		void render() override;
-		void renderGUI() override;
-		void release() override;
+		virtual void init() override;
+		virtual void render() override;
+		virtual void renderGUI() override;
+		virtual void release() override;
 
 		//Gameplay methods
 		inline float getHealth() const { return health; }
+
+		virtual void attack(unit_ptr tower); //Tower attacks unit
+		virtual void attacked(unit_ptr tower); //Unit attacks tower
 	};
 }
 

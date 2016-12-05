@@ -1,13 +1,22 @@
 #include "../include/towerlogic.h"
+#include "../include/Towers/BasicTower.h"
 #include <stdio.h>
 
 namespace towerlogic {
-	tower_ptr TowerLogic::createTower() const {
-		return manager->createTower();
+	tower_ptr TowerLogic::createTower(tower::TYPE type) const {
+		return manager->createTower(type);
 	}
 
-	Tower* TowerLogic::createTower(id_t key) const {
-		return new Tower(key, manager);
+	//Tower factory
+	Tower* TowerLogic::createTower(id_t key, tower::TYPE type) const {
+		switch(type)
+		{
+		case tower::TYPE::BASIC:
+			return new tower::BasicTower(key, manager);
+		case tower::TYPE::BASE:
+		default:
+			return new Tower(key, manager);
+		}
 	}
 
 	void TowerLogic::giveSlavePtr(tower_ptr tower){

@@ -16,6 +16,8 @@ namespace graphics {
 		glClearColor(0.6f, 0.7f, 1.0f, 1.0f);
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glOrtho(0, 800, 600, 0, 1, -1);
 
@@ -253,7 +255,7 @@ namespace graphics {
 	}
 
 	void GCameraOrtho::renderCamera() {
-		this->projection_matrix = glm::ortho(0.0f, (float)width, (float)height, 0.0f, -1.0f, 1.0f); //glm::ortho<float>(0.0f, 0.0f, (float)width, (float)height, -0.1f, 100);
+		this->projection_matrix = glm::ortho(0.0f, (float)width, (float)height, 0.0f, -1000.0f, 1000.0f); //glm::ortho<float>(0.0f, 0.0f, (float)width, (float)height, -0.1f, 100);
 		this->view_matrix = glm::translate(glm::mat4(), -camera_position);
 		this->vp_matrix = this->projection_matrix * this->view_matrix;
 		//this->vp_matrix = this->projection_matrix;//glm::mat4();

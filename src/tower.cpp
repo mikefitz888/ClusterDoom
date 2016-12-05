@@ -63,7 +63,9 @@ namespace tower {
 
 	//Gameplay Methods
 	void Tower::step() {
-		
+		if(health <= 0) {
+			destroySelf();
+		}
 	}
 	void Tower::attack(unit_ptr unit)	{
 		

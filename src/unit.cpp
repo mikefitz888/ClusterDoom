@@ -64,6 +64,7 @@ namespace unit {
 	{
 		auto towers = manager->getTowers();
 		for (auto tower : towers) {
+			if (!tower) continue;
 			if (tower->getHealth() > 0) {
 				return tower;
 			}

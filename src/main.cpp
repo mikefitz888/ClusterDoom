@@ -36,10 +36,10 @@ int main(int argc, char* argv[]){
 	bool running = true;
 	while (running) {
 		// Networking
-		nm.networkStep();
+		//nm.networkStep();
 
 		// Step then Render
-		running = model.step();
+		//running = model.step();
 	}
 
 	// Cleanup

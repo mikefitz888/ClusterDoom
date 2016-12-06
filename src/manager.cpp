@@ -80,6 +80,8 @@ namespace manager {
 	void Manager::removeFromPool(id_t id){
 		game_object_pool[id].invalidate();
 		free_id_list.push_back(id);
+		tower_logic->clean();
+		unit_logic->clean();
 	}
 
 	// This removes the free key from list so ensure it is used to create a GameObject

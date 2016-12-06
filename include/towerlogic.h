@@ -30,6 +30,7 @@ namespace towerlogic {
 	public:
 		inline TowerLogic(Manager* m) : manager(m) {};
 		inline std::vector<tower_ptr>& getTowers() {return towers;}
+		inline void clean() { towers.erase(std::remove_if(towers.begin(), towers.end(), [&](tower_ptr x) {return !(x.valid()); }), towers.end()); }
 		Tower* createTower (id_t key, tower::TYPE type) const;
 		tower_ptr createTower(tower::TYPE type) const;
 		void removeTower(int x, int y);

@@ -13,11 +13,21 @@ namespace gamecontroller {
 		return unit;
 	}
 
+	unit_ptr GameController::spawnUnitAt(Point<int> position) const {
+		return spawnUnitAt(position.x, position.y);
+	}
+
+
 	tower_ptr GameController::spawnTowerAt(int x, int y) const {
 		auto tower = manager->createTower(tower::TYPE::BASE);
 		tower->setPosition(x, y);
 		return tower;
 	}
+
+	tower_ptr GameController::spawnTowerAt(Point<int> position) const {
+		return spawnTowerAt(position.x, position.y);
+	}
+
 
 	void GameController::init() const {
 		spawnTowerAt(400, 200);

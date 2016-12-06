@@ -20,12 +20,14 @@ namespace unit {
 
 	class Unit : public GameObject {
 		sf::Texture* texture;
+		sf::Texture* red;
 		sf::Shader* shader;
 		graphics::VertexBuffer* vbuff;
+		graphics::VertexBuffer* hpbar_buff;
 	protected:
 		tower_ptr getNearestTower() const;
 		Point<float> velocity = Point<float>(0, 0);
-		float health = 100;
+		float health = 1000;
 	public:
 		inline Unit(id_t id, Manager* m) : GameObject(id, m) {}
 		//IRenderable methods

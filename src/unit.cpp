@@ -8,8 +8,10 @@ namespace unit {
 		if (!texture->loadFromFile("src/Resources/Textures/pawn.png")) {
 			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
 		}
-		else {
-			std::cout << "Loaded Texture" << std::endl;
+
+		red = new sf::Texture();
+		if (!red->loadFromFile("src/Resources/Textures/red.png")) {
+			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
 		}
 
 		shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
@@ -21,16 +23,29 @@ namespace unit {
 		}
 
 		vbuff = new graphics::VertexBuffer();
+		hpbar_buff = new graphics::VertexBuffer();
+
 		vbuff->addQuad(-16.0f, -16.0f, 16.0f, 16.0f);
+		hpbar_buff->addQuadRGBA(-32.0f, -2.0f, 32.0f, 2.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+
 		vbuff->freeze();
+		hpbar_buff->freeze();
 	}
 	void Unit::render() {
 		render_manager->setActiveShader(shader);
 		render_manager->setTexture(texture);
+
+		render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
 		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY(), 0.0));
 		render_manager->setWorldMatrix(transform);
-
 		vbuff->render();
+
+		render_manager->setTexture(red);
+		render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
+		transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY()-30.0f, 0.0f) );
+		transform = glm::scale(transform, glm::vec3(health/1000, 1.0f, 1.0f));
+		render_manager->setWorldMatrix(transform);
+		hpbar_buff->render();
 	}
 	void Unit::renderGUI() {}
 	void Unit::release() {}
@@ -78,7 +93,7 @@ namespace unit {
 
 	// BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
 	void Unit::attacked(GameObject* aggressor) {
-		
+		health--;
 		if(health <= 0) {
 			destroySelf();
 		}

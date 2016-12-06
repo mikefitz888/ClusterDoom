@@ -1,12 +1,17 @@
 #include "../include/manager.h"
 #include "../include/network/Network.h"
 #include "../include/RenderManager.h"
+#include "../include/cvInterface.h"
 #include <iostream>
-//#include <unistd.h>
+#include <thread>
 
 using manager::Manager;
 using namespace graphics;
 using namespace network;
+
+void runCVInterface(cvinterface::ICVInterface* cv){
+	cv->init();
+}
 
 int main(int argc, char* argv[]){
 	Manager model = Manager();
@@ -20,8 +25,12 @@ int main(int argc, char* argv[]){
 
 	//Render Manager must be initialized first to ensure GL context
 	model.initRenderManager(rm);
+	
+	//TODO: Pass an openCV component to manager
+	cvinterface::ICVInterface Icv(model.getGameController());
+	std::thread cv_thread = std::thread(runCVInterface, &Icv);
+
 	model.init();
-	//rm.init();
 	//rm.setWindowTitle("Clusterdoom");
 
 	bool running = true;
@@ -31,10 +40,11 @@ int main(int argc, char* argv[]){
 
 		// Step then Render
 		running = model.step();
-		//usleep(200);
 	}
 
 	// Cleanup
+	Icv.release();
+	cv_thread.join();
 	nm.release();
 	model.releaseRender();
 

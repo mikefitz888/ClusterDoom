@@ -73,6 +73,7 @@ namespace manager {
 
 	public:
 		Manager();
+		inline GameController* getGameController() const { return game_controller; }
 		//Tower Methods
 		slave_ptr<Tower> createTower(tower::TYPE type);
 		void destroyTower(slave_ptr<Tower> tower);

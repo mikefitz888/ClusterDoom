@@ -43,8 +43,8 @@ int main(int argc, char* argv[]){
 	}
 
 	// Cleanup
-	Icv.release();
-	cv_thread.join();
+	//Icv.release();
+	//cv_thread.join();
 	nm.release();
 	model.releaseRender();
 

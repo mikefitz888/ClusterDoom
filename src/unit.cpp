@@ -79,7 +79,7 @@ namespace unit {
 	{
 		auto towers = manager->getTowers();
 		int minDist = INT_MAX;
-		tower_ptr* outTower = nullptr;
+		tower_ptr outTower = nullptr;
 
 		int dist;
 		for (auto tower : towers) {
@@ -87,16 +87,16 @@ namespace unit {
 				dist = distanceTo(smartpointers::dynamic_pointer_cast<GameObject>(tower));
 				//printf("dist: %d, minDist: %d\n", dist, minDist);
 				if (dist < minDist) {
-					outTower = &tower;
+					outTower = tower;
 					minDist = dist;
 				}
 			}
 		}
-		printf("object id %p", outTower);
-		if (outTower == nullptr) {
+
+		if (!outTower) {
 			return nullptr;
 		}
-		return *outTower;
+		return outTower;
 	}
 
 	void Unit::attack(tower_ptr tower) {

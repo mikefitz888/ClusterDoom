@@ -13,7 +13,6 @@ namespace manager {
 namespace graphics {
 	class RenderManager;
 }
-
 namespace tower {
 	class Tower;
 }
@@ -58,6 +57,7 @@ namespace gameobject {
 
 		inline int getX() const { return position.x; }
 		inline int getY() const { return position.y; }
+		int distanceTo(smartpointers::slave_ptr<GameObject> other) const;
 
 		inline void setX(int x_) { position.x = x_; }
 		inline void setY(int y_) { position.y = y_; }

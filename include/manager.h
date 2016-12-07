@@ -9,7 +9,7 @@
 #include "RenderManager.h"
 #include "VertexBuffer.h"
 #include "WorldRenderer.h"
-#include "network\Network.h"
+#include "network/Network.h"
 
 namespace network {
 	class NetworkManager;

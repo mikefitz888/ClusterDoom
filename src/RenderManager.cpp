@@ -38,6 +38,7 @@ namespace graphics {
 #ifdef __APPLE__
 		ctx.majorVersion = 3;
 		ctx.minorVersion = 3;
+		printf("APPLE BOYSSS");
 #else
 		ctx.majorVersion = 3;
 		ctx.minorVersion = 1;

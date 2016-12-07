@@ -78,13 +78,24 @@ namespace unit {
 	//Not actually implemented correctly, just prototype
 	{
 		auto towers = manager->getTowers();
+		int minDist = INT_MAX;
+		tower_ptr outTower = nullptr;
+
+		int dist;
 		for (auto tower : towers) {
-			if (!tower) continue;
 			if (tower->getHealth() > 0) {
-				return tower;
+				dist = distanceTo(smartpointers::dynamic_pointer_cast<GameObject>(tower));
+				//printf("dist: %d, minDist: %d\n", dist, minDist);
+				if (dist < minDist) {
+					outTower = tower;
+					minDist = dist;
+				}
 			}
 		}
-		return nullptr;
+		if (!outTower) {
+			return nullptr;
+		}
+		return outTower;
 	}
 
 	void Unit::attack(tower_ptr tower) {

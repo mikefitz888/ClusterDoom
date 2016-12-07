@@ -4,7 +4,7 @@
 #include "../include/cvInterface.h"
 #include <iostream>
 #include <thread>
-
+#include "../include/smartpointers.h"
 using manager::Manager;
 using namespace graphics;
 
@@ -19,6 +19,14 @@ int main(int argc, char* argv[]){
 
 	// Networking
 	//NetworkManager nm;
+	smartpointers::slave_ptr<int> ptr = nullptr;
+
+	if (ptr) {
+		std::cout << "NPT IS VLAID" << std::endl;
+	}
+	else {
+		std::cout << "NPT IS NOT VALID" << std::endl;
+	}
 
 	// Rendering
 	RenderManager rm;
@@ -32,6 +40,8 @@ int main(int argc, char* argv[]){
 
 	model.init();
 	//rm.setWindowTitle("Clusterdoom");
+
+	
 
 	bool running = true;
 	while (running) {

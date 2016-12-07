@@ -40,6 +40,7 @@ namespace gameobject {
 
 	class GameObject : public IRenderable {
 		const id_t id_;
+		const id_t type_ = 0; // TODO: EACH OBJECT NEEDS ITS OWN TYPE
 	protected:
 		Manager* manager;
 		RenderManager* render_manager = nullptr;
@@ -48,6 +49,7 @@ namespace gameobject {
 	public:
 		inline GameObject(id_t id, Manager* m) : id_(id), manager(m) {} //Very important to get key from manager (for memory management + networking)
 		inline id_t getID() const { return id_; }
+		inline id_t getType() const { return type_; }
 		virtual void render() override { }
 		virtual void init() override { }
 		virtual void renderGUI() override { }

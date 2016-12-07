@@ -1,4 +1,4 @@
-#version 130
+#version 330
 
 uniform sampler2D texture_diffuse;
 uniform vec4 drawColour;

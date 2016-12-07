@@ -1,4 +1,4 @@
-#version 130
+#version 330
 
 uniform mat4 matrixProjection;
 uniform mat4 matrixWorld;

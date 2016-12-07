@@ -16,7 +16,7 @@ namespace worldrenderer {
 
 namespace unit {
 	class Unit;
-	enum TYPE;
+	enum TYPE : unsigned int;
 }
 
 namespace tower {

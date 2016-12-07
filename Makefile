@@ -2,14 +2,14 @@ CC := g++
 
 SRCDIR := src
 BUILDDIR := build
-TARGET := bin/Game
+TARGET := ./Game
  
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -std=c++11 -g -Wall -Wextra -pedantic
-LIB := -lGLEW -framework OpenGL -framework sfml-graphics -framework sfml-window -framework sfml-system -framework sfml-network
-INC := -I/opt/local/include/
+LIB := -L lib/glew/ -lGL -lGLEW -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
+INC := -I lib/SFML-2.4.1/include/ -I lib/glm/
 
 $(TARGET): $(OBJECTS)
 	@echo " Linking..."
@@ -21,7 +21,8 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 
 clean:
 	@echo " Cleaning..."; 
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+	@echo " find $(BUILDDIR) ! -type d -delete"; find $(BUILDDIR) ! -type d -delete; rm $(TARGET)
+#alt for linux systems that don't support -delete: "find $(BUILDDIR) ! -type d -exec rm '{}' \;"
 
 run:
 	export LD_LIBRARY_PATH=$(PWD)/lib/glew/; \

@@ -25,7 +25,7 @@ namespace unit {
 		vbuff = new graphics::VertexBuffer();
 		hpbar_buff = new graphics::VertexBuffer();
 
-		vbuff->addQuad(-16.0f, -16.0f, 16.0f, 16.0f);
+		vbuff->addQuad(-100.0f, -56.2f, 100.0f, 56.2f);
 		hpbar_buff->addQuadRGBA(-32.0f, -2.0f, 32.0f, 2.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 
 		vbuff->freeze();

@@ -11,9 +11,12 @@
 #include <vector>
 #include "../manager.h"
 #include "Buffer.h"
+#include "../smartpointers.h"
+#include "../gameobject.h"
 
 using std::vector;
 using manager::Manager;
+
 
 namespace network {
 
@@ -48,6 +51,10 @@ namespace network {
 		void sendPacket(Buffer &buff) const;						// Sends a packet with the given Buffer to the client represented by NetworkClient
 		ConnectionState getConnectionStatus() const;				// Returns the connection status of the client.
 		void release();										// Force disconnects a socket and cleans up any data.
+
+		// Network update functions
+		void sendInstanceCreate(int instance_id, int instance_type);
+		void sendInstanceDestroy(int instance_id);
 	};
 
 	/// Network Manager
@@ -72,6 +79,13 @@ namespace network {
 		Buffer* getSendBuffer() const;
 		void sendToAll(Buffer &buff);	// Will broadcast a packet to ALL clients who are fully connected
 		void release();
+
+		// Network update functions
+		void sendInstanceCreate(NetworkClient *client, int instance_id, int instance_type);
+		void sendInstanceCreate(int instance_id, int instance_type);
+		void sendInstanceDestroy(int instance_id);
+		void sendAllInstancesToClient(NetworkClient *network_client);
+
 
 		/*
 			This is the range of packet IDs that the server can send to the

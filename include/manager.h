@@ -13,6 +13,7 @@
 
 namespace network {
 	class NetworkManager;
+	class NetworkClient;
 }
 namespace worldrenderer {
 	class WorldRenderer;
@@ -94,10 +95,13 @@ namespace manager {
 		slave_ptr<GameObject> createObject();
 		void destroyObject(slave_ptr<GameObject>& obj);
 
+
 		//GameObject Methods
 		void destroy(GameObject* obj);
 
 		//Network Methods
+		void sendAllInstancesToClient(network::NetworkClient *network_client);
+
 		//void sendEvent();
 		//void receiveEvent();
 

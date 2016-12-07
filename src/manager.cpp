@@ -76,6 +76,9 @@ namespace manager {
 		}
 		std::cout << "Object added to pool with id = " << id << std::endl;
 		std::cout << "Pool size now = " << game_object_pool.size() << std::endl;
+
+		// Network update
+		network_manager->sendInstanceCreate(id, game_object->getType());
 	}
 
 	// Destroys the master_ptr
@@ -84,7 +87,20 @@ namespace manager {
 		free_id_list.push_back(id);
 		tower_logic->clean();
 		unit_logic->clean();
+		network_manager->sendInstanceDestroy(id);
+	}
 
+	/*std::vector<master_ptr<GameObject>>& Manager::getObjectPool() {
+		return game_object_pool;
+	}*/
+	void Manager::sendAllInstancesToClient(network::NetworkClient *network_client) {
+		for (slave_ptr<GameObject> object : game_object_pool) {
+			if (object) {
+				int id = object->getID();
+				int type = object->getType();
+				network_manager->sendInstanceCreate(network_client, id, type);
+			}
+		}
 	}
 
 	// This removes the free key from list so ensure it is used to create a GameObject

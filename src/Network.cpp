@@ -2,7 +2,7 @@
 
 
 namespace network {
-
+	
 	//// -------------------------------------------------------------------------------- //////
 	// NETWORK MANAGER
 	NetworkManager::NetworkManager(Manager *manager) {
@@ -87,6 +87,31 @@ namespace network {
 		}
 	}
 
+	// Invokes an instance creation on all clients
+	void NetworkManager::sendInstanceCreate(int instance_id, int instance_type) {
+		for (NetworkClient* it : clients) {
+			it->sendInstanceCreate(instance_id, instance_type);
+		}
+	}
+
+	void NetworkManager::sendInstanceCreate(NetworkClient *client, int instance_id, int instance_type) {
+		client->sendInstanceCreate(instance_id, instance_type);
+	}
+
+	// Invokes an instance destroy on all clients
+	void NetworkManager::sendInstanceDestroy(int instance_id) {
+		for (NetworkClient* it : clients) {
+			it->sendInstanceDestroy(instance_id);
+		}
+	}
+
+	// Send all existing instances to the new client:
+	void NetworkManager::sendAllInstancesToClient(NetworkClient *network_client) {
+		manager->sendAllInstancesToClient(network_client);
+	}
+
+
+
 	void NetworkManager::release() {
 		for (NetworkClient* it : clients) {
 			it->release();
@@ -160,10 +185,32 @@ namespace network {
 		if (received_token == security_hash) {
 			connection_state = VERIFIED;
 			std::cout << "[NETWORK CLIENT] Client successfully verified!" << std::endl;
+
+			// Send all instances
+			network_manager->sendAllInstancesToClient(this);
 		} else {
 			// Disconnect
 			disconnect("Security Check Invalid.");
 		}
+	}
+
+	/*
+		Send Global game network update states:
+	*/
+	void NetworkClient::sendInstanceCreate(int instance_id, int instance_type) {
+		std::cout << "[NETWORK CLIENT] SENDING INSTANCE: " << instance_id << " to client: " << ip << std::endl;
+		send_buffer.seek(0);
+		send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendInstanceCreate;
+		send_buffer << instance_id;
+		send_buffer << instance_type;
+		socket->send(send_buffer.getPtr(), send_buffer.tell());
+	}
+
+	void NetworkClient::sendInstanceDestroy(int instance_id) {
+		send_buffer.seek(0);
+		send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendInstanceDestroy;
+		send_buffer << instance_id;
+		socket->send(send_buffer.getPtr(), send_buffer.tell());
 	}
 
 	/*

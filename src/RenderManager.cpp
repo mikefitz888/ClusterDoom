@@ -35,7 +35,7 @@ namespace graphics {
 
 	void RenderManager::createWindow() {
 		sf::ContextSettings ctx = sf::ContextSettings(32);
-#if __APPLE__
+#ifdef __APPLE__
 		ctx.majorVersion = 3;
 		ctx.minorVersion = 3;
 #else

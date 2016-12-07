@@ -5,6 +5,7 @@
 #include "VertexBuffer.h"
 #include "smartpointers.h"
 
+
 namespace manager {
 	class Manager;
 }
@@ -44,7 +45,7 @@ namespace gameobject {
 		Manager* manager;
 		RenderManager* render_manager = nullptr;
 		Point<int> position = Point<int>(0, 0);
-		void destroySelf();
+		int _destroySelf();
 	public:
 		inline GameObject(id_t id, Manager* m) : id_(id), manager(m) {} //Very important to get key from manager (for memory management + networking)
 		inline id_t getID() const { return id_; }
@@ -63,5 +64,7 @@ namespace gameobject {
 		inline void setPosition(int x, int y) { setX(x); setY(y); }
 	};
 }
+
+#define destroySelf();  _destroySelf(); return;
 
 #endif //GAMEOBJECT_H

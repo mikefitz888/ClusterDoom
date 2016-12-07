@@ -9,7 +9,11 @@
 #include "RenderManager.h"
 #include "VertexBuffer.h"
 #include "WorldRenderer.h"
+#include "network\Network.h"
 
+namespace network {
+	class NetworkManager;
+}
 namespace worldrenderer {
 	class WorldRenderer;
 }
@@ -52,6 +56,7 @@ namespace manager {
 	using tower::Tower;
 	using graphics::RenderManager;
 	using worldrenderer::WorldRenderer;
+	using network::NetworkManager;
 
 	typedef size_t id_t;
 
@@ -64,8 +69,9 @@ namespace manager {
 		UnitLogic* unit_logic;
 		GameController* game_controller; //IRenderable
 
-		RenderManager* render_manager = nullptr;
-		WorldRenderer* world_renderer = nullptr;
+		RenderManager*  render_manager  = nullptr;
+		WorldRenderer*  world_renderer  = nullptr;
+		NetworkManager* network_manager = nullptr;
 
 		void addToPool(GameObject* game_object);
 		void removeFromPool(id_t id);
@@ -100,7 +106,7 @@ namespace manager {
 		void initRenderManager(RenderManager &rm);
 		bool render() const;
 		RenderManager* getRenderManager() const;
-		void releaseRender();
+		void release();
 		void renderAll();
 		void stepAll();
 		

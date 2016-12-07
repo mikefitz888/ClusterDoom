@@ -1,10 +1,12 @@
 #include "../include/manager.h"
 
 namespace manager {
+
 	Manager::Manager() {
 		tower_logic = new TowerLogic(this);
 		unit_logic = new UnitLogic(this);
 		game_controller = new GameController(this);
+		network_manager = new NetworkManager(this);
 	}
 
 	//Tower Methods
@@ -82,6 +84,7 @@ namespace manager {
 		free_id_list.push_back(id);
 		tower_logic->clean();
 		unit_logic->clean();
+
 	}
 
 	// This removes the free key from list so ensure it is used to create a GameObject
@@ -99,6 +102,7 @@ namespace manager {
 	}
 
 	bool Manager::step(){
+		network_manager->networkStep();
 		game_controller->step();
 		return render();
 	}
@@ -121,10 +125,12 @@ namespace manager {
 		return render_manager;
 	}
 
-	void Manager::releaseRender() { 
+	void Manager::release() { 
 		render_manager->release(); 
 		render_manager = nullptr;
 		delete world_renderer;
+
+		network_manager->release();
 	}
 
 	void Manager::renderAll() {

@@ -7,7 +7,7 @@
 
 using manager::Manager;
 using namespace graphics;
-using namespace network;
+
 
 void runCVInterface(cvinterface::ICVInterface* cv){
 	cv->init();
@@ -18,7 +18,7 @@ int main(int argc, char* argv[]){
 	std::cout << "O:!" << std::endl;
 
 	// Networking
-	NetworkManager nm;
+	//NetworkManager nm;
 
 	// Rendering
 	RenderManager rm;
@@ -36,7 +36,7 @@ int main(int argc, char* argv[]){
 	bool running = true;
 	while (running) {
 		// Networking
-		nm.networkStep();
+		//nm.networkStep();
 
 		// Step then Render
 		running = model.step();
@@ -45,8 +45,8 @@ int main(int argc, char* argv[]){
 	// Cleanup
 	//Icv.release();
 	//cv_thread.join();
-	nm.release();
-	model.releaseRender();
+	//nm.release();
+	model.release();
 
 	return 0;
 }

@@ -2,7 +2,8 @@
 #include "../include/manager.h"
 
 namespace gameobject {
-	void GameObject::destroySelf() {
+	int GameObject::_destroySelf() {
 		manager->destroy(this);
+		return 0;
 	}
 }

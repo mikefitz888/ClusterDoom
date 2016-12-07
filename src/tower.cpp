@@ -64,9 +64,9 @@ namespace tower {
 	//Gameplay Methods
 	void Tower::step() {
 		if(health <= 0) {
-			//destroySelf();
+			destroySelf();
 		}
-		
+
 		auto units = manager->getUnits();
 		for(auto unit : units) {
 			if( (unit->getX()-getX())*(unit->getX()-getX()) + (unit->getY() - getY())*(unit->getY() - getY()) < 10000) {

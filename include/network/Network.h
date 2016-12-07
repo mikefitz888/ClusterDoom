@@ -9,9 +9,11 @@
 #include <iostream>
 #include <ctime>
 #include <vector>
+#include "../manager.h"
 #include "Buffer.h"
 
 using std::vector;
+using manager::Manager;
 
 namespace network {
 
@@ -59,11 +61,12 @@ namespace network {
 		vector<NetworkClient*> clients;
 		int					   connection_identifier_max = 0;
 		Buffer				   *send_buffer;
+		Manager				   *manager;
 
 		void removeConnection(NetworkClient *network_client);
 
 	public:
-		NetworkManager();
+		NetworkManager(Manager *manager);
 		void networkStep();
 		void newConnection(sf::TcpSocket *sfc, sf::IpAddress ip);
 		Buffer* getSendBuffer() const;

@@ -1,10 +1,12 @@
 #include "../include/network/Network.h"
 
+
 namespace network {
 
 	//// -------------------------------------------------------------------------------- //////
 	// NETWORK MANAGER
-	NetworkManager::NetworkManager() {
+	NetworkManager::NetworkManager(Manager *manager) {
+		this->manager = manager;
 		listener = new sf::TcpListener();
 		port = 31655;
 

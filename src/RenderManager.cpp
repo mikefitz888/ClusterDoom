@@ -34,7 +34,16 @@ namespace graphics {
 	}
 
 	void RenderManager::createWindow() {
-		window = new sf::Window(sf::VideoMode(width, height), "OpenGL", (fullscreen)? sf::Style::Fullscreen : sf::Style::Default, sf::ContextSettings(32));
+		sf::ContextSettings ctx = sf::ContextSettings(32);
+#if __APPLE__
+		ctx.majorVersion = 3;
+		ctx.minorVersion = 3;
+#else
+		ctx.majorVersion = 3;
+		ctx.minorVersion = 1;
+#endif
+		ctx.attributeFlags = ctx.Core;
+		window = new sf::Window(sf::VideoMode(width, height), "OpenGL", (fullscreen)? sf::Style::Fullscreen : sf::Style::Default, ctx);
 		window->setVerticalSyncEnabled(false);
 		window->setFramerateLimit(60);
 	}

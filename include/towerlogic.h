@@ -13,7 +13,7 @@ namespace manager {
 namespace tower {
 	class Tower;
 	class BasicTower;
-	enum TYPE;
+	enum TYPE : unsigned int;
 }
 
 namespace towerlogic {

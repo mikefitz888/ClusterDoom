@@ -21,7 +21,7 @@ namespace unit {
 
 namespace tower {
 	class Tower;
-	enum TYPE;
+	enum TYPE : unsigned int;
 }
 
 namespace gameobject {

@@ -18,7 +18,7 @@ namespace tower {
 	using gameobject::unit_ptr;
 	using manager::Manager;
 
-	enum TYPE {BASE, BASIC};
+	enum TYPE : unsigned int {BASE, BASIC};
 
 	class Tower : public GameObject {
 		sf::Texture* texture;

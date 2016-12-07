@@ -1,4 +1,4 @@
-#include "unitlogic.h"
+#include "../include/unitlogic.h"
 
 namespace unitlogic {
 	unit_ptr UnitLogic::createUnit(unit::TYPE type) const {

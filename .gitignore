@@ -3,6 +3,9 @@ build
 
 # Ignore executables
 bin/*
+lib/
+test/
+ClusterDoom/
 
 # Ignore Max files
 .DS_Store

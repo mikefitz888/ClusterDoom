@@ -39,6 +39,8 @@ namespace graphics {
 		ctx.majorVersion = 3;
 		ctx.minorVersion = 3;
 		printf("APPLE BOYSSS");
+#elif __linux__
+		//Leave default
 #else
 		ctx.majorVersion = 3;
 		ctx.minorVersion = 1;

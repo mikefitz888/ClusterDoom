@@ -1,5 +1,6 @@
 #include "../include/unit.h"
 #include "../include/tower.h"
+#include <climits>
 
 namespace unit {
 	void Unit::init() {

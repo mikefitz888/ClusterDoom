@@ -2,13 +2,13 @@ CC := g++
 
 SRCDIR := src
 BUILDDIR := build
-TARGET := ./Game
+TARGET := bin/Game
  
 SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -std=c++11 -g -Wall -Wextra -pedantic
-LIB := -L lib/glew/ -lGL -lGLEW -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network
+LIB := -L libs/lib/ -lGL -lGLEW -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lopencv_core -lopencv_highgui
 INC := -I lib/SFML-2.4.1/include/ -I lib/glm/
 
 $(TARGET): $(OBJECTS)
@@ -25,7 +25,7 @@ clean:
 #alt for linux systems that don't support -delete: "find $(BUILDDIR) ! -type d -exec rm '{}' \;"
 
 run:
-	export LD_LIBRARY_PATH=$(PWD)/lib/glew/; \
+	export LD_LIBRARY_PATH=$(PWD)/libs/lib/; \
 	$(TARGET)
 
 # Tests

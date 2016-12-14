@@ -4,6 +4,7 @@
 #include "RenderManager.h"
 #include "VertexBuffer.h"
 #include "smartpointers.h"
+#include "math.h"
 
 
 namespace manager {
@@ -36,6 +37,7 @@ namespace gameobject {
 		inline Point(T x_, T y_) : x(x_), y(y_) {}
 		T x;
 		T y;
+		inline T distanceTo(Point target) {return sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
 	};
 
 	class GameObject : public IRenderable {
@@ -59,6 +61,7 @@ namespace gameobject {
 
 		inline int getX() const { return position.x; }
 		inline int getY() const { return position.y; }
+		inline Point<int> getPosition() const { return position; }
 		int distanceTo(smartpointers::slave_ptr<GameObject> other) const;
 
 		inline void setX(int x_) { position.x = x_; }

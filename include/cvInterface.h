@@ -3,7 +3,10 @@
 
 #include "gamecontroller.h"
 #include "gameobject.h"
+#include <opencv/cv.h>
 #include <opencv2/highgui/highgui.hpp>
+//#include <opencv2/highgui.hpp>
+//#include <opencv2/imgproc.hpp>
 namespace manager {
 	class Manager;
 }
@@ -20,6 +23,7 @@ namespace cvinterface {
 		cv::Mat frame;
 		double dWidth;
 		double dHeight;
+		IplImage* pFrame;
 	public:
 		inline ICVInterface(GameController* gc) : game_controller(gc) {}
 		void init();

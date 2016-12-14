@@ -35,8 +35,8 @@ int main(int argc, char* argv[]){
 	model.initRenderManager(rm);
 	
 	//TODO: Pass an openCV component to manager
-	//cvinterface::ICVInterface Icv(model.getGameController());
-	//std::thread cv_thread = std::thread(runCVInterface, &Icv);
+	cvinterface::ICVInterface Icv(model.getGameController());
+	std::thread cv_thread = std::thread(runCVInterface, &Icv);
 
 	model.init();
 	//rm.setWindowTitle("Clusterdoom");
@@ -53,8 +53,8 @@ int main(int argc, char* argv[]){
 	}
 
 	// Cleanup
-	//Icv.release();
-	//cv_thread.join();
+	Icv.release();
+	cv_thread.join();
 	//nm.release();
 	model.release();
 

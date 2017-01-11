@@ -1,4 +1,5 @@
 #include "../include/manager.h"
+#include "../include/ResourceManager.h"
 
 namespace manager {
 

@@ -33,10 +33,7 @@ using graphics::RenderManager;
 
 // Forward manager declaration
 namespace manager { 
-	class Manager {
-	public:
-		RenderManager* getRenderManager() const;
-	};
+	class Manager;
 }
 
 using std::map;

@@ -4,10 +4,7 @@
 #include "RenderManager.h"
 #include "manager.h"
 #include "towerlogic.h"
-
-namespace manager {
-	class Manager;
-}
+#include "ResourceManager.h"
 
 namespace worldrenderer {
 	using graphics::IRenderable;

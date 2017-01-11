@@ -351,6 +351,7 @@ namespace smartpointers {
             this->validity = r.validity;
             if (*this->validity > 0) ++*this->validity;
             else --*this->validity;
+			return *this;
         }
 
         inline slave_ptr<T>& operator=(slave_ptr<T>&& r) noexcept {

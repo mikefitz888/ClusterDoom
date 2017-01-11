@@ -1,10 +1,14 @@
 #include "../include/RenderManager.h"
 #include <iostream>
-
+#include "../include/manager.h"
 
 namespace graphics {
 	// Init function
-	void RenderManager::init() {
+	void RenderManager::init(Manager *manager) {
+
+		// Assign manager
+		this->manager = manager;
+
 		// Create window
 		createWindow();
 		GLenum err = glewInit();
@@ -27,10 +31,14 @@ namespace graphics {
 		// Create Camera
 		camera = new GCameraOrtho(1280, 720, this);
 
+		// Load resources
+		this->loadResources();
+
 		// Call active parent init
 		if (render_parent != nullptr) {
 			render_parent->init();
 		}
+
 	}
 
 	void RenderManager::createWindow() {
@@ -234,6 +242,20 @@ namespace graphics {
 	}
 	void RenderManager::setWorldMatrixIdentity() {
 		setWorldMatrix(glm::mat4());
+	}
+
+	// Resource loading
+	void RenderManager::loadResources() {
+		ResourceManager *rm = this->manager->getResourceManager();
+
+		// Load Textures
+		rm->textureLoad("background",  "src/Resources/Textures/background.png");
+		rm->textureLoad("basic_tower", "Resources/Textures/Towers/Basic.jpg");
+		rm->textureLoad("pawn",        "src/Resources/Textures/pawn.png");
+		rm->textureLoad("red",         "src/Resources/Textures/red.png");
+		
+		// Load Shaders
+		rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
 	}
 
 	/// ------------------ CAMERA FUNCTIONS -------------------- //

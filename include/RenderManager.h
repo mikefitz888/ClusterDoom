@@ -15,6 +15,11 @@
 	GCamera maintains the current matrix transformation state 
 */
 
+namespace manager {
+	class Manager;
+}
+using manager::Manager;
+
 namespace graphics {
 	class RenderManager;
 	class GCamera {
@@ -80,7 +85,7 @@ namespace graphics {
 
 		public:
 
-			void init();
+			void init(Manager *manager);
 			void setWindowFullScreen(bool fullscreen);
 			void setWindowTitle(const sf::String title) const;
 			void setWindowSize(int width, int height) const;
@@ -113,6 +118,7 @@ namespace graphics {
 			sf::Shader *active_shader = nullptr;		/* Whilst shaders can be changed, it needs to be done through the RenderManager
 											so that binding textures/other graphics resources know which shader uniforms to modify */
 			IRenderable *render_parent = nullptr;		/* The top-most node in the composite rendering pattern (This should render any children in its own render method)*/
+			Manager *manager;
 
 			// Transformation + Rendering
 			glm::mat4 world_matrix;			/* Matrix used to represent the current transformation state */
@@ -121,6 +127,7 @@ namespace graphics {
 			void createWindow();
 			static void shaderPrepare(sf::Shader *shader);	/* Performs any openGL operations upon a shader needed to configure it for the rendering environment*/
 			void bind_colour_uniform();
+			void loadResources(); // A location in which initial, core resources can be loaded in.
 	};
 }
 

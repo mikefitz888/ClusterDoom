@@ -9,14 +9,14 @@ namespace worldrenderer {
 		if (!game_bg_texture->loadFromFile("src/Resources/Textures/background.png")) {
 			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
 		}*/
-		//game_bg_texture = manager->getResourceManager()->getTexture("test");
+		game_bg_texture = manager->getResourceManager()->getTexture("background");
 
 
 		/*game_bg_shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
 		if (game_bg_shader == nullptr) {
 			std::cout << "[ERROR] FAILED TO LOAD SHADER (Tower)" << std::endl;
 		}*/
-		//game_bg_shader = manager->getResourceManager()->getShader("default");
+		game_bg_shader = manager->getResourceManager()->getShader("default");
 
 		vbuff = new graphics::VertexBuffer();
 		float width = render_manager->getWindowWidth();

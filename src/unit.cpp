@@ -5,23 +5,27 @@
 namespace unit {
 	void Unit::init() {
 		render_manager = manager->getRenderManager();
-		texture = new sf::Texture();
+
+		/*texture = new sf::Texture();
 		if (!texture->loadFromFile("src/Resources/Textures/pawn.png")) {
 			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
-		}
+		}*/
+		texture = manager->getResourceManager()->getTexture("pawn");
 
-		red = new sf::Texture();
+		/*red = new sf::Texture();
 		if (!red->loadFromFile("src/Resources/Textures/red.png")) {
 			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
-		}
+		}*/
+		red = manager->getResourceManager()->getTexture("red");
 
-		shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
+		/*shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
 		if (shader == nullptr) {
 			std::cout << "[ERROR] FAILED TO LOAD SHADER (Tower)" << std::endl;
 		}
 		else {
 			std::cout << "Loaded shader" << std::endl;
-		}
+		}*/
+		shader = manager->getResourceManager()->getShader("default");
 
 		vbuff = new graphics::VertexBuffer();
 		hpbar_buff = new graphics::VertexBuffer();

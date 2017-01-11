@@ -1,5 +1,5 @@
 #ifndef _RESOURCE_MANAGER_H
-#define _RESOURCE_MANAGER
+#define _RESOURCE_MANAGER_H
 
 /*
 	Resource Manager
@@ -45,7 +45,7 @@ class ResourceManager {
 private:
 	map<sf::String, sf::Texture*>  textureMap;
 	map<sf::String, sf::Shader*>   shaderMap;
-	//map<sf::String, VertexBuffer*> meshMap;
+	map<sf::String, VertexBuffer*> meshMap;
 
 	Manager *manager; // ptr to manager
 
@@ -58,19 +58,19 @@ public:
 	sf::Texture* textureLoad(sf::String resource_name, sf::String resource_filepath);
 	sf::Texture* getTexture(sf::String resource_name);
 	bool         textureExists(sf::String resource_name);
-	bool         textureUnload(sf::String resource_name);
+	void         textureUnload(sf::String resource_name);
 
 	// Shader functions
 	sf::Shader* shaderLoad(sf::String resource_name, sf::String resource_filepath_vert, sf::String resource_filepath_frag);
 	sf::Shader* getShader(sf::String resource_name);
 	bool		shaderExists(sf::String resource_name);
-	bool        shaderUnload(sf::String resource_name);
+	void        shaderUnload(sf::String resource_name);
 
 	// Mesh functions
 	VertexBuffer* meshLoad(sf::String resource_name, sf::String resource_filepath);
 	VertexBuffer* getMesh(sf::String resource_name);
 	bool	      meshExists(sf::String resource_name);
-	bool		  meshUnload(sf::String resource_name);
+	void		  meshUnload(sf::String resource_name);
 
 	// < UNLOAD ALL with release() ~ To be called at end >
 	void release();

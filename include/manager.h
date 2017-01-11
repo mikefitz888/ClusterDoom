@@ -10,6 +10,7 @@
 #include "VertexBuffer.h"
 #include "WorldRenderer.h"
 #include "network/Network.h"
+#include "ResourceManager.h"
 
 namespace network {
 	class NetworkManager;
@@ -48,8 +49,6 @@ namespace gamecontroller {
 namespace manager {
 	class Manager;
 }
-
-class ResourceManager;
 
 namespace manager {
 	using gameobject::GameObject;

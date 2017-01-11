@@ -129,7 +129,7 @@ namespace manager {
 		render_manager=&rm;
 		world_renderer = new WorldRenderer(this);
 		render_manager->setRenderParent(world_renderer);
-		render_manager->init();
+		render_manager->init(this);
 	}
 
 	bool Manager::render() const {

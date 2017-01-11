@@ -20,24 +20,43 @@
 	 - I have provided the unload functions as well, however these don't really need to be used. They will be called when the release() function is called.
 */
 
-using std::map;
-
 #include "../include/VertexBuffer.h"
+#include "../include/RenderManager.h"
 #include <map>
 #include <SFML\Main.hpp>
 #include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
 #include <SFML\System.hpp>
+#include <iostream>
 
+using graphics::RenderManager;
+
+// Forward manager declaration
+namespace manager { 
+	class Manager {
+	public:
+		RenderManager* getRenderManager() const;
+	};
+}
+
+using std::map;
 using graphics::VertexBuffer;
+using manager::Manager;
 
 class ResourceManager {
-	map<sf::String, sf::Texture*> textureMap;
-	map<sf::String, sf::Shader*>  shaderMap;
-	map<sf::String, VertexBuffer> meshMap;
+
+private:
+	map<sf::String, sf::Texture*>  textureMap;
+	map<sf::String, sf::Shader*>   shaderMap;
+	//map<sf::String, VertexBuffer*> meshMap;
+
+	Manager *manager; // ptr to manager
 
 	
 public:
+	// Constructor
+	ResourceManager(Manager* manager);
+
 	// Texture functions
 	sf::Texture* textureLoad(sf::String resource_name, sf::String resource_filepath);
 	sf::Texture* getTexture(sf::String resource_name);
@@ -45,7 +64,7 @@ public:
 	bool         textureUnload(sf::String resource_name);
 
 	// Shader functions
-	sf::Shader* shaderLoad(sf::String resource_name, sf::String resource_filepath);
+	sf::Shader* shaderLoad(sf::String resource_name, sf::String resource_filepath_vert, sf::String resource_filepath_frag);
 	sf::Shader* getShader(sf::String resource_name);
 	bool		shaderExists(sf::String resource_name);
 	bool        shaderUnload(sf::String resource_name);

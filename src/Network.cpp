@@ -186,6 +186,9 @@ namespace network {
 			connection_state = VERIFIED;
 			std::cout << "[NETWORK CLIENT] Client successfully verified!" << std::endl;
 
+			// Send verify packet
+
+
 			// Send all instances
 			network_manager->sendAllInstancesToClient(this);
 		} else {
@@ -198,12 +201,16 @@ namespace network {
 		Send Global game network update states:
 	*/
 	void NetworkClient::sendInstanceCreate(int instance_id, int instance_type) {
+		//socket->setBlocking(true);
+		size_t ss;
 		std::cout << "[NETWORK CLIENT] SENDING INSTANCE: " << instance_id << " to client: " << ip << std::endl;
 		send_buffer.seek(0);
 		send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendInstanceCreate;
 		send_buffer << instance_id;
 		send_buffer << instance_type;
-		socket->send(send_buffer.getPtr(), send_buffer.tell());
+		socket->send(send_buffer.getPtr(), send_buffer.tell(), ss);
+		std::cout << "STATUS: " << ss << std::endl;
+		//socket->setBlocking(false);
 	}
 
 	void NetworkClient::sendInstanceDestroy(int instance_id) {

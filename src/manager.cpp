@@ -3,10 +3,11 @@
 namespace manager {
 
 	Manager::Manager() {
-		tower_logic = new TowerLogic(this);
-		unit_logic = new UnitLogic(this);
-		game_controller = new GameController(this);
-		network_manager = new NetworkManager(this);
+		tower_logic      = new TowerLogic(this);
+		unit_logic       = new UnitLogic(this);
+		game_controller  = new GameController(this);
+		network_manager  = new NetworkManager(this);
+		resource_manager = new ResourceManager(this);
 	}
 
 	//Tower Methods
@@ -137,8 +138,14 @@ namespace manager {
 		return false;
 	}
 
+	// Get render manager
 	RenderManager* Manager::getRenderManager() const { 
 		return render_manager;
+	}
+
+	// Get resource manager
+	ResourceManager* Manager::getResourceManager() const {
+		return resource_manager;
 	}
 
 	void Manager::release() { 

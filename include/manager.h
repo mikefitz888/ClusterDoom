@@ -10,6 +10,7 @@
 #include "VertexBuffer.h"
 #include "WorldRenderer.h"
 #include "network/Network.h"
+//#include "ResourceManager.h"
 
 namespace network {
 	class NetworkManager;
@@ -46,6 +47,15 @@ namespace gamecontroller {
 }
 
 namespace manager {
+	class Manager;
+}
+
+class ResourceManager {
+public:
+	ResourceManager(manager::Manager* manager);
+};
+
+namespace manager {
 	using gameobject::GameObject;
 	using smartpointers::master_ptr;
 	using smartpointers::slave_ptr;
@@ -70,9 +80,10 @@ namespace manager {
 		UnitLogic* unit_logic;
 		GameController* game_controller; //IRenderable
 
-		RenderManager*  render_manager  = nullptr;
-		WorldRenderer*  world_renderer  = nullptr;
-		NetworkManager* network_manager = nullptr;
+		RenderManager*  render_manager    = nullptr;
+		WorldRenderer*  world_renderer    = nullptr;
+		NetworkManager* network_manager   = nullptr;
+		ResourceManager* resource_manager = nullptr;
 
 		void addToPool(GameObject* game_object);
 		void removeFromPool(id_t id);
@@ -109,7 +120,8 @@ namespace manager {
 		void init() const;
 		void initRenderManager(RenderManager &rm);
 		bool render() const;
-		RenderManager* getRenderManager() const;
+		RenderManager*   getRenderManager() const;
+		ResourceManager* getResourceManager() const;
 		void release();
 		void renderAll();
 		void stepAll();

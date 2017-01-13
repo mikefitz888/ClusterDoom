@@ -32,8 +32,10 @@ using graphics::RenderManager;
 class FrameBuffer {
 private:
 	int width, height;
-	GLuint frameBufferID;
-	RenderManager* renderManager;
+	GLuint frame_buffer_object_id;
+	GLuint render_texture;
+	GLuint render_buffer_object_depth_id;
+	RenderManager* render_manager;
 
 	bool generateFrameBuffer(); // Generate frame buffer
 public:
@@ -41,6 +43,7 @@ public:
 	void setTarget();
 	void resetTarget();
 	void bind();
+	GLuint getTexture();
 };
 
 #endif

@@ -46,6 +46,7 @@ using graphics::AnimatedTexture;
 using manager::Manager;
 
 class ResourceManager {
+	friend class AudioManager;
 
 private:
 	map<sf::String, sf::Texture*>     textureMap;
@@ -57,7 +58,25 @@ private:
 
 	Manager *manager; // ptr to manager
 
-	
+	map<sf::String, sf::Music*> *getMusicMap();
+
+	// SoundBuffer functions
+	/*
+		Note: Sound data is stored in soundbuffer, but we need to use sf::Sound to play an instance of a sound.
+		- Sounds are for sound effects that end are short and multiple instances of them may play.
+
+		- The SoundBuffer functions are private, and only accessible by friend class AudioManager, as normal
+		instances should not be dealing with sound buffers directly. Sound effects are abstracted away
+		through the audio manager.
+
+		- Sound instances however are fine (these are returned by AudioManager's play function and allow
+		manipulation of volume, pitch etc;)
+	*/
+	sf::SoundBuffer* soundBufferLoad(sf::String resource_name, sf::String resource_filepath);
+	sf::SoundBuffer* getSoundBuffer(sf::String resource_name);
+	bool			 soundBufferExists(sf::String resource_name);
+	void			 soundBufferUnload(sf::String resource_name);
+
 public:
 	// Constructor
 	ResourceManager(Manager* manager);
@@ -85,16 +104,6 @@ public:
 	AnimatedTexture* getAnimatedTexture(sf::String resource_name);
 	bool		     animatedTextureExists(sf::String resource_name);
 	void		     animatedTextureUnload(sf::String resource_name);
-
-	// SoundBuffer functions
-	/*
-		Note: Sound data is stored in soundbuffer, but we need to use sf::Sound to play an instance of a sound.
-		- Sounds are for sound effects that end are short and multiple instances of them may play.
-	*/
-	sf::SoundBuffer* soundBufferLoad(sf::String resource_name, sf::String resource_filepath);
-	sf::SoundBuffer* getSoundBuffer(sf::String resource_name);
-	bool			 soundBufferExists(sf::String resource_name);
-	void			 soundBufferUnload(sf::String resource_name);
 
 	// Music functions
 	/*

@@ -26,9 +26,10 @@ private:
 
 public:
 	AudioManager(Manager* manager);
-	sf::Sound* playSoundFromBuffer(sf::SoundBuffer* buffer);
-	sf::Sound* playSoundFromBuffer(sf::String sound_resource_name);
-
+	sf::Sound* playSound(sf::SoundBuffer* buffer);
+	sf::Sound* playSound(sf::String sound_resource_name);
+	void stopAllMusic();
+	void stopAllSound();
 };
 
 

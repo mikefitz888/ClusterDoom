@@ -63,7 +63,9 @@ namespace tower {
 
 	//Gameplay Methods
 	void Tower::step() {
-		if(health <= 0) { destroySelf();return; }
+		if(health <= 0) { 
+			manager->getAudioManager()->playSound("cannon");
+			destroySelf();return; }
 		
 		auto units = manager->getUnits();
 		for(auto unit : units) {

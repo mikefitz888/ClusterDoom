@@ -230,6 +230,10 @@ void ResourceManager::musicUnload(sf::String resource_name) {
 		this->musicMap.erase(resource_name);
 	}
 }
+
+map<sf::String, sf::Music*>* ResourceManager::getMusicMap() {
+	return &musicMap;
+}
 ////////////////////////////////////////////////
 // Release all resources
 void ResourceManager::release() {

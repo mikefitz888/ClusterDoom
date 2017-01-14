@@ -1,4 +1,5 @@
 #include "../include/WorldRenderer.h"
+#include "../include/AnimatedTexture.h"
 
 
 namespace worldrenderer {
@@ -24,6 +25,9 @@ namespace worldrenderer {
 		float height = render_manager->getWindowHeight();
 		vbuff->addQuad(-width/2, -height/2, width/2, height/2);
 		vbuff->freeze();
+
+		// Create Aniamted texture
+		at = new graphics::AnimatedTexture("src/Resources/Textures/explosion.png", false, 48, 1, -1);
 	}
 
 	void WorldRenderer::render(){
@@ -43,6 +47,12 @@ namespace worldrenderer {
 		render_manager->setWorldMatrix(transform);
 
 		vbuff->render();
+
+		// Render debug explosion
+		render_manager->setBlendModeAdditive();
+		index += 0.60;
+		at->render(index);
+		render_manager->setBlendModeNormal();
 	}
 
 	void WorldRenderer::release(){

@@ -107,6 +107,9 @@ namespace graphics {
 			void setWorldMatrix(glm::mat4 world_matrix) const;
 			void setWorldMatrixIdentity();
 
+			void setBlendModeAdditive();
+			void setBlendModeNormal();
+
 
 		private:
 

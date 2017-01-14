@@ -258,6 +258,14 @@ namespace graphics {
 		rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
 	}
 
+	// Blend Modes
+	void RenderManager::setBlendModeAdditive() {
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+	}
+	void RenderManager::setBlendModeNormal() {
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	}
+
 	/// ------------------ CAMERA FUNCTIONS -------------------- //
 	void GCamera::setCameraPosition(float x, float y, float z) {
 		this->camera_position.x = x;

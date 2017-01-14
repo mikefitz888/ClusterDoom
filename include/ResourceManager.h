@@ -53,7 +53,7 @@ private:
 	map<sf::String, VertexBuffer*>	  meshMap;
 	map<sf::String, AnimatedTexture*> animatedTextureMap;
 	map<sf::String, sf::SoundBuffer*> soundBufferMap;
-	map<sf::String, sf::Music>	      musicMap;
+	map<sf::String, sf::Music*>	      musicMap;
 
 	Manager *manager; // ptr to manager
 

@@ -1,0 +1,43 @@
+#ifndef _AUDIO_MANAGER_H
+#define _AUDIO_MANAGER_H
+
+#include <map>
+#include <SFML\Main.hpp>
+#include <SFML\System.hpp>
+#include <SFML\Audio.hpp>
+#include <iostream>
+
+namespace manager {
+	class Manager;
+}
+
+using manager::Manager;
+
+class AudioManager {
+
+
+private:
+	Manager* manager;
+	std::vector<sf::Sound*> sound_instances;
+
+	void loadSoundAssets(); // Function to give us an opportunity to load in sound assets
+	void stepSounds(); 	// Keep sounds up-to-date, and delete sounds that have finished playing.
+	void release();    	// release memory        
+
+public:
+	AudioManager(Manager* manager);
+	sf::Sound* playSoundFromBuffer(sf::SoundBuffer* buffer);
+	sf::Sound* playSoundFromBuffer(sf::String sound_resource_name);
+
+};
+
+
+
+
+
+
+
+
+
+
+#endif

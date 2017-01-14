@@ -9,6 +9,7 @@ namespace manager {
 		game_controller  = new GameController(this);
 		network_manager  = new NetworkManager(this);
 		resource_manager = new ResourceManager(this);
+		audio_manager    = new AudioManager(this);
 	}
 
 	//Tower Methods
@@ -147,6 +148,11 @@ namespace manager {
 	// Get resource manager
 	ResourceManager* Manager::getResourceManager() const {
 		return resource_manager;
+	}
+
+	// Get audio manager
+	AudioManager* Manager::getAudioManager() const {
+		return audio_manager;
 	}
 
 	void Manager::release() { 

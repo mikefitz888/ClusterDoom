@@ -11,6 +11,7 @@
 #include "WorldRenderer.h"
 #include "network/Network.h"
 #include "ResourceManager.h"
+#include "AudioManager.h"
 
 namespace network {
 	class NetworkManager;
@@ -79,6 +80,7 @@ namespace manager {
 		WorldRenderer*  world_renderer    = nullptr;
 		NetworkManager* network_manager   = nullptr;
 		ResourceManager* resource_manager = nullptr;
+		AudioManager*    audio_manager    = nullptr;
 
 		void addToPool(GameObject* game_object);
 		void removeFromPool(id_t id);
@@ -117,6 +119,7 @@ namespace manager {
 		bool render() const;
 		RenderManager*   getRenderManager() const;
 		ResourceManager* getResourceManager() const;
+		AudioManager*    getAudioManager() const;
 		void release();
 		void renderAll();
 		void stepAll();

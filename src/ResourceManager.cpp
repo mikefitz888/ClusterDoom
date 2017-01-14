@@ -189,6 +189,48 @@ void ResourceManager::soundBufferUnload(sf::String resource_name) {
 }
 
 ////////////////////////////////////////////////
+// Music functions
+sf::Music* ResourceManager::musicLoad(sf::String resource_name, sf::String resource_filepath) {
+	if (this->musicExists(resource_name)) {
+		sf::Music *music = this->getMusic(resource_name);
+		return music;
+	} else {
+		sf::Music *music = new sf::Music();
+		bool success = music->openFromFile(resource_filepath);
+		if (!success) {
+			std::cout << "[ERROR] Music '" << resource_filepath.toAnsiString() << "' Failed to load!" << std::endl;
+			delete music;
+			return nullptr;
+		}
+
+		// Music has loaded successfully! (Add to map)
+		this->musicMap.insert(std::pair<sf::String, sf::Music*>(resource_name, music));
+		return music;
+	}
+}
+
+sf::Music* ResourceManager::getMusic(sf::String resource_name) {
+	if (this->musicExists(resource_name)) {
+		sf::Music* music = this->musicMap[resource_name];
+		return music;
+	} else {
+		std::cout << "[ERROR] Music with the name '" << resource_name.toAnsiString() << "' does not exist!" << std::endl;
+		return nullptr;
+	}
+}
+
+bool ResourceManager::musicExists(sf::String resource_name) {
+	return (this->musicMap.find(resource_name) != this->musicMap.end());
+}
+
+void ResourceManager::musicUnload(sf::String resource_name) {
+	if (this->musicExists(resource_name)) {
+		sf::Music *music = this->getMusic(resource_name);
+		delete music;
+		this->musicMap.erase(resource_name);
+	}
+}
+////////////////////////////////////////////////
 // Release all resources
 void ResourceManager::release() {
 
@@ -196,11 +238,13 @@ void ResourceManager::release() {
 	for (auto it = textureMap.begin(); it != textureMap.end(); it++) {
 		this->textureUnload(it->first);
 	}
+	textureMap.clear();
 
 	// Shader map
 	for (auto it = shaderMap.begin(); it != shaderMap.end(); it++) {
 		this->shaderUnload(it->first);
 	}
+	shaderMap.clear();
 
 	// TODO: Unload Mesh Map
 
@@ -208,9 +252,17 @@ void ResourceManager::release() {
 	for (auto it = animatedTextureMap.begin(); it != animatedTextureMap.end(); it++) {
 		this->animatedTextureUnload(it->first);
 	}
+	animatedTextureMap.clear();
 
 	// Unload SoundBuffers
 	for (auto it = soundBufferMap.begin(); it != soundBufferMap.end(); it++) {
 		this->soundBufferUnload(it->first);
 	}
+	soundBufferMap.clear();
+
+	// Unload Music
+	for (auto it = musicMap.begin(); it != musicMap.end(); it++) {
+		this->musicUnload(it->first);
+	}
+	musicMap.clear();
 }

@@ -1,0 +1,31 @@
+FRAMEBUFFER EXAMPLE:
+
+- A framebuffer is an offscreen render target that can be used as a texture when rendering. You can draw things
+to this texture in the same way you would draw things to the screen.
+
+See:
+   FrameBuffer.h
+   FrameBuffer.cpp
+
+   for an indepth explanation
+
+############################################################################################
+To create a framebuffer:
+
+	FrameBuffer *framebuffer = new FrameBuffer( 1280, 720, render_manager);
+
+############################################################################################
+To draw to a framebuffer:
+	
+	framebuffer->setTarget(); // <- now drawing to framebuffer
+
+		framebuffer->clear(0.0, 0.0, 0.0, 0.0);
+		manager->renderAll();
+
+	framebuffer->resetTarget(); // <- drawing to the window
+
+
+############################################################################################
+To use a framebuffer as a texture:
+
+framebuffer->bind();  (In the same way you would do texture->bind() or render_manager->setTexture(tex) )

@@ -1,5 +1,6 @@
 #include "../include/WorldRenderer.h"
 
+
 namespace worldrenderer {
 	using towerlogic::tower_ptr;
 	void WorldRenderer::init(){
@@ -27,6 +28,7 @@ namespace worldrenderer {
 
 	void WorldRenderer::render(){
 		renderGUI();
+
 		manager->renderAll();
 	}
 
@@ -36,6 +38,7 @@ namespace worldrenderer {
 		float width = render_manager->getWindowWidth();
 		float height = render_manager->getWindowHeight();
 		render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
+
 		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(width/2, height/2, 0.0));
 		render_manager->setWorldMatrix(transform);
 

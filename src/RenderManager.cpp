@@ -76,9 +76,9 @@ namespace graphics {
 		}
 
 		// Clear the current frame
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glClearColor(0.6f, 0.7f, 1.0f, 1.0f);
 		glClearDepth(1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// Set active shader and apply universal uniforms
 		if (active_shader != nullptr) {

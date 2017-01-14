@@ -1,4 +1,5 @@
 #include "../include/manager.h"
+#include "../include/AnimatedTexture.h"
 
 // Constructor
 ResourceManager::ResourceManager(Manager* manager) {
@@ -103,6 +104,49 @@ void ResourceManager::shaderUnload(sf::String resource_name) {
 	}
 }
 
+////////////////////////////////////////////////
+// AnimatedTexture functions
+AnimatedTexture* ResourceManager::animatedTextureLoad(sf::String resource_name, sf::String resource_filepath, bool split_both_ways, int frame_count_h, int frame_count_v, int total_frames) {
+	if (this->animatedTextureExists(resource_name)) {
+		AnimatedTexture *new_anim_tex = getAnimatedTexture(resource_name);
+		return new_anim_tex;
+	} else {
+		AnimatedTexture *new_anim_tex = new AnimatedTexture(resource_filepath, split_both_ways, frame_count_h, frame_count_v, total_frames);
+		if (new_anim_tex == nullptr) {
+			std::cout << "[ERROR] Failed to create Animated Texture '" << resource_filepath.toAnsiString() << "'!" << std::endl;
+			delete new_anim_tex;
+			return nullptr;
+		}
+
+		// Animated texture has loaded successfully
+		this->animatedTextureMap.insert(std::pair<sf::String, AnimatedTexture*>(resource_name, new_anim_tex));
+		return new_anim_tex;
+	}
+}
+
+AnimatedTexture* ResourceManager::getAnimatedTexture(sf::String resource_name) {
+	if (this->animatedTextureExists(resource_name)) {
+		AnimatedTexture* texture = this->animatedTextureMap[resource_name];
+		return texture;
+	}
+	else {
+		std::cout << "[ERROR] Animated Texture with '" << resource_name.toAnsiString() << "' Does not exist!" << std::endl;
+		return nullptr;
+	}
+}
+
+bool ResourceManager::animatedTextureExists(sf::String resource_name) {
+	return (this->animatedTextureMap.find(resource_name) != this->animatedTextureMap.end());
+}
+
+void ResourceManager::animatedTextureUnload(sf::String resource_name) {
+	if (this->animatedTextureExists(resource_name)) {
+		AnimatedTexture* at = this->getAnimatedTexture(resource_name);
+		delete at;
+		this->animatedTextureMap.erase(resource_name);
+	}
+}
+
 
 ////////////////////////////////////////////////
 // Release all resources
@@ -118,5 +162,10 @@ void ResourceManager::release() {
 		this->shaderUnload(it->first);
 	}
 
-	// TODO: Unload mesh map
+	// TODO: Unload Mesh Map
+
+	// Unload AnimatedTexture
+	for (auto it = animatedTextureMap.begin(); it != animatedTextureMap.end(); it++) {
+		this->animatedTextureUnload(it->first);
+	}
 }

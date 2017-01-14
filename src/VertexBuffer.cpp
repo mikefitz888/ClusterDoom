@@ -243,8 +243,6 @@ namespace graphics {
 		addVertex(x2, y1, 0, 1, 1, 1, 1, tx2, ty1, 0, 0, 1);
 	}
 
-
-
 	/////////////// ------------------------------ VERTEX CLASS METHODS ------------------------- //////////////////
 
 	Vertex::Vertex() {

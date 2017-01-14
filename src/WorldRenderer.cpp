@@ -27,7 +27,7 @@ namespace worldrenderer {
 		vbuff->freeze();
 
 		// Create Aniamted texture
-		at = new graphics::AnimatedTexture("src/Resources/Textures/explosion.png", false, 48, 1, -1);
+		at = manager->getResourceManager()->getAnimatedTexture("explosion");
 	}
 
 	void WorldRenderer::render(){

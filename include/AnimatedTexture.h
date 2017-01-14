@@ -51,10 +51,14 @@ namespace graphics {
 
 		int frame_count = 0;
 
+		void release();
+
 	public:
 		AnimatedTexture(sf::String filename, bool split_both_ways, int frame_count_h, int frame_count_v, int total_frames);
 		void render(int frame);
 		int getTotalFrames();
+		~AnimatedTexture();
+		
 	};
 }
 

@@ -253,7 +253,10 @@ namespace graphics {
 		rm->textureLoad("basic_tower", "Resources/Textures/Towers/Basic.jpg");
 		rm->textureLoad("pawn",        "src/Resources/Textures/pawn.png");
 		rm->textureLoad("red",         "src/Resources/Textures/red.png");
-		
+
+		// Load Animated Textures
+		rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", false, 48, 1, -1);
+
 		// Load Shaders
 		rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
 	}

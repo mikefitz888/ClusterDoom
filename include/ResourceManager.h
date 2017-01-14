@@ -35,17 +35,22 @@ using graphics::RenderManager;
 namespace manager { 
 	class Manager;
 }
+namespace graphics {
+	class AnimatedTexture;
+}
 
 using std::map;
 using graphics::VertexBuffer;
+using graphics::AnimatedTexture;
 using manager::Manager;
 
 class ResourceManager {
 
 private:
-	map<sf::String, sf::Texture*>  textureMap;
-	map<sf::String, sf::Shader*>   shaderMap;
-	map<sf::String, VertexBuffer*> meshMap;
+	map<sf::String, sf::Texture*>     textureMap;
+	map<sf::String, sf::Shader*>	  shaderMap;
+	map<sf::String, VertexBuffer*>	  meshMap;
+	map<sf::String, AnimatedTexture*> animatedTextureMap;
 
 	Manager *manager; // ptr to manager
 
@@ -71,6 +76,12 @@ public:
 	VertexBuffer* getMesh(sf::String resource_name);
 	bool	      meshExists(sf::String resource_name);
 	void		  meshUnload(sf::String resource_name);
+
+	// AnimatedTexture functions
+	AnimatedTexture* animatedTextureLoad(sf::String resource_name, sf::String resource_filepath, bool split_both_ways, int frame_count_h, int frame_count_v, int total_frames);
+	AnimatedTexture* getAnimatedTexture(sf::String resource_name);
+	bool		     animatedTextureExists(sf::String resource_name);
+	void		     animatedTextureUnload(sf::String resource_name);
 
 	// < UNLOAD ALL with release() ~ To be called at end >
 	void release();

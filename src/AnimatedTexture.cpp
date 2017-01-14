@@ -89,4 +89,12 @@ namespace graphics {
 	int AnimatedTexture::getTotalFrames() {
 		return this->frame_count;
 	}
+
+	// Rlease
+	AnimatedTexture::~AnimatedTexture() {
+		for (VertexBuffer *b : vertex_buffers) {
+			delete b;
+		}
+		delete this->animated_texture_source;
+	}
 }

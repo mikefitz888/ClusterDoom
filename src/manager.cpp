@@ -121,6 +121,7 @@ namespace manager {
 	}
 
 	bool Manager::step(){
+		audio_manager->stepSounds();
 		network_manager->networkStep();
 		game_controller->step();
 		return render();

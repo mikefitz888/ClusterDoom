@@ -32,11 +32,22 @@ void AudioManager::loadSoundAssets() {
 
 */
 void AudioManager::stepSounds() {
+
 	for (auto sound_instance : sound_instances) {
 		if (sound_instance->getStatus() == sf::Sound::Stopped) {
-			// .. Delete sound
+			// Mark sound instance for delete and remove it from main list
+			delete_list.push_back(sound_instance);
 		}
 	}
+	for (auto sound_instance : delete_list) {
+		
+		auto it = std::find(sound_instances.begin(), sound_instances.end(), sound_instance);
+		if (it != sound_instances.end()) {
+			sound_instances.erase(it);
+		}
+		delete sound_instance;
+	}
+	delete_list.clear();
 }
 
 /*

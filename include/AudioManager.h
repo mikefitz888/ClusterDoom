@@ -14,11 +14,12 @@ namespace manager {
 using manager::Manager;
 
 class AudioManager {
-
+	friend class Manager;
 
 private:
 	Manager* manager;
 	std::vector<sf::Sound*> sound_instances;
+	std::vector<sf::Sound*> delete_list;
 
 	void loadSoundAssets(); // Function to give us an opportunity to load in sound assets
 	void stepSounds(); 	// Keep sounds up-to-date, and delete sounds that have finished playing.

@@ -27,6 +27,7 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
 #include <SFML\System.hpp>
+#include <SFML\Audio.hpp>
 #include <iostream>
 
 using graphics::RenderManager;
@@ -51,6 +52,8 @@ private:
 	map<sf::String, sf::Shader*>	  shaderMap;
 	map<sf::String, VertexBuffer*>	  meshMap;
 	map<sf::String, AnimatedTexture*> animatedTextureMap;
+	map<sf::String, sf::SoundBuffer*> soundBufferMap;
+	map<sf::String, sf::Music>	      musicMap;
 
 	Manager *manager; // ptr to manager
 
@@ -82,6 +85,29 @@ public:
 	AnimatedTexture* getAnimatedTexture(sf::String resource_name);
 	bool		     animatedTextureExists(sf::String resource_name);
 	void		     animatedTextureUnload(sf::String resource_name);
+
+	// SoundBuffer functions
+	/*
+		Note: Sound data is stored in soundbuffer, but we need to use sf::Sound to play an instance of a sound.
+		- Sounds are for sound effects that end are short and multiple instances of them may play.
+	*/
+	sf::SoundBuffer* soundBufferLoad(sf::String resource_name, sf::String resource_filepath);
+	sf::SoundBuffer* getSoundBuffer(sf::String resource_name);
+	bool			 soundBufferExists(sf::String resource_name);
+	void			 soundBufferUnload(sf::String resource_name);
+
+	// Music functions
+	/*
+		Music is streamed, and each music track will be associated with one instance stored in this map.
+		Fetching that instance will allow you to start and stop that music from playing. (By using
+		its resource name as a reference).
+
+		- The audio manager will also be able to do this.
+	*/
+	sf::Music* musicLoad(sf::String resource_name, sf::String resource_filepath);
+	sf::Music* getMusic(sf::String resource_name);
+	bool       musicExists(sf::String resource_name);
+	void       musicUnload(sf::String resource_name);
 
 	// < UNLOAD ALL with release() ~ To be called at end >
 	void release();

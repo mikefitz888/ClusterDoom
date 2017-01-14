@@ -128,8 +128,7 @@ AnimatedTexture* ResourceManager::getAnimatedTexture(sf::String resource_name) {
 	if (this->animatedTextureExists(resource_name)) {
 		AnimatedTexture* texture = this->animatedTextureMap[resource_name];
 		return texture;
-	}
-	else {
+	} else {
 		std::cout << "[ERROR] Animated Texture with '" << resource_name.toAnsiString() << "' Does not exist!" << std::endl;
 		return nullptr;
 	}
@@ -147,6 +146,47 @@ void ResourceManager::animatedTextureUnload(sf::String resource_name) {
 	}
 }
 
+////////////////////////////////////////////////
+// SoundBuffer functions
+sf::SoundBuffer* ResourceManager::soundBufferLoad(sf::String resource_name, sf::String resource_filepath) {
+	if (this->soundBufferExists(resource_name)) {
+		sf::SoundBuffer *sound = this->getSoundBuffer(resource_name);
+		return sound;
+	} else {
+		sf::SoundBuffer *sound_buffer = new sf::SoundBuffer();
+		sound_buffer->loadFromFile(resource_filepath);
+		if (sound_buffer == nullptr) {
+			std::cout << "[ERROR] Failed to load sound: '" << resource_filepath.toAnsiString() << "!" << std::endl;
+			delete sound_buffer;
+		}
+		
+		// Store buffer in map
+		this->soundBufferMap.insert(std::pair<sf::String, sf::SoundBuffer*>(resource_name, sound_buffer));
+		return sound_buffer;
+	}
+}
+
+sf::SoundBuffer* ResourceManager::getSoundBuffer(sf::String resource_name) {
+	if (this->soundBufferExists(resource_name)) {
+		sf::SoundBuffer* sound_buffer = this->soundBufferMap[resource_name];
+		return sound_buffer;
+	} else {
+		std::cout << "[ERROR] Sound Buffer with '" << resource_name.toAnsiString() << "' Does not exist!" << std::endl;
+		return nullptr;
+	}
+}
+
+bool ResourceManager::soundBufferExists(sf::String resource_name) {
+	return (this->soundBufferMap.find(resource_name) != this->soundBufferMap.end());
+}
+
+void ResourceManager::soundBufferUnload(sf::String resource_name) {
+	if (this->soundBufferExists(resource_name)) {
+		sf::SoundBuffer* sound_buffer = this->getSoundBuffer(resource_name);
+		delete sound_buffer;
+		this->soundBufferMap.erase(resource_name);
+	}
+}
 
 ////////////////////////////////////////////////
 // Release all resources
@@ -167,5 +207,10 @@ void ResourceManager::release() {
 	// Unload AnimatedTexture
 	for (auto it = animatedTextureMap.begin(); it != animatedTextureMap.end(); it++) {
 		this->animatedTextureUnload(it->first);
+	}
+
+	// Unload SoundBuffers
+	for (auto it = soundBufferMap.begin(); it != soundBufferMap.end(); it++) {
+		this->soundBufferUnload(it->first);
 	}
 }

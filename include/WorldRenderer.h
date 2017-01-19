@@ -22,6 +22,7 @@ namespace worldrenderer {
 		sf::Texture* game_bg_texture = nullptr;
 		sf::Shader* game_bg_shader = nullptr;
 		graphics::VertexBuffer* vbuff = nullptr;
+		sf::Text* text = nullptr;
 
 		/// TEMP
 		graphics::AnimatedTexture *at = nullptr;

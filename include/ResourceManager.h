@@ -55,6 +55,7 @@ private:
 	map<sf::String, AnimatedTexture*> animatedTextureMap;
 	map<sf::String, sf::SoundBuffer*> soundBufferMap;
 	map<sf::String, sf::Music*>	      musicMap;
+	map<sf::String, sf::Font*>		  fontMap;
 
 	Manager *manager; // ptr to manager
 
@@ -117,6 +118,15 @@ public:
 	sf::Music* getMusic(sf::String resource_name);
 	bool       musicExists(sf::String resource_name);
 	void       musicUnload(sf::String resource_name);
+
+	// Font functions
+	sf::Font* fontLoad(sf::String resource_name, sf::String resource_filepath);
+	sf::Font* getFont(sf::String resource_name);
+	bool      fontExists(sf::String resource_name);
+	void      fontUnload(sf::String resource_name);
+
+	// Text functions
+	sf::Text* createTextFromFont(sf::String resource_name, sf::String default_text);
 
 	// < UNLOAD ALL with release() ~ To be called at end >
 	void release();

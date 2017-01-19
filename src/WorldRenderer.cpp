@@ -28,6 +28,8 @@ namespace worldrenderer {
 
 		// Create Aniamted texture
 		at = manager->getResourceManager()->getAnimatedTexture("explosion");
+
+		text = manager->getResourceManager()->createTextFromFont( "agency","Git gud");
 	}
 
 	void WorldRenderer::render(){
@@ -48,6 +50,7 @@ namespace worldrenderer {
 
 		vbuff->render();
 
+		
 		// Render debug explosion
 		render_manager->setBlendModeAdditive();
 		index += 0.60;

@@ -235,6 +235,60 @@ map<sf::String, sf::Music*>* ResourceManager::getMusicMap() {
 	return &musicMap;
 }
 ////////////////////////////////////////////////
+// Font functions
+sf::Font* ResourceManager::fontLoad(sf::String resource_name, sf::String resource_filepath) {
+	if (fontExists(resource_name)) {
+		return getFont(resource_name);
+	} else {
+		// load font
+		sf::Font* new_font = new sf::Font();
+		if (!new_font->loadFromFile(resource_filepath)) {
+			std::cout << "[ERROR] FONT '" << resource_filepath.toAnsiString() << "' Failed to load!" << std::endl;
+			delete new_font;
+			return nullptr;
+		}
+
+		// Font loaded sucecssfully (add to map)
+		fontMap.insert(std::pair<sf::String, sf::Font*>(resource_name, new_font));
+	}
+}
+
+sf::Font* ResourceManager::getFont(sf::String resource_name) {
+	if (fontExists(resource_name)) {
+		return this->fontMap[resource_name];
+	}
+	else {
+		std::cout << "[ERROR] Font with name '" << resource_name.toAnsiString() << "' does not exist" << std::endl;
+		return nullptr;
+	}
+}
+
+bool ResourceManager::fontExists(sf::String resource_name) {
+	return (this->fontMap.find(resource_name) != this->fontMap.end());
+}
+
+void ResourceManager::fontUnload(sf::String resource_name) {
+	sf::Font* font = this->getFont(resource_name);
+	if (font != nullptr) {
+		delete font;
+		this->fontMap.erase(resource_name);
+	}
+}
+
+sf::Text* ResourceManager::createTextFromFont(sf::String resource_name, sf::String default_text) {
+	if (fontExists(resource_name)) {
+		sf::Font *font = getFont(resource_name);
+		if (font != nullptr) {
+			sf::Text *new_text = new sf::Text();
+			new_text->setFont(*font);
+			new_text->setString(default_text);
+			return new_text;
+		}
+	}
+	return nullptr;
+}
+
+////////////////////////////////////////////////
 // Release all resources
 void ResourceManager::release() {
 
@@ -268,5 +322,11 @@ void ResourceManager::release() {
 	for (auto it = musicMap.begin(); it != musicMap.end(); it++) {
 		this->musicUnload(it->first);
 	}
+
+	// Unload fonts
+	for (auto it = fontMap.begin(); it != fontMap.end(); it++) {
+		this->fontUnload(it->first);
+	}
+
 	musicMap.clear();
 }

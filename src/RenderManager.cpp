@@ -111,6 +111,10 @@ namespace graphics {
 		return sh;
 	}
 
+	sf::Window* RenderManager::getWindow() {
+		return this->window;
+	}
+
 	void RenderManager::shaderPrepare(sf::Shader *shader) {
 		GLuint sh_id = shader->getNativeHandle();
 
@@ -259,6 +263,9 @@ namespace graphics {
 
 		// Load Shaders
 		rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
+
+		// Load fonts
+		rm->fontLoad("agency", "src/Resources/Fonts/AGENCYR.TTF");
 	}
 
 	// Blend Modes

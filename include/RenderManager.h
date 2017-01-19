@@ -110,6 +110,8 @@ namespace graphics {
 			void setBlendModeAdditive();
 			void setBlendModeNormal();
 
+			sf::Window* getWindow();
+
 
 		private:
 

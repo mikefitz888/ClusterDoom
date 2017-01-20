@@ -1,6 +1,6 @@
 #include "../include/towerlogic.h"
 #include "../include/Towers/BasicTower.h"
-#include <stdio.h>
+#include <iostream>
 
 namespace towerlogic {
 	tower_ptr TowerLogic::createTower(tower::TYPE type) const {
@@ -15,7 +15,8 @@ namespace towerlogic {
 			return new tower::BasicTower(key, manager);
 		case tower::TYPE::BASE:
 		default:
-			return new Tower(key, manager);
+			std::cout << "FATAL ERROR! INCORRECT INSTANCE, nullptr RETURNED" << std::endl;
+			return nullptr;
 		}
 	}
 

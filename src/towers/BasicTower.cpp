@@ -1,7 +1,7 @@
 #include "../../include/Towers/BasicTower.h"
 
 namespace tower {
-	BasicTower::BasicTower(id_t key, Manager* m) : Tower(key, m) {
+	BasicTower::BasicTower(id_t key, Manager* m) : Tower(key, TYPE::BASIC, m) {
 		position.x = 200;
 		position.y = 400;
 	}

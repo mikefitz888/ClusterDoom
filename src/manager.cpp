@@ -81,7 +81,7 @@ namespace manager {
 		std::cout << "Pool size now = " << game_object_pool.size() << std::endl;
 
 		// Network update
-		network_manager->sendInstanceCreate(id, game_object->getType());
+		network_manager->sendInstanceCreate(id, game_object->getSuperType());
 	}
 
 	// Destroys the master_ptr
@@ -100,7 +100,7 @@ namespace manager {
 		for (slave_ptr<GameObject> object : game_object_pool) {
 			if (object) {
 				int id = object->getID();
-				int type = object->getType();
+				int type = object->getSuperType();
 				network_manager->sendInstanceCreate(network_client, id, type);
 			}
 		}

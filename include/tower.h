@@ -29,7 +29,7 @@ namespace tower {
 
 		float health = 100;
 	public:
-		inline Tower(id_t id, Manager* m) : GameObject(id, m) { }
+		inline Tower(id_t id, TYPE tower_type, Manager* m) : GameObject(id, gameobject::TYPE::TOWER, tower_type, m) { }
 		virtual void init() override;
 		virtual void render() override;
 		virtual void renderGUI() override;

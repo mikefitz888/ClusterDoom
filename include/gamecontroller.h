@@ -3,8 +3,11 @@
 
 #include "gameobject.h"
 #include "manager.h"
-#include <thread>
-#include <mutex>
+#include "../include/network/Buffer.h"
+#include <SFML/Network/TcpListener.hpp>
+#include <SFML/Network/TcpSocket.hpp>
+#include <SFML/Network/IpAddress.hpp>
+#include <SFML/Network/Packet.hpp>
 
 namespace gameobject {
     class GameObject;
@@ -24,11 +27,22 @@ namespace gamecontroller {
     class GameController {
         Manager* manager;
         std::vector<Point<int>> cvList;
+		
+		// CV Network
+		int                port;
+		sf::TcpListener   *listener;
+		Buffer            *recv_buffer;
+		sf::TcpSocket     *client;
+		bool              cvConnectionEstablished;
+
+		void startCVServer();
+		void cvNetworkStep();
+
     public:
         GameController(Manager* m);
         GameObject* createObject(id_t key);
-        void init() const;
-        void step() const;
+        void init();
+        void step();
         void restart() const;
 
         tower_ptr spawnTowerAt(int x, int y) const;

@@ -7,6 +7,13 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
+#include "../include/network/Buffer.h"
+#include <SFML/Network/TcpListener.hpp>
+#include <SFML/Network/TcpSocket.hpp>
+#include <SFML/Network/IpAddress.hpp>
+#include <SFML/Network/Packet.hpp>
+#include <SFML/System/Time.hpp>
+
 namespace manager {
     class Manager;
 }
@@ -26,6 +33,9 @@ namespace cvinterface {
         double dWidth;
         double dHeight;
         IplImage* pFrame;
+
+		// Network stuff
+		sf::TcpSocket *socket;
     public:
         inline ICVInterface(GameController* gc) : game_controller(gc) {}
         void init();
@@ -35,6 +45,10 @@ namespace cvinterface {
     private:
         void findTowers();
         // We'll need some others here...
+		
+		// Network stuff
+		void networkConnect();
+		void networkSendTowerPositions();
     };
 }
 

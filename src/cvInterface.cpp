@@ -50,6 +50,9 @@ namespace cvinterface {
         //cvShowImage("WebCam", pFrame);
         //char keypress = cvWaitKey(20);
 
+		// Connect
+		networkConnect();
+
         while(true) {
             step();
         }
@@ -59,7 +62,7 @@ namespace cvinterface {
     {
         bool success = camera.read(frame);
         if(!success) {
-            std::cout << "Cannot read frame from video stream!" << std::endl;
+           // std::cout << "Cannot read frame from video stream!" << std::endl;
             return;
         }
         //std::cout << "Stepping" << std::endl;
@@ -96,7 +99,7 @@ namespace cvinterface {
         cv::equalizeHist(frame_gray, frame_gray);
 
         cascade.detectMultiScale(frame_gray, objects, 1.1, 1, CV_HAAR_SCALE_IMAGE, cv::Size(50, 50), cv::Size(500, 500));
-        std::cout << "Objects detected: " << objects.size() << std::endl;
+        //std::cout << "Objects detected: " << objects.size() << std::endl;
 
         tower_locations.clear();
         // Next step is to commit the findings to the tower_locations list...
@@ -109,5 +112,17 @@ namespace cvinterface {
         //TODO: SHARE LIST
 
         //updateTowerList();
+		networkSendTowerPositions();
     }
+
+	void ICVInterface::networkConnect() {
+		socket = new sf::TcpSocket();
+		sf::TcpSocket::Status st = socket->connect("127.0.0.1", 31654, sf::seconds(10.0f));
+		if (st == sf::TcpSocket::Status::Done) {
+			std::cout << "[CV] Connected to CV interface successfully!" << std::endl;
+		}
+	}
+	void ICVInterface::networkSendTowerPositions() {
+
+	}
 }

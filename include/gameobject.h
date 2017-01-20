@@ -8,70 +8,70 @@
 
 
 namespace manager {
-	class Manager;
+    class Manager;
 }
 
 namespace graphics {
-	class RenderManager;
+    class RenderManager;
 }
 namespace tower {
-	class Tower;
+    class Tower;
 }
 
 namespace unit {
-	class Unit;
+    class Unit;
 }
 
 namespace gameobject {
-	using graphics::IRenderable;
-	using manager::Manager;
-	using graphics::RenderManager;
+    using graphics::IRenderable;
+    using manager::Manager;
+    using graphics::RenderManager;
 
-	enum TYPE : unsigned int {TOWER=0, UNIT, OBJECT};
+    enum TYPE : unsigned int {TOWER=0, UNIT, OBJECT};
 
-	typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
-	typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
-	
-	typedef size_t id_t;
+    typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
+    typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
+    
+    typedef size_t id_t;
 
-	template <typename T>
-	struct Point {
-		inline Point(T x_, T y_) : x(x_), y(y_) {}
-		T x;
-		T y;
-		inline T distanceTo(Point target) {return sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
-	};
+    template <typename T>
+    struct Point {
+        inline Point(T x_, T y_) : x(x_), y(y_) {}
+        T x;
+        T y;
+        inline T distanceTo(Point target) {return sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
+    };
 
-	class GameObject : public IRenderable {
-		const id_t id_;
-		const id_t super_type_ = 0;
-		const id_t sub_type_ = 0;
-	protected:
-		Manager* manager;
-		RenderManager* render_manager = nullptr;
-		Point<int> position = Point<int>(0, 0);
-		int _destroySelf();
-	public:
-		inline GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m) : id_(id), super_type_(super_type), sub_type_(sub_type), manager(m) {} //Very important to get key from manager (for memory management + networking)
-		inline id_t getID() const { return id_; }
-		inline id_t getSuperType() const { return super_type_; }
-		inline id_t getSubType() const { return sub_type_; }
-		virtual void render() override { }
-		virtual void init() override { }
-		virtual void renderGUI() override { }
-		virtual void release() override { }
-		inline virtual void step() { };
-		inline virtual ~GameObject() { }
+    class GameObject : public IRenderable {
+        const id_t id_;
+        const id_t super_type_ = 0;
+        const id_t sub_type_ = 0;
+    protected:
+        Manager* manager;
+        RenderManager* render_manager = nullptr;
+        Point<int> position = Point<int>(0, 0);
+        int _destroySelf();
+    public:
+        inline GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m) : id_(id), super_type_(super_type), sub_type_(sub_type), manager(m) {} //Very important to get key from manager (for memory management + networking)
+        inline id_t getID() const { return id_; }
+        inline id_t getSuperType() const { return super_type_; }
+        inline id_t getSubType() const { return sub_type_; }
+        virtual void render() override { }
+        virtual void init() override { }
+        virtual void renderGUI() override { }
+        virtual void release() override { }
+        inline virtual void step() { };
+        inline virtual ~GameObject() { }
 
-		inline int getX() const { return position.x; }
-		inline int getY() const { return position.y; }
-		inline Point<int> getPosition() const { return position; }
-		int distanceTo(smartpointers::slave_ptr<GameObject> other) const;
+        inline int getX() const { return position.x; }
+        inline int getY() const { return position.y; }
+        inline Point<int> getPosition() const { return position; }
+        int distanceTo(smartpointers::slave_ptr<GameObject> other) const;
 
-		inline void setX(int x_) { position.x = x_; }
-		inline void setY(int y_) { position.y = y_; }
-		inline void setPosition(int x, int y) { setX(x); setY(y); }
-	};
+        inline void setX(int x_) { position.x = x_; }
+        inline void setY(int y_) { position.y = y_; }
+        inline void setPosition(int x, int y) { setX(x); setY(y); }
+    };
 }
 
 #define destroySelf();  _destroySelf(); return;

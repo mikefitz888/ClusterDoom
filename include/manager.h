@@ -14,119 +14,119 @@
 #include "AudioManager.h"
 
 namespace network {
-	class NetworkManager;
-	class NetworkClient;
+    class NetworkManager;
+    class NetworkClient;
 }
 namespace worldrenderer {
-	class WorldRenderer;
+    class WorldRenderer;
 }
 
 namespace unit {
-	class Unit;
-	enum TYPE : unsigned int;
+    class Unit;
+    enum TYPE : unsigned int;
 }
 
 namespace tower {
-	class Tower;
-	enum TYPE : unsigned int;
+    class Tower;
+    enum TYPE : unsigned int;
 }
 
 namespace gameobject {
-	class GameObject;
+    class GameObject;
 }
 
 namespace towerlogic {
-	class TowerLogic;
+    class TowerLogic;
 }
 
 namespace unitlogic {
-	class UnitLogic;
+    class UnitLogic;
 }
 
 namespace gamecontroller {
-	class GameController;
+    class GameController;
 }
 
 namespace manager {
-	class Manager;
+    class Manager;
 }
 
 namespace manager {
-	using gameobject::GameObject;
-	using smartpointers::master_ptr;
-	using smartpointers::slave_ptr;
-	using smartpointers::static_pointer_cast;
-	using towerlogic::TowerLogic;
-	using unitlogic::UnitLogic;
-	using gamecontroller::GameController;
-	using unit::Unit;
-	using tower::Tower;
-	using graphics::RenderManager;
-	using worldrenderer::WorldRenderer;
-	using network::NetworkManager;
+    using gameobject::GameObject;
+    using smartpointers::master_ptr;
+    using smartpointers::slave_ptr;
+    using smartpointers::static_pointer_cast;
+    using towerlogic::TowerLogic;
+    using unitlogic::UnitLogic;
+    using gamecontroller::GameController;
+    using unit::Unit;
+    using tower::Tower;
+    using graphics::RenderManager;
+    using worldrenderer::WorldRenderer;
+    using network::NetworkManager;
 
-	typedef size_t id_t;
+    typedef size_t id_t;
 
-	class Manager {
-		//std::vector<master_ptr<GameObject>> game_object_pool;
-		std::vector<master_ptr<GameObject>> game_object_pool;
-		std::vector<id_t> free_id_list;
+    class Manager {
+        //std::vector<master_ptr<GameObject>> game_object_pool;
+        std::vector<master_ptr<GameObject>> game_object_pool;
+        std::vector<id_t> free_id_list;
 
-		TowerLogic* tower_logic;
-		UnitLogic* unit_logic;
-		GameController* game_controller; //IRenderable
+        TowerLogic* tower_logic;
+        UnitLogic* unit_logic;
+        GameController* game_controller; //IRenderable
 
-		RenderManager*  render_manager    = nullptr;
-		WorldRenderer*  world_renderer    = nullptr;
-		NetworkManager* network_manager   = nullptr;
-		ResourceManager* resource_manager = nullptr;
-		AudioManager*    audio_manager    = nullptr;
+        RenderManager*  render_manager    = nullptr;
+        WorldRenderer*  world_renderer    = nullptr;
+        NetworkManager* network_manager   = nullptr;
+        ResourceManager* resource_manager = nullptr;
+        AudioManager*    audio_manager    = nullptr;
 
-		void addToPool(GameObject* game_object);
-		void removeFromPool(id_t id);
-		id_t getFreePoolKey();
+        void addToPool(GameObject* game_object);
+        void removeFromPool(id_t id);
+        id_t getFreePoolKey();
 
-	public:
-		Manager();
-		inline GameController* getGameController() const { return game_controller; }
-		//Tower Methods
-		slave_ptr<Tower> createTower(tower::TYPE type);
-		void destroyTower(slave_ptr<Tower> tower);
-		std::vector<slave_ptr<Tower>>& getTowers() const;
+    public:
+        Manager();
+        inline GameController* getGameController() const { return game_controller; }
+        //Tower Methods
+        slave_ptr<Tower> createTower(tower::TYPE type);
+        void destroyTower(slave_ptr<Tower> tower);
+        std::vector<slave_ptr<Tower>>& getTowers() const;
 
-		//Unit Methods
-		slave_ptr<Unit> createUnit(unit::TYPE type);
-		void destroyUnit(slave_ptr<Unit>& unit);
-		std::vector<slave_ptr<Unit>> getUnits() const;
+        //Unit Methods
+        slave_ptr<Unit> createUnit(unit::TYPE type);
+        void destroyUnit(slave_ptr<Unit>& unit);
+        std::vector<slave_ptr<Unit>> getUnits() const;
 
-		//Game Controller Methods (World Logic)
-		slave_ptr<GameObject> createObject();
-		void destroyObject(slave_ptr<GameObject>& obj);
+        //Game Controller Methods (World Logic)
+        slave_ptr<GameObject> createObject();
+        void destroyObject(slave_ptr<GameObject>& obj);
 
 
-		//GameObject Methods
-		void destroy(GameObject* obj);
+        //GameObject Methods
+        void destroy(GameObject* obj);
 
-		//Network Methods
-		void sendAllInstancesToClient(network::NetworkClient *network_client);
+        //Network Methods
+        void sendAllInstancesToClient(network::NetworkClient *network_client);
 
-		//void sendEvent();
-		//void receiveEvent();
+        //void sendEvent();
+        //void receiveEvent();
 
-		//Manager Methods
-		void init() const;
-		void initRenderManager(RenderManager &rm);
-		bool render() const;
-		RenderManager*   getRenderManager() const;
-		ResourceManager* getResourceManager() const;
-		AudioManager*    getAudioManager() const;
-		void release();
-		void renderAll();
-		void stepAll();
-		
+        //Manager Methods
+        void init() const;
+        void initRenderManager(RenderManager &rm);
+        bool render() const;
+        RenderManager*   getRenderManager() const;
+        ResourceManager* getResourceManager() const;
+        AudioManager*    getAudioManager() const;
+        void release();
+        void renderAll();
+        void stepAll();
+        
 
-		bool step();
-	};
+        bool step();
+    };
 }
 
 #endif //MANAGER_H

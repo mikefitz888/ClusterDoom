@@ -15,8 +15,8 @@ out vec2 pass_TextureCoord;
 uniform vec4 colour;
 
 void main(void) {
-	gl_Position = matrixProjection * matrixWorld * in_Position;
+    gl_Position = matrixProjection * matrixWorld * in_Position;
 
-	pass_Color = in_Colour;
-	pass_TextureCoord = in_TextureCoord;
+    pass_Color = in_Colour;
+    pass_TextureCoord = in_TextureCoord;
 }

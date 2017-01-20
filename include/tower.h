@@ -5,43 +5,43 @@
 #include "manager.h"
 
 namespace manager {
-	class Manager;
+    class Manager;
 }
 
 namespace tower {
-	//using containers::optional;
-	using graphics::IRenderable;
-	using gameobject::GameObject;
-	using gameobject::id_t;
-	using gameobject::Point;
-	using gameobject::tower_ptr;
-	using gameobject::unit_ptr;
-	using manager::Manager;
+    //using containers::optional;
+    using graphics::IRenderable;
+    using gameobject::GameObject;
+    using gameobject::id_t;
+    using gameobject::Point;
+    using gameobject::tower_ptr;
+    using gameobject::unit_ptr;
+    using manager::Manager;
 
-	enum TYPE : unsigned int {BASE=0, BASIC};
+    enum TYPE : unsigned int {BASE=0, BASIC};
 
-	class Tower : public GameObject {
-		graphics::Texture* texture;
-		graphics::Texture* red;
-		sf::Shader* shader;
-		graphics::VertexBuffer* vbuff;
-		graphics::VertexBuffer* hpbar_buff;
+    class Tower : public GameObject {
+        graphics::Texture* texture;
+        graphics::Texture* red;
+        sf::Shader* shader;
+        graphics::VertexBuffer* vbuff;
+        graphics::VertexBuffer* hpbar_buff;
 
-		float health = 100;
-	public:
-		inline Tower(id_t id, TYPE tower_type, Manager* m) : GameObject(id, gameobject::TYPE::TOWER, tower_type, m) { }
-		virtual void init() override;
-		virtual void render() override;
-		virtual void renderGUI() override;
-		virtual void release() override;
+        float health = 100;
+    public:
+        inline Tower(id_t id, TYPE tower_type, Manager* m) : GameObject(id, gameobject::TYPE::TOWER, tower_type, m) { }
+        virtual void init() override;
+        virtual void render() override;
+        virtual void renderGUI() override;
+        virtual void release() override;
 
-		virtual void step();
-		//Gameplay methods
-		inline float getHealth() const { return health; }
+        virtual void step();
+        //Gameplay methods
+        inline float getHealth() const { return health; }
 
-		virtual void attack(unit_ptr tower); //Tower attacks unit
-		virtual void attacked(GameObject* aggressor); //Unit attacks tower
-	};
+        virtual void attack(unit_ptr tower); //Tower attacks unit
+        virtual void attacked(GameObject* aggressor); //Unit attacks tower
+    };
 }
 
 #endif //TOWER_H

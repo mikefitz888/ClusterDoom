@@ -10,53 +10,53 @@ using namespace graphics;
 
 
 void runCVInterface(cvinterface::ICVInterface* cv){
-	cv->init();
+    cv->init();
 }
 
 int main(int argc, char* argv[]){
-	Manager model = Manager();
-	std::cout << "O:!" << std::endl;
+    Manager model = Manager();
+    std::cout << "O:!" << std::endl;
 
-	// Networking
-	//NetworkManager nm;
-	smartpointers::slave_ptr<int> ptr = nullptr;
+    // Networking
+    //NetworkManager nm;
+    smartpointers::slave_ptr<int> ptr = nullptr;
 
-	if (ptr) {
-		std::cout << "NPT IS VLAID" << std::endl;
-	}
-	else {
-		std::cout << "NPT IS NOT VALID" << std::endl;
-	}
+    if (ptr) {
+        std::cout << "NPT IS VLAID" << std::endl;
+    }
+    else {
+        std::cout << "NPT IS NOT VALID" << std::endl;
+    }
 
-	// Rendering
-	RenderManager rm;
+    // Rendering
+    RenderManager rm;
 
-	//Render Manager must be initialized first to ensure GL context
-	model.initRenderManager(rm);
-	
-	//TODO: Pass an openCV component to manager
-	cvinterface::ICVInterface Icv(model.getGameController());
-	std::thread cv_thread = std::thread(runCVInterface, &Icv);
+    //Render Manager must be initialized first to ensure GL context
+    model.initRenderManager(rm);
+    
+    //TODO: Pass an openCV component to manager
+    cvinterface::ICVInterface Icv(model.getGameController());
+    std::thread cv_thread = std::thread(runCVInterface, &Icv);
 
-	model.init();
-	//rm.setWindowTitle("Clusterdoom");
+    model.init();
+    //rm.setWindowTitle("Clusterdoom");
 
-	
+    
 
-	bool running = true;
-	while (running) {
-		// Networking
-		//nm.networkStep();
+    bool running = true;
+    while (running) {
+        // Networking
+        //nm.networkStep();
 
-		// Step then Render
-		running = model.step();
-	}
+        // Step then Render
+        running = model.step();
+    }
 
-	// Cleanup
-	Icv.release();
-	cv_thread.join();
-	//nm.release();
-	model.release();
+    // Cleanup
+    Icv.release();
+    cv_thread.join();
+    //nm.release();
+    model.release();
 
-	return 0;
+    return 0;
 }

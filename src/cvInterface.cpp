@@ -57,7 +57,7 @@ namespace cvinterface {
 
 	void ICVInterface::step()
 	{
-		bool success = camera->read(frame);
+		bool success = camera.read(frame);
 		if(!success) {
 			std::cout << "Cannot read frame from video stream!" << std::endl;
 			return;
@@ -66,7 +66,7 @@ namespace cvinterface {
 		//TODO: Parse frame data
 		findTowers();
 		cv::imshow("WebCam", frame);
-		char keypress = cvWaitKey(20);
+		//char keypress = cvWaitKey(20);
 	}
 
 	void ICVInterface::release() {
@@ -96,7 +96,7 @@ namespace cvinterface {
 		cv::equalizeHist(frame_gray, frame_gray);
 
 	    cascade.detectMultiScale(frame_gray, objects, 1.1, 1, CV_HAAR_SCALE_IMAGE, cv::Size(50, 50), cv::Size(500, 500));
-		cout << "Objects detected: " << objects.size() << endl;
+		std::cout << "Objects detected: " << objects.size() << std::endl;
 
 		tower_locations.clear();
 		// Next step is to commit the findings to the tower_locations list...

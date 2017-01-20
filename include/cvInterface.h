@@ -22,7 +22,7 @@ namespace cvinterface {
 		std::vector<tower_ptr> towers; //Up date this list to ensure a correspondance between it and tower_locations
 		cv::VideoCapture camera;
 		cv::Mat frame;
-		cv::CascadeClassifier;
+		cv::CascadeClassifier cascade;
 		double dWidth;
 		double dHeight;
 		IplImage* pFrame;

@@ -254,8 +254,8 @@ namespace graphics {
 
 		// Load Textures
 		rm->textureLoad("background",  "src/Resources/Textures/background.png");
-		rm->textureLoad("basic_tower", "Resources/Textures/Towers/Basic.jpg");
-		rm->textureLoad("pawn",        "src/Resources/Textures/pawn.png");
+		rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png");
+		rm->textureLoad("basic_unit",  "src/Resources/Textures/pawn.png");
 		rm->textureLoad("red",         "src/Resources/Textures/red.png");
 
 		// Load Animated Textures
@@ -342,5 +342,30 @@ namespace graphics {
 		this->width = width;
 		this->height = height;
 	}*/
+
+	////////////////////////////////////////////////////
+	// TEXTURE METHODS
+	void graphics::Texture::createVertexBuffer() {
+		// Create vertex buffer
+		this->texture_quad = new VertexBuffer();
+		this->texture_quad->addQuad(0, 0, this->getSize().x, this->getSize().y);
+		this->texture_quad->freeze();
+	}
+
+	void graphics::Texture::render() {
+		GLuint gl_tex_id = this->getNativeHandle();
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+		this->texture_quad->render();
+	}
+
+	bool graphics::Texture::loadFromFile(sf::String resource_filepath) {
+		bool result = this->sf::Texture::loadFromFile(resource_filepath);
+		if (result) {
+			this->createVertexBuffer();
+		}
+		return result;
+	}
+
 }
 

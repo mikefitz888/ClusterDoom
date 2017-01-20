@@ -19,7 +19,7 @@ namespace worldrenderer {
 		Manager* manager = nullptr;
 		RenderManager* render_manager = nullptr;
 
-		sf::Texture* game_bg_texture = nullptr;
+		graphics::Texture* game_bg_texture = nullptr;
 		sf::Shader* game_bg_shader = nullptr;
 		graphics::VertexBuffer* vbuff = nullptr;
 		sf::Text* text = nullptr;

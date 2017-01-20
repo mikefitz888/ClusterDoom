@@ -130,11 +130,13 @@ namespace network {
 	*/
 	class INetworkInstance {
 
-
 	private:
 		/*
 			network_instance_id is the unique instance identifier associated with a given object.
+			instance_type_group - The global group type as defined by 
 		*/
+		int instance_type_group;
+		int instance_type;
 		int network_instance_id;
 		NetworkManager *manager;
 

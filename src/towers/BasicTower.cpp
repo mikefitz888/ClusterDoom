@@ -8,14 +8,13 @@ namespace tower {
 
 	void BasicTower::init(){
 		render_manager = manager->getRenderManager();
-		/*texture = new sf::Texture();
-		if(!texture->loadFromFile("Resources/Textures/Towers/Basic.jpg")){
-			std::cout << "[ERROR] Could not load texture! (BasicTower)" << std::endl;
-		}*/
 		texture = manager->getResourceManager()->getTexture("basic_tower");
 	}
 
 	void BasicTower::render(){
-		
+
+		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY(), 0.0));
+		render_manager->setWorldMatrix(transform);
+		texture->render();
 	}
 }

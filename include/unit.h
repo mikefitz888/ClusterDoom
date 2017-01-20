@@ -19,8 +19,8 @@ namespace unit {
 	enum TYPE : unsigned int {BASE=0, BASIC};
 
 	class Unit : public GameObject {
-		sf::Texture* texture;
-		sf::Texture* red;
+		graphics::Texture* texture;
+		graphics::Texture* red;
 		sf::Shader* shader;
 		graphics::VertexBuffer* vbuff;
 		graphics::VertexBuffer* hpbar_buff;

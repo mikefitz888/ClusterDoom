@@ -5,15 +5,15 @@ namespace tower {
 	void Tower::init(){
 		render_manager = manager->getRenderManager();
 
-		texture = new sf::Texture();
-		if(!texture->loadFromFile("src/Resources/Textures/chess_piece_rook.png")){
+		texture = manager->getResourceManager()->getTexture("basic_tower");
+		/*if(!texture->loadFromFile("src/Resources/Textures/chess_piece_rook.png")){
 			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
-		}
+		}*/
 
-		red = new sf::Texture();
-		if (!red->loadFromFile("src/Resources/Textures/red.png")) {
+		red = manager->getResourceManager()->getTexture("red");
+		/*if (!red->loadFromFile("src/Resources/Textures/red.png")) {
 			std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
-		}
+		}*/
 
 		shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
 		if(shader == nullptr){

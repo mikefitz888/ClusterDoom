@@ -21,6 +21,7 @@ namespace manager {
 using manager::Manager;
 
 namespace graphics {
+	class VertexBuffer;
 	class RenderManager;
 	class GCamera {
 
@@ -133,6 +134,15 @@ namespace graphics {
 			static void shaderPrepare(sf::Shader *shader);	/* Performs any openGL operations upon a shader needed to configure it for the rendering environment*/
 			void bind_colour_uniform();
 			void loadResources(); // A location in which initial, core resources can be loaded in.
+	};
+
+	class Texture : public sf::Texture {
+	private:
+		VertexBuffer *texture_quad;
+		void createVertexBuffer();
+	public:
+		bool loadFromFile(sf::String filepath);
+		void render();
 	};
 }
 

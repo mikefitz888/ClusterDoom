@@ -49,7 +49,7 @@ class ResourceManager {
 	friend class AudioManager;
 
 private:
-	map<sf::String, sf::Texture*>     textureMap;
+	map<sf::String, graphics::Texture*>     textureMap;
 	map<sf::String, sf::Shader*>	  shaderMap;
 	map<sf::String, VertexBuffer*>	  meshMap;
 	map<sf::String, AnimatedTexture*> animatedTextureMap;
@@ -83,10 +83,10 @@ public:
 	ResourceManager(Manager* manager);
 
 	// Texture functions
-	sf::Texture* textureLoad(sf::String resource_name, sf::String resource_filepath);
-	sf::Texture* getTexture(sf::String resource_name);
-	bool         textureExists(sf::String resource_name);
-	void         textureUnload(sf::String resource_name);
+	graphics::Texture* textureLoad(sf::String resource_name, sf::String resource_filepath);
+	graphics::Texture* getTexture(sf::String resource_name);
+	bool			   textureExists(sf::String resource_name);
+	void			   textureUnload(sf::String resource_name);
 
 	// Shader functions
 	sf::Shader* shaderLoad(sf::String resource_name, sf::String resource_filepath_vert, sf::String resource_filepath_frag);

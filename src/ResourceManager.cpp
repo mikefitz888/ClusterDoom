@@ -8,14 +8,14 @@ ResourceManager::ResourceManager(Manager* manager) {
 
 ////////////////////////////////////////////////
 // Texture functions
-sf::Texture* ResourceManager::textureLoad(sf::String resource_name, sf::String resource_filepath) {
+graphics::Texture* ResourceManager::textureLoad(sf::String resource_name, sf::String resource_filepath) {
 	// Check if map already contains something under the desired resource_name key:
-	sf::Texture* new_tex;
+	graphics::Texture* new_tex;
 	if (this->textureExists(resource_name)) {
 		return this->getTexture(resource_name);
 	}
 	else {
-		new_tex = new sf::Texture();
+		new_tex = new graphics::Texture();
 		if (!new_tex->loadFromFile(resource_filepath)) {
 			// Texture has failed to load
 			std::cout << "[ERROR] TEXTURE' " << resource_filepath.toAnsiString() << "' FAILED TO LOAD!" << std::endl;
@@ -25,7 +25,7 @@ sf::Texture* ResourceManager::textureLoad(sf::String resource_name, sf::String r
 
 		// Texture has loaded successfully, store in map
 		std::cout << "TEXTURE '" << resource_filepath.toAnsiString() << "' LOADED into resource slot '" << resource_name.toAnsiString() << "'!" << std::endl;
-		this->textureMap.insert(std::pair<sf::String, sf::Texture*>(resource_name, new_tex));
+		this->textureMap.insert(std::pair<sf::String, graphics::Texture*>(resource_name, new_tex));
 		return new_tex;
 	}
 	return nullptr;
@@ -35,9 +35,9 @@ bool ResourceManager::textureExists(sf::String resource_name) {
 	return (this->textureMap.find(resource_name) != this->textureMap.end());
 }
 
-sf::Texture* ResourceManager::getTexture(sf::String resource_name) {
+graphics::Texture* ResourceManager::getTexture(sf::String resource_name) {
 	if (this->textureExists(resource_name)) {
-		sf::Texture* texture = this->textureMap[resource_name];
+		graphics::Texture* texture = this->textureMap[resource_name];
 		return texture;
 	} else {
 		std::cout << "[ERROR] Texture '" << resource_name.toAnsiString() << "' Does not exist!" << std::endl;

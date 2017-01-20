@@ -5,7 +5,7 @@
 namespace unit
 {
 	class BasicUnit : public Unit {
-		sf::Texture* texture = nullptr;
+		graphics::Texture* texture = nullptr;
 	public:
 		BasicUnit(id_t key, Manager* m);
 		void init() override;

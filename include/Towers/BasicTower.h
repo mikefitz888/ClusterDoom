@@ -5,7 +5,7 @@
 namespace tower
 {
 	class BasicTower : public Tower {
-		sf::Texture* texture = nullptr;
+		graphics::Texture* texture = nullptr;
 	public:
 		BasicTower(id_t key, Manager* m);
 		void init() override;

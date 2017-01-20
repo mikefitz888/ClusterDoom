@@ -8,7 +8,7 @@ SRCEXT := cpp
 SOURCES := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 CFLAGS := -std=c++11 -g -Wall -Wextra -pedantic
-LIB := -L libs/lib/ -lGL -lGLEW -lpthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lopencv_core -lopencv_highgui -lopencv_imgproc
+LIB := -L libs/lib/ -lGL -lGLEW -lpthread -lsfml-graphics -lsfml-window -lsfml-system -lsfml-network -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv-objdetect
 INC := -I lib/SFML-2.4.1/include/ -I lib/glm/
 
 $(TARGET): $(OBJECTS)

@@ -3,7 +3,7 @@
 namespace cvinterface {
 	void ICVInterface::updateTowerList(/*std::vector<Point<int>>& towerlist*/) {
 		//tower_locations = towerlist;
-		if (tower_locations.size() > towers.size()) {
+		/*if (tower_locations.size() > towers.size()) {
 			auto tower = game_controller->spawnTowerAt(tower_locations[towers.size()]);
 			towers.push_back(tower);
 		} else if (tower_locations.size() < towers.size()) {
@@ -11,7 +11,7 @@ namespace cvinterface {
 
 		} else {
 			//Tower count unchanged
-		}
+		}*/
 
 		//Deal with any movement
 	}
@@ -105,6 +105,9 @@ namespace cvinterface {
 	        cv::rectangle(frame, cv::Point(objects[i].x, objects[i].y), cv::Point(objects[i].x + objects[i].width, objects[i].y + objects[i].height), cv::Scalar(0, 255, 0), 2);
 			tower_locations.push_back(Point<int>(objects[i].x + objects[i].width/2, objects[i].y + objects[i].height/2));
 	    }
-		updateTowerList();
+
+	    //TODO: SHARE LIST
+
+		//updateTowerList();
 	}
 }

@@ -28,6 +28,15 @@ namespace gamecontroller {
 		return spawnTowerAt(position.x, position.y);
 	}
 
+	void GameController::restart() const {
+		for(auto obj : manager->getTowers()){
+			//destroy
+		}
+		for(auto obj : manager->getUnits()){
+			//destroy
+		}
+	}
+
 
 	void GameController::init() const {
 		spawnTowerAt(400, 200);

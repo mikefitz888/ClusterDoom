@@ -259,7 +259,7 @@ namespace graphics {
 		rm->textureLoad("red",         "src/Resources/Textures/red.png");
 
 		// Load Animated Textures
-		rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
+		//rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
 
 		// Load Shaders
 		rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");

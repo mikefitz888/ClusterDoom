@@ -26,6 +26,7 @@ namespace gamecontroller {
 		GameObject* createObject(id_t key);
 		void init() const;
 		void step() const;
+		void restart() const;
 		tower_ptr spawnTowerAt(int x, int y) const;
 		tower_ptr spawnTowerAt(Point<int> position) const;
 		unit_ptr spawnUnitAt(int x, int y) const;

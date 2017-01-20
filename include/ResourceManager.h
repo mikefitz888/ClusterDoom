@@ -23,11 +23,11 @@
 #include "../include/VertexBuffer.h"
 #include "../include/RenderManager.h"
 #include <map>
-#include <SFML\Main.hpp>
-#include <SFML\Graphics.hpp>
-#include <SFML\Window.hpp>
-#include <SFML\System.hpp>
-#include <SFML\Audio.hpp>
+#include <SFML/Main.hpp>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 
 using graphics::RenderManager;

@@ -2,9 +2,9 @@
 #define _AUDIO_MANAGER_H
 
 #include <map>
-#include <SFML\Main.hpp>
-#include <SFML\System.hpp>
-#include <SFML\Audio.hpp>
+#include <SFML/Main.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 
 namespace manager {

@@ -27,7 +27,7 @@ namespace worldrenderer {
 		vbuff->freeze();
 
 		// Create Aniamted texture
-		at = manager->getResourceManager()->getAnimatedTexture("explosion");
+		//at = manager->getResourceManager()->getAnimatedTexture("explosion");
 
 		text = manager->getResourceManager()->createTextFromFont( "agency","Git gud");
 	}
@@ -54,7 +54,7 @@ namespace worldrenderer {
 		// Render debug explosion
 		render_manager->setBlendModeAdditive();
 		index += 0.60;
-		at->render(index);
+		//at->render(index);
 		render_manager->setBlendModeNormal();
 	}
 

@@ -16,7 +16,7 @@ namespace unit {
 	using manager::Manager;
 	//using containers::optional;
 
-	enum TYPE : unsigned int {BASE, BASIC};
+	enum TYPE : unsigned int {BASE=0, BASIC};
 
 	class Unit : public GameObject {
 		sf::Texture* texture;

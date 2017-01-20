@@ -8,7 +8,7 @@ namespace gamecontroller {
 	}
 
 	unit_ptr GameController::spawnUnitAt(int x, int y) const {
-		auto unit = manager->createUnit(unit::TYPE::BASE);
+		auto unit = manager->createUnit(unit::TYPE::BASIC);
 		unit->setPosition(x, y);
 		return unit;
 	}
@@ -19,7 +19,7 @@ namespace gamecontroller {
 
 
 	tower_ptr GameController::spawnTowerAt(int x, int y) const {
-		auto tower = manager->createTower(tower::TYPE::BASE);
+		auto tower = manager->createTower(tower::TYPE::BASIC);
 		tower->setPosition(x, y);
 		return tower;
 	}

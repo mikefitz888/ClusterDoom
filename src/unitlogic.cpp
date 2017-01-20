@@ -1,4 +1,6 @@
 #include "../include/unitlogic.h"
+#include "../include/Units/BasicUnit.h"
+#include <iostream>
 
 namespace unitlogic {
 	unit_ptr UnitLogic::createUnit(unit::TYPE type) const {
@@ -6,7 +8,15 @@ namespace unitlogic {
 	}
 
 	Unit* UnitLogic::createUnit(id_t key, unit::TYPE type) const {
-		return new Unit(key, manager);
+		switch(type)
+		{
+		case unit::TYPE::BASIC:
+			return new unit::BasicUnit(key, manager);
+		case unit::TYPE::BASE:
+		default:
+			std::cout << "FATAL ERROR! INCORRECT INSTANCE, nullptr RETURNED" << std::endl;
+			return nullptr;
+		}
 	}
 
 	void UnitLogic::giveSlavePtr(unit_ptr unitptr) {

@@ -60,16 +60,25 @@ namespace cvinterface {
 
     void ICVInterface::step()
     {
-        bool success = camera.read(frame);
+		// TEST OF SENDING
+		/*tower_locations.clear();
+		tower_locations.push_back(Point<int>(20, 10));
+		tower_locations.push_back(Point<int>(30, 13));
+		tower_locations.push_back(Point<int>(12, 10));
+		networkSendTowerPositions();
+		char keypress = cvWaitKey(1000);
+		return;*/
+		
+		
+		bool success = camera.read(frame);
         if(!success) {
            // std::cout << "Cannot read frame from video stream!" << std::endl;
             return;
         }
-        //std::cout << "Stepping" << std::endl;
         //TODO: Parse frame data
         findTowers();
         cv::imshow("WebCam", frame);
-        //char keypress = cvWaitKey(20);
+		char keypress = cvWaitKey(42); // <- This is essential as if we leave it, the main thread will receive multiple packets of data containing updated lists every frame. (Realistically, this only needs to run at 24 fps, as this is the maximum performance of the camera.)
     }
 
     void ICVInterface::release() {
@@ -120,9 +129,22 @@ namespace cvinterface {
 		sf::TcpSocket::Status st = socket->connect("127.0.0.1", 31654, sf::seconds(10.0f));
 		if (st == sf::TcpSocket::Status::Done) {
 			std::cout << "[CV] Connected to CV interface successfully!" << std::endl;
+
+			// Create send buffer:
+			send_buffer = new Buffer();
 		}
 	}
 	void ICVInterface::networkSendTowerPositions() {
+		std::cout << "[CV] Sending towers to control thread: Count: " << tower_locations.size() << std::endl;
+		
+		// Write data to buffer
+		send_buffer->seek(0);
+		(*send_buffer) << (int)tower_locations.size();
+		for (auto location : tower_locations) {
+			(*send_buffer) << location;
+		}
 
+		// Send
+		socket->send(send_buffer->getPtr(), send_buffer->tell());
 	}
 }

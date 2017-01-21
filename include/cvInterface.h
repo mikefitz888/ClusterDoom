@@ -36,6 +36,7 @@ namespace cvinterface {
 
 		// Network stuff
 		sf::TcpSocket *socket;
+		Buffer        *send_buffer;
     public:
         inline ICVInterface(GameController* gc) : game_controller(gc) {}
         void init();

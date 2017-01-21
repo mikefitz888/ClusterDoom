@@ -89,6 +89,22 @@ namespace gamecontroller {
 			}
 		} else {
 			// Listen for messages from cv interface
+			/*
+				In this process, the gamecontroller checks the incoming buffer for any messages
+				from cvInterface. If data exists, it reads the first 4 bytes (int) from the stream to
+				determine the number of data points received.
+				- it then reads out a series of points into cvList. 
+
+				(NOTE: This list is cleared when data is received).
+				- At this stage, we can do something with the new list.
+
+				-------------------------------------------
+				ADDITIONAL COMMENT:
+				- This is just a communication interface. If instead you want the tower moving/creation/deletion to be done on the cv thread,
+				then it can be done there, and this can be adjusted to receive the resultant data after that has happened.
+				- It is currently setup the way it is as this way, we only need a one-way data exchange with the tower position data being sent from the 
+				webcam feed thread to the main app.
+			*/
 			client->setBlocking(false);
 			std::size_t message_size;
 			sf::TcpSocket::Status st = client->receive((void*)recv_buffer->getPtr(), (std::size_t)recv_buffer->maxSize(), message_size);
@@ -98,10 +114,23 @@ namespace gamecontroller {
 					// Data received
 					std::cout << "[CV NETWORK] Data received from CV interface. Size: " << message_size << " bytes!" << std::endl;
 
-					// Read packet:
-					recv_buffer->seek(0);
+					// Clear cv list
+					cvList.clear();
 
-					/// .. TODO: Read data sent from cv interface
+					// Read packet:
+					int number_of_positions;
+					Point<int> point(0,0);
+
+					recv_buffer->seek(0);
+					(*recv_buffer) >> number_of_positions;
+					for (int c = 0; c < number_of_positions; c++) {
+						(*recv_buffer) >> point;
+						cvList.push_back(point);
+						//std::cout << "\tReceived Point (" << point.x << "," << point.y << ")" << std::endl;
+					}
+
+
+					// TODO: Do something with the new list.
 				}
 				break;
 			}

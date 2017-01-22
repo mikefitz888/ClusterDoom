@@ -37,6 +37,19 @@ namespace gamecontroller {
         }
     }
 
+	void GameController::spawnTowers(std::vector<Point<int>> tower_list) const {
+		for (auto location : tower_list) {
+			spawnTowerAt(location);
+		}
+	}
+
+	void GameController::clearTowers() const {
+		for (auto tower_ptr : manager->getTowers()) {
+			//For demo use only
+			tower_ptr->demoDestroy();
+		}
+	}
+
 
     void GameController::init() {
         spawnTowerAt(400, 200);
@@ -131,6 +144,10 @@ namespace gamecontroller {
 
 
 					// TODO: Do something with the new list.
+					
+					// For Demo Only
+					clearTowers();
+					spawnTowers(cvList);
 				}
 				break;
 			}

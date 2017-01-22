@@ -49,6 +49,9 @@ namespace gamecontroller {
         tower_ptr spawnTowerAt(Point<int> position) const;
         unit_ptr spawnUnitAt(int x, int y) const;
         unit_ptr spawnUnitAt(Point<int> position) const;
+
+		void clearTowers() const;
+		void spawnTowers(std::vector<Point<int>> tower_list) const;
     };
 }
 

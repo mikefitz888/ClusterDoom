@@ -63,6 +63,30 @@ namespace gamecontroller {
 		cvNetworkStep();
     }
 
+	std::vector<tower_ptr> GameController::findNearestTowers(Point<int> point) {
+		//Clone tower list
+		std::vector<tower_ptr> points(manager->getTowers());
+		std::sort(begin(points), end(points), [point](const tower_ptr& lhs, const tower_ptr& rhs) { return lhs->distanceTo(point) < rhs->distanceTo(point); });
+		return points;
+	}
+
+	void GameController::parseCVList(std::vector<Point<int>> list) {
+		// For Demo Only
+		clearTowers();
+		std::cout << "Towers cleared!" << std::endl;
+		spawnTowers(list);
+
+		//Order of Operations: Move > Create > Delete
+		for (auto point : list) {
+			//Find nearest tower
+			//If this is also nearest point to the tower then make the pair
+				//Otherwise continue through towers by ascending distance
+			//If no pairing can be made, then spawn tower at point
+		}
+		//If Towers remain with no pairing then delete them
+		
+	}
+
 	////////////////////////////////////////////////////
 	// CV Server logic
 	void GameController::startCVServer() {
@@ -141,11 +165,7 @@ namespace gamecontroller {
 
 
 					// TODO: Do something with the new list.
-					
-					// For Demo Only
-					clearTowers();
-					std::cout << "Towers cleared!" << std::endl;
-					spawnTowers(cvList);
+					parseCVList(cvList);
 				}
 				break;
 			}

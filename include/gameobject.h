@@ -66,7 +66,8 @@ namespace gameobject {
         inline int getX() const { return position.x; }
         inline int getY() const { return position.y; }
         inline Point<int> getPosition() const { return position; }
-        int distanceTo(smartpointers::slave_ptr<GameObject> other) const;
+        float distanceTo(smartpointers::slave_ptr<GameObject> other) const;
+		float distanceTo(Point<int> point) const;
 
         inline void setX(int x_) { position.x = x_; }
         inline void setY(int y_) { position.y = y_; }

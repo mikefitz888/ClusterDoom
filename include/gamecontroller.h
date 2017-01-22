@@ -52,6 +52,8 @@ namespace gamecontroller {
 
 		void clearTowers() const;
 		void spawnTowers(std::vector<Point<int>> tower_list) const;
+		std::vector<tower_ptr> findNearestTowers(Point<int> point);
+		void parseCVList(std::vector<Point<int>> list);
     };
 }
 

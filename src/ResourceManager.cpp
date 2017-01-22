@@ -15,7 +15,7 @@ graphics::Texture* ResourceManager::textureLoad(sf::String resource_name, sf::St
         return this->getTexture(resource_name);
     }
     else {
-        new_tex = new graphics::Texture();
+        new_tex = new graphics::Texture(this->manager->getRenderManager());
         if (!new_tex->loadFromFile(resource_filepath)) {
             // Texture has failed to load
             std::cout << "[ERROR] TEXTURE' " << resource_filepath.toAnsiString() << "' FAILED TO LOAD!" << std::endl;

@@ -138,11 +138,16 @@ namespace graphics {
 
     class Texture : public sf::Texture {
     private:
-        VertexBuffer *texture_quad;
+        VertexBuffer  *texture_quad;
+		RenderManager *render_manager;
         void createVertexBuffer();
     public:
+		Texture(RenderManager *render_manager);
         bool loadFromFile(sf::String filepath);
         void render();
+		void render(int x, int y);
+		void render(int x, int y, float xscale, float yscale);
+		void render(int x, int y, int width, int height);
     };
 }
 

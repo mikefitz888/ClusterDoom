@@ -345,6 +345,9 @@ namespace graphics {
 
     ////////////////////////////////////////////////////
     // TEXTURE METHODS
+	graphics::Texture::Texture(RenderManager *render_manager) : sf::Texture() {
+		this->render_manager = render_manager;
+	}
     void graphics::Texture::createVertexBuffer() {
         // Create vertex buffer
         this->texture_quad = new VertexBuffer();
@@ -358,6 +361,33 @@ namespace graphics {
         glBindTexture(GL_TEXTURE_2D, gl_tex_id);
         this->texture_quad->render();
     }
+
+	void graphics::Texture::render(int x, int y) {
+		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
+		this->render_manager->setWorldMatrix(transform);
+		this->render();
+	}
+
+	void graphics::Texture::render(int x, int y, float xscale, float yscale) {
+		glm::mat4 transform = glm::mat4();
+		transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+		transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+
+		this->render_manager->setWorldMatrix(transform);
+		this->render();
+	}
+
+	void graphics::Texture::render(int x, int y, int width, int height) {
+		float xscale = (float)width / (float)this->getSize().x;
+		float yscale = (float)height / (float)this->getSize().y;
+		glm::mat4 transform = glm::mat4();
+		transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+		transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+
+		this->render_manager->setWorldMatrix(transform);
+		this->render();
+	}
+
 
     bool graphics::Texture::loadFromFile(sf::String resource_filepath) {
         bool result = this->sf::Texture::loadFromFile(resource_filepath);

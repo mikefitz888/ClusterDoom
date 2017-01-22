@@ -13,8 +13,6 @@ namespace tower {
 
     void BasicTower::render(){
 
-        glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY(), 0.0));
-        render_manager->setWorldMatrix(transform);
-        texture->render();
+		texture->render(getX(), getY(), 96, 96);
     }
 }

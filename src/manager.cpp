@@ -27,6 +27,18 @@ namespace manager {
         removeFromPool(tower->getID());
     }
 
+	void Manager::clearTowers() {
+		for (auto tower : (this->tower_logic)->getTowers()) {
+			id_t id = tower->getID();
+			game_object_pool[id].invalidate();
+			free_id_list.push_back(id);
+			network_manager->sendInstanceDestroy(id);
+		}
+
+		tower_logic->clean();
+		unit_logic->clean();
+	}
+
     std::vector<slave_ptr<Tower>>& Manager::getTowers() const {
         return (this->tower_logic)->getTowers();
     }

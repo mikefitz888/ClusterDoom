@@ -44,19 +44,16 @@ namespace gamecontroller {
 	}
 
 	void GameController::clearTowers() const {
-		for (auto tower_ptr : manager->getTowers()) {
-			//For demo use only
-			tower_ptr->demoDestroy();
-		}
+		manager->clearTowers();
 	}
 
 
     void GameController::init() {
-        spawnTowerAt(400, 200);
+        /*spawnTowerAt(400, 200);
         spawnTowerAt(800, 200);
         spawnTowerAt(800, 600);
         spawnTowerAt(400, 600);
-        spawnUnitAt(100, 50);
+        spawnUnitAt(100, 50);*/
 
 		startCVServer();
     }
@@ -147,6 +144,7 @@ namespace gamecontroller {
 					
 					// For Demo Only
 					clearTowers();
+					std::cout << "Towers cleared!" << std::endl;
 					spawnTowers(cvList);
 				}
 				break;

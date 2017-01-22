@@ -72,7 +72,7 @@ namespace gameobject {
         inline void setY(int y_) { position.y = y_; }
         inline void setPosition(int x, int y) { setX(x); setY(y); }
 
-		inline void demoDestroy() { _destroySelf(); }
+		inline void demoDestroy() { _destroySelf(); return; }
     };
 }
 

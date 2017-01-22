@@ -92,6 +92,7 @@ namespace manager {
         //Tower Methods
         slave_ptr<Tower> createTower(tower::TYPE type);
         void destroyTower(slave_ptr<Tower> tower);
+		void clearTowers();
         std::vector<slave_ptr<Tower>>& getTowers() const;
 
         //Unit Methods

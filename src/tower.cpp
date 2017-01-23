@@ -74,6 +74,10 @@ namespace tower {
                 return;
             }
         }
+
+        //TODO: update render positions
+        render_position.x -= (render_position.x - position.x)/20;
+        render_position.y -= (render_position.y - position.y)/20;
     }
 
     void Tower::attack(unit_ptr unit)    {

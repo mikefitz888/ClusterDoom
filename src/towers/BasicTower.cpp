@@ -13,6 +13,6 @@ namespace tower {
 
     void BasicTower::render(){
 
-		texture->render(getX(), getY(), 96, 96);
+		texture->render(getXr(), getYr(), 96, 96);
     }
 }

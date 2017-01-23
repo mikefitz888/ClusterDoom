@@ -51,6 +51,7 @@ namespace gameobject {
         RenderManager* render_manager = nullptr;
         Point<int> position = Point<int>(0, 0);
         Point<int> jitter_offset = Point<int>(0, 0);
+        Point<int> render_position = Point<int>(0, 0);
         int _destroySelf();
     public:
         inline GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m) : id_(id), super_type_(super_type), sub_type_(sub_type), manager(m) {} //Very important to get key from manager (for memory management + networking)
@@ -66,6 +67,8 @@ namespace gameobject {
 
         inline int getX() const { return position.x; }
         inline int getY() const { return position.y; }
+        inline int getXr() const { return render_position.x; }
+        inline int getYr() const { return render_position.y; }
         inline Point<int> getPosition() const { return position; }
         float distanceTo(smartpointers::slave_ptr<GameObject> other) const;
 		float distanceTo(Point<int> point) const;

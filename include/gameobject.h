@@ -23,6 +23,8 @@ namespace unit {
 }
 
 namespace gameobject {
+	class GameObject;
+
     using graphics::IRenderable;
     using manager::Manager;
     using graphics::RenderManager;
@@ -32,6 +34,7 @@ namespace gameobject {
 
     typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
     typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
+	typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
     
     typedef size_t id_t;
 

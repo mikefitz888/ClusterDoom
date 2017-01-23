@@ -5,6 +5,8 @@
 #include "smartpointers.h"
 #include "unitlogic.h"
 #include "towerlogic.h"
+#include "ObjectLogic.h"
+#include "gameobject.h"
 #include "gamecontroller.h"
 #include "RenderManager.h"
 #include "VertexBuffer.h"
@@ -43,6 +45,8 @@ namespace unitlogic {
     class UnitLogic;
 }
 
+class ObjectLogic;
+
 namespace gamecontroller {
     class GameController;
 }
@@ -75,6 +79,7 @@ namespace manager {
         TowerLogic* tower_logic;
         UnitLogic* unit_logic;
         GameController* game_controller; //IRenderable
+		ObjectLogic* object_logic;
 
         RenderManager*  render_manager    = nullptr;
         WorldRenderer*  world_renderer    = nullptr;
@@ -91,6 +96,7 @@ namespace manager {
         inline GameController* getGameController() const { return game_controller; }
         //Tower Methods
         slave_ptr<Tower> createTower(tower::TYPE type);
+		slave_ptr<GameObject> createObject(gameobject::OBJECT_TYPE type);
         void destroyTower(slave_ptr<Tower> tower);
 		void clearTowers();
         std::vector<slave_ptr<Tower>>& getTowers() const;
@@ -101,7 +107,7 @@ namespace manager {
         std::vector<slave_ptr<Unit>> getUnits() const;
 
         //Game Controller Methods (World Logic)
-        slave_ptr<GameObject> createObject();
+        //slave_ptr<GameObject> createObject(gameobject::OBJECT_TYPE type);
         void destroyObject(slave_ptr<GameObject>& obj);
 
 

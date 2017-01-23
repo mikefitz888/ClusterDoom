@@ -4,9 +4,9 @@
 namespace gamecontroller {
     GameController::GameController(Manager* m) : manager(m) {}
 
-    GameObject* GameController::createObject(id_t key){
+    /*GameObject* GameController::createObject(id_t key){
         return nullptr;
-    }
+    }*/
 
     unit_ptr GameController::spawnUnitAt(int x, int y) const {
         auto unit = manager->createUnit(unit::TYPE::BASIC);
@@ -30,6 +30,17 @@ namespace gamecontroller {
     	tower->setJitter(position.x - tower->getX(), position.y - tower->getY());
     	return tower;
     }
+
+	gameobject_ptr GameController::spawnObjectAt(gameobject::OBJECT_TYPE type, int x, int y) const {
+		// TODO: Make spawn
+		gameobject_ptr game_object = manager->createObject(type);
+		game_object->setPosition(x, y);
+		return game_object;
+	}
+
+	gameobject_ptr GameController::spawnObjectAt(gameobject::OBJECT_TYPE type, Point<int> position) const {
+		return spawnObjectAt(type, position.x, position.y);
+	}
 
     void GameController::restart() const {
         for(auto obj : manager->getTowers()){
@@ -65,6 +76,10 @@ namespace gamecontroller {
         spawnTowerAt(400, 600);
         spawnUnitAt(100, 50);*/
 
+		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0);
+		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0);
+		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672);
+		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672);
 		startCVServer();
     }
     

@@ -33,6 +33,7 @@ namespace gamecontroller {
     using gameobject::id_t;
     using gameobject::tower_ptr;
     using gameobject::unit_ptr;
+	using gameobject::gameobject_ptr;
     using gameobject::Point;
     using manager::Manager;
 
@@ -70,16 +71,18 @@ namespace gamecontroller {
 
     public:
         GameController(Manager* m);
-        GameObject* createObject(id_t key);
+       // GameObject* createObject(id_t key);
         void init();
         void step();
         void restart() const;
         Matching stableMatching(vector<Point<int>>& detections);
 
-        tower_ptr spawnTowerAt(int x, int y) const;
-        tower_ptr spawnTowerAt(Point<int> position) const;
-        unit_ptr spawnUnitAt(int x, int y) const;
-        unit_ptr spawnUnitAt(Point<int> position) const;
+        tower_ptr  spawnTowerAt(int x, int y) const;
+        tower_ptr  spawnTowerAt(Point<int> position) const;
+        unit_ptr   spawnUnitAt(int x, int y) const;
+        unit_ptr   spawnUnitAt(Point<int> position) const;
+		gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, int x, int y) const;
+		gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, Point<int> position) const;
         void moveTower(tower_ptr tower, Point<int> point) const;
 
 		void clearTowers() const;

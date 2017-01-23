@@ -6,6 +6,9 @@ void Spawn::init() {
 }
 void Spawn::step() {
 	//manager->getGameController()->spawnUnitAt(getX(), getY());
+	if(manager->getTowers().size() > 0 && manager->getUnits().size() == 0){
+		manager->getGameController()->spawnUnitAt(getX(), getY());
+	}
 }
 void Spawn::render() {
 	graphics::Texture *tex = this->manager->getResourceManager()->getTexture("spawn");

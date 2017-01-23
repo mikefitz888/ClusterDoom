@@ -182,6 +182,40 @@ namespace gamecontroller {
 					// TODO: Do something with the new list.
 					Matching match = stableMatching(cvList);
 					//matches, deleted_towers, new_towers
+					//Order of Operations: Move > Create > Delete
+
+					//For move
+						//Set delete_queue = 0
+					for(auto tower : manager->getTowers()){
+						auto result = match.matches.find(tower->getID());
+						if(result != match.matches.end()){
+							tower->setPosition((result->second).x, (result->second).y);
+						}//else not found
+					}
+					
+					//For creation:
+						//If tower to create:
+							//Increment create_queue
+							//If > n then actually spawn
+					if(match.new_towers.size() > 0){
+						create_count++;
+						if(create_count > 10){
+							spawnTowerAt(match.new_towers[0]);
+						}
+					}else{
+						create_count = 0;
+					}
+
+					//For deletion:
+						//Increase tower->delete_queue
+						//If > n then actually delete
+					for(auto tower : match.deleted_towers){
+						tower->delete_queue++;
+						if(tower->delete_queue > 10){
+							tower->demoDestroy();
+							break; //Have to break I think to prevent seg-fault
+						}
+					}
 				}
 				break;
 			}

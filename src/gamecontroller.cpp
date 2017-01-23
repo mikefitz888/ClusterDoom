@@ -180,10 +180,122 @@ namespace gamecontroller {
 
 
 					// TODO: Do something with the new list.
-					parseCVList(cvList);
+					Matching match = stableMatching(cvList);
+					//matches, deleted_towers, new_towers
 				}
 				break;
 			}
 		}
+	}
+
+	Matching GameController::stableMatching(vector<Point<int>>& detections)
+	{
+	    vector<deque<int>> point_prefs;
+	    vector<vector<int>> tower_prefs;
+	    auto& towers = manager->getTowers();
+	    int tower_count = towers.size();
+	    int** dists = new int*[tower_count];
+	    for (size_t i = 0; i < tower_count; i++)
+	    {
+	        dists[i] = new int[detections.size()];
+	        for (size_t j = 0; j < detections.size(); j++)
+	        {
+	            dists[i][j] = towers[i]->distanceTo(detections[j]);
+	            //cout << dists[i][j] << " ";
+	        }
+	        //cout << "\n";
+	    }
+	    //cout << "\n";
+
+	    for (int i = 0; i < tower_count; i++)
+	    {
+	        tower_prefs.push_back({});
+	        auto cmp = [&dists, i](int& pref, const int& point)
+	        {
+	            return dists[i][pref] < dists[i][point];
+	        };
+	        for (int j = 0; j < detections.size(); j++)
+	        {
+	            auto pos = std::lower_bound(tower_prefs[i].begin(), tower_prefs[i].end(), j, cmp);
+	            tower_prefs[i].insert(pos, j);
+	        }
+	        //for (int pref : tower_prefs[i]) cout << pref << " ";
+	        //cout << "\n";
+	    }
+	    //cout << "\n";
+
+	    for (int j = 0; j < detections.size(); j++)
+	    {
+	        point_prefs.push_back({});
+	        auto cmp = [&dists, j](int& pref, const int& tower)
+	        {
+	            return dists[pref][j] < dists[tower][j];
+	        };
+	        for (int i = 0; i < tower_count; i++)
+	        {
+	            auto pos = std::lower_bound(point_prefs[j].begin(), point_prefs[j].end(), i, cmp);
+	            point_prefs[j].insert(pos, i);
+	        }
+	        //for (int pref : point_prefs[j]) cout << pref << " ";
+	        //cout << "\n";
+	    }
+	    //cout << "\n";
+
+	    for (int i = 0; i < tower_count; i++) delete [] dists[i];
+	    delete [] dists;
+
+	    stack<int> free;
+	    vector<Point<int>> news;
+	    vector<int> matches;
+
+	    for (int j = 0; j < detections.size(); j++) free.push(j);
+	    for (int i = 0; i < tower_count; i++) matches.push_back(NO_MATCH);
+
+	    while (!free.empty())
+	    {
+	        int p = free.top();
+	        if (point_prefs[p].empty())
+	        {
+	            // Clearly, this is a new tower
+	            news.push_back(detections[p]);
+	            free.pop();
+	            continue;
+	        }
+	        int t = point_prefs[p].front();
+	        point_prefs[p].pop_front();
+	        int p_ = matches[t];
+	        if (p_ == NO_MATCH)
+	        {
+	            matches[t] = p;
+	            free.pop();
+	        }
+	        //TODO: Binary Search on both
+	        else for (int x : tower_prefs[t])
+	        {
+	            if (x == p_) break;
+	            else if (x == p)
+	            {
+	                free.pop();
+	                free.push(p_);
+	                matches[t] = p;
+	                break;
+	            }
+	        }
+	    }
+
+	    Matching match;
+	    match.new_towers = news;
+	    for (int i = 0; i < matches.size(); i++)
+	    {
+	        if (matches[i] == NO_MATCH)
+	        {
+	            match.deleted_towers.push_back(towers[i]);
+	        }
+	        else
+	        {
+	            match.matches.emplace(towers[i]->getID(), detections[matches[i]]);
+	        }
+	    }
+	    return match;
 	}
 }

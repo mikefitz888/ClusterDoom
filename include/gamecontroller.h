@@ -10,6 +10,16 @@
 #include <SFML/Network/Packet.hpp>
 #include <vector>
 
+
+#include <iostream>
+#include <deque>
+#include <stack>
+#include <unordered_map>
+#include <cmath>
+#include <algorithm>
+
+#define NO_MATCH -1
+
 namespace gameobject {
     class GameObject;
 }
@@ -25,9 +35,26 @@ namespace gamecontroller {
     using gameobject::unit_ptr;
     using gameobject::Point;
     using manager::Manager;
+
+    using std::cout;
+    using std::endl;
+    using std::vector;
+    using std::deque;
+    using std::stack;
+    using std::unordered_map;
+    using std::tuple;
+
+
+    struct Matching
+    {
+        unordered_map<id_t, Point<int>> matches;
+        vector<tower_ptr> deleted_towers;
+        vector<Point<int>> new_towers;
+    };
+
     class GameController {
         Manager* manager;
-        std::vector<Point<int>> cvList;
+        vector<Point<int>> cvList;
 		
 		// CV Network
 		int                port;
@@ -47,6 +74,7 @@ namespace gamecontroller {
         void init();
         void step();
         void restart() const;
+        Matching stableMatching(vector<Point<int>>& detections);
 
         tower_ptr spawnTowerAt(int x, int y) const;
         tower_ptr spawnTowerAt(Point<int> position) const;

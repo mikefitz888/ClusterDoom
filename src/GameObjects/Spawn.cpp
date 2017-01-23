@@ -6,7 +6,7 @@ void Spawn::init() {
 }
 void Spawn::step() {
 	//manager->getGameController()->spawnUnitAt(getX(), getY());
-	if(manager->getTowers().size() > 0 && manager->getUnits().size() == 0){
+	if(manager->getTowers().size() >= 0 && manager->getUnits().size() < 10){
 		manager->getGameController()->spawnUnitAt(getX(), getY());
 	}
 }

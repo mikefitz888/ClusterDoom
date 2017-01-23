@@ -194,7 +194,11 @@ namespace manager {
 
     void Manager::stepAll() {
         //std::cout << "stepAll()" << std::endl;
-        for (slave_ptr<GameObject> obj : game_object_pool) {
+		std::vector<slave_ptr<GameObject>> copy;
+		for (slave_ptr<GameObject> obj : game_object_pool) {
+			copy.push_back(obj);
+		}
+        for (slave_ptr<GameObject> obj :copy) {
             if(obj) obj->step();
         }
     }

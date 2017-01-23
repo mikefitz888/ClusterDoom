@@ -53,6 +53,8 @@ namespace gameobject {
         Point<int> position = Point<int>(0, 0);
         Point<int> jitter_offset = Point<int>(0, 0);
         Point<int> render_position = Point<int>(0, 0);
+
+        int delete_queue = 0;
         int _destroySelf();
     public:
         inline GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m) : id_(id), super_type_(super_type), sub_type_(sub_type), manager(m) {} //Very important to get key from manager (for memory management + networking)

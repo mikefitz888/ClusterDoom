@@ -6,7 +6,7 @@
 using gameobject::GameObject;
 using gameobject::Point;
 using gameobject::TYPE;
-using gameobject::id_t;
+//using gameobject::id_t;
 
 class Spawn : public GameObject {
 	Point<int> position;

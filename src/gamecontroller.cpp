@@ -87,13 +87,18 @@ namespace gamecontroller {
 		spawnTowers(list);
 
 		//Order of Operations: Move > Create > Delete
-		for (auto point : list) {
-			//Find nearest tower
-			//If this is also nearest point to the tower then make the pair
-				//Otherwise continue through towers by ascending distance
-			//If no pairing can be made, then spawn tower at point
-		}
-		//If Towers remain with no pairing then delete them
+
+		//For move
+			//Set delete_queue = 0
+		
+		//For creation:
+			//If tower to create:
+				//Increment create_queue
+				//If > n then actually spawn
+
+		//For deletion:
+			//Increase tower->delete_queue
+			//If > n then actually delete
 		
 	}
 

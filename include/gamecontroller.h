@@ -8,6 +8,7 @@
 #include <SFML/Network/TcpSocket.hpp>
 #include <SFML/Network/IpAddress.hpp>
 #include <SFML/Network/Packet.hpp>
+#include <vector>
 
 namespace gameobject {
     class GameObject;
@@ -37,6 +38,8 @@ namespace gamecontroller {
 
 		void startCVServer();
 		void cvNetworkStep();
+
+        int create_count = 0;
 
     public:
         GameController(Manager* m);

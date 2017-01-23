@@ -1,4 +1,5 @@
 #include "../include/gamecontroller.h"
+#include <math.h>
 
 namespace gamecontroller {
     GameController::GameController(Manager* m) : manager(m) {}
@@ -25,7 +26,9 @@ namespace gamecontroller {
     }
 
     tower_ptr GameController::spawnTowerAt(Point<int> position) const {
-        return spawnTowerAt(position.x, position.y);
+    	tower_ptr tower = spawnTowerAt( round(((float)position.x)/64.0f)*64.0f, round(((float)position.y)/64.0f)*64.0f );
+    	tower->setJitter(position.x - tower->getX(), position.y - tower->getY());
+    	return tower;
     }
 
     void GameController::restart() const {
@@ -41,6 +44,13 @@ namespace gamecontroller {
 		for (auto location : tower_list) {
 			spawnTowerAt(location);
 		}
+	}
+
+	void GameController::moveTower(tower_ptr tower, Point<int> point) const {
+		Point<int> jitter = tower->getJitter();
+		int x = point.x - jitter.x;
+		int y = point.y - jitter.y;
+		tower->setPosition(x, y);
 	}
 
 	void GameController::clearTowers() const {

@@ -39,7 +39,7 @@ namespace gameobject {
         inline Point(T x_, T y_) : x(x_), y(y_) {}
         T x;
         T y;
-        inline T distanceTo(Point target) {return sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
+        inline T distanceTo(Point target) const {return sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
     };
 
     class GameObject : public IRenderable {
@@ -50,6 +50,7 @@ namespace gameobject {
         Manager* manager;
         RenderManager* render_manager = nullptr;
         Point<int> position = Point<int>(0, 0);
+        Point<int> jitter_offset = Point<int>(0, 0);
         int _destroySelf();
     public:
         inline GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m) : id_(id), super_type_(super_type), sub_type_(sub_type), manager(m) {} //Very important to get key from manager (for memory management + networking)
@@ -72,6 +73,8 @@ namespace gameobject {
         inline void setX(int x_) { position.x = x_; }
         inline void setY(int y_) { position.y = y_; }
         inline void setPosition(int x, int y) { setX(x); setY(y); }
+        inline void setJitter(int x, int y){jitter_offset.x=x; jitter_offset.y=y;};
+        inline Point<int> getJitter(){return jitter_offset;};
 
 		inline void demoDestroy() { _destroySelf(); return; }
     };

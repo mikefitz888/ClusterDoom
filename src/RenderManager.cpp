@@ -3,6 +3,29 @@
 #include "../include/manager.h"
 
 namespace graphics {
+
+	// Resource loading
+	void RenderManager::loadResources() {
+		ResourceManager *rm = this->manager->getResourceManager();
+
+		// Load Textures
+		rm->textureLoad("background", "src/Resources/Textures/background.png");
+		rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png");
+		rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png");
+		rm->textureLoad("red", "src/Resources/Textures/red.png");
+		rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
+
+		// Load Animated Textures
+		//rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
+
+		// Load Shaders
+		rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
+
+		// Load fonts
+		rm->fontLoad("agency", "src/Resources/Fonts/AGENCYR.TTF");
+	}
+
+
     // Init function
     void RenderManager::init(Manager *manager) {
 
@@ -246,26 +269,6 @@ namespace graphics {
     }
     void RenderManager::setWorldMatrixIdentity() {
         setWorldMatrix(glm::mat4());
-    }
-
-    // Resource loading
-    void RenderManager::loadResources() {
-        ResourceManager *rm = this->manager->getResourceManager();
-
-        // Load Textures
-        rm->textureLoad("background",  "src/Resources/Textures/background.png");
-        rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png");
-        rm->textureLoad("basic_unit",  "src/Resources/Textures/pawn.png");
-        rm->textureLoad("red",         "src/Resources/Textures/red.png");
-
-        // Load Animated Textures
-        //rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
-
-        // Load Shaders
-        rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
-
-        // Load fonts
-        rm->fontLoad("agency", "src/Resources/Fonts/AGENCYR.TTF");
     }
 
     // Blend Modes

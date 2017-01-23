@@ -28,6 +28,7 @@ namespace gameobject {
     using graphics::RenderManager;
 
     enum TYPE : unsigned int {TOWER=0, UNIT, OBJECT};
+	enum OBJECT_TYPE : unsigned int { SPAWN = 0 };
 
     typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
     typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;

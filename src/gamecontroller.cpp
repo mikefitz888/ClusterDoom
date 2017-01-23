@@ -73,8 +73,8 @@ namespace gamecontroller {
         /*spawnTowerAt(400, 200);
         spawnTowerAt(800, 200);
         spawnTowerAt(800, 600);
-        spawnTowerAt(400, 600);
-        spawnUnitAt(100, 50);*/
+        spawnTowerAt(400, 600);*/
+        //spawnUnitAt(100, 50);
 
 		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0);
 		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0);
@@ -205,6 +205,7 @@ namespace gamecontroller {
 						auto result = match.matches.find(tower->getID());
 						if(result != match.matches.end()){
 							tower->setPosition((result->second).x, (result->second).y);
+							tower->delete_queue = 0;
 						}//else not found
 					}
 					
@@ -226,7 +227,7 @@ namespace gamecontroller {
 						//If > n then actually delete
 					for(auto tower : match.deleted_towers){
 						tower->delete_queue++;
-						if(tower->delete_queue > 10){
+						if(tower->delete_queue > 200){
 							tower->demoDestroy();
 							break; //Have to break I think to prevent seg-fault
 						}

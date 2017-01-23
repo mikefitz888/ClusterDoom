@@ -12,7 +12,10 @@ namespace tower {
     }
 
     void BasicTower::render(){
-
-		texture->render(getXr(), getYr(), 96, 96);
+        float mod = (200.0f - delete_queue)/200.0f;
+        int size = (int)(96.0f);
+        //setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) 
+        render_manager->setActiveColour(255, 255, 255, (int)(255.0 * mod));
+		texture->render(getXr(), getYr(), size, size);
     }
 }

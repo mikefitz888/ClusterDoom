@@ -6,11 +6,21 @@ namespace manager {
     Manager::Manager() {
         tower_logic      = new TowerLogic(this);
         unit_logic       = new UnitLogic(this);
+		object_logic     = new ObjectLogic(this);
         game_controller  = new GameController(this);
         network_manager  = new NetworkManager(this);
         resource_manager = new ResourceManager(this);
         audio_manager    = new AudioManager(this);
     }
+
+	// Object Methods
+	slave_ptr<GameObject> Manager::createObject(gameobject::OBJECT_TYPE type) {
+		auto obj = object_logic->createObject(getFreePoolKey(), type);
+		addToPool(obj);
+		obj->init();
+		auto passback = slave_ptr<GameObject>(static_pointer_cast<GameObject>(game_object_pool[obj->getID()]));
+		return passback;
+	}
 
     //Tower Methods
     slave_ptr<Tower> Manager::createTower(tower::TYPE type){
@@ -62,12 +72,12 @@ namespace manager {
     }
 
     //Game Controller Methods
-    slave_ptr<GameObject> Manager::createObject(){
+    /*slave_ptr<GameObject> Manager::createObject(){
         auto obj = game_controller->createObject( getFreePoolKey() );
         addToPool(obj);
         obj->init();
         return game_object_pool[obj->getID()];
-    }
+    }*/
 
     void Manager::destroyObject(slave_ptr<GameObject>& obj){
         removeFromPool(obj->getID());

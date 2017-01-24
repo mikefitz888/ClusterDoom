@@ -63,7 +63,7 @@ namespace unit {
 
         float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
         if (distance < 2000) {
-            attack(target);
+           // attack(target);
         }
         else {
             //Move to tower

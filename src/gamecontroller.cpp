@@ -84,8 +84,8 @@ namespace gamecontroller {
     }
     
     void GameController::step() {
-        manager->stepAll();
 		cvNetworkStep();
+        manager->stepAll();
     }
 
 	std::vector<tower_ptr> GameController::findNearestTowers(Point<int> point) {

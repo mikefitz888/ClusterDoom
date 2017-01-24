@@ -66,6 +66,10 @@ namespace tower {
         if(health <= 0) { 
             manager->getAudioManager()->playSound("cannon");
             destroySelf();return; }
+
+		//TODO: update render positions
+		render_position.x -= (render_position.x - position.x) / 20;
+		render_position.y -= (render_position.y - position.y) / 20;
         
         auto units = manager->getUnits();
         for(auto unit : units) {
@@ -75,9 +79,7 @@ namespace tower {
             }
         }
 
-        //TODO: update render positions
-        render_position.x -= (render_position.x - position.x)/20;
-        render_position.y -= (render_position.y - position.y)/20;
+        
     }
 
     void Tower::attack(unit_ptr unit)    {

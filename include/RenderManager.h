@@ -138,10 +138,15 @@ namespace graphics {
     };
 
     class Texture : public sf::Texture {
+		friend class RenderManager;
     private:
         VertexBuffer  *texture_quad;
 		RenderManager *render_manager;
         void createVertexBuffer();
+		int origin_x, origin_y;
+
+		void setOrigin(int x, int y);
+		void setOriginCentre();
     public:
 		Texture(RenderManager *render_manager);
         bool loadFromFile(sf::String filepath);
@@ -149,6 +154,7 @@ namespace graphics {
 		void render(int x, int y, float rotation = 0);
 		void render(int x, int y, float xscale, float yscale, float rotation = 0);
 		void render(int x, int y, int width, int height, float rotation = 0);
+		
     };
 }
 

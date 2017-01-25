@@ -11,12 +11,12 @@ namespace graphics {
 
 		// Load Textures
 		rm->textureLoad("background", "src/Resources/Textures/grass/grass_template.jpg");
-		rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png");
-		rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png");
-		rm->textureLoad("red", "src/Resources/Textures/red.png");
+		rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png")->setOriginCentre();
+		rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
+		rm->textureLoad("red", "src/Resources/Textures/red.png")->setOriginCentre();
 		rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
-		rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png");
-		rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png");
+		rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
+		rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();
 
 		// Load Animated Textures
 		//rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
@@ -366,6 +366,16 @@ namespace graphics {
 	graphics::Texture::Texture(RenderManager *render_manager) : sf::Texture() {
 		this->render_manager = render_manager;
 	}
+
+	void graphics::Texture::setOrigin(int x, int y) {
+		this->origin_x = x;
+		this->origin_y = y;
+	}
+
+	void graphics::Texture::setOriginCentre() {
+		setOrigin(getSize().x / 2, getSize().y / 2);
+	}
+
     void graphics::Texture::createVertexBuffer() {
         // Create vertex buffer
         this->texture_quad = new VertexBuffer();
@@ -383,6 +393,8 @@ namespace graphics {
 	void graphics::Texture::render(int x, int y, float rotation) {
 		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f) );
+		transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
+
 		this->render_manager->setWorldMatrix(transform);
 		this->render();
 	}
@@ -392,6 +404,7 @@ namespace graphics {
 		transform = glm::translate(transform, glm::vec3(x, y, 0.0));
 		transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+		transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
 
 		this->render_manager->setWorldMatrix(transform);
 		this->render();
@@ -404,6 +417,7 @@ namespace graphics {
 		transform = glm::translate(transform, glm::vec3(x, y, 0.0));
 		transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+		transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
 
 		this->render_manager->setWorldMatrix(transform);
 		this->render();

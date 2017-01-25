@@ -60,6 +60,7 @@ namespace unit {
         if (!target) {
             return; //NO TARGET
         }
+        render_facing = target->getPosition();
 
         float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
         if (distance < 2000) {

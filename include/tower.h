@@ -27,7 +27,8 @@ namespace tower {
         graphics::VertexBuffer* vbuff;
         graphics::VertexBuffer* hpbar_buff;
     protected:
-        float health = 100;
+        float max_health = 10000;
+        float health=max_health;
     public:
         inline Tower(id_t id, TYPE tower_type, Manager* m) : GameObject(id, gameobject::TYPE::TOWER, tower_type, m) { }
         virtual void init() override;

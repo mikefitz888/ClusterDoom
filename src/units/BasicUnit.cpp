@@ -17,6 +17,8 @@ namespace unit {
 
     void BasicUnit::render(){
         render_manager = manager->getRenderManager();
+
+        
         
         texture->render(getX(), getY(), 0.10f, 0.10f);
     }

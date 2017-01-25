@@ -365,27 +365,30 @@ namespace graphics {
         this->texture_quad->render();
     }
 
-	void graphics::Texture::render(int x, int y) {
+	void graphics::Texture::render(int x, int y, float rotation) {
 		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
+        transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f) );
 		this->render_manager->setWorldMatrix(transform);
 		this->render();
 	}
 
-	void graphics::Texture::render(int x, int y, float xscale, float yscale) {
+	void graphics::Texture::render(int x, int y, float xscale, float yscale, float rotation) {
 		glm::mat4 transform = glm::mat4();
 		transform = glm::translate(transform, glm::vec3(x, y, 0.0));
 		transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+        transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		this->render_manager->setWorldMatrix(transform);
 		this->render();
 	}
 
-	void graphics::Texture::render(int x, int y, int width, int height) {
+	void graphics::Texture::render(int x, int y, int width, int height, float rotation) {
 		float xscale = (float)width / (float)this->getSize().x;
 		float yscale = (float)height / (float)this->getSize().y;
 		glm::mat4 transform = glm::mat4();
 		transform = glm::translate(transform, glm::vec3(x, y, 0.0));
 		transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+        transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 
 		this->render_manager->setWorldMatrix(transform);
 		this->render();

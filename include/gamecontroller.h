@@ -48,7 +48,7 @@ namespace gamecontroller {
 
     struct Matching
     {
-        unordered_map<id_t, Point<int>> matches;
+        unordered_map<tower_ptr, Point<int>> matches;
         vector<tower_ptr> deleted_towers;
         vector<Point<int>> new_towers;
     };

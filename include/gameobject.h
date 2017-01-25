@@ -53,9 +53,12 @@ namespace gameobject {
     protected:
         Manager* manager;
         RenderManager* render_manager = nullptr;
+
         Point<int> position = Point<int>(0, 0);
         Point<int> jitter_offset = Point<int>(0, 0);
+
         Point<int> render_position = Point<int>(0, 0);
+        Point<int> render_facing = Point<int>(0, 0);
 
         int _destroySelf();
     public:

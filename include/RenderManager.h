@@ -145,9 +145,9 @@ namespace graphics {
 		Texture(RenderManager *render_manager);
         bool loadFromFile(sf::String filepath);
         void render();
-		void render(int x, int y);
-		void render(int x, int y, float xscale, float yscale);
-		void render(int x, int y, int width, int height);
+		void render(int x, int y, float rotation = 0);
+		void render(int x, int y, float xscale, float yscale, float rotation = 0);
+		void render(int x, int y, int width, int height, float rotation = 0);
     };
 }
 

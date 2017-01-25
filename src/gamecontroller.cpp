@@ -200,13 +200,10 @@ namespace gamecontroller {
 					//Order of Operations: Move > Create > Delete
 
 					//For move
-						//Set delete_queue = 0
-					for(auto tower : manager->getTowers()){
-						auto result = match.matches.find(tower->getID());
-						if(result != match.matches.end()){
-							tower->setPosition((result->second).x, (result->second).y);
-							tower->delete_queue = 0;
-						}//else not found
+
+					for(auto& result : match.matches){
+						result.first->setPosition((result.second).x, (result.second).y);
+						result.first->delete_queue = 0;
 					}
 
 					//For creation:
@@ -333,7 +330,7 @@ namespace gamecontroller {
 	        }
 	        else
 	        {
-	            match.matches.emplace(towers[i]->getID(), detections[matches[i]]);
+	            match.matches.emplace(towers[i], detections[matches[i]]);
 	        }
 	    }
 	    return match;

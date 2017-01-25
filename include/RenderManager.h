@@ -94,8 +94,9 @@ namespace graphics {
             int getWindowHeight() const;
             bool render();
             void setActiveShader(sf::Shader *shd);
+			void resetActiveShader();
             void setTexture(sf::Texture *tex);
-            void setTextureExt(sf::Texture *tex, GLuint texture_unit);
+            void setTextureExt(sf::Texture *tex, GLuint texture_unit, GLchar* texture_uniform_name);
             void setRenderParent(IRenderable *render_instance);
             void setActiveColour(Colour c);
             void setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a);

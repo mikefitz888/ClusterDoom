@@ -1,4 +1,5 @@
 #include "../include/manager.h"
+#include "../include/RenderUtils.h"
 
 namespace tower {
     using namespace graphics;
@@ -51,7 +52,7 @@ namespace tower {
     }
 
     void Tower::renderGUI(){
-
+		
     }
 
     void Tower::release(){

@@ -1,6 +1,7 @@
 #include "../include/RenderManager.h"
 #include <iostream>
 #include "../include/manager.h"
+#include "../include/RenderUtils.h"
 
 namespace graphics {
 
@@ -14,13 +15,17 @@ namespace graphics {
 		rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png");
 		rm->textureLoad("red", "src/Resources/Textures/red.png");
 		rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
+		rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png");
+		rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png");
 
 		// Load Animated Textures
 		//rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
 
 		// Load Shaders
 		rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
-
+		rm->shaderLoad( "health_bar_mask_shader", 
+						"src/Resources/Shaders/health_bar_mask_shd_vert.glsl", 
+						"src/Resources/Shaders/health_bar_mask_shd_frag.glsl");
 		// Load fonts
 		rm->fontLoad("agency", "src/Resources/Fonts/AGENCYR.TTF");
 	}
@@ -56,6 +61,7 @@ namespace graphics {
 
         // Load resources
         this->loadResources();
+		RenderUtils::init(this->manager);
 
         // Call active parent init
         if (render_parent != nullptr) {
@@ -188,6 +194,11 @@ namespace graphics {
         }
     }
 
+	void RenderManager::resetActiveShader() {
+		sf::Shader *shd = manager->getResourceManager()->getShader("default");
+		setActiveShader(shd);
+	}
+
     void RenderManager::setActiveColour(Colour c) {
         this->active_colour = c;
         bind_colour_uniform();
@@ -217,7 +228,7 @@ namespace graphics {
         glBindTexture(GL_TEXTURE_2D, gl_tex_id);
     }
 
-    void RenderManager::setTextureExt(sf::Texture *tex, GLuint texture_unit) {
+    void RenderManager::setTextureExt(sf::Texture *tex, GLuint texture_unit, GLchar* texture_uniform_name) {
         //active_shader->setUniform("texture_diffuse", tex);
         //sf::Texture::bind(tex);
         GLuint gl_tex_id = tex->getNativeHandle();
@@ -228,6 +239,10 @@ namespace graphics {
             default:glActiveTexture(GL_TEXTURE0); break;
         }
         glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+
+		// Bind texture unit to uniform name
+		GLuint tex_location = glGetUniformLocation(active_shader->getNativeHandle(), texture_uniform_name);
+		glUniform1i(tex_location, texture_unit);
     }
 
     void RenderManager::release() const {

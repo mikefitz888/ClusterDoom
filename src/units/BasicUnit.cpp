@@ -1,4 +1,6 @@
 #include "../../include/Units/BasicUnit.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 namespace unit {
     BasicUnit::BasicUnit(id_t key, Manager* m) : Unit(key, TYPE::BASIC, m) {
@@ -18,8 +20,8 @@ namespace unit {
     void BasicUnit::render(){
         render_manager = manager->getRenderManager();
 
-        
-        
-        texture->render(getX(), getY(), 0.10f, 0.10f);
+
+        float rotation = atan2(render_facing.y-getY(), render_facing.x-getX()) - M_PI/2;
+        texture->render(getX(), getY(), 0.10f, 0.10f, rotation);
     }
 }

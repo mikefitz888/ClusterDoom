@@ -71,7 +71,7 @@ namespace tower {
         if(health <= 0){
             health--;
             if(health == -100){
-                health = 100;
+                health = max_health;
             }
         }
 

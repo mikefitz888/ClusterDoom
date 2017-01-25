@@ -8,6 +8,10 @@ namespace gamecontroller {
         return nullptr;
     }*/
 
+    int GameController::getWeight(int x, int y){
+    	return 0;
+    }
+
     unit_ptr GameController::spawnUnitAt(int x, int y) const {
         auto unit = manager->createUnit(unit::TYPE::BASIC);
         unit->setPosition(x, y);

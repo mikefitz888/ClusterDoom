@@ -76,6 +76,7 @@ namespace gamecontroller {
         void step();
         void restart() const;
         Matching stableMatching(vector<Point<int>>& detections);
+        int GameController::getWeight(int x, int y);
 
         tower_ptr  spawnTowerAt(int x, int y) const;
         tower_ptr  spawnTowerAt(Point<int> position) const;

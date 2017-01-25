@@ -25,6 +25,6 @@ namespace tower {
 		}
 		texture->render(getXr(), getYr(), size, size);
 
-		RenderUtils::render_circular_health(getXr(), getYr(), health, 100.0f, RenderUtils::colour_blend(Colour(0,255,0,255), Colour(255,0,0,255), (float)health/100.0f));
+		RenderUtils::render_circular_health(getXr(), getYr(), health, max_health, RenderUtils::colour_blend(Colour(0,255,0,255), Colour(255,0,0,255), (float)health/(float)max_health));
 	}
 }

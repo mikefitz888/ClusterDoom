@@ -1,8 +1,8 @@
 #include "../include/cvInterface.h"
 
 namespace cvinterface {
-    CVInterface::RED_THRESHOLD = 105;
-    CVInterface::NON_RED_THRESHOLD = 70;
+    int CVInterface::RED_THRESHOLD = 105;
+    int CVInterface::NON_RED_THRESHOLD = 70;
 
     void CVInterface::init() {
         if (!cascade.load("src/Resources/OpenCV/cascade.xml")) {
@@ -44,7 +44,7 @@ namespace cvinterface {
     }
 
     void CVInterface::release() {
-        send_buffer.release();
+        //send_buffer.release();
     }
 
     void CVInterface::findTowers() {

@@ -9,7 +9,7 @@ namespace graphics {
 		ResourceManager *rm = this->manager->getResourceManager();
 
 		// Load Textures
-		rm->textureLoad("background", "src/Resources/Textures/background.png");
+		rm->textureLoad("background", "src/Resources/Textures/grass/grass_template.jpg");
 		rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png");
 		rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png");
 		rm->textureLoad("red", "src/Resources/Textures/red.png");

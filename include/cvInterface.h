@@ -29,13 +29,13 @@ namespace cvinterface {
 		// Network stuff
 		sf::TcpSocket *socket;
 		Buffer send_buffer;
-        // These are both essentially final! Consider them const!
-        static int RED_THRESHOLD;
-        static int NON_RED_THRESHOLD;
     public:
         void init();
         void step();
         void release();
+        // These are both essentially final! Consider them const!
+        static int RED_THRESHOLD;
+        static int NON_RED_THRESHOLD;
     private:
         void findTowers();
 

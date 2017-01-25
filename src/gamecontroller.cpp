@@ -82,7 +82,7 @@ namespace gamecontroller {
 		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672);
 		startCVServer();
     }
-    
+
     void GameController::step() {
 		cvNetworkStep();
         manager->stepAll();
@@ -105,7 +105,7 @@ namespace gamecontroller {
 
 		//For move
 			//Set delete_queue = 0
-		
+
 		//For creation:
 			//If tower to create:
 				//Increment create_queue
@@ -114,7 +114,7 @@ namespace gamecontroller {
 		//For deletion:
 			//Increase tower->delete_queue
 			//If > n then actually delete
-		
+
 	}
 
 	////////////////////////////////////////////////////
@@ -157,7 +157,7 @@ namespace gamecontroller {
 				In this process, the gamecontroller checks the incoming buffer for any messages
 				from cvInterface. If data exists, it reads the first 4 bytes (int) from the stream to
 				determine the number of data points received.
-				- it then reads out a series of points into cvList. 
+				- it then reads out a series of points into cvList.
 
 				(NOTE: This list is cleared when data is received).
 				- At this stage, we can do something with the new list.
@@ -166,7 +166,7 @@ namespace gamecontroller {
 				ADDITIONAL COMMENT:
 				- This is just a communication interface. If instead you want the tower moving/creation/deletion to be done on the cv thread,
 				then it can be done there, and this can be adjusted to receive the resultant data after that has happened.
-				- It is currently setup the way it is as this way, we only need a one-way data exchange with the tower position data being sent from the 
+				- It is currently setup the way it is as this way, we only need a one-way data exchange with the tower position data being sent from the
 				webcam feed thread to the main app.
 			*/
 			client->setBlocking(false);
@@ -208,7 +208,7 @@ namespace gamecontroller {
 							tower->delete_queue = 0;
 						}//else not found
 					}
-					
+
 					//For creation:
 						//If tower to create:
 							//Increment create_queue
@@ -251,11 +251,8 @@ namespace gamecontroller {
 	        for (size_t j = 0; j < detections.size(); j++)
 	        {
 	            dists[i][j] = towers[i]->distanceTo(detections[j]);
-	            //cout << dists[i][j] << " ";
 	        }
-	        //cout << "\n";
 	    }
-	    //cout << "\n";
 
 	    for (int i = 0; i < tower_count; i++)
 	    {
@@ -269,10 +266,7 @@ namespace gamecontroller {
 	            auto pos = std::lower_bound(tower_prefs[i].begin(), tower_prefs[i].end(), j, cmp);
 	            tower_prefs[i].insert(pos, j);
 	        }
-	        //for (int pref : tower_prefs[i]) cout << pref << " ";
-	        //cout << "\n";
 	    }
-	    //cout << "\n";
 
 	    for (int j = 0; j < detections.size(); j++)
 	    {
@@ -286,10 +280,7 @@ namespace gamecontroller {
 	            auto pos = std::lower_bound(point_prefs[j].begin(), point_prefs[j].end(), i, cmp);
 	            point_prefs[j].insert(pos, i);
 	        }
-	        //for (int pref : point_prefs[j]) cout << pref << " ";
-	        //cout << "\n";
 	    }
-	    //cout << "\n";
 
 	    for (int i = 0; i < tower_count; i++) delete [] dists[i];
 	    delete [] dists;
@@ -319,7 +310,6 @@ namespace gamecontroller {
 	            matches[t] = p;
 	            free.pop();
 	        }
-	        //TODO: Binary Search on both
 	        else for (int x : tower_prefs[t])
 	        {
 	            if (x == p_) break;

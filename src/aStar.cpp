@@ -1,22 +1,16 @@
 #include <queue>
+#include <vector>
 #include <string>
 #include <math.h>
+#include <functional>
+#include "../include/gamecontroller.h"
+#include "../include/gameobject.h"
 
 using namespace std;
+using gameobject::Point;
 
-const int w = 50; //width of grid
-const int h = 50; //height of grid
 
-int object[w][h]; //1 if area contains collider, 0 otherwise
-
-int closedNodes[w][h];
-int openNodes[w][h];
-
-const int dir = 8;
-int dirMap[w][h];
-
-int dx[dir] = { 1, 1, 0, -1, -1, -1, 0, 1 };
-int dy[dir] = { 0, 1, 1, 1, 0, -1, -1, -1 };
+//bool isObstacle(x, y)
 
 class node {
 
@@ -78,8 +72,14 @@ bool operator<(const node & a, const node & b)
 	return a.getF() > b.getF();
 }
 
-string aStar(int & xStart, int & yStart, int & xEnd, int & yEnd) {
+vector<Point<int>> aStar(Point<int> start, Point<int> end, const int w, const int h, gamecontroller::GameController *gc) {
+	//w and h refer to  width and height of grid. object is 2d array indicating colliders (1 for object 0 for not)
+	
+	int xStart = start.x;
+	int yStart = start.y;
 
+	int xEnd = end.x;
+	int yEnd = end.y;
 	//initialise working queue and index toggle
 	priority_queue<node> workingNodes[2];
 	int wTog = 0;
@@ -87,13 +87,24 @@ string aStar(int & xStart, int & yStart, int & xEnd, int & yEnd) {
 	node* n;
 	node* m;
 
-	char c;
-
 	int x;
 	int y;
+
+	//gets change in x and y for different directions
+	const int dir = 8;
+	int dx[dir] = { 1, 1, 0, -1, -1, -1, 0, 1 };
+	int dy[dir] = { 0, 1, 1, 1, 0, -1, -1, -1 };
 	
-	//initialise open and closed sets to 0
+	//initialise open, closed sets and parent node map
+	//int *closedNodes = (int*)malloc(w * h * sizeof(int));
+	int** closedNodes = new int*[w];
+	int** openNodes = new int*[w];
+	int** dirMap = new int*[w];
+
 	for (x = 0; x < w; x++) {
+		closedNodes[x] = new int[h];
+		openNodes[x] = new int[h];
+		dirMap[x] = new int[h];
 		for (y = 0; y < w; y++) {
 			openNodes[x][y] = 0;
 			closedNodes[x][y] = 0;
@@ -121,15 +132,22 @@ string aStar(int & xStart, int & yStart, int & xEnd, int & yEnd) {
 		//if at the end retrace path to start and output
 		if (x == xEnd && y == yEnd) {
 
-			string path = "";
-			while (!(x == xEnd && y == yEnd)){
+			vector<Point<int>> path;
+			int thisDir = dirMap[x][y];
+			path.insert(path.begin(), Point<int>(x, y));
+			int lastDir = thisDir;
 
-				int thisDir = dirMap[x][y];
-				c = '0' + thisDir;
-				path = c + path;
+			while (!(x == xStart && y == yStart)){
+
+				thisDir = dirMap[x][y];
+				if (thisDir != lastDir) {
+					path.insert(path.begin(), Point<int>(x, y));
+				}
 
 				x += dx[thisDir];
 				y += dy[thisDir];
+
+				lastDir = thisDir;
 			}
 			return path;
 		}
@@ -140,7 +158,7 @@ string aStar(int & xStart, int & yStart, int & xEnd, int & yEnd) {
 			int ydy = y + dy[i];
 
 			//if outside bounds, in closed set or an object ignore
-			if (!(xdx<0 || ydy<0 || xdx>w - 1 || ydy>h - 1 || object[xdx][ydy] == 1 || closedNodes[xdx][ydy] == 1)) {
+			if (!(xdx<0 || ydy<0 || xdx>w - 1 || ydy>h - 1 || gc->getWeight(xdx,ydy) < 0 || closedNodes[xdx][ydy] == 1)) {
 				
 				m = new node(xdx, ydy, n->getG(), n->getF());
 				m->updateG(i);
@@ -179,5 +197,6 @@ string aStar(int & xStart, int & yStart, int & xEnd, int & yEnd) {
 			}
 		}
 	}
-	return "";
+	vector<Point<int>> empty;
+	return empty;
 }

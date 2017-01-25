@@ -12,6 +12,16 @@
 #define or ||
 #endif
 
+/*namespace smartpointers
+{
+    template <typename T> class slave_ptr;
+}
+
+namespace std
+{
+    template <typename T> struct hash<smartpointers::slave_ptr<T>>;
+}*/
+
 namespace smartpointers {
     using std::cout;
     using std::endl;
@@ -54,6 +64,7 @@ namespace smartpointers {
         template <typename Y> friend inline bool operator<=(std::nullptr_t lhs, const watch_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator>=(const watch_ptr<Y>& lhs, std::nullptr_t rhs);
         template <typename Y> friend inline bool operator>=(std::nullptr_t lhs, const watch_ptr<Y>& rhs);
+        template <typename Y> friend struct std::hash;
 
         T** payload;
         std::string name;
@@ -158,11 +169,12 @@ namespace smartpointers {
         template <typename U, typename V> friend inline slave_ptr<U> dynamic_pointer_cast(const master_ptr<V>& ptr) noexcept;
         template <typename U, typename V> friend inline slave_ptr<U> const_pointer_cast(const master_ptr<V>& ptr) noexcept;
         template <typename U, typename V> friend inline bool instanceof(const master_ptr<V> ptr) noexcept;
+        template <typename Y> friend struct std::hash;
 
         T* payload;
         int* validity;
         std::string name;
-        
+
         inline T* get() const {
             return this->payload;
         }
@@ -273,6 +285,7 @@ namespace smartpointers {
         template <typename U, typename V> friend inline slave_ptr<U> dynamic_pointer_cast(const master_ptr<V>& ptr) noexcept;
         template <typename U, typename V> friend inline slave_ptr<U> const_pointer_cast(const master_ptr<V>& ptr) noexcept;
         template <typename U, typename V> friend inline bool instanceof(const slave_ptr<V> ptr) noexcept;
+        template <typename Y> friend struct std::hash;
 
         T* payload;
         std::string name;
@@ -496,6 +509,33 @@ namespace smartpointers {
     template <typename T, typename U> inline bool instanceof(const slave_ptr<U> ptr) noexcept {
         return dynamic_cast<T*>(ptr.get()) != nullptr;
     }
+}
+
+namespace std
+{
+    template <typename T> struct hash<smartpointers::watch_ptr<T>>
+    {
+        size_t operator()(const smartpointers::watch_ptr<T>& p) const
+        {
+            return std::hash<T*>()(p.get());
+        }
+    };
+
+    template <typename T> struct hash<smartpointers::master_ptr<T>>
+    {
+        size_t operator()(const smartpointers::master_ptr<T>& p) const
+        {
+            return std::hash<T*>()(p.get());
+        }
+    };
+
+    template <typename T> struct hash<smartpointers::slave_ptr<T>>
+    {
+        size_t operator()(const smartpointers::slave_ptr<T>& p) const
+        {
+            return std::hash<T*>()(p.get());
+        }
+    };
 }
 
 #endif //SMARTPOINTERS_H

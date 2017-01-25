@@ -26,7 +26,7 @@ namespace tower {
         sf::Shader* shader;
         graphics::VertexBuffer* vbuff;
         graphics::VertexBuffer* hpbar_buff;
-
+    protected:
         float health = 100;
     public:
         inline Tower(id_t id, TYPE tower_type, Manager* m) : GameObject(id, gameobject::TYPE::TOWER, tower_type, m) { }

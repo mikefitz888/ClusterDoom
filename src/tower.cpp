@@ -63,9 +63,16 @@ namespace tower {
 
     //Gameplay Methods
     void Tower::step() {
-        if(health <= 0) { 
+        if(health == 0) { 
             manager->getAudioManager()->playSound("cannon");
-            destroySelf();return; }
+        }
+
+        if(health <= 0){
+            health--;
+            if(health == -100){
+                health = 100;
+            }
+        }
 
 		//TODO: update render positions
 		render_position.x -= (render_position.x - position.x) / 20;

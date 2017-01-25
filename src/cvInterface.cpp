@@ -1,35 +1,10 @@
 #include "../include/cvInterface.h"
 
 namespace cvinterface {
-    void ICVInterface::updateTowerList(/*std::vector<Point<int>>& towerlist*/) {
-        //tower_locations = towerlist;
-        /*if (tower_locations.size() > towers.size()) {
-            auto tower = game_controller->spawnTowerAt(tower_locations[towers.size()]);
-            towers.push_back(tower);
-        } else if (tower_locations.size() < towers.size()) {
-            //There are less towers in play than in game, find removed tower; For each point find nearest tower and pair
+    CVInterface::RED_THRESHOLD = 105;
+    CVInterface::NON_RED_THRESHOLD = 70;
 
-        } else {
-            //Tower count unchanged
-        }*/
-
-        //Deal with any movement
-    }
-
-    void ICVInterface::init() {
-        //CvCapture* pCapture;
-
-        // Start capturing data from the webcam
-        //pCapture = cvCaptureFromCAM(CV_CAP_V4L2);
-
-        // Display image properties
-        //std::cout << "Width of frame: " << cvGetCaptureProperty(pCapture, CV_CAP_PROP_FRAME_WIDTH) << std::endl;         // Width of the frames in the video stream
-        //std::cout << "Height of frame: " << cvGetCaptureProperty(pCapture, CV_CAP_PROP_FRAME_HEIGHT) << std::endl;     // Height of the frames in the video stream
-        //std::cout << "Image brightness: " << cvGetCaptureProperty(pCapture, CV_CAP_PROP_BRIGHTNESS) << std::endl;     // Brightness of the image (only for cameras)
-        //std::cout << "Image contrast: " << cvGetCaptureProperty(pCapture, CV_CAP_PROP_CONTRAST) << std::endl;         // Contrast of the image (only for cameras)
-        //std::cout << "Image saturation: " << cvGetCaptureProperty(pCapture, CV_CAP_PROP_SATURATION) << std::endl;        // Saturation of the image (only for cameras)
-        //std::cout << "Image hue: " << cvGetCaptureProperty(pCapture, CV_CAP_PROP_HUE) << std::endl;            // Hue of the image (only for cameras)
-
+    void CVInterface::init() {
         if (!cascade.load("src/Resources/OpenCV/cascade.xml")) {
             std::cout << "Cannot load cascade!" << std::endl;
             // Exit? This is pretty fatal!
@@ -46,46 +21,33 @@ namespace cvinterface {
         std::cout << dWidth << std::endl;
         std::cout << dHeight << std::endl;
         cv::namedWindow("WebCam", CV_WINDOW_AUTOSIZE);
-        //pFrame = cvQueryFrame(pCapture);
-        //cvShowImage("WebCam", pFrame);
-        //char keypress = cvWaitKey(20);
 
-		// Connect
-		networkConnect();
+        networkConnect();
 
-        while(true) {
+        while (true) {
             step();
         }
     }
 
-    void ICVInterface::step()
+    void CVInterface::step()
     {
-		// TEST OF SENDING
-		/*tower_locations.clear();
-		tower_locations.push_back(Point<int>(20, 10));
-		tower_locations.push_back(Point<int>(30, 13));
-		tower_locations.push_back(Point<int>(12, 10));
-		networkSendTowerPositions();
-		char keypress = cvWaitKey(1000);
-		return;*/
-		
-		
-		bool success = camera.read(frame);
-        if(!success) {
-           // std::cout << "Cannot read frame from video stream!" << std::endl;
+        bool success = camera.read(frame);
+        if (!success) {
+            // std::cout << "Cannot read frame from video stream!" << std::endl;
             return;
         }
-        //TODO: Parse frame data
         findTowers();
         cv::imshow("WebCam", frame);
-		char keypress = cvWaitKey(42); // <- This is essential as if we leave it, the main thread will receive multiple packets of data containing updated lists every frame. (Realistically, this only needs to run at 24 fps, as this is the maximum performance of the camera.)
+         // This is essential as if we leave it, the main thread will receive multiple packets of data containing updated lists every frame.
+         // (Realistically, this only needs to run at 24 fps, as this is the maximum performance of the camera.)
+        cvWaitKey(42);
     }
 
-    void ICVInterface::release() {
-
+    void CVInterface::release() {
+        send_buffer.release();
     }
 
-    void ICVInterface::findTowers() {
+    void CVInterface::findTowers() {
         cv::Mat frame2 = frame.clone();
         cv::Mat frame_gray;
         std::vector<cv::Rect> objects;
@@ -94,9 +56,7 @@ namespace cvinterface {
             for (int j = 0; j < frame2.cols; j++) {
                 auto& point = frame2.at<cv::Vec3b>(i, j);
 
-                int greenblue = 70;
-                int red = 105;
-                if (!(point[2] > red && point[1] < greenblue && point[0] < greenblue)) {
+                if (!(point[2] > RED_THRESHOLD && point[1] < NON_RED_THRESHOLD && point[0] < NON_RED_THRESHOLD)) {
                     point[0] = 255;
                     point[1] = 255;
                     point[2] = 255;
@@ -115,36 +75,31 @@ namespace cvinterface {
         for (size_t i = 0; i < objects.size(); i++)
         {
             cv::rectangle(frame, cv::Point(objects[i].x, objects[i].y), cv::Point(objects[i].x + objects[i].width, objects[i].y + objects[i].height), cv::Scalar(0, 255, 0), 2);
-            tower_locations.push_back(Point<int>(objects[i].x + objects[i].width/2, objects[i].y + objects[i].height/2));
+            tower_locations.push_back(gameobject::Point<int>(objects[i].x + objects[i].width/2, objects[i].y + objects[i].height/2));
         }
-
-        //TODO: SHARE LIST
-
-        //updateTowerList();
-		networkSendTowerPositions();
+        
+        networkSendTowerPositions();
     }
 
-	void ICVInterface::networkConnect() {
-		socket = new sf::TcpSocket();
-		sf::TcpSocket::Status st = socket->connect("127.0.0.1", 31654, sf::seconds(10.0f));
-		if (st == sf::TcpSocket::Status::Done) {
-			std::cout << "[CV] Connected to CV interface successfully!" << std::endl;
+    void CVInterface::networkConnect() {
+        socket = new sf::TcpSocket();
+        sf::TcpSocket::Status st = socket->connect("127.0.0.1", 31654, sf::seconds(10.0f));
+        if (st == sf::TcpSocket::Status::Done) {
+            std::cout << "[CV] Connected to CV interface successfully!" << std::endl;
+        }
+    }
 
-			// Create send buffer:
-			send_buffer = new Buffer();
-		}
-	}
-	void ICVInterface::networkSendTowerPositions() {
-		std::cout << "[CV] Sending towers to control thread: Count: " << tower_locations.size() << std::endl;
-		
-		// Write data to buffer
-		send_buffer->seek(0);
-		(*send_buffer) << (int)tower_locations.size();
-		for (auto location : tower_locations) {
-			(*send_buffer) << location;
-		}
+    void CVInterface::networkSendTowerPositions() {
+        std::cout << "[CV] Sending towers to control thread: Count: " << tower_locations.size() << std::endl;
 
-		// Send
-		socket->send(send_buffer->getPtr(), send_buffer->tell());
-	}
+        // Write data to buffer
+        send_buffer.seek(0);
+        send_buffer << (int)tower_locations.size();
+        for (auto location : tower_locations) {
+            send_buffer << location;
+        }
+
+        // Send
+        socket->send(send_buffer.getPtr(), send_buffer.tell());
+    }
 }

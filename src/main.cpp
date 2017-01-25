@@ -9,7 +9,7 @@ using manager::Manager;
 using namespace graphics;
 
 
-void runCVInterface(cvinterface::ICVInterface* cv){
+void runCVInterface(cvinterface::CVInterface* cv){
     cv->init();
 }
 
@@ -33,15 +33,15 @@ int main(int argc, char* argv[]){
 
     //Render Manager must be initialized first to ensure GL context
     model.initRenderManager(rm);
-    
+
     //TODO: Pass an openCV component to manager
-    cvinterface::ICVInterface Icv(model.getGameController());
-    std::thread cv_thread = std::thread(runCVInterface, &Icv);
+    cvinterface::CVInterface cv(model.getGameController());
+    std::thread cv_thread = std::thread(runCVInterface, Icv);
 
     model.init();
     //rm.setWindowTitle("Clusterdoom");
 
-    
+
 
     bool running = true;
     while (running) {
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]){
     }
 
     // Cleanup
-    Icv.release();
+    cv.release();
     cv_thread.join();
     //nm.release();
     model.release();

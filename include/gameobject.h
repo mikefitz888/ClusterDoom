@@ -6,6 +6,9 @@
 #include "smartpointers.h"
 #include "math.h"
 
+#define MAX(x,y) (x>y)?x:y
+#define DISTANCE(x1, y1, x2, y2) sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1))
+
 
 namespace manager {
     class Manager;
@@ -53,6 +56,7 @@ namespace gameobject {
     protected:
         Manager* manager;
         RenderManager* render_manager = nullptr;
+		Collision* collision_profile = nullptr;
 
         Point<int> position = Point<int>(0, 0);
         Point<int> jitter_offset = Point<int>(0, 0);
@@ -90,6 +94,62 @@ namespace gameobject {
 
 		inline void demoDestroy() { _destroySelf(); return; }
     };
+
+	/*
+		The collision system is designed to be an attachable
+		component to gameobjects.
+
+		Collision provides a number of utility functions
+		for testing collisions between itself and other collision
+		instances.
+	
+	
+	
+	*/
+	struct BoundingBox {
+		int bbox_left, bbox_up, bbox_down, bbox_right;
+		BoundingBox(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
+	};
+
+	enum CollisionType { NONE, BOX, CIRCLE };
+	class Collision {
+
+	protected:
+		CollisionType collision_type;
+		gameobject_ptr parent = nullptr;
+
+		int radius;
+		BoundingBox bounding_box = BoundingBox(0,0,0,0);
+		bool is_collidable;
+
+	private:
+		void calculateBoundingCircle();
+		void calculateBoundingBox();
+
+	public:
+		Collision(gameobject_ptr parent); // Empty constructor.
+		Collision(gameobject_ptr parent, int radius); // Create collision of Type circle
+		Collision(gameobject_ptr parent, int bbox_left, int bbox_right, int bbox_up, int bbox_down);
+		Collision(gameobject_ptr parent, BoundingBox box);
+
+		void setTypeNone();
+		void setTypeCircle(int radius);
+		void setTypeSquare(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
+		void setTypeSquare(BoundingBox box);
+		void setCollidable(bool collidable);
+
+		bool intersects(Collision* collision);
+		bool intersects(Collision* collision, int x, int y);
+		bool intersects(Collision* collision, int x, int y, int other_x, int other_y);
+		int  getBoundingRadius();
+		BoundingBox getBoundingBox();
+		gameobject_ptr getParent();
+
+		// General collision utility functions
+		static bool circle_intersects(int x1, int y1, int r1, int x2, int y2, int r2);
+		static bool box_intersects(int x1, int y1, BoundingBox a, int x2, int y2, BoundingBox b);
+		static bool circle_box_intersects(int cx, int cy, int radius, int bx, int by, BoundingBox box);
+	};
 }
 
 #define destroySelf();  _destroySelf(); return;

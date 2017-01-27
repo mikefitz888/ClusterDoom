@@ -17,7 +17,7 @@ void main(void) {
 
 	float alpha_fac = 1.0;
 	if( mask.r > healthProgress ){
-		alpha_fac = clamp(1.0f - (mask.r-healthProgress)/0.1f, 0.0f, 1.0f);
+		alpha_fac = clamp(1.0f - (mask.r-healthProgress)/0.025f, 0.0f, 1.0f);
 	}
 
     out_Color = pass_Color*drawColour*base;

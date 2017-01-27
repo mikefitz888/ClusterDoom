@@ -237,13 +237,13 @@ namespace gameobject {
 	}
 
 	//// Collision Utility functions
-	static bool Collision::circle_intersects(int x1, int y1, int r1, int x2, int y2, int r2) {
+	bool Collision::circle_intersects(int x1, int y1, int r1, int x2, int y2, int r2) {
 		return false;
 	}
-	static bool Collision::box_intersects(int x1, int y1, BoundingBox a, int x2, int y2, BoundingBox b) {
+	bool Collision::box_intersects(int x1, int y1, BoundingBox a, int x2, int y2, BoundingBox b) {
 		return false;
 	}
-	static bool Collision::circle_box_intersects(int cx, int cy, int radius, int bx, int by, BoundingBox box) {
+	bool Collision::circle_box_intersects(int cx, int cy, int radius, int bx, int by, BoundingBox box) {
 		return false;
 	}
 

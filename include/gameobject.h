@@ -27,6 +27,8 @@ namespace unit {
 
 namespace gameobject {
 	class GameObject;
+	class Collision;
+	struct BoundingBox;
 
     using graphics::IRenderable;
     using manager::Manager;

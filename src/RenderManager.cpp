@@ -14,6 +14,7 @@ namespace graphics {
 		rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png")->setOriginCentre();
 		rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
 		rm->textureLoad("red", "src/Resources/Textures/red.png")->setOriginCentre();
+		rm->textureLoad("base_image", "src/Resources/Textures/base.png");
 		rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
 		rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
 		rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();

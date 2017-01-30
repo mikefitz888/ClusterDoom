@@ -23,14 +23,14 @@ namespace gamecontroller {
     }
 
 
-    tower_ptr GameController::spawnTowerAt(int x, int y) const {
-        auto tower = manager->createTower(tower::TYPE::BASIC);
+    tower_ptr GameController::spawnTowerAt(int x, int y, tower::TYPE type) const {
+        auto tower = manager->createTower(type);
         tower->setPosition(x, y);
         return tower;
     }
 
-    tower_ptr GameController::spawnTowerAt(Point<int> position) const {
-    	tower_ptr tower = spawnTowerAt( round(((float)position.x)/64.0f)*64.0f, round(((float)position.y)/64.0f)*64.0f );
+    tower_ptr GameController::spawnTowerAt(Point<int> position, tower::TYPE type) const {
+    	tower_ptr tower = spawnTowerAt( round(((float)position.x)/64.0f)*64.0f, round(((float)position.y)/64.0f)*64.0f, type );
     	tower->setJitter(position.x - tower->getX(), position.y - tower->getY());
     	return tower;
     }
@@ -57,7 +57,7 @@ namespace gamecontroller {
 
 	void GameController::spawnTowers(std::vector<Point<int>> tower_list) const {
 		for (auto location : tower_list) {
-			spawnTowerAt(location);
+			spawnTowerAt(location, tower::TYPE::BASIC);
 		}
 	}
 
@@ -80,16 +80,24 @@ namespace gamecontroller {
         spawnTowerAt(400, 600);*/
         //spawnUnitAt(100, 50);
 
-		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0);
+		/*spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0);
 		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0);
 		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672);
-		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672);
+		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672);*/
+		spawnTowerAt(400, 200, tower::TYPE::BASE);
 		startCVServer();
     }
 
     void GameController::step() {
+		//In general, step() should be frame-based.
 		cvNetworkStep();
         manager->stepAll();
+
+		//Assumes 60 frames = 1000ms roughly... it's not but we'll work with that timing
+		float delta = getElapsedTime();
+
+		//Scenario: 10 stages, 3 waves per stage. 1 minute per stage
+		//TODO: implement Stage class
     }
 
 	std::vector<tower_ptr> GameController::findNearestTowers(Point<int> point) {
@@ -180,7 +188,7 @@ namespace gamecontroller {
 				case sf::TcpSocket::Done:
 				{
 					// Data received
-					std::cout << "[CV NETWORK] Data received from CV interface. Size: " << message_size << " bytes!" << std::endl;
+					//std::cout << "[CV NETWORK] Data received from CV interface. Size: " << message_size << " bytes!" << std::endl;
 
 					// Clear cv list
 					cvList.clear();
@@ -217,7 +225,7 @@ namespace gamecontroller {
 					if(match.new_towers.size() > 0){
 						create_count++;
 						if(create_count > 10){
-							spawnTowerAt(match.new_towers[0]);
+							spawnTowerAt(match.new_towers[0], tower::TYPE::BASIC);
 						}
 					}else{
 						create_count = 0;
@@ -243,8 +251,22 @@ namespace gamecontroller {
 	{
 	    vector<deque<int>> point_prefs;
 	    vector<vector<int>> tower_prefs;
-	    auto& towers = manager->getTowers();
-	    int tower_count = towers.size();
+	    auto& _towers = manager->getTowers();
+
+		std::vector<tower_ptr> towers;
+		if (_towers.size()) {
+			if (_towers[0]->getSubType() != tower::TYPE::BASE) {
+				std::cout << "ERROR! 1st tower is not base" << std::endl;
+			}
+			std::vector<tower_ptr>::const_iterator begin = _towers.begin();
+			std::vector<tower_ptr>::const_iterator last = _towers.begin() + _towers.size();
+			towers = std::vector<tower_ptr>(begin+1, last); //skip first tower without needing to change Jamie's algorithm			
+		}
+		else {
+			towers = std::vector<tower_ptr>();
+		}
+
+	    int tower_count = towers.size(); //base exists and is first tower
 	    int** dists = new int*[tower_count];
 	    for (size_t i = 0; i < tower_count; i++)
 	    {

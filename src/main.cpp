@@ -42,14 +42,16 @@ int main(int argc, char* argv[]){
     //rm.setWindowTitle("Clusterdoom");
 
 
-
+	sf::Clock clock = sf::Clock();
     bool running = true;
+	int i = 0;
     while (running) {
         // Networking
         //nm.networkStep();
 
         // Step then Render
         running = model.step();
+
     }
 
     // Cleanup

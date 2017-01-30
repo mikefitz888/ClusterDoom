@@ -38,6 +38,7 @@ namespace cvinterface {
         static int NON_RED_THRESHOLD;
     private:
         void findTowers();
+		void findTowers2();
 
 		// Network stuff
 		void networkConnect();

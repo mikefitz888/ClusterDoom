@@ -20,6 +20,10 @@
 
 #define NO_MATCH -1
 
+namespace tower {
+	enum TYPE : unsigned int;
+}
+
 namespace gameobject {
     class GameObject;
 }
@@ -68,18 +72,21 @@ namespace gamecontroller {
 		void cvNetworkStep();
 
         int create_count = 0;
+		int frame_clock = 0;
 
     public:
         GameController(Manager* m);
        // GameObject* createObject(id_t key);
+		inline float getElapsedTime() {	return (float)frame_clock * 1000.0f / 60.0f; }
+		inline void resetClock() { frame_clock = 0; };
         void init();
         void step();
         void restart() const;
         Matching stableMatching(vector<Point<int>>& detections);
         int getWeight(int x, int y);
 
-        tower_ptr  spawnTowerAt(int x, int y) const;
-        tower_ptr  spawnTowerAt(Point<int> position) const;
+        tower_ptr  spawnTowerAt(int x, int y, tower::TYPE type) const;
+        tower_ptr  spawnTowerAt(Point<int> position, tower::TYPE type) const;
         unit_ptr   spawnUnitAt(int x, int y) const;
         unit_ptr   spawnUnitAt(Point<int> position) const;
 		gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, int x, int y) const;

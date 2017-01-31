@@ -5,6 +5,8 @@
 #include "VertexBuffer.h"
 #include "smartpointers.h"
 #include "math.h"
+#include <map>
+#include <string>
 
 #define MAX(x,y) (x>y)?x:y
 #define DISTANCE(x1, y1, x2, y2) sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1))
@@ -55,6 +57,7 @@ namespace gameobject {
         const id_t id_;
         const id_t super_type_ = 0;
         const id_t sub_type_ = 0;
+		typedef void (GameObject::*fn_ptr)(void*, void*);
     protected:
         Manager* manager;
         RenderManager* render_manager = nullptr;
@@ -67,9 +70,11 @@ namespace gameobject {
         Point<int> render_facing = Point<int>(0, 0);
 
         int _destroySelf();
+		std::map<std::string, fn_ptr> fn_hooks = std::map<std::string, fn_ptr>();
+		//std::vector<std::string> = std::vector<std::string>();
     public:
         int delete_queue = 0;
-        inline GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m) : id_(id), super_type_(super_type), sub_type_(sub_type), manager(m) {} //Very important to get key from manager (for memory management + networking)
+		GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m); //Very important to get key from manager (for memory management + networking)
         inline id_t getID() const { return id_; }
         inline id_t getSuperType() const { return super_type_; }
         inline id_t getSubType() const { return sub_type_; }
@@ -95,6 +100,21 @@ namespace gameobject {
         inline Point<int> getJitter(){return jitter_offset;};
 
 		inline void demoDestroy() { _destroySelf(); return; }
+
+
+		inline void testing(void* arg, void* ret) { std::cout << "Testing" << std::endl; }
+		inline void call(const std::string& fn_name, void* _arg = nullptr, void* _ret = nullptr) {
+			/*
+			** Rather basic system to allow more dynamic control over function calls
+			** Only pre-specified methods may be called in this way so hidden methods are not exposed
+			*/
+			std::map<std::string, fn_ptr>::iterator fn = fn_hooks.find(fn_name);
+			if (fn != fn_hooks.end()) {
+				(this->*(fn->second))(_arg, _ret);
+			} else {
+				std::cout << "ERROR: Function is not exposed to call()." << std::endl;
+			}
+		}
     };
 
 	/*

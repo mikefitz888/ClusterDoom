@@ -27,12 +27,8 @@ namespace towerlogic {
 	} //TODO: filter out BASE 
 
 	tower_ptr TowerLogic::getBase() {
-		for (auto t : towers) {
-			if (t->getSubType() == tower::TYPE::BASE) {
-				return t;
-			}
-		}
-		return nullptr;
+		return towers[0];
+		//return nullptr;
 	}
 
     void TowerLogic::giveSlavePtr(tower_ptr towerptr){

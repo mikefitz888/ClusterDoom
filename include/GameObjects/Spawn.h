@@ -9,6 +9,8 @@ using gameobject::TYPE;
 
 class Spawn : public GameObject {
 
+protected:
+	
 public:
 	Spawn(gameobject::id_t id, Manager* m);
 
@@ -17,6 +19,9 @@ public:
 	virtual void renderGUI() override;
 	virtual void release() override;
     virtual void step() override;
+
+	void startSpawn(void* arg, void* ret);
+	void continueSpawn(void* arg, void* ret);
 };
 
 #endif

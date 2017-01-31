@@ -5,6 +5,13 @@ namespace gameobject {
 
 	//// GAME OBJECT
 
+	GameObject::GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m) : id_(id), super_type_(super_type), sub_type_(sub_type), manager(m) {
+		//Add hook functions
+		//fmap.insert( std::make_pair( "f", &A::f ));
+		fn_hooks.insert(std::make_pair("call_test", &GameObject::testing));
+		//fn_hooks.insert("call_test", )
+	}
+
     int GameObject::_destroySelf() {
         manager->destroy(this);
         return 0;

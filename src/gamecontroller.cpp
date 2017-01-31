@@ -1,5 +1,6 @@
 #include "../include/gamecontroller.h"
 #include <math.h>
+#include <SFML/Window/Keyboard.hpp>
 
 namespace gamecontroller {
     GameController::GameController(Manager* m) : manager(m) {}
@@ -80,25 +81,93 @@ namespace gamecontroller {
         spawnTowerAt(400, 600);*/
         //spawnUnitAt(100, 50);
 
-		/*spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0);
-		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0);
-		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672);
-		spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672);*/
-		spawnTowerAt(400, 200, tower::TYPE::BASE);
+		//Gotta love smartpointers, look how clean this is :^)
+		spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
+		spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0)));
+		spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672)));
+		spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672)));
+
 		startCVServer();
     }
 
     void GameController::step() {
+		frame_clock++;
 		//In general, step() should be frame-based.
-		cvNetworkStep();
-        manager->stepAll();
-
+        
 		//Assumes 60 frames = 1000ms roughly... it's not but we'll work with that timing
 		float delta = getElapsedTime();
 
 		//Scenario: 10 stages, 3 waves per stage. 1 minute per stage
 		//TODO: implement Stage class
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+			//Restart Game
+			game_started = false;
+			wave = 0;
+			scenario = 0;
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
+				//Exit Game
+			}
+			return;
+		}
+
+		if (!game_started) {
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+				game_started = true; //Start game
+				if (manager->getTowers().size()) {
+					std::cout << "ERROR! There should not be any towers existing at this point, before base has spawned." << std::endl;
+				}
+				tower_ptr t = spawnTowerAt(400, 200, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
+				frame_clock = 0;
+			}
+			else {
+				return;
+			}
+		}
+
+		cvNetworkStep();
+		manager->stepAll();
+
+		//Run scenarios for 10 minutes
+		if (getElapsedTime() < 60*10) {
+			int scenario = getElapsedTime()/60.0f;
+			runScenario(scenario);
+		}
+		else { //Ending sequence
+			
+		}
     }
+
+	void GameController::runScenario(int scenario) {
+		if (scenario > this->scenario) {
+			//New stage
+			this->scenario = scenario;
+			this->wave = 0;
+			//Start wave 0
+			//spawn short burst of troops from each spawn point
+			for (auto spawn : spawn_points) {
+				
+			}
+		}
+		else {
+			//Continue current scenario
+			int wave = ((int)getElapsedTime() % 60)/3;
+			if (wave > this->wave) {
+				this->wave = wave;
+				//Start wave
+				//spawn short burst of troops from each spawn point
+				for (auto spawn : spawn_points) {
+					
+				}
+			}
+			else {
+				//Continue wave
+				for (auto spawn : spawn_points) {
+					
+				}
+			}
+		}
+	}
 
 	std::vector<tower_ptr> GameController::findNearestTowers(Point<int> point) {
 		//Clone tower list

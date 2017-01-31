@@ -1,5 +1,7 @@
 #include "../include/manager.h"
 #include "../include/ResourceManager.h"
+#include <algorithm> // for remove_if
+#include <functional> // for unary_function
 
 namespace manager {
 
@@ -202,4 +204,14 @@ namespace manager {
             if(obj) obj->step();
         }
     }
+
+	void Manager::restart() {
+		std::vector<slave_ptr<GameObject>> copy;
+		for (slave_ptr<GameObject> obj : game_object_pool) {
+			copy.push_back(obj);
+		}
+		for (slave_ptr<GameObject> obj : copy) {
+			removeFromPool(obj->getID());
+		}
+	}
 }

@@ -2,6 +2,7 @@
 #define GAMECONTROLLER_H
 
 #include "gameobject.h"
+#include "GameObjects\Spawn.h"
 #include "manager.h"
 #include "../include/network/Buffer.h"
 #include <SFML/Network/TcpListener.hpp>
@@ -74,10 +75,16 @@ namespace gamecontroller {
         int create_count = 0;
 		int frame_clock = 0;
 
+		bool game_started = false;
+		int wave = 0;
+		int scenario = 0;
+
+		std::vector<smartpointers::slave_ptr<Spawn>> spawn_points = std::vector<smartpointers::slave_ptr<Spawn>>();
+
     public:
         GameController(Manager* m);
        // GameObject* createObject(id_t key);
-		inline float getElapsedTime() {	return (float)frame_clock * 1000.0f / 60.0f; }
+		inline float getElapsedTime() {	return (float)frame_clock / 60.0f; }
 		inline void resetClock() { frame_clock = 0; };
         void init();
         void step();
@@ -92,6 +99,8 @@ namespace gamecontroller {
 		gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, int x, int y) const;
 		gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, Point<int> position) const;
         void moveTower(tower_ptr tower, Point<int> point) const;
+
+		void runScenario(int scenario);
 
 		void clearTowers() const;
 		void spawnTowers(std::vector<Point<int>> tower_list) const;

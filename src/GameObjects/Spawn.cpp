@@ -1,6 +1,8 @@
 #include "../../include/GameObjects/Spawn.h"
 #include "../../include/manager.h"
-Spawn::Spawn(gameobject::id_t id, Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::SPAWN, m) {}
+Spawn::Spawn(gameobject::id_t id, Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::SPAWN, m) {
+
+}
 void Spawn::init() {
 	//manager->getGameController()->spawnUnitAt(getX(), getY());
 }
@@ -16,3 +18,11 @@ void Spawn::render() {
 }
 void Spawn::renderGUI() {}
 void Spawn::release() {}
+
+void Spawn::startSpawn(void* arg, void* ret) {
+
+}
+
+void Spawn::continueSpawn(void* arg, void* ret) {
+
+}

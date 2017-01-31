@@ -68,6 +68,7 @@ namespace manager {
     using graphics::RenderManager;
     using worldrenderer::WorldRenderer;
     using network::NetworkManager;
+	using gameobject::Collision;
 
     typedef size_t id_t;
 
@@ -130,6 +131,7 @@ namespace manager {
         void release();
         void renderAll();
         void stepAll();
+		void collisionAll();
         
 
         bool step();

@@ -74,6 +74,9 @@ namespace gamecontroller {
         int create_count = 0;
 		int frame_clock = 0;
 
+		// TEMP
+		bool spawned = false;
+
     public:
         GameController(Manager* m);
        // GameObject* createObject(id_t key);

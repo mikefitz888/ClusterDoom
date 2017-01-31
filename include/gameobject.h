@@ -54,19 +54,18 @@ namespace gameobject {
 	class Collision {
 
 	protected:
-		CollisionType collision_type;
+		CollisionType collision_type = CollisionType::NONE;
 		gameobject_ptr parent = nullptr;
 
 		int radius;
 		BoundingBox bounding_box = BoundingBox(0, 0, 0, 0);
-		bool is_collidable;
+		bool is_collidable = false;
 
 	private:
 		void calculateBoundingCircle();
 		void calculateBoundingBox();
 
 	public:
-		Collision();
 		Collision(gameobject_ptr parent); // Empty constructor.
 		Collision(gameobject_ptr parent, int radius); // Create collision of Type circle
 		Collision(gameobject_ptr parent, int bbox_left, int bbox_right, int bbox_up, int bbox_down);

@@ -196,6 +196,8 @@ namespace gameobject {
 	*/
 	bool Collision::intersects(Collision* collision, int x, int y, int other_x, int other_y) {
 
+		if (!this->is_collidable) { return false;  }
+		if (!collision->is_collidable) { return false; }
 		// Switch on type of collision profile:
 		switch (this->collision_type) {
 

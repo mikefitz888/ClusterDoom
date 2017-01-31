@@ -245,10 +245,17 @@ namespace gameobject {
 
 	//// Collision Utility functions
 	bool Collision::circle_intersects(int x1, int y1, int r1, int x2, int y2, int r2) {
+
+		float dist = sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+		if (dist <= r1 + r2) {
+			return true;
+		}
+
 		return false;
 	}
 	bool Collision::box_intersects(int x1, int y1, BoundingBox a, int x2, int y2, BoundingBox b) {
-		return false;
+		return (abs(a.bbox_left - b.bbox_left) * 2 < (a.bbox_right-a.bbox_left + b.bbox_right - b.bbox_left)) &&
+			(abs(a.bbox_up - b.bbox_up) * 2 < (a.bbox_down - a.bbox_up + b.bbox_down - b.bbox_up));
 	}
 	bool Collision::circle_box_intersects(int cx, int cy, int radius, int bx, int by, BoundingBox box) {
 		return false;

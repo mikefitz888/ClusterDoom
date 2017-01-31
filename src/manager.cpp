@@ -104,6 +104,10 @@ namespace manager {
         std::cout << "Object added to pool with id = " << id << std::endl;
         std::cout << "Pool size now = " << game_object_pool.size() << std::endl;
 
+		// Set shared pointer
+		gameobject_ptr self = game_object_pool[id];
+		self->setSharedPtr(self);
+
         // Network update
         network_manager->sendInstanceCreate(id, game_object->getSuperType());
     }
@@ -205,13 +209,48 @@ namespace manager {
         }
     }
 
-	void Manager::restart() {
-		std::vector<slave_ptr<GameObject>> copy;
-		for (slave_ptr<GameObject> obj : game_object_pool) {
-			copy.push_back(obj);
-		}
+
+	void Manager::restart() {}
+
+	/*
+		Performs collisions between all the given objects and fires off events
+		for those objects that collide with each other.
+
+		Collision events will run both ways if the objects continue to collide.
+	
+	*/
+	void Manager::collisionAll() {
+
+	/*
+	Create a copy of the object list. This allows objects
+	to destroy themselves during the collision event.
+	*/
+
+	std::vector<slave_ptr<GameObject>> copy;
+	for (slave_ptr<GameObject> obj : game_object_pool) {
+		copy.push_back(obj);
+	}
+
+	/*
+	For every object, test collisions against every other
+	object (excluding self).
+	*/
+
 		for (slave_ptr<GameObject> obj : copy) {
-			removeFromPool(obj->getID());
+
+			for (slave_ptr<GameObject> other : copy) {
+
+				if (obj && other && obj != other) {
+					//Collision* my_collision = obj->getCollision();
+					//Collision* other_collision = other->getCollision();
+
+					//if (my_collision->intersects(other_collision)) {
+
+					//}
+				}
+			}
+
 		}
 	}
+
 }

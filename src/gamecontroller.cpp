@@ -94,6 +94,24 @@ namespace gamecontroller {
 		frame_clock++;
 		//In general, step() should be frame-based.
         
+
+
+		// Perform 
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (!spawned) {
+				sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+				spawnUnitAt(mouse_pos.x, mouse_pos.y);
+				spawned = true;
+			}
+		} else {
+			spawned = false;
+		}
+
+		//In general, step() should be frame-based.
+		cvNetworkStep();
+        manager->stepAll();
+		manager->collisionAll();
+
 		//Assumes 60 frames = 1000ms roughly... it's not but we'll work with that timing
 		float delta = getElapsedTime();
 

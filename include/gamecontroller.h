@@ -80,6 +80,8 @@ namespace gamecontroller {
 		int scenario = 0;
 
 		std::vector<smartpointers::slave_ptr<Spawn>> spawn_points = std::vector<smartpointers::slave_ptr<Spawn>>();
+		// TEMP
+		bool spawned = false;
 
     public:
         GameController(Manager* m);

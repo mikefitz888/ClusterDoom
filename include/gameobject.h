@@ -61,13 +61,15 @@ namespace gameobject {
     protected:
         Manager* manager;
         RenderManager* render_manager = nullptr;
-		Collision* collision_profile = nullptr;
+		//Collision *collision_profile;
 
         Point<int> position = Point<int>(0, 0);
         Point<int> jitter_offset = Point<int>(0, 0);
 
         Point<int> render_position = Point<int>(0, 0);
         Point<int> render_facing = Point<int>(0, 0);
+
+		gameobject_ptr self = nullptr;
 
         int _destroySelf();
 		std::map<std::string, fn_ptr> fn_hooks = std::map<std::string, fn_ptr>();
@@ -78,13 +80,22 @@ namespace gameobject {
         inline id_t getID() const { return id_; }
         inline id_t getSuperType() const { return super_type_; }
         inline id_t getSubType() const { return sub_type_; }
+		inline void setSharedPtr(gameobject_ptr myself) { this->self = myself; }
+		inline gameobject_ptr getSharedPtr() { return this->self; }
+
+		// EVENTS
         virtual void render() override { }
         virtual void init() override { }
         virtual void renderGUI() override { }
         virtual void release() override { }
+		inline virtual void  onCollision(gameobject_ptr other) {};
         inline virtual void step() { };
+
+
+		// destructor
         inline virtual ~GameObject() { }
 
+		// CONTORL & DATA
         inline int getX() const { return position.x; }
         inline int getY() const { return position.y; }
         inline int getXr() const { return render_position.x; }
@@ -92,6 +103,7 @@ namespace gameobject {
         inline Point<int> getPosition() const { return position; }
         float distanceTo(smartpointers::slave_ptr<GameObject> other) const;
 		float distanceTo(Point<int> point) const;
+		//inline Collision* getCollision() { return this->collision_profile; }
 
         inline void setX(int x_) { position.x = x_; }
         inline void setY(int y_) { position.y = y_; }

@@ -241,13 +241,15 @@ namespace manager {
 
 		for (slave_ptr<GameObject> obj : copy) {
 			Collision* my_collision = obj->getCollision();
+			my_collision->setParent(obj);
 
 			if (obj->getRunCollisionEvent() && my_collision->getCollidable()) {
 				for (slave_ptr<GameObject> other : copy) {
-
+				
 					if (obj && other && obj != other) {
 
 						Collision* other_collision = other->getCollision();
+						other_collision->setParent(other);
 
 						if (my_collision->intersects(other_collision)) {
 							obj->onCollision(other);

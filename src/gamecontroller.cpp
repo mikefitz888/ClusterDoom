@@ -101,7 +101,7 @@ namespace gamecontroller {
 			if (!spawned) {
 				sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
 				spawnUnitAt(mouse_pos.x, mouse_pos.y);
-				spawned = true;
+				//spawned = true;
 			}
 		} else {
 			spawned = false;

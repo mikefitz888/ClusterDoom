@@ -240,17 +240,19 @@ namespace manager {
 	*/
 
 		for (slave_ptr<GameObject> obj : copy) {
+			Collision* my_collision = obj->getCollision();
 
-			for (slave_ptr<GameObject> other : copy) {
+			if (obj->getRunCollisionEvent() && my_collision->getCollidable()) {
+				for (slave_ptr<GameObject> other : copy) {
 
-				if (obj && other && obj != other) {
+					if (obj && other && obj != other) {
 
-					Collision* my_collision    = obj->getCollision();
-					Collision* other_collision = other->getCollision();
+						Collision* other_collision = other->getCollision();
 
-					if (my_collision->intersects(other_collision)) {
-						obj->onCollision(other);
-						std::cout << "collision between objects" << std::endl;
+						if (my_collision->intersects(other_collision)) {
+							obj->onCollision(other);
+							//std::cout << "collision between objects" << std::endl;
+						}
 					}
 				}
 			}

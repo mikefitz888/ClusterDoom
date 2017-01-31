@@ -77,6 +77,7 @@ namespace gameobject {
 		void setTypeSquare(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
 		void setTypeSquare(BoundingBox box);
 		void setCollidable(bool collidable);
+		inline bool getCollidable() { return this->is_collidable;  }
 
 		bool intersects(Collision* collision);
 		bool intersects(Collision* collision, int x, int y);
@@ -136,6 +137,8 @@ namespace gameobject {
         Point<int> render_facing = Point<int>(0, 0);
 
 		gameobject_ptr self = nullptr;
+		
+		bool run_collision_event = true;
 
         int _destroySelf();
 		std::map<std::string, fn_ptr> fn_hooks = std::map<std::string, fn_ptr>();
@@ -177,6 +180,9 @@ namespace gameobject {
         inline void setPosition(int x, int y) { setX(x); setY(y); }
         inline void setJitter(int x, int y){jitter_offset.x=x; jitter_offset.y=y;};
         inline Point<int> getJitter(){return jitter_offset;};
+
+		inline bool getRunCollisionEvent() { return run_collision_event; }
+		inline void setRunCollisionEvent(bool run_collision_event) { this->run_collision_event = run_collision_event; }
 
 		inline void demoDestroy() { _destroySelf(); return; }
 

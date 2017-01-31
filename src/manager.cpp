@@ -108,6 +108,9 @@ namespace manager {
 		gameobject_ptr self = game_object_pool[id];
 		self->setSharedPtr(self);
 
+		// Run setup
+		self->setup();
+
         // Network update
         network_manager->sendInstanceCreate(id, game_object->getSuperType());
     }
@@ -241,12 +244,14 @@ namespace manager {
 			for (slave_ptr<GameObject> other : copy) {
 
 				if (obj && other && obj != other) {
-					//Collision* my_collision = obj->getCollision();
-					//Collision* other_collision = other->getCollision();
 
-					//if (my_collision->intersects(other_collision)) {
+					Collision* my_collision    = obj->getCollision();
+					Collision* other_collision = other->getCollision();
 
-					//}
+					if (my_collision->intersects(other_collision)) {
+						obj->onCollision(other);
+						std::cout << "collision between objects" << std::endl;
+					}
 				}
 			}
 

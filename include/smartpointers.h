@@ -278,6 +278,7 @@ namespace smartpointers {
         template <typename Y> friend inline bool operator<=(const slave_ptr<Y>& lhs, const master_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator>=(const master_ptr<Y>& lhs, const slave_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator>=(const slave_ptr<Y>& lhs, const master_ptr<Y>& rhs);
+		template <typename Y, typename U, typename V> friend inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const slave_ptr<Y>& ptr);
         template <typename U, typename V> friend inline slave_ptr<U> static_pointer_cast(const slave_ptr<V>& ptr);
         template <typename U, typename V> friend inline slave_ptr<U> dynamic_pointer_cast(const slave_ptr<V>& ptr);
         template <typename U, typename V> friend inline slave_ptr<U> const_pointer_cast(const slave_ptr<V>& ptr);
@@ -330,6 +331,7 @@ namespace smartpointers {
         }
 
         slave_ptr(const slave_ptr& ptr) {
+			//std::cout << "ONE" << std::endl;
             this->payload = ptr.payload;
             this->name = ptr.name;
             this->validity = ptr.validity;
@@ -338,6 +340,7 @@ namespace smartpointers {
         }
 
         slave_ptr(slave_ptr&& ptr) noexcept {
+			//std::cout << "TWO" << std::endl;
             this->payload = ptr.payload;
             this->name = ptr.name;
             this->validity = ptr.validity;
@@ -359,15 +362,17 @@ namespace smartpointers {
         }
 
         inline slave_ptr<T>& operator=(const slave_ptr<T>& r) noexcept {
+			//std::cout << "THREE" << std::endl;
             this->payload = r.payload;
             this->name = r.name;
             this->validity = r.validity;
-            if (*this->validity > 0) ++*this->validity;
-            else --*this->validity;
+            if (this->validity && *this->validity > 0) ++*this->validity;
+            else if(this->validity)--*this->validity;
             return *this;
         }
 
-        inline slave_ptr<T>& operator=(slave_ptr<T>&& r) noexcept {
+		inline slave_ptr<T>& operator=(slave_ptr<T>&& r) noexcept {
+			//std::cout << "FOUR" << std::endl;
             this->payload = r.payload;
             this->name = r.name;
             this->validity = r.validity;
@@ -391,15 +396,15 @@ namespace smartpointers {
     }
 
     template <typename T, typename U, typename V> inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const watch_ptr<T>& ptr) {
-        os << ptr.get();
+		return os << ptr.get();
     }
 
     template <typename T, typename U, typename V> inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const master_ptr<T>& ptr) {
-        os << ptr.get();
+		return os << ptr.get();
     }
 
     template <typename T, typename U, typename V> inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const slave_ptr<T>& ptr) {
-        os << ptr.get();
+		return os << ptr.payload;
     }
 
     template <typename T> inline bool operator==(const watch_ptr<T>& lhs, const watch_ptr<T>& rhs)   { return lhs.payload == rhs.payload; }

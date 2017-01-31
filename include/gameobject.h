@@ -28,9 +28,73 @@ namespace unit {
 }
 
 namespace gameobject {
+
 	class GameObject;
-	class Collision;
-	struct BoundingBox;
+	typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
+	typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
+	typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
+	
+	/*
+	The collision system is designed to be an attachable
+	component to gameobjects.
+
+	Collision provides a number of utility functions
+	for testing collisions between itself and other collision
+	instances.
+
+
+
+	*/
+	struct BoundingBox {
+		int bbox_left, bbox_up, bbox_down, bbox_right;
+		BoundingBox(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
+	};
+
+	enum CollisionType { NONE, BOX, CIRCLE };
+	class Collision {
+
+	protected:
+		CollisionType collision_type;
+		gameobject_ptr parent = nullptr;
+
+		int radius;
+		BoundingBox bounding_box = BoundingBox(0, 0, 0, 0);
+		bool is_collidable;
+
+	private:
+		void calculateBoundingCircle();
+		void calculateBoundingBox();
+
+	public:
+		Collision();
+		Collision(gameobject_ptr parent); // Empty constructor.
+		Collision(gameobject_ptr parent, int radius); // Create collision of Type circle
+		Collision(gameobject_ptr parent, int bbox_left, int bbox_right, int bbox_up, int bbox_down);
+		Collision(gameobject_ptr parent, BoundingBox box);
+		inline void setParent(gameobject_ptr parent) { this->parent = parent; }
+
+		void setTypeNone();
+		void setTypeCircle(int radius);
+		void setTypeSquare(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
+		void setTypeSquare(BoundingBox box);
+		void setCollidable(bool collidable);
+
+		bool intersects(Collision* collision);
+		bool intersects(Collision* collision, int x, int y);
+		bool intersects(Collision* collision, int x, int y, int other_x, int other_y);
+		int  getBoundingRadius();
+		BoundingBox getBoundingBox();
+		gameobject_ptr getParent();
+
+		// General collision utility functions
+		static bool circle_intersects(int x1, int y1, int r1, int x2, int y2, int r2);
+		static bool box_intersects(int x1, int y1, BoundingBox a, int x2, int y2, BoundingBox b);
+		static bool circle_box_intersects(int cx, int cy, int radius, int bx, int by, BoundingBox box);
+	};
+
+
+
+
 
     using graphics::IRenderable;
     using manager::Manager;
@@ -39,9 +103,7 @@ namespace gameobject {
     enum TYPE : unsigned int {TOWER=0, UNIT, OBJECT};
 	enum OBJECT_TYPE : unsigned int { SPAWN = 0 };
 
-    typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
-    typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
-	typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
+    
     
     typedef size_t id_t;
 
@@ -53,6 +115,11 @@ namespace gameobject {
         inline T distanceTo(Point target) const {return sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
     };
 
+
+	/*
+		Gameobject abstract class
+	
+	*/
     class GameObject : public IRenderable {
         const id_t id_;
         const id_t super_type_ = 0;
@@ -61,7 +128,7 @@ namespace gameobject {
     protected:
         Manager* manager;
         RenderManager* render_manager = nullptr;
-		//Collision *collision_profile;
+		Collision collision_profile = Collision(nullptr);
 
         Point<int> position = Point<int>(0, 0);
         Point<int> jitter_offset = Point<int>(0, 0);
@@ -82,6 +149,7 @@ namespace gameobject {
         inline id_t getSubType() const { return sub_type_; }
 		inline void setSharedPtr(gameobject_ptr myself) { this->self = myself; }
 		inline gameobject_ptr getSharedPtr() { return this->self; }
+		void setup(); // The setup to be run for all gameobjects to configure default properties
 
 		// EVENTS
         virtual void render() override { }
@@ -103,7 +171,7 @@ namespace gameobject {
         inline Point<int> getPosition() const { return position; }
         float distanceTo(smartpointers::slave_ptr<GameObject> other) const;
 		float distanceTo(Point<int> point) const;
-		//inline Collision* getCollision() { return this->collision_profile; }
+		inline Collision* getCollision() { return &this->collision_profile; }
 
         inline void setX(int x_) { position.x = x_; }
         inline void setY(int y_) { position.y = y_; }
@@ -129,61 +197,7 @@ namespace gameobject {
 		}
     };
 
-	/*
-		The collision system is designed to be an attachable
-		component to gameobjects.
-
-		Collision provides a number of utility functions
-		for testing collisions between itself and other collision
-		instances.
 	
-	
-	
-	*/
-	struct BoundingBox {
-		int bbox_left, bbox_up, bbox_down, bbox_right;
-		BoundingBox(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
-	};
-
-	enum CollisionType { NONE, BOX, CIRCLE };
-	class Collision {
-
-	protected:
-		CollisionType collision_type;
-		gameobject_ptr parent = nullptr;
-
-		int radius;
-		BoundingBox bounding_box = BoundingBox(0,0,0,0);
-		bool is_collidable;
-
-	private:
-		void calculateBoundingCircle();
-		void calculateBoundingBox();
-
-	public:
-		Collision(gameobject_ptr parent); // Empty constructor.
-		Collision(gameobject_ptr parent, int radius); // Create collision of Type circle
-		Collision(gameobject_ptr parent, int bbox_left, int bbox_right, int bbox_up, int bbox_down);
-		Collision(gameobject_ptr parent, BoundingBox box);
-
-		void setTypeNone();
-		void setTypeCircle(int radius);
-		void setTypeSquare(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
-		void setTypeSquare(BoundingBox box);
-		void setCollidable(bool collidable);
-
-		bool intersects(Collision* collision);
-		bool intersects(Collision* collision, int x, int y);
-		bool intersects(Collision* collision, int x, int y, int other_x, int other_y);
-		int  getBoundingRadius();
-		BoundingBox getBoundingBox();
-		gameobject_ptr getParent();
-
-		// General collision utility functions
-		static bool circle_intersects(int x1, int y1, int r1, int x2, int y2, int r2);
-		static bool box_intersects(int x1, int y1, BoundingBox a, int x2, int y2, BoundingBox b);
-		static bool circle_box_intersects(int cx, int cy, int radius, int bx, int by, BoundingBox box);
-	};
 }
 
 #define destroySelf();  _destroySelf(); return;

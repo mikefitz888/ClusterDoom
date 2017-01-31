@@ -3,12 +3,13 @@
 #include <math.h>
 
 namespace unit {
-    BasicUnit::BasicUnit(id_t key, Manager* m) : Unit(key, TYPE::BASIC, m) {
+    BasicUnit::BasicUnit(id_t key, Manager* m) : Unit(key, TYPE::BASIC, m)  {
         position.x = 200;
         position.y = 400;
     }
 
     void BasicUnit::init(){
+		collision_profile.setTypeCircle(20);
         render_manager = manager->getRenderManager();
         /*texture = new sf::Texture();
         if(!texture->loadFromFile("Resources/Textures/Units/Basic.jpg")){

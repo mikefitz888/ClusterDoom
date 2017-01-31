@@ -31,6 +31,17 @@ namespace gameobject {
         return position.distanceTo(point);
 	}
 
+	// Setup
+	/*
+		A script that runs before init to setup gameobject specific properties
+		such as collision profiles.
+		(This then allows a gameobject to modify the collision profile
+		within its init funtion).
+	*/
+	void GameObject::setup() {
+		this->collision_profile.setParent(this->getSharedPtr());
+	}
+
 
 	//// COLLISION HANDLING
 	BoundingBox::BoundingBox(int bbox_left, int bbox_right, int bbox_up, int bbox_down) {
@@ -42,6 +53,7 @@ namespace gameobject {
 
 	// Create new empty collision profile
 	Collision::Collision(gameobject_ptr parent) {
+		std::cout << "PARENT: " << parent << std::endl;
 		this->parent = parent;
 		this->setTypeNone();
 	}

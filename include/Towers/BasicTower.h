@@ -1,5 +1,8 @@
 #ifndef BASICTOWER_H
 #define BASICTOWER_H
+
+#include "../gamecore.h"
+
 #include "../tower.h"
 
 namespace tower

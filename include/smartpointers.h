@@ -1,6 +1,8 @@
 #ifndef SMARTPOINTERS_H
 #define SMARTPOINTERS_H
 
+#include "gamecore.h"
+
 #include <iostream>
 #include <memory>
 #include <exception>

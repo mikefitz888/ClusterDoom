@@ -1,5 +1,8 @@
 #ifndef BASICUNIT_H
 #define BASICUNIT_H
+
+#include "../gamecore.h"
+
 #include "../tower.h"
 
 namespace unit

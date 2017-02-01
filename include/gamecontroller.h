@@ -1,6 +1,8 @@
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
+#include "gamecore.h"
+
 #include "gameobject.h"
 #include "GameObjects\Spawn.h"
 #include "manager.h"
@@ -61,7 +63,6 @@ namespace gamecontroller {
     class GameController {
         Manager* manager;
         vector<Point<int>> cvList;
-		
 		// CV Network
 		int                port;
 		sf::TcpListener   *listener;
@@ -108,6 +109,9 @@ namespace gamecontroller {
 		void spawnTowers(std::vector<Point<int>> tower_list) const;
 		std::vector<tower_ptr> findNearestTowers(Point<int> point);
 		void parseCVList(std::vector<Point<int>> list);
+
+		int getScreenWidth();
+		int getScreenHeight();
     };
 }
 

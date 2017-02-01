@@ -1,4 +1,7 @@
 #pragma once
+
+#include "gamecore.h"
+
 #include <string>
 #include <iostream>
 

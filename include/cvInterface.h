@@ -1,6 +1,9 @@
 #ifndef CVINTERFACE_H
 #define CVINTERFACE_H
 
+
+#include "gamecore.h"
+
 #include "gameobject.h"
 
 #include "../include/network/Buffer.h"

@@ -21,8 +21,7 @@
 
 */
 
-#include <SFML/Graphics.hpp>
-#include <GL/glew.h>
+#include "gamecore.h"
 
 namespace graphics {
     class RenderManager;

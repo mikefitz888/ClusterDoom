@@ -1,6 +1,8 @@
 #ifndef _BUFFER_H
 #define _BUFFER_H
 
+#include "../gamecore.h"
+
 #include <algorithm>
 #include <string.h>
 typedef unsigned char byte;

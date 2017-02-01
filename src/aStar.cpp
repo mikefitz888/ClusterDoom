@@ -1,8 +1,7 @@
 #include <queue>
 #include <vector>
 #include <math.h>
-#include "../include/gamecontroller.h"
-#include "../include/gameobject.h"
+#include "../include/unit.h"
 
 // TOM: namespace pollution... either `using` the things you need or std qualify
 //using namespace std;
@@ -10,8 +9,6 @@ using gameobject::Point;
 
 //bool isObstacle(x, y)
 
-// TOM: Changed to a struct, that allows for public by default fields, no reason to have private members here
-// As a result, removed getters and setters
 struct Node
 {
 	//x,y position of node in grid
@@ -87,7 +84,7 @@ namespace std
 	};
 }
 
-std::vector<Point<int>> aStar(Point<int> start, Point<int> end, const int w, const int h, gamecontroller::GameController *gc) {
+void aStar(Point<int> start, Point<int> end, const int w, const int h, gamecontroller::GameController *gc, std::vector<Point<int>>& ret) {
 	//w and h refer to  width and height of grid. object is 2d array indicating colliders (1 for object 0 for not)
 	int xStart = start.x;
 	int yStart = start.y;
@@ -179,7 +176,7 @@ std::vector<Point<int>> aStar(Point<int> start, Point<int> end, const int w, con
 			delete [] openNodes;
 			delete [] dirMap;
 
-			return path;
+			ret = path;
 		}
 
 		//check all surrounding nodes (children)
@@ -248,5 +245,4 @@ std::vector<Point<int>> aStar(Point<int> start, Point<int> end, const int w, con
 	//TOM: made the equivalent for now, just to show it can be done
 	//std::vector<Point<int>> empty;
 	//return empty;
-	return {};
 }

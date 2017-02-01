@@ -1,6 +1,8 @@
 #ifndef TOWERLOGIC_H
 #define TOWERLOGIC_H
 
+#include "gamecore.h"
+
 #include <vector>
 #include "smartpointers.h"
 #include "tower.h"

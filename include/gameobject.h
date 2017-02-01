@@ -1,6 +1,8 @@
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
 
+#include "gamecore.h"
+
 #include "RenderManager.h"
 #include "VertexBuffer.h"
 #include "smartpointers.h"

@@ -1,6 +1,8 @@
 #ifndef TOWER_H
 #define TOWER_H
 
+#include "gamecore.h"
+
 #include "gameobject.h"
 #include "manager.h"
 
@@ -41,7 +43,7 @@ namespace tower {
         inline float getHealth() const { return health; }
 
         virtual void attack(unit_ptr tower); //Tower attacks unit
-        virtual void attacked(GameObject* aggressor); //Unit attacks tower
+        virtual void attacked(GameObject& aggressor); //Unit attacks tower
     };
 }
 

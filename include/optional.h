@@ -1,6 +1,9 @@
 //#define OPTIONAL_H
 #ifndef OPTIONAL_H
 #define OPTIONAL_H
+
+#include "gamecore.h"
+
 #include <exception>
 #include <functional>
 

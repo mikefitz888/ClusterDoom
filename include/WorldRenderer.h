@@ -1,6 +1,8 @@
 #ifndef WORLDRENDERER_H
 #define WORLDRENDERER_H
 
+#include "gamecore.h"
+
 #include "RenderManager.h"
 #include "manager.h"
 #include "towerlogic.h"

@@ -1,6 +1,8 @@
 #ifndef RENDER_MANAGER_H
 #define RENDER_MANAGER_H
 
+#include "gamecore.h"
+
 #include <SFML/Window.hpp>
 #include <SFML/Graphics.hpp>
 #include <GL/glew.h>

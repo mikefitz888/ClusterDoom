@@ -3,11 +3,11 @@
 #include <SFML/Window/Keyboard.hpp>
 
 namespace gamecontroller {
-    GameController::GameController(Manager* m) : manager(m) {}
+	GameController::GameController(Manager* m) : manager(m) {}
 
-    /*GameObject* GameController::createObject(id_t key){
-        return nullptr;
-    }*/
+	/*GameObject* GameController::createObject(id_t key){
+		return nullptr;
+	}*/
 
     int GameController::getWeight(int x, int y){
     	return 0;
@@ -447,5 +447,13 @@ namespace gamecontroller {
 	        }
 	    }
 	    return match;
+	}
+
+	int GameController::getScreenWidth() {
+		return 1920;
+	}
+
+	int GameController::getScreenHeight() {
+		return 1080;
 	}
 }

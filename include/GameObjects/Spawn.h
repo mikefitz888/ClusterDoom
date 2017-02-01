@@ -1,6 +1,8 @@
 #ifndef _SPAWN_H
 #define _SPAWN_H
 
+#include "../gamecore.h"
+
 #include "../../include/gameobject.h"
 
 using gameobject::GameObject;

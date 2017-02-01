@@ -1,6 +1,7 @@
 #ifndef UNITLOGIC_H
 #define UNITLOGIC_H
 
+#include "gamecore.h"
 #include <vector>
 #include "smartpointers.h"
 #include "unit.h"

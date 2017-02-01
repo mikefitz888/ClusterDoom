@@ -91,11 +91,11 @@ namespace tower {
     }
 
     void Tower::attack(unit_ptr unit)    {
-        unit->attacked(this);
+        unit->attacked(*this);
     }
 
     // BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
-    void Tower::attacked(GameObject* aggressor) {
+    void Tower::attacked(GameObject& aggressor) {
         if (health > 0)
         {
             health--;

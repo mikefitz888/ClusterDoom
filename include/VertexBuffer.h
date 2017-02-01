@@ -1,6 +1,8 @@
 #ifndef VERTEX_BUFFER_H
 #define VERTEX_BUFFER_H
 
+#include "gamecore.h"
+
 #include <SFML/Graphics.hpp>
 #include <GL/glew.h>
 

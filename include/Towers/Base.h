@@ -1,6 +1,8 @@
 #ifndef BASE_H
 #define BASE_H
 
+#include "../gamecore.h"
+
 #include "../tower.h"
 
 namespace tower {

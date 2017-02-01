@@ -1,6 +1,8 @@
 #ifndef _OBJECT_LOGIC_H
 #define _OBJECT_LOGIC_H
 
+#include "gamecore.h"
+
 #include "gameobject.h"
 
 

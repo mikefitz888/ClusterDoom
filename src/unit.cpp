@@ -106,14 +106,23 @@ namespace unit {
     }
 
     void Unit::attack(tower_ptr tower) {
-        tower->attacked(this);
+        tower->attacked(*this);
     }
 
     // BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
-    void Unit::attacked(GameObject* aggressor) {
+    void Unit::attacked(GameObject& aggressor) {
         health--;
         if(health <= 0) {
             destroySelf();
         }
     }
+
+	void Unit::getPath(Point<int> target) {
+		//Point<int> start = (&*&*&*&*this)->position;
+		Point<int> start = this->position;
+		gamecontroller::GameController* gc = this->manager->getGameController();
+		int screenWidth = gc->getScreenWidth();
+		int screenHeight = gc->getScreenHeight();
+		aStar(start, target, screenWidth, screenHeight, gc, path);
+	}
 }

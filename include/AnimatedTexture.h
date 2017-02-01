@@ -1,6 +1,8 @@
 #ifndef _ANIMATED_TEXTURE_H
 #define _ANIMATED_TEXTURE_H
 
+#include "gamecore.h"
+
 /*
     ------------------------------------------------------------------------------------
     Animated textures are a combination of an array of simple vertex buffers and 

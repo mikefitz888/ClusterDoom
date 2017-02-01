@@ -1,6 +1,8 @@
 #ifndef MANAGER_H
 #define MANAGER_H
 
+#include "gamecore.h"
+
 #include <vector>
 #include "smartpointers.h"
 #include "unitlogic.h"

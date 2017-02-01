@@ -1,6 +1,8 @@
 #ifndef _AUDIO_MANAGER_H
 #define _AUDIO_MANAGER_H
 
+#include "gamecore.h"
+
 #include <map>
 #include <SFML/Main.hpp>
 #include <SFML/System.hpp>

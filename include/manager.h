@@ -3,7 +3,7 @@
 
 #include "gamecore.h"
 
-#include <vector>
+//#include <vector>
 #include "smartpointers.h"
 #include "unitlogic.h"
 #include "towerlogic.h"
@@ -17,45 +17,45 @@
 #include "ResourceManager.h"
 #include "AudioManager.h"
 
-namespace network {
-    class NetworkManager;
-    class NetworkClient;
-}
-namespace worldrenderer {
-    class WorldRenderer;
-}
+//namespace network {
+//    class NetworkManager;
+//    class NetworkClient;
+//}
+//namespace worldrenderer {
+//    class WorldRenderer;
+//}
 
-namespace unit {
-    class Unit;
-    enum TYPE : unsigned int;
-}
+//namespace unit {
+//    class Unit;
+//    enum TYPE : unsigned int;
+//}
 
-namespace tower {
-    class Tower;
-    enum TYPE : unsigned int;
-}
+//namespace tower {
+//    class Tower;
+//    enum TYPE : unsigned int;
+//}
 
-namespace gameobject {
-    class GameObject;
-}
+//namespace gameobject {
+//    class GameObject;
+//}
 
-namespace towerlogic {
-    class TowerLogic;
-}
+//namespace towerlogic {
+//    class TowerLogic;
+//}
 
-namespace unitlogic {
-    class UnitLogic;
-}
+//namespace unitlogic {
+//    class UnitLogic;
+//}
 
-class ObjectLogic;
+//class ObjectLogic;
 
-namespace gamecontroller {
-    class GameController;
-}
+//namespace gamecontroller {
+//    class GameController;
+//}
 
-namespace manager {
-    class Manager;
-}
+//namespace manager {
+//    class Manager;
+//}
 
 namespace manager {
     using gameobject::GameObject;
@@ -72,10 +72,9 @@ namespace manager {
     using network::NetworkManager;
 	using gameobject::Collision;
 
-    typedef size_t id_t;
+    //typedef size_t id_t;
 
     class Manager {
-        //std::vector<master_ptr<GameObject>> game_object_pool;
         std::vector<master_ptr<GameObject>> game_object_pool;
         std::vector<id_t> free_id_list;
 
@@ -134,7 +133,7 @@ namespace manager {
         void renderAll();
         void stepAll();
 		void collisionAll();
-        
+
 
         bool step();
 		void restart();

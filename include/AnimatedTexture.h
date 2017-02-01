@@ -5,7 +5,7 @@
 
 /*
     ------------------------------------------------------------------------------------
-    Animated textures are a combination of an array of simple vertex buffers and 
+    Animated textures are a combination of an array of simple vertex buffers and
     a sprite sheet.
 
     ------------------------------------------------------------------------------------
@@ -18,7 +18,7 @@
 
         AnimatedTexture(sf::String filename, bool split_both_ways, int frame_count )
             Imports and creates an animated texture resource with the given image.
-            
+
             - filename        :: Filename to the repeating texture we want to use
             - split_both_ways :: set to true if you want both vertical and horizontal splitting (horizontal only if false)
             - frame_count_h   :: Number of frames to split the image into along the horizontal
@@ -34,15 +34,16 @@
         int getTotalFrames()
             Returns the number of frame associated with this image
 */
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <GL/glew.h>
-#include <SFML/OpenGL.hpp>
-#include <SFML/Main.hpp>
+//#include <SFML/Window.hpp>
+//#include <SFML/Graphics.hpp>
+//#include <GL/glew.h>
+//#include <SFML/OpenGL.hpp>
+//#include <SFML/Main.hpp>
 
 #include "VertexBuffer.h"
-#include <vector>
+//#include <vector>
 #include "manager.h"
+
 namespace graphics {
     class AnimatedTexture {
 
@@ -60,7 +61,7 @@ namespace graphics {
         void render(int frame);
         int getTotalFrames();
         ~AnimatedTexture();
-        
+
     };
 }
 

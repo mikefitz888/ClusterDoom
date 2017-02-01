@@ -9,8 +9,8 @@
      - Resource manager contains a centralised list of resources such as textures, sounds, shaders, models. (Any externally loaded resource).
      This means that objects themselves should not be responsible for loading in resources.
 
-     - The system provides a means of both loading in resources to add the the list, and fetching ones that already exist. To do this, 
-     a specific string is associated with that particular resource. If you attempt to load a resource under an already existing entry, 
+     - The system provides a means of both loading in resources to add the the list, and fetching ones that already exist. To do this,
+     a specific string is associated with that particular resource. If you attempt to load a resource under an already existing entry,
      it will assume the resource already exists (and will return the existing one).
 
      - Otherwise, resources can simply be queried from their known resource name. Existance checks will also be provided. If you attempt
@@ -24,30 +24,36 @@
 
 #include "../include/VertexBuffer.h"
 #include "../include/RenderManager.h"
-#include <map>
-#include <SFML/Main.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Audio.hpp>
-#include <iostream>
+//#include <map>
+//#include <SFML/Main.hpp>
+//#include <SFML/Graphics.hpp>
+//#include <SFML/Window.hpp>
+//#include <SFML/System.hpp>
+//#include <SFML/Audio.hpp>
+//#include <iostream>
 
-using graphics::RenderManager;
+//using graphics::RenderManager;
 
 // Forward manager declaration
-namespace manager { 
-    class Manager;
-}
-namespace graphics {
-    class AnimatedTexture;
-}
+//namespace manager {
+//    class Manager;
+//}
+//namespace graphics {
+//    class AnimatedTexture;
+//
 
-using std::map;
-using graphics::VertexBuffer;
-using graphics::AnimatedTexture;
-using manager::Manager;
+//using std::map;
+//using graphics::VertexBuffer;
+//using graphics::AnimatedTexture;
+//using manager::Manager;
 
 class ResourceManager {
+    using graphics::RenderManager;
+    using std::map;
+    using graphics::VertexBuffer;
+    using graphics::AnimatedTexture;
+    using manager::Manager;
+
     friend class AudioManager;
 
 private:

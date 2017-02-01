@@ -1,11 +1,12 @@
-//#define OPTIONAL_H
+//#define OPTIONAL_Husing gameobject::gameobject_ptr;
+using gameobject::GameObject;
 #ifndef OPTIONAL_H
 #define OPTIONAL_H
 
 #include "gamecore.h"
 
-#include <exception>
-#include <functional>
+//#include <exception>
+//#include <functional>
 
 namespace containers
 {

@@ -3,10 +3,10 @@
 
 #include "gamecore.h"
 
-#include <iostream>
-#include <memory>
-#include <exception>
-#include <string>
+//#include <iostream>
+//#include <memory>
+//#include <exception>
+//#include <string>
 
 #ifdef _MSC_VER
 #define not !
@@ -128,7 +128,7 @@ namespace smartpointers {
         inline explicit operator bool () const noexcept { return valid(); }
     };
 
-    template <typename T> class slave_ptr;
+    //template <typename T> class slave_ptr;
     /**
     master_ptrs are pointers that are in sole control of an object of some
     type. They can be used like pointers if necessary, but they should be

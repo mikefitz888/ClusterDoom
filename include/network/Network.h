@@ -3,27 +3,17 @@
 
 #include "../gamecore.h"
 
-#include <SFML/Network/TcpListener.hpp>
-#include <SFML/Network/TcpSocket.hpp>
-#include <SFML/Network/IpAddress.hpp>
-#include <SFML/Network/Packet.hpp>
-#include <cstdlib>
-#include <iostream>
-#include <ctime>
-#include <vector>
 #include "../manager.h"
 #include "Buffer.h"
 #include "../smartpointers.h"
 #include "../gameobject.h"
 
-using std::vector;
-using manager::Manager;
-
-
 namespace network {
+    using std::vector;
+    using manager::Manager;
 
     //Forward Declaration
-    class NetworkManager;
+    //class NetworkManager;
 
     /// Network Client
     class NetworkClient {
@@ -135,7 +125,7 @@ namespace network {
     private:
         /*
             network_instance_id is the unique instance identifier associated with a given object.
-            instance_type_group - The global group type as defined by 
+            instance_type_group - The global group type as defined by
         */
         int instance_type_group;
         int instance_type;

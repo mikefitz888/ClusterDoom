@@ -6,12 +6,11 @@
 #include "gameobject.h"
 #include "manager.h"
 
-namespace manager {
-    class Manager;
-}
+//namespace manager {
+//    class Manager;
+//}
 
 namespace tower {
-    //using containers::optional;
     using graphics::IRenderable;
     using gameobject::GameObject;
     using gameobject::id_t;

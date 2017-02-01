@@ -3,28 +3,29 @@
 
 #include "gamecore.h"
 
-#include <SFML/Window.hpp>
-#include <SFML/Graphics.hpp>
-#include <GL/glew.h>
-#include <SFML/OpenGL.hpp>
-#include <glm/vec3.hpp> // glm::vec3
-#include <glm/vec4.hpp> // glm::vec4, glm::ivec4
-#include <glm/mat4x4.hpp> // glm::mat4
-#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
-#include <glm/gtc/type_ptr.hpp> // glm::value_ptr
+//#include <SFML/Window.hpp>
+//#include <SFML/Graphics.hpp>
+//#include <GL/glew.h>
+//#include <SFML/OpenGL.hpp>
+//#include <glm/vec3.hpp> // glm::vec3
+//#include <glm/vec4.hpp> // glm::vec4, glm::ivec4
+//#include <glm/mat4x4.hpp> // glm::mat4
+//#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
+//#include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 
 /*
-    GCamera maintains the current matrix transformation state 
+    GCamera maintains the current matrix transformation state
 */
 
-namespace manager {
-    class Manager;
-}
-using manager::Manager;
+//namespace manager {
+//    class Manager;
+//}
+//using manager::Manager;
 
 namespace graphics {
-    class VertexBuffer;
-    class RenderManager;
+    using manager::Manager;
+    //class VertexBuffer;
+    //class RenderManager;
     class GCamera {
 
         protected:
@@ -67,9 +68,9 @@ namespace graphics {
         can be rendered.
     */
     class IRenderable {
-    
+
         public:
-            virtual void init() = 0;            // Function called once openGL context is guaranteed to exist. Useful for loading resources/initialises mesh's/shaders. 
+            virtual void init() = 0;            // Function called once openGL context is guaranteed to exist. Useful for loading resources/initialises mesh's/shaders.
             virtual void render() = 0;        // Function called during main render loop to allow an object to perform its rendering
             virtual void renderGUI() = 0;        // Function called after main render loop with an orthographic context that match the window dimensions
             virtual void release() = 0;        // Called when the openGL context is destroyed
@@ -156,7 +157,7 @@ namespace graphics {
 		void render(int x, int y, float rotation = 0);
 		void render(int x, int y, float xscale, float yscale, float rotation = 0);
 		void render(int x, int y, int width, int height, float rotation = 0);
-		
+
     };
 }
 

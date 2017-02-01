@@ -2,9 +2,9 @@
 #define _RENDER_UTILS_H
 #include "RenderManager.h"
 
-namespace manager {
-	class Manager;
-}
+//namespace manager {
+//	class Manager;
+//}
 
 namespace graphics {
 

@@ -2,25 +2,25 @@
 #define UNITLOGIC_H
 
 #include "gamecore.h"
-#include <vector>
+//#include <vector>
 #include "smartpointers.h"
 #include "unit.h"
 #include "manager.h"
 
-namespace manager {
-    class Manager;
-}
+//namespace manager {
+//    class Manager;
+//}
 
-namespace unit {
-    class Unit;
-}
+//namespace unit {
+//    class Unit;
+//}
 
 namespace unitlogic {
     using unit::Unit;
     using manager::Manager;
     using gameobject::id_t;
 
-    typedef smartpointers::slave_ptr<Unit> unit_ptr;
+    //typedef smartpointers::slave_ptr<Unit> unit_ptr;
 
     class UnitLogic {
         std::vector<unit_ptr> units;
@@ -32,7 +32,7 @@ namespace unitlogic {
         Unit* createUnit(id_t key, unit::TYPE type) const;
         unit_ptr createUnit(unit::TYPE type) const;
         void removeUnit(unit_ptr unit);
-        
+
         void giveSlavePtr(unit_ptr unit);
     };
 }

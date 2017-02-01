@@ -23,12 +23,12 @@
 
 #include "gamecore.h"
 
-namespace graphics {
-    class RenderManager;
-}
-using graphics::RenderManager;
+//namespace graphics {
+//    class RenderManager;
+//}
 
 class FrameBuffer {
+    using graphics::RenderManager;
 private:
     int width, height;
     GLuint           frame_buffer_object_id;

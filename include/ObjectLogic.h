@@ -5,11 +5,9 @@
 
 #include "gameobject.h"
 
-
-using gameobject::gameobject_ptr;
-using gameobject::GameObject;
-
 class ObjectLogic {
+	using gameobject::gameobject_ptr;
+	using gameobject::GameObject;
 	std::vector<gameobject_ptr> game_objects;
 	Manager *manager;
 

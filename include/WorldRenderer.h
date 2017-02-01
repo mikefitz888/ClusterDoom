@@ -9,9 +9,9 @@
 #include "ResourceManager.h"
 //#include "AnimatedTexture.h"
 
-namespace graphics {
-    class AnimatedTexture;
-}
+//namespace graphics {
+//    class AnimatedTexture;
+//}
 
 namespace worldrenderer {
     using graphics::IRenderable;

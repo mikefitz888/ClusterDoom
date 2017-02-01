@@ -12,7 +12,7 @@ using gameobject::TYPE;
 class Spawn : public GameObject {
 
 protected:
-	
+
 public:
 	Spawn(gameobject::id_t id, Manager* m);
 

@@ -3,27 +3,27 @@
 
 #include "gamecore.h"
 
-#include <vector>
+//#include <vector>
 #include "smartpointers.h"
 #include "tower.h"
 #include "manager.h"
 
-namespace manager {
-    class Manager;
-}
+//namespace manager {
+//    class Manager;
+//}
 
-namespace tower {
-    class Tower;
-    class BasicTower;
-    enum TYPE : unsigned int;
-}
+//namespace tower {
+//    class Tower;
+//    class BasicTower;
+//    enum TYPE : unsigned int;
+//}
 
 namespace towerlogic {
     using tower::Tower;
     using manager::Manager;
     using gameobject::id_t;
 
-    typedef smartpointers::slave_ptr<Tower> tower_ptr;
+    //typedef smartpointers::slave_ptr<Tower> tower_ptr;
 
     class TowerLogic {
         std::vector<tower_ptr> towers;
@@ -39,10 +39,9 @@ namespace towerlogic {
         tower_ptr createTower(tower::TYPE type) const;
         void removeTower(int x, int y);
         void removeTower(tower_ptr tower);
-        
+
         void giveSlavePtr(tower_ptr tower);
     };
 }
 
 #endif //TOWERLOGIC_H
-

@@ -3,10 +3,6 @@
 
 #include "../gamecore.h"
 
-#include <algorithm>
-#include <string.h>
-typedef unsigned char byte;
-
 class Buffer {
 private:
     int   max_size = 1024;
@@ -37,14 +33,14 @@ public:
     template <typename T> inline void operator<<(T arg) {
         write(arg);
     }
-    
+
     inline void operator>>(char* &arg) {
         read_str(arg);
     }
     template <typename T> inline void operator>>(T &arg) {
         read(&arg);
     }
-    
+
 };
 
 template <typename T> void Buffer::write(T data) {
@@ -66,7 +62,7 @@ template <typename T> void Buffer::read(T*  ptr) {
     byte* dataP = buffer + head;
     head += sizeof(T);
     if (head >= max_size) {
-        // Check if reading head 
+        // Check if reading head
     }
     *ptr = *((T*)dataP);
 }
@@ -75,7 +71,7 @@ void Buffer::read_str(char* string) {
     const char* dataP = (char*)buffer + head;
     head += strlen((char*)dataP)+1;
     if (head >= max_size) {
-        // Check if reading head 
+        // Check if reading head
     }
     strcpy(string, dataP);
     //*string = *((char*)dataP);

@@ -3,19 +3,20 @@
 
 #include "gamecore.h"
 
-#include <map>
-#include <SFML/Main.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Audio.hpp>
-#include <iostream>
+//#include <map>
+//#include <SFML/Main.hpp>
+//#include <SFML/System.hpp>
+//#include <SFML/Audio.hpp>
+//#include <iostream>
 
-namespace manager {
-    class Manager;
-}
+//namespace manager {
+//    class Manager;
+//}
 
-using manager::Manager;
 
 class AudioManager {
+    using manager::Manager;
+
     friend class Manager;
 
 private:
@@ -25,7 +26,7 @@ private:
 
     void loadSoundAssets(); // Function to give us an opportunity to load in sound assets
     void stepSounds();     // Keep sounds up-to-date, and delete sounds that have finished playing.
-    void release();        // release memory        
+    void release();        // release memory
 
 public:
     AudioManager(Manager* manager);
@@ -34,14 +35,5 @@ public:
     void stopAllMusic();
     void stopAllSound();
 };
-
-
-
-
-
-
-
-
-
 
 #endif

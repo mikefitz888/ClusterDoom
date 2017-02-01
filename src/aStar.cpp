@@ -1,6 +1,3 @@
-#include <queue>
-#include <vector>
-#include <math.h>
 #include "../include/unit.h"
 
 // TOM: namespace pollution... either `using` the things you need or std qualify

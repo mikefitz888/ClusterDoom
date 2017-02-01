@@ -3,9 +3,6 @@
 
 #include "gamecore.h"
 
-//#include <SFML/Graphics.hpp>
-//#include <GL/glew.h>
-
 namespace graphics {
     struct Vec2 {
         float x, y;

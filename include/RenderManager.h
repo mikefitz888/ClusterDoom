@@ -3,29 +3,12 @@
 
 #include "gamecore.h"
 
-//#include <SFML/Window.hpp>
-//#include <SFML/Graphics.hpp>
-//#include <GL/glew.h>
-//#include <SFML/OpenGL.hpp>
-//#include <glm/vec3.hpp> // glm::vec3
-//#include <glm/vec4.hpp> // glm::vec4, glm::ivec4
-//#include <glm/mat4x4.hpp> // glm::mat4
-//#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
-//#include <glm/gtc/type_ptr.hpp> // glm::value_ptr
-
 /*
     GCamera maintains the current matrix transformation state
 */
 
-//namespace manager {
-//    class Manager;
-//}
-//using manager::Manager;
-
 namespace graphics {
     using manager::Manager;
-    //class VertexBuffer;
-    //class RenderManager;
     class GCamera {
 
         protected:

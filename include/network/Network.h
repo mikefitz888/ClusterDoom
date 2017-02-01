@@ -11,10 +11,7 @@
 namespace network {
     using std::vector;
     using manager::Manager;
-
-    //Forward Declaration
-    //class NetworkManager;
-
+    
     /// Network Client
     class NetworkClient {
         friend class NetworkManager;

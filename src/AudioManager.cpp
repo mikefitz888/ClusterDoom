@@ -1,7 +1,6 @@
 #include "../include/AudioManager.h"
 #include "../include/manager.h"
 
-
 // Constructor
 AudioManager::AudioManager(manager::Manager* manager) {
     this->manager = manager;
@@ -40,7 +39,7 @@ void AudioManager::stepSounds() {
         }
     }
     for (auto sound_instance : delete_list) {
-        
+
         auto it = std::find(sound_instances.begin(), sound_instances.end(), sound_instance);
         if (it != sound_instances.end()) {
             sound_instances.erase(it);
@@ -74,7 +73,7 @@ sf::Sound* AudioManager::playSound(sf::SoundBuffer* buffer) {
     return new_sound;
 }
 sf::Sound* AudioManager::playSound(sf::String sound_resource_name) {
-    
+
     if (manager->getResourceManager()->soundBufferExists(sound_resource_name)) {
         sf::SoundBuffer *sound_buffer;
         sound_buffer = manager->getResourceManager()->getSoundBuffer(sound_resource_name);

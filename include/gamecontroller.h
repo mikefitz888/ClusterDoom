@@ -7,33 +7,8 @@
 #include "GameObjects\Spawn.h"
 #include "manager.h"
 #include "../include/network/Buffer.h"
-//#include <SFML/Network/TcpListener.hpp>
-//#include <SFML/Network/TcpSocket.hpp>
-//#include <SFML/Network/IpAddress.hpp>
-//#include <SFML/Network/Packet.hpp>
-//#include <vector>
-
-
-//#include <iostream>
-//#include <deque>
-//#include <stack>
-//#include <unordered_map>
-//#include <cmath>
-//#include <algorithm>
 
 #define NO_MATCH -1
-
-//namespace tower {
-//    enum TYPE : unsigned int;
-//}
-
-//namespace gameobject {
-//    class GameObject;
-//}
-
-//namespace manager {
-//    class Manager;
-//}
 
 namespace gamecontroller {
     using gameobject::GameObject;

@@ -6,10 +6,6 @@
 #include "gameobject.h"
 #include "manager.h"
 
-//namespace manager {
-//    class Manager;
-//}
-
 namespace tower {
     using graphics::IRenderable;
     using gameobject::GameObject;

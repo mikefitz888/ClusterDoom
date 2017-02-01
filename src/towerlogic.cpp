@@ -1,7 +1,6 @@
 #include "../include/towerlogic.h"
 #include "../include/Towers/BasicTower.h"
 #include "../include/Towers/Base.h"
-#include <iostream>
 
 namespace towerlogic {
     tower_ptr TowerLogic::createTower(tower::TYPE type) const {
@@ -24,7 +23,7 @@ namespace towerlogic {
 
 	std::vector<tower_ptr>& TowerLogic::getTowers() {
 		return towers;
-	} //TODO: filter out BASE 
+	} //TODO: filter out BASE
 
 	tower_ptr TowerLogic::getBase() {
 		return towers[0];
@@ -50,4 +49,3 @@ namespace towerlogic {
          }
     }
 }
-

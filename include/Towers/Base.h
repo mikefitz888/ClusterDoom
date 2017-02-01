@@ -5,7 +5,8 @@
 
 #include "../tower.h"
 
-namespace tower {
+namespace tower
+{
 	class Base : public Tower {
 		graphics::Texture* texture = nullptr;
 	public:

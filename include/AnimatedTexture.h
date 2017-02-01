@@ -1,8 +1,6 @@
 #ifndef _ANIMATED_TEXTURE_H
 #define _ANIMATED_TEXTURE_H
 
-#include "gamecore.h"
-
 /*
     ------------------------------------------------------------------------------------
     Animated textures are a combination of an array of simple vertex buffers and
@@ -34,14 +32,10 @@
         int getTotalFrames()
             Returns the number of frame associated with this image
 */
-//#include <SFML/Window.hpp>
-//#include <SFML/Graphics.hpp>
-//#include <GL/glew.h>
-//#include <SFML/OpenGL.hpp>
-//#include <SFML/Main.hpp>
+
+#include "gamecore.h"
 
 #include "VertexBuffer.h"
-//#include <vector>
 #include "manager.h"
 
 namespace graphics {

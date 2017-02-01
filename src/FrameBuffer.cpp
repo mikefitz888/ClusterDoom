@@ -1,5 +1,4 @@
 #include "../include/FrameBuffer.h"
-#include <iostream>
 
 // < See docs in header >
 

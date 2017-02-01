@@ -1,7 +1,6 @@
 #include "../include/WorldRenderer.h"
 #include "../include/AnimatedTexture.h"
 
-
 namespace worldrenderer {
     using towerlogic::tower_ptr;
     void WorldRenderer::init(){
@@ -50,7 +49,7 @@ namespace worldrenderer {
 
         vbuff->render();
 
-        
+
         // Render debug explosion
         render_manager->setBlendModeAdditive();
         index += 0.60;

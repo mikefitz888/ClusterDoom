@@ -6,16 +6,6 @@
 #include "gameobject.h"
 
 #include "../include/network/Buffer.h"
-//#include <SFML/Network/TcpListener.hpp>
-//#include <SFML/Network/TcpSocket.hpp>
-//#include <SFML/Network/IpAddress.hpp>
-//#include <SFML/Network/Packet.hpp>
-//#include <SFML/System/Time.hpp>
-
-//#include <opencv/cv.h>
-//#include <opencv2/highgui/highgui.hpp>
-//#include <opencv2/imgproc/imgproc.hpp>
-//#include <opencv2/objdetect/objdetect.hpp>
 
 namespace cvinterface {
     class CVInterface {

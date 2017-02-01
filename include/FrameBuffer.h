@@ -23,10 +23,6 @@
 
 #include "gamecore.h"
 
-//namespace graphics {
-//    class RenderManager;
-//}
-
 class FrameBuffer {
 private:
     int width, height;

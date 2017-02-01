@@ -3,17 +3,6 @@
 
 #include "gamecore.h"
 
-//#include <map>
-//#include <SFML/Main.hpp>
-//#include <SFML/System.hpp>
-//#include <SFML/Audio.hpp>
-//#include <iostream>
-
-//namespace manager {
-//    class Manager;
-//}
-
-
 class AudioManager {
 
     friend class manager::Manager;

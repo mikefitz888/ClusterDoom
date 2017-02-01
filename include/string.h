@@ -2,9 +2,6 @@
 
 #include "gamecore.h"
 
-//#include <string>
-//#include <iostream>
-
 // template<typname T> is intended to cover int/long/long long/float/double/long double and unsigned types where available
 class String {
 public:

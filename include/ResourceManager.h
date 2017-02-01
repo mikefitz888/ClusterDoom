@@ -1,8 +1,6 @@
 #ifndef _RESOURCE_MANAGER_H
 #define _RESOURCE_MANAGER_H
 
-#include "gamecore.h"
-
 /*
     Resource Manager
     ==========================
@@ -22,25 +20,9 @@
      - I have provided the unload functions as well, however these don't really need to be used. They will be called when the release() function is called.
 */
 
+#include "gamecore.h"
 #include "../include/VertexBuffer.h"
 #include "../include/RenderManager.h"
-//#include <map>
-//#include <SFML/Main.hpp>
-//#include <SFML/Graphics.hpp>
-//#include <SFML/Window.hpp>
-//#include <SFML/System.hpp>
-//#include <SFML/Audio.hpp>
-//#include <iostream>
-
-//using graphics::RenderManager;
-
-// Forward manager declaration
-//namespace manager {
-//    class Manager;
-//}
-//namespace graphics {
-//    class AnimatedTexture;
-//
 
 using std::map;
 using graphics::VertexBuffer;

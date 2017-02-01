@@ -1,5 +1,4 @@
 #include "../include/RenderManager.h"
-#include <iostream>
 #include "../include/manager.h"
 #include "../include/RenderUtils.h"
 
@@ -24,8 +23,8 @@ namespace graphics {
 
 		// Load Shaders
 		rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
-		rm->shaderLoad( "health_bar_mask_shader", 
-						"src/Resources/Shaders/health_bar_mask_shd_vert.glsl", 
+		rm->shaderLoad( "health_bar_mask_shader",
+						"src/Resources/Shaders/health_bar_mask_shd_vert.glsl",
 						"src/Resources/Shaders/health_bar_mask_shd_frag.glsl");
 		// Load fonts
 		rm->fontLoad("agency", "src/Resources/Fonts/AGENCYR.TTF");
@@ -211,7 +210,7 @@ namespace graphics {
 
     void RenderManager::bind_colour_uniform() {
         GLuint _uniform_colour_id = glGetUniformLocation(active_shader->getNativeHandle(), "drawColour");
-        glUniform4f(_uniform_colour_id, (float)this->active_colour.r/255.0, 
+        glUniform4f(_uniform_colour_id, (float)this->active_colour.r/255.0,
                                         (float)this->active_colour.g/255.0,
                                         (float)this->active_colour.b/255.0,
                                         (float)this->active_colour.a/255.0 );
@@ -262,7 +261,7 @@ namespace graphics {
         //active_shader->setUniform("matrixProjection", sf::Glsl::Mat4(glm::value_ptr(vp_matrix)));
         GLuint _mat_id = glGetUniformLocation(active_shader->getNativeHandle(), "matrixProjection");
         glUniformMatrix4fv(_mat_id, 1, GL_FALSE, glm::value_ptr(*vp_matrix));
-    
+
         //vp_matrix = glm::mat4();
         /*std::cout << "MAT: " << std::endl;
         std::cout << (*vp_matrix)[0][0] << " " << (*vp_matrix)[0][1] << " " << (*vp_matrix)[0][2] << " " << (*vp_matrix)[0][3]  << std::endl;
@@ -278,7 +277,7 @@ namespace graphics {
         world_matrix = world_matrix;
         if (active_shader != nullptr) {
 
-            // Apply the matrix 
+            // Apply the matrix
             GLuint _mat_id = glGetUniformLocation(active_shader->getNativeHandle(), "matrixWorld");
             glUniformMatrix4fv(_mat_id, 1, GL_FALSE, glm::value_ptr(world_matrix));
         }
@@ -300,7 +299,7 @@ namespace graphics {
         this->camera_position.x = x;
         this->camera_position.y = y;
         this->camera_position.z = z;
-    
+
     }
 
     void GCamera::setCameraDirection(float x, float y, float z){
@@ -434,4 +433,3 @@ namespace graphics {
     }
 
 }
-

@@ -2,25 +2,14 @@
 #define UNITLOGIC_H
 
 #include "gamecore.h"
-//#include <vector>
 #include "smartpointers.h"
 #include "unit.h"
 #include "manager.h"
-
-//namespace manager {
-//    class Manager;
-//}
-
-//namespace unit {
-//    class Unit;
-//}
 
 namespace unitlogic {
     using unit::Unit;
     using manager::Manager;
     using gameobject::id_t;
-
-    //typedef smartpointers::slave_ptr<Unit> unit_ptr;
 
     class UnitLogic {
         std::vector<unit_ptr> units;

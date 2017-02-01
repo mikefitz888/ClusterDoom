@@ -118,7 +118,6 @@ namespace unit {
     }
 
 	void Unit::getPath(Point<int> target) {
-		//Point<int> start = (&*&*&*&*this)->position;
 		Point<int> start = this->position;
 		gamecontroller::GameController* gc = this->manager->getGameController();
 		int screenWidth = gc->getScreenWidth();

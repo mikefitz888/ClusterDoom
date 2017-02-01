@@ -88,23 +88,6 @@ namespace gamecontroller {
     struct Matching;
 }
 
-namespace gameobject {
-    class Collision;
-    class GameObject;
-
-    struct BoundingBox;
-    template <typename T> struct Point;
-
-    enum CollisionType;
-    enum OBJECT_TYPE : unsigned int;
-    enum TYPE : unsigned int;
-
-    typedef size_t id_t;
-    typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
-	typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
-	typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
-}
-
 namespace graphics {
     class AnimatedTexture;
     class GCamera;
@@ -152,6 +135,23 @@ namespace unit {
     class Unit;
 
     enum TYPE : unsigned int;
+}
+
+namespace gameobject {
+	class Collision;
+	class GameObject;
+
+	struct BoundingBox;
+	template <typename T> struct Point;
+
+	enum CollisionType;
+	enum OBJECT_TYPE : unsigned int;
+	enum TYPE : unsigned int;
+
+	typedef size_t id_t;
+	typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
+	typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
+	typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
 }
 
 namespace unitlogic {

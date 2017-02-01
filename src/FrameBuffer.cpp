@@ -3,7 +3,7 @@
 
 // < See docs in header >
 
-FrameBuffer::FrameBuffer(int width, int height, RenderManager* render_manager) {
+FrameBuffer::FrameBuffer(int width, int height, graphics::RenderManager* render_manager) {
     this->width             = width;
     this->height         = height;
     this->render_manager = render_manager;

@@ -5,7 +5,7 @@
 
 #include "gameobject.h"
 
-//#include "../include/network/Buffer.h"
+#include "../include/network/Buffer.h"
 //#include <SFML/Network/TcpListener.hpp>
 //#include <SFML/Network/TcpSocket.hpp>
 //#include <SFML/Network/IpAddress.hpp>

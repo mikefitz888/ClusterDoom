@@ -2,7 +2,7 @@
 #include "../include/AnimatedTexture.h"
 
 // Constructor
-ResourceManager::ResourceManager(Manager* manager) {
+ResourceManager::ResourceManager(manager::Manager* manager) {
     this->manager = manager;
 }
 

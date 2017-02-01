@@ -42,17 +42,12 @@
 //    class AnimatedTexture;
 //
 
-//using std::map;
-//using graphics::VertexBuffer;
-//using graphics::AnimatedTexture;
-//using manager::Manager;
+using std::map;
+using graphics::VertexBuffer;
+using graphics::AnimatedTexture;
+using graphics::RenderManager;
 
 class ResourceManager {
-    using graphics::RenderManager;
-    using std::map;
-    using graphics::VertexBuffer;
-    using graphics::AnimatedTexture;
-    using manager::Manager;
 
     friend class AudioManager;
 
@@ -65,9 +60,9 @@ private:
     map<sf::String, sf::Music*>          musicMap;
     map<sf::String, sf::Font*>          fontMap;
 
-    Manager *manager; // ptr to manager
+    manager::Manager* manager; // ptr to manager
 
-    map<sf::String, sf::Music*> *getMusicMap();
+    map<sf::String, sf::Music*>* getMusicMap();
 
     // SoundBuffer functions
     /*
@@ -88,7 +83,7 @@ private:
 
 public:
     // Constructor
-    ResourceManager(Manager* manager);
+    ResourceManager(manager::Manager* manager);
 
     // Texture functions
     graphics::Texture* textureLoad(sf::String resource_name, sf::String resource_filepath);

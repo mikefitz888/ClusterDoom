@@ -450,10 +450,10 @@ namespace gamecontroller {
 	}
 
 	int GameController::getScreenWidth() {
-		return 1920;
+		return sf::VideoMode::getDesktopMode().width;
 	}
 
 	int GameController::getScreenHeight() {
-		return 1080;
+		return sf::VideoMode::getDesktopMode().height;
 	}
 }

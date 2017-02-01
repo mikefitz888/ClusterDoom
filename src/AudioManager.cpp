@@ -3,7 +3,7 @@
 
 
 // Constructor
-AudioManager::AudioManager(Manager* manager) {
+AudioManager::AudioManager(manager::Manager* manager) {
     this->manager = manager;
 
     loadSoundAssets();

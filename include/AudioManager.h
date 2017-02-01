@@ -15,12 +15,11 @@
 
 
 class AudioManager {
-    using manager::Manager;
 
-    friend class Manager;
+    friend class manager::Manager;
 
 private:
-    Manager* manager;
+    manager::Manager* manager;
     std::vector<sf::Sound*> sound_instances;
     std::vector<sf::Sound*> delete_list;
 
@@ -29,7 +28,7 @@ private:
     void release();        // release memory
 
 public:
-    AudioManager(Manager* manager);
+    AudioManager(manager::Manager* manager);
     sf::Sound* playSound(sf::SoundBuffer* buffer);
     sf::Sound* playSound(sf::String sound_resource_name);
     void stopAllMusic();

@@ -28,17 +28,16 @@
 //}
 
 class FrameBuffer {
-    using graphics::RenderManager;
 private:
     int width, height;
     GLuint           frame_buffer_object_id;
     GLuint           render_texture;
     GLuint           depth_texture;
-    RenderManager* render_manager;
+    graphics::RenderManager* render_manager;
 
     bool generateFrameBuffer(); // Generate frame buffer
 public:
-    FrameBuffer(int width, int height, RenderManager* renderManager);
+    FrameBuffer(int width, int height, graphics::RenderManager* renderManager);
     void setTarget();
     void resetTarget();
     void bind();

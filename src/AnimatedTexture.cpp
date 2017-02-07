@@ -1,5 +1,4 @@
 #include "../include/AnimatedTexture.h"
-#include <iostream>
 
 namespace graphics {
     // Create a new animated texture

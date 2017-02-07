@@ -1,6 +1,5 @@
 #include "../include/unit.h"
 #include "../include/tower.h"
-#include <climits>
 
 namespace unit {
     void Unit::init() {
@@ -70,7 +69,7 @@ namespace unit {
             //Move to tower
             float dx = target->getX() - getX();
             float dy = target->getY() - getY();
-            
+
             if (dx > 0) { position.x++; }
             else { position.x--; }
 
@@ -118,7 +117,6 @@ namespace unit {
     }
 
 	void Unit::getPath(Point<int> target) {
-		//Point<int> start = (&*&*&*&*this)->position;
 		Point<int> start = this->position;
 		gamecontroller::GameController* gc = this->manager->getGameController();
 		int screenWidth = gc->getScreenWidth();

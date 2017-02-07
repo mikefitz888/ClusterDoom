@@ -1,6 +1,4 @@
 #include "../include/gamecontroller.h"
-#include <math.h>
-#include <SFML/Window/Keyboard.hpp>
 
 namespace gamecontroller {
 	GameController::GameController(Manager* m) : manager(m) {}
@@ -93,10 +91,10 @@ namespace gamecontroller {
     void GameController::step() {
 		frame_clock++;
 		//In general, step() should be frame-based.
-        
 
 
-		// Perform 
+
+		// Perform
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			if (!spawned) {
 				sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
@@ -152,7 +150,7 @@ namespace gamecontroller {
 			runScenario(scenario);
 		}
 		else { //Ending sequence
-			
+
 		}
     }
 
@@ -164,7 +162,7 @@ namespace gamecontroller {
 			//Start wave 0
 			//spawn short burst of troops from each spawn point
 			for (auto spawn : spawn_points) {
-				
+
 			}
 		}
 		else {
@@ -175,13 +173,13 @@ namespace gamecontroller {
 				//Start wave
 				//spawn short burst of troops from each spawn point
 				for (auto spawn : spawn_points) {
-					
+
 				}
 			}
 			else {
 				//Continue wave
 				for (auto spawn : spawn_points) {
-					
+
 				}
 			}
 		}
@@ -347,7 +345,7 @@ namespace gamecontroller {
 			}
 			std::vector<tower_ptr>::const_iterator begin = _towers.begin();
 			std::vector<tower_ptr>::const_iterator last = _towers.begin() + _towers.size();
-			towers = std::vector<tower_ptr>(begin+1, last); //skip first tower without needing to change Jamie's algorithm			
+			towers = std::vector<tower_ptr>(begin+1, last); //skip first tower without needing to change Jamie's algorithm
 		}
 		else {
 			towers = std::vector<tower_ptr>();
@@ -450,10 +448,10 @@ namespace gamecontroller {
 	}
 
 	int GameController::getScreenWidth() {
-		return 1920;
+		return sf::VideoMode::getDesktopMode().width;
 	}
 
 	int GameController::getScreenHeight() {
-		return 1080;
+		return sf::VideoMode::getDesktopMode().height;
 	}
 }

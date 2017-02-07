@@ -6,36 +6,11 @@
 #include "RenderManager.h"
 #include "VertexBuffer.h"
 #include "smartpointers.h"
-#include "math.h"
-#include <map>
-#include <string>
 
 #define MAX(x,y) (x>y)?x:y
 #define DISTANCE(x1, y1, x2, y2) sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1))
 
-
-namespace manager {
-    class Manager;
-}
-
-namespace graphics {
-    class RenderManager;
-}
-namespace tower {
-    class Tower;
-}
-
-namespace unit {
-    class Unit;
-}
-
 namespace gameobject {
-
-	class GameObject;
-	typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
-	typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
-	typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
-	
 	/*
 	The collision system is designed to be an attachable
 	component to gameobjects.
@@ -43,10 +18,8 @@ namespace gameobject {
 	Collision provides a number of utility functions
 	for testing collisions between itself and other collision
 	instances.
-
-
-
 	*/
+	
 	struct BoundingBox {
 		int bbox_left, bbox_up, bbox_down, bbox_right;
 		BoundingBox(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
@@ -105,9 +78,9 @@ namespace gameobject {
     enum TYPE : unsigned int {TOWER=0, UNIT, OBJECT};
 	enum OBJECT_TYPE : unsigned int { SPAWN = 0 };
 
-    
-    
-    typedef size_t id_t;
+
+
+    //typedef size_t id_t;
 
     template <typename T>
     struct Point {
@@ -120,7 +93,7 @@ namespace gameobject {
 
 	/*
 		Gameobject abstract class
-	
+
 	*/
     class GameObject : public IRenderable {
         const id_t id_;
@@ -199,7 +172,7 @@ namespace gameobject {
 		}
     };
 
-	
+
 }
 
 #define destroySelf();  _destroySelf(); return;

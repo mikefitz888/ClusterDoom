@@ -1,16 +1,14 @@
 #ifndef _RESOURCE_MANAGER_H
 #define _RESOURCE_MANAGER_H
 
-#include "gamecore.h"
-
 /*
     Resource Manager
     ==========================
      - Resource manager contains a centralised list of resources such as textures, sounds, shaders, models. (Any externally loaded resource).
      This means that objects themselves should not be responsible for loading in resources.
 
-     - The system provides a means of both loading in resources to add the the list, and fetching ones that already exist. To do this, 
-     a specific string is associated with that particular resource. If you attempt to load a resource under an already existing entry, 
+     - The system provides a means of both loading in resources to add the the list, and fetching ones that already exist. To do this,
+     a specific string is associated with that particular resource. If you attempt to load a resource under an already existing entry,
      it will assume the resource already exists (and will return the existing one).
 
      - Otherwise, resources can simply be queried from their known resource name. Existance checks will also be provided. If you attempt
@@ -22,32 +20,17 @@
      - I have provided the unload functions as well, however these don't really need to be used. They will be called when the release() function is called.
 */
 
+#include "gamecore.h"
 #include "../include/VertexBuffer.h"
 #include "../include/RenderManager.h"
-#include <map>
-#include <SFML/Main.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Audio.hpp>
-#include <iostream>
-
-using graphics::RenderManager;
-
-// Forward manager declaration
-namespace manager { 
-    class Manager;
-}
-namespace graphics {
-    class AnimatedTexture;
-}
 
 using std::map;
 using graphics::VertexBuffer;
 using graphics::AnimatedTexture;
-using manager::Manager;
+using graphics::RenderManager;
 
 class ResourceManager {
+
     friend class AudioManager;
 
 private:
@@ -59,9 +42,9 @@ private:
     map<sf::String, sf::Music*>          musicMap;
     map<sf::String, sf::Font*>          fontMap;
 
-    Manager *manager; // ptr to manager
+    manager::Manager* manager; // ptr to manager
 
-    map<sf::String, sf::Music*> *getMusicMap();
+    map<sf::String, sf::Music*>* getMusicMap();
 
     // SoundBuffer functions
     /*
@@ -82,7 +65,7 @@ private:
 
 public:
     // Constructor
-    ResourceManager(Manager* manager);
+    ResourceManager(manager::Manager* manager);
 
     // Texture functions
     graphics::Texture* textureLoad(sf::String resource_name, sf::String resource_filepath);

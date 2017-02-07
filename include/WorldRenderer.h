@@ -7,11 +7,6 @@
 #include "manager.h"
 #include "towerlogic.h"
 #include "ResourceManager.h"
-//#include "AnimatedTexture.h"
-
-namespace graphics {
-    class AnimatedTexture;
-}
 
 namespace worldrenderer {
     using graphics::IRenderable;

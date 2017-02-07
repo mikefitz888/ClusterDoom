@@ -5,12 +5,12 @@ using graphics::RenderUtils;
 using graphics::Colour;
 using graphics::Texture;
 
-Manager *RenderUtils::manager = nullptr;
-Texture *RenderUtils::health_bar_diffuse_mask = nullptr;
-Texture *RenderUtils::health_bar_progress_mask = nullptr;
-sf::Shader *RenderUtils::health_bar_mask_shader = nullptr;
+manager::Manager* RenderUtils::manager = nullptr;
+Texture* RenderUtils::health_bar_diffuse_mask = nullptr;
+Texture* RenderUtils::health_bar_progress_mask = nullptr;
+sf::Shader* RenderUtils::health_bar_mask_shader = nullptr;
 
-void RenderUtils::init(Manager *manager) {
+void RenderUtils::init(manager::Manager *manager) {
 	RenderUtils::manager = manager;
 	RenderUtils::health_bar_progress_mask = manager->getResourceManager()->getTexture("health_bar_progress_mask");
 	RenderUtils::health_bar_diffuse_mask = manager->getResourceManager()->getTexture("health_bar_diffuse_mask");

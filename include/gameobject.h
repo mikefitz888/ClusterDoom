@@ -52,7 +52,7 @@ namespace gameobject {
 		BoundingBox(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
 	};
 
-	enum CollisionType { NONE, BOX, CIRCLE };
+	enum CollisionType : unsigned int { NONE, BOX, CIRCLE };
 	class Collision {
 
 	protected:

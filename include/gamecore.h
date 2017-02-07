@@ -123,7 +123,7 @@ namespace cvinterface {
 namespace gameobject {
 	class GameObject;
 	struct BoundingBox;
-	enum CollisionType;
+	enum CollisionType : unsigned int;
 	class Collision;
 	enum TYPE : unsigned int;
 	enum OBJECT_TYPE : unsigned int;

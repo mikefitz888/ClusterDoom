@@ -2,8 +2,6 @@
 #include "../include/network/Network.h"
 #include "../include/RenderManager.h"
 #include "../include/cvInterface.h"
-#include <iostream>
-#include <thread>
 #include "../include/smartpointers.h"
 using manager::Manager;
 using namespace graphics;

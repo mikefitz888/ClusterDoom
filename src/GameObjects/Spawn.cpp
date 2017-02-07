@@ -1,6 +1,6 @@
 #include "../../include/GameObjects/Spawn.h"
 #include "../../include/manager.h"
-Spawn::Spawn(gameobject::id_t id, Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::SPAWN, m) {
+Spawn::Spawn(gameobject::id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::SPAWN, m) {
 
 }
 void Spawn::init() {

@@ -1,6 +1,3 @@
-#include <queue>
-#include <vector>
-#include <math.h>
 #include "../include/unit.h"
 #include "../include/aStar.h"
 

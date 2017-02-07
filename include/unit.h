@@ -3,16 +3,11 @@
 
 #include "gamecore.h"
 
-#include <vector>
 #include "gameobject.h"
 #include "gamecontroller.h"
 #include "aStar.h"
 
 void aStar(gameobject::Point<int> start, gameobject::Point<int> end, const int w, const int h, gamecontroller::GameController *gc, std::vector<gameobject::Point<int>>& ret);
-
-namespace manager {
-    class Manager;
-}
 
 namespace unit {
     using gameobject::id_t;

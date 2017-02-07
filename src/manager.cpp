@@ -1,7 +1,5 @@
 #include "../include/manager.h"
 #include "../include/ResourceManager.h"
-#include <algorithm> // for remove_if
-#include <functional> // for unary_function
 
 namespace manager {
 
@@ -158,7 +156,7 @@ namespace manager {
         return render();
     }
 
-    void Manager::initRenderManager(RenderManager &rm) { 
+    void Manager::initRenderManager(RenderManager &rm) {
         render_manager=&rm;
         world_renderer = new WorldRenderer(this);
         render_manager->setRenderParent(world_renderer);
@@ -173,7 +171,7 @@ namespace manager {
     }
 
     // Get render manager
-    RenderManager* Manager::getRenderManager() const { 
+    RenderManager* Manager::getRenderManager() const {
         return render_manager;
     }
 
@@ -187,8 +185,8 @@ namespace manager {
         return audio_manager;
     }
 
-    void Manager::release() { 
-        render_manager->release(); 
+    void Manager::release() {
+        render_manager->release();
         render_manager = nullptr;
         delete world_renderer;
 
@@ -220,7 +218,7 @@ namespace manager {
 		for those objects that collide with each other.
 
 		Collision events will run both ways if the objects continue to collide.
-	
+
 	*/
 	void Manager::collisionAll() {
 

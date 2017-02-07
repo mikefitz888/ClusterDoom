@@ -1,6 +1,5 @@
 #include "../include/unitlogic.h"
 #include "../include/Units/BasicUnit.h"
-#include <iostream>
 
 namespace unitlogic {
     unit_ptr UnitLogic::createUnit(unit::TYPE type) const {

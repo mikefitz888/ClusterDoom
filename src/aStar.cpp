@@ -122,7 +122,7 @@ void aStar(Point<int> start, Point<int> end, const int w, const int h, gamecontr
 	Node n(xStart, yStart, 0, 0);
 	n.updateF(xEnd, yEnd);
 	workingNodes[workingQueueToggle].push(n);
-	openNodes[w][h] = n.f;
+	openNodes[w-1][h-1] = n.f;
 
 	while (!workingNodes[workingQueueToggle].empty()) {
 

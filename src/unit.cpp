@@ -59,25 +59,39 @@ namespace unit {
         if (!target) {
             return; //NO TARGET
         }
-        render_facing = target->getPosition();
 
-        float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
-        if (distance < 2000) {
-           attack(target);
-        }
-        else {
-            //Move to tower
-            float dx = target->getX() - getX();
-            float dy = target->getY() - getY();
-
-            if (dx > 0) { position.x++; }
-            else { position.x--; }
-
-            if (dy > 0) { position.y++; }
-            else { position.y--; }
-
-        }
+		if (path.size() > 0) {
+			bool move = this->moveTowards(path[0]);
+			if (!move) {
+				path.erase(path.begin(), path.begin() + 1);
+			}
+		} else {
+			getPath(target->getPosition());
+		}
     }
+
+	bool Unit::moveTowards(Point<int> target) {
+		bool move = false;
+
+		if (position.x < target.x) {
+			position.x += velocity.x;
+			move = true;
+		} else if (position.x > target.x){
+			position.x -= velocity.x;
+			move = true;
+		}
+
+		if (position.y < target.y) {
+			position.y += velocity.y;
+			move = true;
+		}
+		else if (position.y > target.y) {
+			position.y -= velocity.y;
+			move = true;
+		}
+
+		return move;
+	}
 
     tower_ptr Unit::getNearestTower() const
     //Not actually implemented correctly, just prototype

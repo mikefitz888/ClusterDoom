@@ -31,6 +31,7 @@ namespace unit {
         Point<float> velocity = Point<float>(0, 0);
         float health = 1000;
 		std::vector<Point<int>> path;
+		bool moveTowards(Point<int> target);
 
     public:
         inline Unit(id_t id, TYPE unit_type, Manager* m) : GameObject(id, gameobject::TYPE::UNIT, unit_type, m) {}

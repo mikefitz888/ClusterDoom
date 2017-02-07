@@ -13,6 +13,8 @@ namespace manager {
         network_manager  = new NetworkManager(this);
         resource_manager = new ResourceManager(this);
         audio_manager    = new AudioManager(this);
+
+		
     }
 
 	// Object Methods
@@ -147,7 +149,7 @@ namespace manager {
         return id;
     }
 
-    void Manager::init() const {
+    void Manager::init() {
         game_controller->init();
     }
 
@@ -163,6 +165,13 @@ namespace manager {
         world_renderer = new WorldRenderer(this);
         render_manager->setRenderParent(world_renderer);
         render_manager->init(this);
+
+		// Create splitmap
+		const int splitmap_cellsize = 64;
+		int splitmap_width, splitmap_height;
+		splitmap_width  = render_manager->getWindowWidth() / splitmap_cellsize;
+		splitmap_height = render_manager->getWindowHeight() / splitmap_cellsize;
+		splitmap		= new Splitmap(splitmap_cellsize, splitmap_width, splitmap_height);
     }
 
     bool Manager::render() const {
@@ -224,21 +233,21 @@ namespace manager {
 	*/
 	void Manager::collisionAll() {
 
-	/*
-	Create a copy of the object list. This allows objects
-	to destroy themselves during the collision event.
-	*/
+		/*
+		Create a copy of the object list. This allows objects
+		to destroy themselves during the collision event.
+		*/
 
-	std::vector<slave_ptr<GameObject>> copy;
-	for (slave_ptr<GameObject> obj : game_object_pool) {
-		copy.push_back(obj);
-	}
+		std::vector<slave_ptr<GameObject>> copy;
+		for (slave_ptr<GameObject> obj : game_object_pool) {
+			copy.push_back(obj);
+		}
 
-	/*
-	For every object, test collisions against every other
-	object (excluding self).
-	*/
-
+		/*
+		For every object, test collisions against every other
+		object (excluding self).
+		*/
+		/*int collision_tests = 0;
 		for (slave_ptr<GameObject> obj : copy) {
 			Collision* my_collision = obj->getCollision();
 			my_collision->setParent(obj);
@@ -251,6 +260,7 @@ namespace manager {
 						Collision* other_collision = other->getCollision();
 						other_collision->setParent(other);
 
+						collision_tests++;
 						if (my_collision->intersects(other_collision)) {
 							obj->onCollision(other);
 							//std::cout << "collision between objects" << std::endl;
@@ -258,8 +268,205 @@ namespace manager {
 					}
 				}
 			}
+		}
+		std::cout << "Collision tests: " << collision_tests << std::endl;*/
 
+		// Collision model 2.0
+		/*
+			Maintain a grid where each cell contains a list of objects that collide with that cell.
+			- List is built by using the objects bounding box and filling all the cells it 
+			intersects with. (Per object, iterate over the grid-aligned space that its bounding
+			box occupies).
+
+			- After these lists are generated, for each list, perform collisions between objects
+			within each cell.
+
+			Result: Reduced number of intersection tests needed. Massive reduction for
+			sparsely located objects.
+
+			Potential downsides:
+			- Objects executing collision events with the same instances.
+				Potential solutions: Each object keeps a list of the objects they have already
+				collided with on that frame. (Though increased complexity).
+		
+		*/
+		// Clear the splitmap
+		splitmap->clear();
+
+		// Add all objects
+		for (slave_ptr<GameObject> obj : copy) {
+			splitmap->add(obj);
+		}
+
+		// Perform collisions
+		splitmap->performAllCollisions();
+		
+
+	}
+
+	/*
+		Create a new split map with the given size.
+			See manager.h for detailed explanation
+	*/
+	Splitmap::Splitmap(int cellsize, int width, int height) {
+
+		// Declare members
+		this->splitmap_cellsize = cellsize;
+		this->splitmap_width    = width;
+		this->splitmap_height   = height;
+
+		// Initialise splitmap datastructre
+		collision_splitmap = new std::vector<gameobject_ptr>**[splitmap_width];
+		for (int i = 0; i < splitmap_width; i++) {
+			collision_splitmap[i] = new std::vector<gameobject_ptr>*[splitmap_height];
+
+			for (int j = 0; j < splitmap_height; j++) {
+				collision_splitmap[i][j] = new std::vector<gameobject_ptr>;
+			}
+		}
+
+
+
+	}
+
+	// Splitmap destructor
+	Splitmap::~Splitmap() {
+
+		// Delete splitmap
+		for (int i = 0; i < splitmap_width; i++) {
+			for (int j = 0; j < splitmap_height; j++) {
+				delete collision_splitmap[i][j];
+			}
+			delete collision_splitmap[i];
+		}
+		delete collision_splitmap;
+	}
+
+	// Clear splitmap
+	void Splitmap::clear() {
+		for (int i = 0; i < splitmap_width; i++) {
+			for (int j = 0; j < splitmap_height; j++) {
+				collision_splitmap[i][j]->clear();
+			}
 		}
 	}
+
+	// Add element to a specific cell of a splitmap
+	void Splitmap::add(int cell_x, int cell_y, gameobject_ptr object) {
+		if (cell_x >= 0 && cell_x < splitmap_width &&
+			cell_y >= 0 && cell_y < splitmap_height) {
+			collision_splitmap[cell_x][cell_y]->push_back(object);
+		}
+
+	}
+
+	// Add element to all cells it intersects with
+	void Splitmap::add(gameobject_ptr object) {
+
+		// if object does not exist, or is not collidable
+		if (!object || !object->getCollision()->getCollidable()) { return; }
+
+		gameobject::BoundingBox bounding_box = object->getCollision()->getBoundingBox();
+		glm::vec2 min_cell_pos, max_cell_pos;
+		min_cell_pos = this->convertRealWorldPositionToCell(object->getX()+ bounding_box.bbox_left, object->getY() + bounding_box.bbox_up);
+		max_cell_pos = this->convertRealWorldPositionToCell(object->getX()+bounding_box.bbox_right, object->getY() + bounding_box.bbox_down);
+		//std::cout << "BBOX : " << min_cell_pos.x << " : " << max_cell_pos.x << std::endl;
+		// Mark all intersecting cells
+		for (int i = min_cell_pos.x; i <= max_cell_pos.x; i++) {
+			for (int j = min_cell_pos.y; j <= min_cell_pos.y; j++) {
+				this->add(i, j, object);
+			}
+		}
+	}
+
+	// General getters
+	int Splitmap::getWidth() {
+		return this->splitmap_width;
+	}
+
+	int Splitmap::getHeight() {
+		return this->splitmap_height;
+	}
+
+	int Splitmap::getCellSize() {
+		return this->splitmap_cellsize;
+	}
+	/*
+		Get a copy of the vector of objects in a given cell.
+	*/
+	bool Splitmap::getCellObjects(int cell_x, int cell_y, std::vector<gameobject_ptr>& vector) {
+		if (cell_x >= 0 && cell_x < splitmap_width &&
+			cell_y >= 0 && cell_y < splitmap_height) {
+			vector = *this->collision_splitmap[cell_x][cell_y];
+			return true;
+		}
+		return false;
+	}
+
+	// convert a realworld position to the cell coordinate on the corresponding splitmap
+	glm::vec2 Splitmap::convertRealWorldPositionToCell(int rpos_x, int rpos_y) {
+		glm::vec2 cell_position;
+		cell_position.x = rpos_x / this->splitmap_cellsize;
+		cell_position.y = rpos_y / this->splitmap_cellsize;
+		return cell_position;
+	}
+
+	// Perform all collision tests
+	void Splitmap::performAllCollisions() {
+
+		/*
+			For every cell, perform collision tests
+			within subjects.
+		
+		*/
+		int collision_tests = 0;
+		for (int i = 0; i < splitmap_width; i++) {
+			for (int j = 0; j < splitmap_height; j++) {
+				auto objects = *collision_splitmap[i][j];
+				//std::cout << "[" << i << "," << j << "] size = " << objects.size() << std::endl;
+
+				/*
+					Perform collisions between pairs of objects, 
+					avoiding testing itself.
+
+					Note: Will need to mark which pairs of objects have
+					already collided
+				*/
+				for (auto object : objects) {
+
+					if (object) {
+						Collision* my_collision = object->getCollision();
+						my_collision->setParent(object);
+
+						for (auto other : objects) {
+							if (other && object != other) {
+
+								// TODO: Check if already tested
+
+								Collision* other_collision = other->getCollision();
+								other_collision->setParent(other);
+								collision_tests++;
+								if (my_collision->intersects(other_collision)) {
+									object->onCollision(other);
+									//std::cout << "collision between objects" << std::endl;
+								}
+
+								// TODO: Mark this as tests
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+			int a;
+			std::cin >> a;
+		}*/
+		
+		std::cout << "COLLISION TESTS: " << collision_tests << std::endl;
+
+	}
+
 
 }

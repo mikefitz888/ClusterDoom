@@ -53,6 +53,7 @@ namespace gamecontroller {
 
 namespace manager {
     class Manager;
+	class Splitmap;
 }
 
 namespace manager {
@@ -92,6 +93,9 @@ namespace manager {
         void removeFromPool(id_t id);
         id_t getFreePoolKey();
 
+		// Event management
+		Splitmap* splitmap;
+
     public:
         Manager();
         inline GameController* getGameController() const { return game_controller; }
@@ -122,7 +126,7 @@ namespace manager {
         //void receiveEvent();
 
         //Manager Methods
-        void init() const;
+        void init();
         void initRenderManager(RenderManager &rm);
         bool render() const;
         RenderManager*   getRenderManager() const;
@@ -137,6 +141,42 @@ namespace manager {
         bool step();
 		void restart();
     };
+
+
+	/*
+		Splitmap:
+			- Splitmap is used by the collision system. It is a 2D array of vectors to type
+			gameobject_ptr.
+			- Each iteration, the splitmap is updated. Each cell contains a list of the objects
+			that intersect with it. This is then used to optimise collisions, as objects only
+			need to test collisions with those other objects sharing cells.
+	
+	
+	*/
+	class Splitmap {
+
+	private:
+		int splitmap_width, splitmap_height, splitmap_cellsize;
+		std::vector<gameobject_ptr> ***collision_splitmap;
+
+	public:
+		Splitmap(int cellsize, int width, int height);
+		~Splitmap();
+
+		void clear();
+		void add(int cell_x, int cell_y, gameobject_ptr object); // Add object to specific cell
+		void add(gameobject_ptr object); // Add using objects collision profile to test intersection
+		int getWidth();
+		int getHeight();
+		int getCellSize();
+		glm::vec2 convertRealWorldPositionToCell(int rpos_x, int rpos_y);
+		
+		// Get a copy of the vector of objects in a given cell.
+		bool getCellObjects(int cell_x, int cell_y, std::vector<gameobject_ptr>& vector);
+		
+		// Perform all collision tests
+		void performAllCollisions();
+	};
 }
 
 #endif //MANAGER_H

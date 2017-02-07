@@ -2,7 +2,10 @@
 #include "../include/AnimatedTexture.h"
 
 namespace worldrenderer {
-    using towerlogic::tower_ptr;
+
+    WorldRenderer::WorldRenderer(Manager* model) :
+        manager(model) {}
+
     void WorldRenderer::init(){
         render_manager = manager->getRenderManager();
 

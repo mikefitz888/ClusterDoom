@@ -2,6 +2,9 @@
 #include "../include/tower.h"
 
 namespace unit {
+    Unit::Unit(id_t id, TYPE unit_type, Manager* m) :
+        GameObject(id, gameobject::TYPE::UNIT, unit_type, m) {}
+
     void Unit::init() {
         render_manager = manager->getRenderManager();
 

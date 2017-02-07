@@ -3,6 +3,9 @@
 #include "../include/Towers/Base.h"
 
 namespace towerlogic {
+    TowerLogic::TowerLogic(Manager* m) :
+        manager(m) {}
+
     tower_ptr TowerLogic::createTower(tower::TYPE type) const {
         return manager->createTower(type);
     }
@@ -14,21 +17,28 @@ namespace towerlogic {
         case tower::TYPE::BASIC:
             return new tower::BasicTower(key, manager);
         case tower::TYPE::BASE:
-			return new tower::Base(key, manager);
+            return new tower::Base(key, manager);
         default:
             std::cout << "FATAL ERROR! INCORRECT INSTANCE, nullptr RETURNED" << std::endl;
             return nullptr;
         }
     }
 
-	std::vector<tower_ptr>& TowerLogic::getTowers() {
-		return towers;
-	} //TODO: filter out BASE
+    std::vector<tower_ptr>& TowerLogic::getTowers() {
+        return towers;
+    } //TODO: filter out BASE
 
-	tower_ptr TowerLogic::getBase() {
-		return towers[0];
-		//return nullptr;
-	}
+    tower_ptr TowerLogic::getBase() {
+        return towers[0];
+        //return nullptr;
+    }
+
+    void TowerLogic::clean() {
+        towers.erase(std::remove_if(towers.begin(), towers.end(), [&](tower_ptr x)
+        {
+            return !(x.valid());
+        }), towers.end());
+    }
 
     void TowerLogic::giveSlavePtr(tower_ptr towerptr){
         //Look for free place in towers pool

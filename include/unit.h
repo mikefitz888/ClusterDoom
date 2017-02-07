@@ -7,7 +7,7 @@
 #include "gamecontroller.h"
 #include "aStar.h"
 
-void aStar(gameobject::Point<int> start, gameobject::Point<int> end, const int w, const int h, gamecontroller::GameController *gc, std::vector<gameobject::Point<int>>& ret);
+//void aStar(gameobject::Point<int> start, gameobject::Point<int> end, const int w, const int h, gamecontroller::GameController *gc, std::vector<gameobject::Point<int>>& ret);
 
 namespace unit {
     using gameobject::id_t;
@@ -33,7 +33,7 @@ namespace unit {
 		std::vector<Point<int>> path;
 
     public:
-        inline Unit(id_t id, TYPE unit_type, Manager* m) : GameObject(id, gameobject::TYPE::UNIT, unit_type, m) {}
+        Unit(id_t id, TYPE unit_type, Manager* m);
         //IRenderable methods
         virtual void init() override;
         virtual void render() override;

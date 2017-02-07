@@ -75,14 +75,6 @@ namespace gameobject {
     enum TYPE : unsigned int {TOWER=0, UNIT, OBJECT};
     enum OBJECT_TYPE : unsigned int { SPAWN = 0 };
 
-    /*template <typename T>
-    struct Point {
-        inline Point(T x_, T y_) : x(x_), y(y_) {}
-        T x;
-        T y;
-        inline T distanceTo(Point target) const {return sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
-    };*/
-
 
     /*
         Gameobject abstract class
@@ -92,7 +84,6 @@ namespace gameobject {
         const id_t id_;
         const id_t super_type_ = 0;
         const id_t sub_type_ = 0;
-        //typedef void (GameObject::*fn_ptr)(void*, void*);
     protected:
         Manager* manager;
         RenderManager* render_manager = nullptr;
@@ -107,7 +98,6 @@ namespace gameobject {
         gameobject_ptr self = nullptr;
 
         int _destroySelf();
-        //std::map<std::string, fn_ptr> fn_hooks = std::map<std::string, fn_ptr>();
     public:
         int delete_queue = 0;
         GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m); //Very important to get key from manager (for memory management + networking)
@@ -145,18 +135,6 @@ namespace gameobject {
         Point<int> getJitter();
 
         void demoDestroy();
-
-        /*
-        inline void testing(void* arg, void* ret) { std::cout << "Testing" << std::endl; }
-        inline void call(const std::string& fn_name, void* _arg = nullptr, void* _ret = nullptr) {
-            std::map<std::string, fn_ptr>::iterator fn = fn_hooks.find(fn_name);
-            if (fn != fn_hooks.end()) {
-                (this->*(fn->second))(_arg, _ret);
-            } else {
-                std::cout << "ERROR: Function is not exposed to call()." << std::endl;
-            }
-        }
-        */
     };
 
 

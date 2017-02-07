@@ -15,9 +15,9 @@ namespace unitlogic {
         std::vector<unit_ptr> units;
         Manager* manager;
     public:
-        inline UnitLogic(Manager* m) : manager(m) {};
-        inline std::vector<unit_ptr> getUnits() const {    return units; }
-        inline void clean() { units.erase(std::remove_if(units.begin(), units.end(), [](unit_ptr &x) {return !(x.valid()); }), units.end()); }
+        UnitLogic(Manager* m);
+        std::vector<unit_ptr> getUnits() const;
+        void clean();
         Unit* createUnit(id_t key, unit::TYPE type) const;
         unit_ptr createUnit(unit::TYPE type) const;
         void removeUnit(unit_ptr unit);

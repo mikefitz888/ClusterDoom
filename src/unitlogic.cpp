@@ -1,7 +1,22 @@
 #include "../include/unitlogic.h"
 #include "../include/Units/BasicUnit.h"
 
-namespace unitlogic {
+namespace unitlogic
+{
+    UnitLogic::UnitLogic(Manager* m) :
+        manager(m) {}
+
+    std::vector<unit_ptr> UnitLogic::getUnits() const {
+        return units;
+    }
+
+    void UnitLogic::clean() {
+        units.erase(std::remove_if(units.begin(), units.end(), [](unit_ptr &x)
+        {
+            return !(x.valid());
+        }), units.end());
+    }
+
     unit_ptr UnitLogic::createUnit(unit::TYPE type) const {
         return manager->createUnit(type);
     }

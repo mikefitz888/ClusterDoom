@@ -4,32 +4,39 @@
 
 namespace graphics {
 
-	// Resource loading
-	void RenderManager::loadResources() {
-		ResourceManager *rm = this->manager->getResourceManager();
+    // Resource loading
+    void RenderManager::loadResources() {
+        ResourceManager *rm = this->manager->getResourceManager();
 
-		// Load Textures
-		rm->textureLoad("background", "src/Resources/Textures/grass/grass_template.jpg");
-		rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png")->setOriginCentre();
-		rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
-		rm->textureLoad("red", "src/Resources/Textures/red.png")->setOriginCentre();
-		rm->textureLoad("base_image", "src/Resources/Textures/base.png");
-		rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
-		rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
-		rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();
+        // Load Textures
+        rm->textureLoad("background", "src/Resources/Textures/grass/grass_template.jpg");
+        rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png")->setOriginCentre();
+        rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
+        rm->textureLoad("red", "src/Resources/Textures/red.png")->setOriginCentre();
+        rm->textureLoad("base_image", "src/Resources/Textures/base.png");
+        rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
+        rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
+        rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();
 
-		// Load Animated Textures
-		//rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
+        // Load Animated Textures
+        //rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
 
-		// Load Shaders
-		rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
-		rm->shaderLoad( "health_bar_mask_shader",
-						"src/Resources/Shaders/health_bar_mask_shd_vert.glsl",
-						"src/Resources/Shaders/health_bar_mask_shd_frag.glsl");
-		// Load fonts
-		rm->fontLoad("agency", "src/Resources/Fonts/AGENCYR.TTF");
-	}
+        // Load Shaders
+        rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
+        rm->shaderLoad( "health_bar_mask_shader",
+                        "src/Resources/Shaders/health_bar_mask_shd_vert.glsl",
+                        "src/Resources/Shaders/health_bar_mask_shd_frag.glsl");
+        // Load fonts
+        rm->fontLoad("agency", "src/Resources/Fonts/AGENCYR.TTF");
+    }
 
+    GCamera::GCamera(RenderManager* render_manager_) :
+        render_manager(render_manager_) {}
+
+    GCameraOrtho::GCameraOrtho(int width_, int height_, RenderManager* render_manager_) :
+        GCamera(render_manager_),
+        width(width_),
+        height(height_) {}
 
     // Init function
     void RenderManager::init(Manager *manager) {
@@ -61,7 +68,7 @@ namespace graphics {
 
         // Load resources
         this->loadResources();
-		RenderUtils::init(this->manager);
+        RenderUtils::init(this->manager);
 
         // Call active parent init
         if (render_parent != nullptr) {
@@ -194,10 +201,10 @@ namespace graphics {
         }
     }
 
-	void RenderManager::resetActiveShader() {
-		sf::Shader *shd = manager->getResourceManager()->getShader("default");
-		setActiveShader(shd);
-	}
+    void RenderManager::resetActiveShader() {
+        sf::Shader *shd = manager->getResourceManager()->getShader("default");
+        setActiveShader(shd);
+    }
 
     void RenderManager::setActiveColour(Colour c) {
         this->active_colour = c;
@@ -240,9 +247,9 @@ namespace graphics {
         }
         glBindTexture(GL_TEXTURE_2D, gl_tex_id);
 
-		// Bind texture unit to uniform name
-		GLuint tex_location = glGetUniformLocation(active_shader->getNativeHandle(), texture_uniform_name);
-		glUniform1i(tex_location, texture_unit);
+        // Bind texture unit to uniform name
+        GLuint tex_location = glGetUniformLocation(active_shader->getNativeHandle(), texture_uniform_name);
+        glUniform1i(tex_location, texture_unit);
     }
 
     void RenderManager::release() const {
@@ -363,18 +370,18 @@ namespace graphics {
 
     ////////////////////////////////////////////////////
     // TEXTURE METHODS
-	graphics::Texture::Texture(RenderManager *render_manager) : sf::Texture() {
-		this->render_manager = render_manager;
-	}
+    graphics::Texture::Texture(RenderManager *render_manager) : sf::Texture() {
+        this->render_manager = render_manager;
+    }
 
-	void graphics::Texture::setOrigin(int x, int y) {
-		this->origin_x = x;
-		this->origin_y = y;
-	}
+    void graphics::Texture::setOrigin(int x, int y) {
+        this->origin_x = x;
+        this->origin_y = y;
+    }
 
-	void graphics::Texture::setOriginCentre() {
-		setOrigin(getSize().x / 2, getSize().y / 2);
-	}
+    void graphics::Texture::setOriginCentre() {
+        setOrigin(getSize().x / 2, getSize().y / 2);
+    }
 
     void graphics::Texture::createVertexBuffer() {
         // Create vertex buffer
@@ -390,38 +397,38 @@ namespace graphics {
         this->texture_quad->render();
     }
 
-	void graphics::Texture::render(int x, int y, float rotation) {
-		glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
+    void graphics::Texture::render(int x, int y, float rotation) {
+        glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f) );
-		transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
+        transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
 
-		this->render_manager->setWorldMatrix(transform);
-		this->render();
-	}
+        this->render_manager->setWorldMatrix(transform);
+        this->render();
+    }
 
-	void graphics::Texture::render(int x, int y, float xscale, float yscale, float rotation) {
-		glm::mat4 transform = glm::mat4();
-		transform = glm::translate(transform, glm::vec3(x, y, 0.0));
-		transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+    void graphics::Texture::render(int x, int y, float xscale, float yscale, float rotation) {
+        glm::mat4 transform = glm::mat4();
+        transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+        transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-		transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
+        transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
 
-		this->render_manager->setWorldMatrix(transform);
-		this->render();
-	}
+        this->render_manager->setWorldMatrix(transform);
+        this->render();
+    }
 
-	void graphics::Texture::render(int x, int y, int width, int height, float rotation) {
-		float xscale = (float)width / (float)this->getSize().x;
-		float yscale = (float)height / (float)this->getSize().y;
-		glm::mat4 transform = glm::mat4();
-		transform = glm::translate(transform, glm::vec3(x, y, 0.0));
-		transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+    void graphics::Texture::render(int x, int y, int width, int height, float rotation) {
+        float xscale = (float)width / (float)this->getSize().x;
+        float yscale = (float)height / (float)this->getSize().y;
+        glm::mat4 transform = glm::mat4();
+        transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+        transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
-		transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
+        transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
 
-		this->render_manager->setWorldMatrix(transform);
-		this->render();
-	}
+        this->render_manager->setWorldMatrix(transform);
+        this->render();
+    }
 
 
     bool graphics::Texture::loadFromFile(sf::String resource_filepath) {

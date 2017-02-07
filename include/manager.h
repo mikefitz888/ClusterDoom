@@ -29,7 +29,7 @@ namespace manager {
     using graphics::RenderManager;
     using worldrenderer::WorldRenderer;
     using network::NetworkManager;
-	using gameobject::Collision;
+    using gameobject::Collision;
 
     //typedef size_t id_t;
 
@@ -40,7 +40,7 @@ namespace manager {
         TowerLogic* tower_logic;
         UnitLogic* unit_logic;
         GameController* game_controller; //IRenderable
-		ObjectLogic* object_logic;
+        ObjectLogic* object_logic;
 
         RenderManager*  render_manager    = nullptr;
         WorldRenderer*  world_renderer    = nullptr;
@@ -54,12 +54,12 @@ namespace manager {
 
     public:
         Manager();
-        inline GameController* getGameController() const { return game_controller; }
+        GameController* getGameController() const;
         //Tower Methods
         slave_ptr<Tower> createTower(tower::TYPE type);
-		slave_ptr<GameObject> createObject(gameobject::OBJECT_TYPE type);
+        slave_ptr<GameObject> createObject(gameobject::OBJECT_TYPE type);
         void destroyTower(slave_ptr<Tower> tower);
-		void clearTowers();
+        void clearTowers();
         std::vector<slave_ptr<Tower>>& getTowers() const;
 
         //Unit Methods
@@ -91,11 +91,11 @@ namespace manager {
         void release();
         void renderAll();
         void stepAll();
-		void collisionAll();
+        void collisionAll();
 
 
         bool step();
-		void restart();
+        void restart();
     };
 }
 

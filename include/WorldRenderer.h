@@ -12,6 +12,8 @@ namespace worldrenderer {
     using graphics::IRenderable;
     using graphics::RenderManager;
     using manager::Manager;
+    using towerlogic::tower_ptr;
+
     class WorldRenderer : public IRenderable {
         Manager* manager = nullptr;
         RenderManager* render_manager = nullptr;
@@ -27,7 +29,7 @@ namespace worldrenderer {
         ///
 
     public:
-        inline WorldRenderer(Manager* model) : manager(model) {}
+        WorldRenderer(Manager* model);
         void init() override;
         void render() override;
         void renderGUI() override;

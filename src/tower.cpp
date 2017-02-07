@@ -3,6 +3,10 @@
 
 namespace tower {
     using namespace graphics;
+
+    Tower::Tower(id_t id, TYPE tower_type, Manager* m) :
+        GameObject(id, gameobject::TYPE::TOWER, tower_type, m) {}
+
     void Tower::init(){
         render_manager = manager->getRenderManager();
 
@@ -23,7 +27,7 @@ namespace tower {
 
         vbuff = new graphics::VertexBuffer();
         hpbar_buff = new graphics::VertexBuffer();
-        
+
         vbuff->addQuad(-32.0f, -32.0f, 32.0f, 32.0f);
 
         hpbar_buff->addQuadRGBA(-32.0f, -2.0f, 32.0f, 2.0f, 1.0f, 0.0f, 0.0f, 1.0f);
@@ -35,24 +39,24 @@ namespace tower {
     void Tower::render(){
         render_manager->setActiveShader(shader);
         render_manager->setTexture(texture);
-        
+
         render_manager->setActiveColour(Colour(0, 0, 255, 255));
         glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY(), 0.0));
         render_manager->setWorldMatrix(transform);
         vbuff->render();
         render_manager->setActiveColour(Colour(255, 255, 255, 255));
-        
+
         render_manager->setTexture(red);
         float hp = (float) health / 100;
         transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY()-50, 0.0));
         transform = glm::scale(transform, glm::vec3(hp, 1.0f, 1.0f));
         render_manager->setWorldMatrix(transform);
         hpbar_buff->render();
-        
+
     }
 
     void Tower::renderGUI(){
-		
+
     }
 
     void Tower::release(){
@@ -64,7 +68,7 @@ namespace tower {
 
     //Gameplay Methods
     void Tower::step() {
-        if(health == 0) { 
+        if(health == 0) {
             manager->getAudioManager()->playSound("cannon");
         }
 
@@ -78,7 +82,7 @@ namespace tower {
 		//TODO: update render positions
 		render_position.x -= (render_position.x - position.x) / 20;
 		render_position.y -= (render_position.y - position.y) / 20;
-        
+
         auto units = manager->getUnits();
         for(auto unit : units) {
             if( (unit->getX()-getX())*(unit->getX()-getX()) + (unit->getY() - getY())*(unit->getY() - getY()) < 10000) {
@@ -86,8 +90,10 @@ namespace tower {
                 return;
             }
         }
+    }
 
-        
+    float Tower::getHealth() const {
+        return health;
     }
 
     void Tower::attack(unit_ptr unit)    {
@@ -95,6 +101,7 @@ namespace tower {
     }
 
     // BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
+    // TODO: Remove this and use getSharedPtr() instead!
     void Tower::attacked(GameObject& aggressor) {
         if (health > 0)
         {

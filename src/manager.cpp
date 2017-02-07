@@ -6,21 +6,25 @@ namespace manager {
     Manager::Manager() {
         tower_logic      = new TowerLogic(this);
         unit_logic       = new UnitLogic(this);
-		object_logic     = new ObjectLogic(this);
+        object_logic     = new ObjectLogic(this);
         game_controller  = new GameController(this);
         network_manager  = new NetworkManager(this);
         resource_manager = new ResourceManager(this);
         audio_manager    = new AudioManager(this);
     }
 
-	// Object Methods
-	slave_ptr<GameObject> Manager::createObject(gameobject::OBJECT_TYPE type) {
-		auto obj = object_logic->createObject(getFreePoolKey(), type);
-		addToPool(obj);
-		obj->init();
-		auto passback = slave_ptr<GameObject>(static_pointer_cast<GameObject>(game_object_pool[obj->getID()]));
-		return passback;
-	}
+    // Object Methods
+    slave_ptr<GameObject> Manager::createObject(gameobject::OBJECT_TYPE type) {
+        auto obj = object_logic->createObject(getFreePoolKey(), type);
+        addToPool(obj);
+        obj->init();
+        auto passback = slave_ptr<GameObject>(static_pointer_cast<GameObject>(game_object_pool[obj->getID()]));
+        return passback;
+    }
+
+    GameController* Manager::getGameController() const {
+        return game_controller;
+    }
 
     //Tower Methods
     slave_ptr<Tower> Manager::createTower(tower::TYPE type){
@@ -37,17 +41,17 @@ namespace manager {
         removeFromPool(tower->getID());
     }
 
-	void Manager::clearTowers() {
-		for (auto tower : (this->tower_logic)->getTowers()) {
-			id_t id = tower->getID();
-			game_object_pool[id].invalidate();
-			free_id_list.push_back(id);
-			network_manager->sendInstanceDestroy(id);
-		}
+    void Manager::clearTowers() {
+        for (auto tower : (this->tower_logic)->getTowers()) {
+            id_t id = tower->getID();
+            game_object_pool[id].invalidate();
+            free_id_list.push_back(id);
+            network_manager->sendInstanceDestroy(id);
+        }
 
-		tower_logic->clean();
-		unit_logic->clean();
-	}
+        tower_logic->clean();
+        unit_logic->clean();
+    }
 
     std::vector<slave_ptr<Tower>>& Manager::getTowers() const {
         return (this->tower_logic)->getTowers();
@@ -102,12 +106,12 @@ namespace manager {
         std::cout << "Object added to pool with id = " << id << std::endl;
         std::cout << "Pool size now = " << game_object_pool.size() << std::endl;
 
-		// Set shared pointer
-		gameobject_ptr self = game_object_pool[id];
-		self->setSharedPtr(self);
+        // Set shared pointer
+        gameobject_ptr self = game_object_pool[id];
+        self->setSharedPtr(self);
 
-		// Run setup
-		self->setup();
+        // Run setup
+        self->setup();
 
         // Network update
         network_manager->sendInstanceCreate(id, game_object->getSuperType());
@@ -201,59 +205,59 @@ namespace manager {
 
     void Manager::stepAll() {
         //std::cout << "stepAll()" << std::endl;
-		std::vector<slave_ptr<GameObject>> copy;
-		for (slave_ptr<GameObject> obj : game_object_pool) {
-			copy.push_back(obj);
-		}
+        std::vector<slave_ptr<GameObject>> copy;
+        for (slave_ptr<GameObject> obj : game_object_pool) {
+            copy.push_back(obj);
+        }
         for (slave_ptr<GameObject> obj :copy) {
             if(obj) obj->step();
         }
     }
 
 
-	void Manager::restart() {}
+    void Manager::restart() {}
 
-	/*
-		Performs collisions between all the given objects and fires off events
-		for those objects that collide with each other.
+    /*
+        Performs collisions between all the given objects and fires off events
+        for those objects that collide with each other.
 
-		Collision events will run both ways if the objects continue to collide.
+        Collision events will run both ways if the objects continue to collide.
 
-	*/
-	void Manager::collisionAll() {
+    */
+    void Manager::collisionAll() {
 
-	/*
-	Create a copy of the object list. This allows objects
-	to destroy themselves during the collision event.
-	*/
+    /*
+    Create a copy of the object list. This allows objects
+    to destroy themselves during the collision event.
+    */
 
-	std::vector<slave_ptr<GameObject>> copy;
-	for (slave_ptr<GameObject> obj : game_object_pool) {
-		copy.push_back(obj);
-	}
+    std::vector<slave_ptr<GameObject>> copy;
+    for (slave_ptr<GameObject> obj : game_object_pool) {
+        copy.push_back(obj);
+    }
 
-	/*
-	For every object, test collisions against every other
-	object (excluding self).
-	*/
+    /*
+    For every object, test collisions against every other
+    object (excluding self).
+    */
 
-		for (slave_ptr<GameObject> obj : copy) {
+        for (slave_ptr<GameObject> obj : copy) {
 
-			for (slave_ptr<GameObject> other : copy) {
+            for (slave_ptr<GameObject> other : copy) {
 
-				if (obj && other && obj != other) {
+                if (obj && other && obj != other) {
 
-					Collision* my_collision    = obj->getCollision();
-					Collision* other_collision = other->getCollision();
+                    Collision* my_collision    = obj->getCollision();
+                    Collision* other_collision = other->getCollision();
 
-					if (my_collision->intersects(other_collision)) {
-						obj->onCollision(other);
-						std::cout << "collision between objects" << std::endl;
-					}
-				}
-			}
+                    if (my_collision->intersects(other_collision)) {
+                        obj->onCollision(other);
+                        std::cout << "collision between objects" << std::endl;
+                    }
+                }
+            }
 
-		}
-	}
+        }
+    }
 
 }

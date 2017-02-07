@@ -14,14 +14,14 @@ namespace towerlogic {
 
     class TowerLogic {
         std::vector<tower_ptr> towers;
-        Manager * manager;
+        Manager* manager;
 
     public:
-        inline TowerLogic(Manager* m) : manager(m) {};
-		std::vector<tower_ptr>& getTowers();
-		tower_ptr getBase();
+        TowerLogic(Manager* m);
+        std::vector<tower_ptr>& getTowers();
+        tower_ptr getBase();
 
-        inline void clean() { towers.erase(std::remove_if(towers.begin(), towers.end(), [&](tower_ptr x) {return !(x.valid()); }), towers.end()); }
+        void clean();
         Tower* createTower (id_t key, tower::TYPE type) const;
         tower_ptr createTower(tower::TYPE type) const;
         void removeTower(int x, int y);

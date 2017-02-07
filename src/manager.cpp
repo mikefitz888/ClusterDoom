@@ -349,6 +349,7 @@ namespace manager {
 				collision_splitmap[i][j]->clear();
 			}
 		}
+		tested_objects.clear();
 	}
 
 	// Add element to a specific cell of a splitmap
@@ -423,7 +424,6 @@ namespace manager {
 		for (int i = 0; i < splitmap_width; i++) {
 			for (int j = 0; j < splitmap_height; j++) {
 				auto objects = *collision_splitmap[i][j];
-				//std::cout << "[" << i << "," << j << "] size = " << objects.size() << std::endl;
 
 				/*
 					Perform collisions between pairs of objects, 
@@ -441,28 +441,27 @@ namespace manager {
 						for (auto other : objects) {
 							if (other && object != other) {
 
-								// TODO: Check if already tested
+								// Check if already tested
+								std::pair<gameobject_ptr, gameobject_ptr> object_pair(object, other);
+								bool already_tested = tested_objects.find(object_pair) != tested_objects.end();
 
-								Collision* other_collision = other->getCollision();
-								other_collision->setParent(other);
-								collision_tests++;
-								if (my_collision->intersects(other_collision)) {
-									object->onCollision(other);
-									//std::cout << "collision between objects" << std::endl;
+								if (!already_tested) {
+									Collision* other_collision = other->getCollision();
+									other_collision->setParent(other);
+									collision_tests++;
+									if (my_collision->intersects(other_collision)) {
+										object->onCollision(other);
+									}
+
+									// Mark this as tested, so we don't run the collision event twice
+									tested_objects.insert(object_pair);
 								}
-
-								// TODO: Mark this as tests
 							}
 						}
 					}
 				}
 			}
 		}
-		
-		/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-			int a;
-			std::cin >> a;
-		}*/
 		
 		std::cout << "COLLISION TESTS: " << collision_tests << std::endl;
 

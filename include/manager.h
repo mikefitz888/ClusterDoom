@@ -2,6 +2,7 @@
 #define MANAGER_H
 
 #include <vector>
+#include <unordered_set>
 #include "smartpointers.h"
 #include "unitlogic.h"
 #include "towerlogic.h"
@@ -153,11 +154,13 @@ namespace manager {
 	
 	
 	*/
+
 	class Splitmap {
 
 	private:
 		int splitmap_width, splitmap_height, splitmap_cellsize;
 		std::vector<gameobject_ptr> ***collision_splitmap;
+		std::unordered_set<std::pair<gameobject_ptr, gameobject_ptr>> tested_objects;
 
 	public:
 		Splitmap(int cellsize, int width, int height);
@@ -175,6 +178,9 @@ namespace manager {
 		bool getCellObjects(int cell_x, int cell_y, std::vector<gameobject_ptr>& vector);
 		
 		// Perform all collision tests
+		/*
+			This will fire off collision events for the objects
+		*/
 		void performAllCollisions();
 	};
 }

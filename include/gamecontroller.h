@@ -4,7 +4,7 @@
 #include "gamecore.h"
 
 #include "gameobject.h"
-#include "GameObjects\Spawn.h"
+#include "GameObjects/Spawn.h"
 #include "manager.h"
 #include "../include/network/Buffer.h"
 

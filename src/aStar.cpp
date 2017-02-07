@@ -1,4 +1,5 @@
 #include "../include/unit.h"
+#include "../include/aStar.h"
 
 // TOM: namespace pollution... either `using` the things you need or std qualify
 //using namespace std;

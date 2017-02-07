@@ -143,8 +143,8 @@ namespace gameobject {
 
 	struct BoundingBox;
 	template <typename T> struct Point;
-
-	enum CollisionType;
+  
+	enum CollisionType : unsigned int;
 	enum OBJECT_TYPE : unsigned int;
 	enum TYPE : unsigned int;
 

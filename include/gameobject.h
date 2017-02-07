@@ -77,7 +77,7 @@ namespace gameobject {
 		void setTypeSquare(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
 		void setTypeSquare(BoundingBox box);
 		void setCollidable(bool collidable);
-		inline bool getCollidable() { return this->is_collidable;  }
+		bool getCollidable();
 
 		bool intersects(Collision* collision);
 		bool intersects(Collision* collision, int x, int y);

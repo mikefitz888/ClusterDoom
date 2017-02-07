@@ -137,6 +137,10 @@ namespace gameobject {
 		this->is_collidable = collidable;
 	}
 
+	bool Collision::getCollidable(){ 
+		return this->is_collidable; 
+	}
+
 	// Returns the bounding radius
 	/*
 		If collision type circle, this matches the set radius.

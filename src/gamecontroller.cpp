@@ -10,6 +10,7 @@ namespace gamecontroller {
 	}*/
 
     int GameController::getWeight(int x, int y){
+    	//Return negative for an obstacle
     	return 0;
     }
 
@@ -450,10 +451,10 @@ namespace gamecontroller {
 	}
 
 	int GameController::getScreenWidth() {
-		return 1920;
+		return 20;
 	}
 
 	int GameController::getScreenHeight() {
-		return 1080;
+		return 20;
 	}
 }

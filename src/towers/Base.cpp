@@ -1,4 +1,5 @@
 #include "../../include/Towers/Base.h"
+#include "../../include/ResourceManager.h"
 
 namespace tower {
 	Base::Base(id_t key, Manager* m) : Tower(key, TYPE::BASE, m) {

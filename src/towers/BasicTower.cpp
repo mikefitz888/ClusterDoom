@@ -1,5 +1,6 @@
 #include "../../include/Towers/BasicTower.h"
 #include "../../include/RenderUtils.h"
+#include "../../include/ResourceManager.h"
 
 using graphics::RenderUtils;
 using graphics::Colour;

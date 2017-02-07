@@ -93,28 +93,30 @@ namespace gamecontroller {
         spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672)));
         spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672)));
 
+
         startCVServer();
     }
 
     void GameController::step() {
-        frame_clock++;
-        //In general, step() should be frame-based.
+
+		frame_clock++;
+		//In general, step() should be frame-based.
+        
 
 
+		// Perform 
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+			if (!spawned) {
+				sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+				spawnUnitAt(mouse_pos.x, mouse_pos.y);
+				//spawned = true;
+			}
+		} else {
+			spawned = false;
+		}
 
-        // Perform
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-            if (!spawned) {
-                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                spawnUnitAt(mouse_pos.x, mouse_pos.y);
-                spawned = true;
-            }
-        } else {
-            spawned = false;
-        }
-
-        //In general, step() should be frame-based.
-        cvNetworkStep();
+		//In general, step() should be frame-based.
+		cvNetworkStep();
         manager->stepAll();
         manager->collisionAll();
 

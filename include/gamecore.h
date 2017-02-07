@@ -20,6 +20,7 @@
 #include <thread>
 #include <unordered_map>
 #include <vector>
+#include <unordered_set>
 
 // Shared GLEW
 #include <GL/glew.h>
@@ -50,6 +51,8 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
+
+#include "smartpointers.h"
 
 // Forward declarations
 class AudioManager;
@@ -106,6 +109,7 @@ namespace graphics {
 
 namespace manager {
     class Manager;
+	class Splitmap;
 
     typedef size_t id_t;
 }
@@ -131,10 +135,11 @@ namespace towerlogic {
 }
 
 namespace unit {
-    class BasicUnit;
-    class Unit;
+	class BasicUnit;
+	class Unit;
 
-    enum TYPE : unsigned int;
+	enum TYPE : unsigned int;
+
 }
 
 namespace gameobject {
@@ -159,6 +164,11 @@ namespace gameobject {
     typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
     typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
 }
+
+namespace unit {
+	using gameobject::gameobject_ptr;
+}
+
 
 namespace unitlogic {
     class UnitLogic;

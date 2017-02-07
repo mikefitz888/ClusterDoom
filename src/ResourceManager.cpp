@@ -1,3 +1,4 @@
+#include "../include/ResourceManager.h"
 #include "../include/manager.h"
 #include "../include/AnimatedTexture.h"
 

@@ -1,5 +1,6 @@
 #include "../include/AudioManager.h"
 #include "../include/manager.h"
+#include "../include/ResourceManager.h"
 
 // Constructor
 AudioManager::AudioManager(manager::Manager* manager) {

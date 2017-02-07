@@ -1,6 +1,8 @@
 #include "../include/RenderManager.h"
 #include "../include/manager.h"
 #include "../include/RenderUtils.h"
+#include "../include/VertexBuffer.h"
+#include "../include/ResourceManager.h"
 
 namespace graphics {
 

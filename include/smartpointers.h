@@ -527,6 +527,16 @@ namespace std
             return std::hash<T*>()(p.get());
         }
     };
+
+	template <typename T, typename U>
+	struct hash<std::pair<T, U>> {
+		size_t operator () (const std::pair<T, U> & p) const {
+			//return (hash<smartpointers::slave_ptr<T>>()(p.first) + hash<smartpointers::slave_ptr<T>>()(p.second) * 458481);
+			//return std::hash<T>(p.first)()+ std::hash<U>(p.second)() * 458481;//std::hash<T*>()(p.first.get()) + std::hash<U*>()(p.second.get()) * 458481;
+			//return std::hash<T*>()(p.get())
+			return hash<T>()(p.first) + hash<U>()(p.second) * 458481;
+		}
+	};
 }
 
 #endif //SMARTPOINTERS_H

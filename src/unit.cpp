@@ -1,5 +1,6 @@
 #include "../include/unit.h"
 #include "../include/tower.h"
+#include "../include/ResourceManager.h"
 
 namespace unit {
     Unit::Unit(id_t id, TYPE unit_type, Manager* m) :

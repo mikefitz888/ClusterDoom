@@ -1,5 +1,6 @@
 #include "../include/RenderUtils.h"
 #include "../include/manager.h"
+#include "../include/ResourceManager.h"
 
 using graphics::RenderUtils;
 using graphics::Colour;

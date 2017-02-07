@@ -7,6 +7,8 @@
 #include "GameObjects/Spawn.h"
 #include "manager.h"
 #include "../include/network/Buffer.h"
+#include "../include/tower.h"
+#include "../include/unit.h"
 
 #define NO_MATCH -1
 

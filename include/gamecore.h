@@ -138,20 +138,26 @@ namespace unit {
 }
 
 namespace gameobject {
-	class Collision;
-	class GameObject;
+    class Collision;
+    class GameObject;
 
-	struct BoundingBox;
-	template <typename T> struct Point;
-  
-	enum CollisionType : unsigned int;
-	enum OBJECT_TYPE : unsigned int;
-	enum TYPE : unsigned int;
+    struct BoundingBox;
+    //template <typename T> struct Point;
+    template <typename T> struct Point {
+        inline Point(T x_, T y_) : x(x_), y(y_) {}
+        T x;
+        T y;
+        inline T distanceTo(Point target) const {return sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
+    };
 
-	typedef size_t id_t;
-	typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
-	typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
-	typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
+    enum CollisionType : unsigned int;
+    enum OBJECT_TYPE : unsigned int;
+    enum TYPE : unsigned int;
+
+    typedef size_t id_t;
+    typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
+    typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
+    typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
 }
 
 namespace unitlogic {

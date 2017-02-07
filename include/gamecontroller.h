@@ -61,8 +61,8 @@ namespace gamecontroller {
     public:
         GameController(Manager* m);
        // GameObject* createObject(id_t key);
-        inline float getElapsedTime() { return (float)frame_clock / 60.0f; }
-        inline void resetClock() { frame_clock = 0; };
+        float getElapsedTime() const;
+        void resetClock();
         void init();
         void step();
         void restart() const;

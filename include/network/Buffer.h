@@ -77,8 +77,6 @@ void Buffer::read_str(char* string) {
     //*string = *((char*)dataP);
 }
 
-
-
 Buffer::Buffer() {
     max_size = 1024;
     buffer = new byte[max_size];

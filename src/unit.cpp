@@ -112,6 +112,10 @@ namespace unit {
         tower->attacked(*this);
     }
 
+    // NETWORK EVENTS
+    void Unit::writeNetworkUpdate(int event_id, Buffer &buffer) {}
+    void Unit::recvNetworkInteraction(int event_id, Buffer &buffer) {}
+
     // BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
     void Unit::attacked(GameObject& aggressor) {
         health--;

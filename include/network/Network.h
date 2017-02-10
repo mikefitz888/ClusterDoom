@@ -42,7 +42,7 @@ namespace network {
         void release();                                        // Force disconnects a socket and cleans up any data.
 
         // Network update functions
-        void sendInstanceCreate(int instance_id, int instance_type);
+        void sendInstanceCreate(int instance_id, int instance_super_type, int instance_sub_type);
         void sendInstanceDestroy(int instance_id);
     };
 
@@ -70,8 +70,8 @@ namespace network {
         void release();
 
         // Network update functions
-        void sendInstanceCreate(NetworkClient *client, int instance_id, int instance_type);
-        void sendInstanceCreate(int instance_id, int instance_type);
+        void sendInstanceCreate(NetworkClient *client, int instance_id, int instance_super_type, int instance_sub_type);
+        void sendInstanceCreate(int instance_id, int instance_super_type, int instance_sub_type);
         void sendInstanceDestroy(int instance_id);
         void sendAllInstancesToClient(NetworkClient *network_client);
 
@@ -152,6 +152,24 @@ namespace network {
             sendNetworkUpdate( int event_id ) function should be used. This is ESSENTIAL as it wraps the packet in a header
             which contains information about the specific kind of global network event it is, and an instance id to ensure
             the corresponding instance on the client devices responds to an update.
+
+			--------------------------------------------------------------
+			KEY CONSIDERATIONS:
+			- Every object must maintain lists of its own events, these do not have to match any other events. 
+			- The lists: "Interaction events" and "Update Events" correspond to the two types of network events that can affect an object.
+
+				Interaction events - These are events triggered by the client. The client can send one of these events to the server with a 
+								     packet of data. The server-side object will trigger the interaction handling event, where it can then 
+									 read in the data and perform an appropriate action.
+
+				Update events - These are events sent from the server to the client. This gives the server an opportunity to update the 
+				                remote state of each object.
+
+				- Both of these event lists must be paralleled on the server and client. Both need to implement the events in order for
+				the system to function. If the server sends data that the phone ignores, this can cause other issues.
+
+				- Objects are responsible for the frequency at which they send updates. They shouldn't send updates constantly, however
+				  key events 
         */
         virtual void writeNetworkUpdate(int event_id, Buffer &buffer) = 0;
         virtual void recvNetworkInteraction(int event_id, Buffer &buffer) = 0;

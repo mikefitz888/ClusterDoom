@@ -88,14 +88,14 @@ namespace network {
     }
 
     // Invokes an instance creation on all clients
-    void NetworkManager::sendInstanceCreate(int instance_id, int instance_type) {
+    void NetworkManager::sendInstanceCreate(int instance_id, int instance_super_type, int instance_sub_type) {
         for (NetworkClient* it : clients) {
-            it->sendInstanceCreate(instance_id, instance_type);
+            it->sendInstanceCreate(instance_id, instance_super_type, instance_sub_type);
         }
     }
 
-    void NetworkManager::sendInstanceCreate(NetworkClient *client, int instance_id, int instance_type) {
-        client->sendInstanceCreate(instance_id, instance_type);
+    void NetworkManager::sendInstanceCreate(NetworkClient *client, int instance_id, int instance_super_type, int instance_sub_type) {
+        client->sendInstanceCreate(instance_id, instance_super_type, instance_sub_type);
     }
 
     // Invokes an instance destroy on all clients
@@ -200,14 +200,15 @@ namespace network {
     /*
         Send Global game network update states:
     */
-    void NetworkClient::sendInstanceCreate(int instance_id, int instance_type) {
+    void NetworkClient::sendInstanceCreate(int instance_id, int instance_super_type, int instance_sub_type) {
         //socket->setBlocking(true);
         size_t ss;
         std::cout << "[NETWORK CLIENT] SENDING INSTANCE: " << instance_id << " to client: " << ip << std::endl;
         send_buffer.seek(0);
         send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendInstanceCreate;
         send_buffer << instance_id;
-        send_buffer << instance_type;
+		send_buffer << instance_super_type;
+		send_buffer << instance_sub_type;
         socket->send(send_buffer.getPtr(), send_buffer.tell(), ss);
         std::cout << "STATUS: " << ss << std::endl;
         //socket->setBlocking(false);
@@ -325,7 +326,7 @@ namespace network {
     //// -------------------------------------------------------------------------------- //////
     // INetworkInstance (interface)
     void INetworkInstance::sendNetworkUpdate(int event_id){
-
+        
         Buffer buff = *manager->getSendBuffer();
         buff.seek(0);
         buff << NetworkManager::SERVER_PACKET_TYPE::SendInstanceUpdate;
@@ -334,6 +335,10 @@ namespace network {
 
         writeNetworkUpdate(event_id, buff); // <- User interface function to write data
 
+        std::cout << "[NETWORK] Sending network object update: " <<
+            "     Size: " << buff.tell() <<
+            "     Instance ID: " << network_instance_id << 
+            "     Event ID:    " << event_id << std::endl;
         // Broadcast update to all clients
         manager->sendToAll(buff);
     }

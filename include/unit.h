@@ -42,9 +42,13 @@ namespace unit {
 		void getPath(Point<int> target);
 
         //Gameplay methods
-        virtual void step() override;
+        virtual void step();
         virtual void attack(tower_ptr tower);
         virtual void attacked(GameObject& aggressor);
+
+        // Network methods
+        virtual void writeNetworkUpdate(int event_id, Buffer &buffer) override;
+        virtual void recvNetworkInteraction(int event_id, Buffer &buffer) override;
     };
 }
 

@@ -1,5 +1,6 @@
 #include "../include/gameobject.h"
 #include "../include/manager.h"
+#include "../include/VertexBuffer.h"
 
 namespace gameobject {
 
@@ -51,14 +52,14 @@ namespace gameobject {
     int GameObject::getYr() const { return render_position.y; }
     Point<int> GameObject::getPosition() const { return position; }
 
-    float GameObject::distanceTo(smartpointers::slave_ptr<GameObject> other) const {
+    int GameObject::distanceTo(smartpointers::slave_ptr<GameObject> other) const {
         //int x = (other->getX() - getX());
         //int y = (other->getY() - getY());
         //return (x*x + y*y);
         return position.distanceTo(other->getPosition());
     }
 
-    float GameObject::distanceTo(Point<int> point) const {
+    int GameObject::distanceTo(Point<int> point) const {
         //int x = (point.x - getX());
         //int y = (point.y - getY());
         //return (x*x + y*y);
@@ -148,17 +149,20 @@ namespace gameobject {
 		- This is because collision optimised collision structures
 		may require a quick samping of this information.
 	*/
+    // Optimisation; why are we calculating 4 square roots here? might as well
+    // do one square root!
+    // ***was 4 DISTANCE calls, now 4 DIST_SQ calls***
 	void Collision::calculateBoundingCircle() {
-		this->radius = MAX(
+		this->radius = (int) sqrt(MAX(
 			MAX(
-				DISTANCE(0,0,this->bounding_box.bbox_left, this->bounding_box.bbox_up),
-				DISTANCE(0,0,this->bounding_box.bbox_left, this->bounding_box.bbox_down)
+				DIST_SQ(0,0,this->bounding_box.bbox_left, this->bounding_box.bbox_up),
+				DIST_SQ(0,0,this->bounding_box.bbox_left, this->bounding_box.bbox_down)
 			),
 			MAX(
-				DISTANCE(0,0,this->bounding_box.bbox_right, this->bounding_box.bbox_up),
-				DISTANCE(0,0,this->bounding_box.bbox_right, this->bounding_box.bbox_down)
+				DIST_SQ(0,0,this->bounding_box.bbox_right, this->bounding_box.bbox_up),
+				DIST_SQ(0,0,this->bounding_box.bbox_right, this->bounding_box.bbox_down)
 			)
-		);
+		));
 	}
 
 	// Calculates the bounding box of a collision
@@ -301,7 +305,7 @@ namespace gameobject {
 	//// Collision Utility functions
 	bool Collision::circle_intersects(int x1, int y1, int r1, int x2, int y2, int r2) {
 
-		float dist = sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
+		double dist = sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
 		if (dist <= r1 + r2) {
 			return true;
 		}

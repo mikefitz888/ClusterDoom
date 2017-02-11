@@ -1,6 +1,7 @@
 #include "../include/ResourceManager.h"
 #include "../include/manager.h"
 #include "../include/AnimatedTexture.h"
+#include "../include/RenderManager.h"
 
 // Constructor
 ResourceManager::ResourceManager(manager::Manager* manager) {

@@ -1,9 +1,17 @@
 #include "../include/manager.h"
-
-using smartpointers::static_pointer_cast;
+#include "../include/TowerLogic.h"
+#include "../include/ObjectLogic.h"
+#include "../include/network/Network.h"
+#include "../include/unitlogic.h"
+#include "../include/ResourceManager.h"
+#include "../include/AudioManager.h"
+#include "../include/gamecontroller.h"
+#include "../include/WorldRenderer.h"
+#include "../include/tower.h"
+#include "../include/unit.h"
 
 namespace manager {
-
+    using smartpointers::static_pointer_cast;
     Manager::Manager() {
         tower_logic      = new TowerLogic(this);
         unit_logic       = new UnitLogic(this);
@@ -12,8 +20,6 @@ namespace manager {
         network_manager  = new NetworkManager(this);
         resource_manager = new ResourceManager(this);
         audio_manager    = new AudioManager(this);
-
-		
     }
 
     // Object Methods
@@ -376,8 +382,8 @@ namespace manager {
 		max_cell_pos = this->convertRealWorldPositionToCell(object->getX()+bounding_box.bbox_right, object->getY() + bounding_box.bbox_down);
 		//std::cout << "BBOX : " << min_cell_pos.x << " : " << max_cell_pos.x << std::endl;
 		// Mark all intersecting cells
-		for (int i = min_cell_pos.x; i <= max_cell_pos.x; i++) {
-			for (int j = min_cell_pos.y; j <= min_cell_pos.y; j++) {
+		for (int i = (int) min_cell_pos.x; i <= (int) max_cell_pos.x; i++) {
+			for (int j = (int) min_cell_pos.y; j <= (int) min_cell_pos.y; j++) {
 				this->add(i, j, object);
 			}
 		}
@@ -410,8 +416,8 @@ namespace manager {
 	// convert a realworld position to the cell coordinate on the corresponding splitmap
 	glm::vec2 Splitmap::convertRealWorldPositionToCell(int rpos_x, int rpos_y) {
 		glm::vec2 cell_position;
-		cell_position.x = rpos_x / this->splitmap_cellsize;
-		cell_position.y = rpos_y / this->splitmap_cellsize;
+		cell_position.x = (float) (rpos_x / this->splitmap_cellsize);
+		cell_position.y = (float) (rpos_y / this->splitmap_cellsize);
 		return cell_position;
 	}
 

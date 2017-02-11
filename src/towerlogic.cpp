@@ -1,6 +1,7 @@
 #include "../include/towerlogic.h"
 #include "../include/Towers/BasicTower.h"
 #include "../include/Towers/Base.h"
+#include "../include/manager.h"
 
 namespace towerlogic {
     TowerLogic::TowerLogic(Manager* m) :

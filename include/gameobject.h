@@ -4,12 +4,13 @@
 #include "gamecore.h"
 
 #include "RenderManager.h"
-#include "VertexBuffer.h"
 #include "smartpointers.h"
 
 
-#define MAX(x,y) (x>y)?x:y
-#define DISTANCE(x1, y1, x2, y2) sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1))
+// This is already defined in the CSTDLib
+//#define MAX(x,y) (x>y)?x:y
+#define DISTANCE(x1, y1, x2, y2) sqrt(DIST_SQ(x1, y1, x2, y2))
+#define DIST_SQ(x1, y1, x2, y2) ((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1))
 
 namespace gameobject {
 
@@ -23,29 +24,29 @@ namespace gameobject {
     */
 
 
-	class GameObject;
-	typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
-	typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
-	typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
-	
-	/*
-	The collision system is designed to be an attachable
-	component to gameobjects.
+    class GameObject;
+    typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
+    typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
+    typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
+    
+    /*
+    The collision system is designed to be an attachable
+    component to gameobjects.
 
-	Collision provides a number of utility functions
-	for testing collisions between itself and other collision
-	instances.
+    Collision provides a number of utility functions
+    for testing collisions between itself and other collision
+    instances.
 
 
 
-	*/
-	struct BoundingBox {
-		int bbox_left, bbox_up, bbox_down, bbox_right;
-		BoundingBox(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
-	};
+    */
+    struct BoundingBox {
+        int bbox_left, bbox_up, bbox_down, bbox_right;
+        BoundingBox(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
+    };
 
-	enum CollisionType : unsigned int { NONE=0, BOX, CIRCLE };
-	class Collision {
+    enum CollisionType : unsigned int { NONE=0, BOX, CIRCLE };
+    class Collision {
 
     protected:
         CollisionType collision_type;
@@ -72,7 +73,7 @@ namespace gameobject {
         void setTypeSquare(int bbox_left, int bbox_right, int bbox_up, int bbox_down);
         void setTypeSquare(BoundingBox box);
         void setCollidable(bool collidable);
-		bool getCollidable();
+        bool getCollidable();
 
         bool intersects(Collision* collision);
         bool intersects(Collision* collision, int x, int y);
@@ -107,7 +108,7 @@ namespace gameobject {
     protected:
         Manager* manager;
         RenderManager* render_manager = nullptr;
-		Collision collision_profile = Collision(nullptr);
+        Collision collision_profile = Collision(nullptr);
 
         Point<int> position = Point<int>(0, 0);
         Point<int> jitter_offset = Point<int>(0, 0);
@@ -116,8 +117,8 @@ namespace gameobject {
         Point<int> render_facing = Point<int>(0, 0);
 
 
-		gameobject_ptr self = nullptr;
-		bool run_collision_event = true;
+        gameobject_ptr self = nullptr;
+        bool run_collision_event = true;
 
 
         int _destroySelf();
@@ -147,10 +148,10 @@ namespace gameobject {
         int getXr() const;
         int getYr() const;
         Point<int> getPosition() const;
-        float distanceTo(smartpointers::slave_ptr<GameObject> other) const;
+        int distanceTo(smartpointers::slave_ptr<GameObject> other) const;
 
-		float distanceTo(Point<int> point) const;
-		inline Collision* getCollision() { return &this->collision_profile; }
+        int distanceTo(Point<int> point) const;
+        inline Collision* getCollision() { return &this->collision_profile; }
 
         inline void setX(int x_) { position.x = x_; }
         inline void setY(int y_) { position.y = y_; }
@@ -158,25 +159,25 @@ namespace gameobject {
         inline void setJitter(int x, int y){jitter_offset.x=x; jitter_offset.y=y;};
         inline Point<int> getJitter(){return jitter_offset;};
 
-		inline bool getRunCollisionEvent() { return run_collision_event; }
-		inline void setRunCollisionEvent(bool run_collision_event) { this->run_collision_event = run_collision_event; }
+        inline bool getRunCollisionEvent() { return run_collision_event; }
+        inline void setRunCollisionEvent(bool run_collision_event) { this->run_collision_event = run_collision_event; }
 
-		inline void demoDestroy() { _destroySelf(); return; }
+        inline void demoDestroy() { _destroySelf(); return; }
 
 
-		inline void testing(void* arg, void* ret) { std::cout << "Testing" << std::endl; }
-		//inline void call(const std::string& fn_name, void* _arg = nullptr, void* _ret = nullptr) {
-			/*
-			** Rather basic system to allow more dynamic control over function calls
-			** Only pre-specified methods may be called in this way so hidden methods are not exposed
-			*/
-		/*	std::map<std::string, fn_ptr>::iterator fn = fn_hooks.find(fn_name);
-			if (fn != fn_hooks.end()) {
-				(this->*(fn->second))(_arg, _ret);
-			} else {
-				std::cout << "ERROR: Function is not exposed to call()." << std::endl;
-			}
-		}*/
+        inline void testing(void* arg, void* ret) { std::cout << "Testing" << std::endl; }
+        //inline void call(const std::string& fn_name, void* _arg = nullptr, void* _ret = nullptr) {
+            /*
+            ** Rather basic system to allow more dynamic control over function calls
+            ** Only pre-specified methods may be called in this way so hidden methods are not exposed
+            */
+        /*	std::map<std::string, fn_ptr>::iterator fn = fn_hooks.find(fn_name);
+            if (fn != fn_hooks.end()) {
+                (this->*(fn->second))(_arg, _ret);
+            } else {
+                std::cout << "ERROR: Function is not exposed to call()." << std::endl;
+            }
+        }*/
 
     };
 

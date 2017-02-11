@@ -1,5 +1,6 @@
 #include "../include/unit.h"
 #include "../include/aStar.h"
+#include "../include/gamecontroller.h"
 
 // TOM: namespace pollution... either `using` the things you need or std qualify
 using gameobject::Point;

@@ -52,8 +52,6 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
-#include "smartpointers.h"
-
 // Forward declarations
 class AudioManager;
 class Buffer;
@@ -64,6 +62,7 @@ class Spawn;
 class String;
 
 typedef unsigned char byte;
+typedef size_t id_t;
 
 namespace containers {
     class InvalidOptionalAccessException;
@@ -109,9 +108,7 @@ namespace graphics {
 
 namespace manager {
     class Manager;
-	class Splitmap;
-
-    typedef size_t id_t;
+    class Splitmap;
 }
 
 namespace network {
@@ -135,11 +132,10 @@ namespace towerlogic {
 }
 
 namespace unit {
-	class BasicUnit;
-	class Unit;
-
-	enum TYPE : unsigned int;
-
+    class BasicUnit;
+    class Unit;
+    
+    enum TYPE : unsigned int;
 }
 
 namespace gameobject {
@@ -147,28 +143,21 @@ namespace gameobject {
     class GameObject;
 
     struct BoundingBox;
-    //template <typename T> struct Point;
     template <typename T> struct Point {
         inline Point(T x_, T y_) : x(x_), y(y_) {}
         T x;
         T y;
-        inline T distanceTo(Point target) const {return sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
+        inline T distanceTo(Point target) const {return (T) sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
     };
 
     enum CollisionType : unsigned int;
     enum OBJECT_TYPE : unsigned int;
     enum TYPE : unsigned int;
 
-    typedef size_t id_t;
     typedef smartpointers::slave_ptr<tower::Tower> tower_ptr;
     typedef smartpointers::slave_ptr<unit::Unit> unit_ptr;
     typedef smartpointers::slave_ptr<GameObject> gameobject_ptr;
 }
-
-namespace unit {
-	using gameobject::gameobject_ptr;
-}
-
 
 namespace unitlogic {
     class UnitLogic;
@@ -178,6 +167,25 @@ namespace unitlogic {
 
 namespace worldrenderer {
     class WorldRenderer;
+}
+
+// Usings
+using gameobject::GameObject;
+using gameobject::Point;
+using gameobject::TYPE;
+using gameobject::gameobject_ptr;
+using std::map;
+using graphics::VertexBuffer;
+using graphics::AnimatedTexture;
+using graphics::RenderManager;
+
+namespace unit {
+    //using gameobject::gameobject_ptr;
+    using gameobject::GameObject;
+    using gameobject::tower_ptr;
+    using gameobject::unit_ptr;
+    using gameobject::Point;
+    using manager::Manager;
 }
 
 #endif //_CORE_HEADER

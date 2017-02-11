@@ -2,64 +2,21 @@
 #define MANAGER_H
 
 #include "gamecore.h"
-#include "../include/ResourceManager.h"
-#include "../include/AudioManager.h"
-#include "../include/TowerLogic.h"
-#include "../include/gamecontroller.h"
-#include "../include/ObjectLogic.h"
-#include "../include/network/Network.h"
-#include "../include/unitlogic.h"
 #include "../include/smartpointers.h"
-#include "../include/WorldRenderer.h"
-
-//#include "../include/smartpointers.h"
-
-/*namespace network {
-    class NetworkManager;
-    class NetworkClient;
-}
-namespace worldrenderer {
-    class WorldRenderer;
-}
-
-namespace unit {
-    class Unit;
-    enum TYPE : unsigned int;
-}
-
-namespace tower {
-    class Tower;
-    enum TYPE : unsigned int;
-}
-
-namespace gameobject {
-    class GameObject;
-}
-
-namespace towerlogic {
-    class TowerLogic;
-}
-
-namespace unitlogic {
-    class UnitLogic;
-}
-
-class ObjectLogic;
-
-namespace gamecontroller {
-    class GameController;
-}
-
-namespace manager {
-    class Manager;
-	class Splitmap;
-}*/
+//#include "../include/ResourceManager.h"
+//#include "../include/AudioManager.h"
+//#include "../include/TowerLogic.h"
+//#include "../include/gamecontroller.h"
+//#include "../include/ObjectLogic.h"
+//#include "../include/network/Network.h"
+//#include "../include/unitlogic.h"
+//#include "../include/WorldRenderer.h"
 
 namespace manager {
     using gameobject::GameObject;
     using smartpointers::master_ptr;
     using smartpointers::slave_ptr;
-	using gameobject::gameobject_ptr;
+    using gameobject::gameobject_ptr;
     using smartpointers::static_pointer_cast;
     using towerlogic::TowerLogic;
     using unitlogic::UnitLogic;
@@ -70,8 +27,6 @@ namespace manager {
     using worldrenderer::WorldRenderer;
     using network::NetworkManager;
     using gameobject::Collision;
-
-    //typedef size_t id_t;
 
     class Manager {
         std::vector<master_ptr<GameObject>> game_object_pool;

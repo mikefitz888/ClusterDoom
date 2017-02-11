@@ -4,12 +4,12 @@
 #include "gamecore.h"
 
 #include "gameobject.h"
-#include "manager.h"
+//#include "manager.h"
 
 namespace tower {
     using graphics::IRenderable;
     using gameobject::GameObject;
-    using gameobject::id_t;
+    //using gameobject::id_t;
     using gameobject::Point;
     using gameobject::tower_ptr;
     using gameobject::unit_ptr;

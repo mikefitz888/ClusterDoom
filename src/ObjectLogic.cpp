@@ -1,8 +1,9 @@
 #include "../include/ObjectLogic.h"
 #include "../include/GameObjects/Spawn.h"
 #include "../include/manager.h"
+#include "../include/gameobject.h"
 
-GameObject* ObjectLogic::createObject(gameobject::id_t key, gameobject::OBJECT_TYPE type) {
+GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
     switch (type) {
     case gameobject::OBJECT_TYPE::SPAWN:
         return new Spawn( key, manager);

@@ -1,5 +1,7 @@
 #include "../../include/Units/BasicUnit.h"
 #include "../../include/ResourceManager.h"
+#include "../../include/gameobject.h"
+#include "../../include/manager.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -23,7 +25,7 @@ namespace unit {
         render_manager = manager->getRenderManager();
 
 
-        float rotation = atan2(render_facing.y-getY(), render_facing.x-getX()) - M_PI/2;
+        float rotation = (float) (atan2(render_facing.y-getY(), render_facing.x-getX()) - M_PI/2);
         texture->render(getX(), getY(), 0.10f, 0.10f, rotation);
     }
 
@@ -41,8 +43,8 @@ namespace unit {
 					other->getPosition().y - y);
 				direction = glm::normalize(direction);
 
-				x -= direction.x * 5;
-				y -= direction.y * 5;
+				x -= (int) (direction.x * 5);
+				y -= (int) (direction.y * 5);
 				setX(x);
 				setY(y);
 			} break;

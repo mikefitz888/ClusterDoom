@@ -1,4 +1,9 @@
 #include "../include/gamecontroller.h"
+#include "../include/manager.h"
+#include "../include/network/Buffer.h"
+#include "../include/unit.h"
+#include "../include/tower.h"
+#include "../include/GameObjects/spawn.h"
 
 namespace gamecontroller {
     GameController::GameController(Manager* m) : manager(m) {}
@@ -30,7 +35,7 @@ namespace gamecontroller {
     }
 
     tower_ptr GameController::spawnTowerAt(Point<int> position, tower::TYPE type) const {
-        tower_ptr tower = spawnTowerAt( round(((float)position.x)/64.0f)*64.0f, round(((float)position.y)/64.0f)*64.0f, type );
+        tower_ptr tower = spawnTowerAt( (int) (round(((float)position.x)/64.0f)*64.0f), (int) (round(((float)position.y)/64.0f)*64.0f), type );
         tower->setJitter(position.x - tower->getX(), position.y - tower->getY());
         return tower;
     }
@@ -156,7 +161,7 @@ namespace gamecontroller {
 
         //Run scenarios for 10 minutes
         if (getElapsedTime() < 60*10) {
-            int scenario = getElapsedTime()/60.0f;
+            int scenario = (int) (getElapsedTime()/60.0f);
             runScenario(scenario);
         }
         else { //Ending sequence
@@ -361,54 +366,54 @@ namespace gamecontroller {
             towers = std::vector<tower_ptr>();
         }
 
-        int tower_count = towers.size(); //base exists and is first tower
+        size_t tower_count = towers.size(); //base exists and is first tower
         int** dists = new int*[tower_count];
         for (size_t i = 0; i < tower_count; i++)
         {
             dists[i] = new int[detections.size()];
             for (size_t j = 0; j < detections.size(); j++)
             {
-                dists[i][j] = towers[i]->distanceTo(detections[j]);
+                dists[i][j] = (int) towers[i]->distanceTo(detections[j]);
             }
         }
 
-        for (int i = 0; i < tower_count; i++)
+        for (size_t i = 0; i < tower_count; i++)
         {
             tower_prefs.push_back({});
             auto cmp = [&dists, i](int& pref, const int& point)
             {
                 return dists[i][pref] < dists[i][point];
             };
-            for (int j = 0; j < detections.size(); j++)
+            for (size_t j = 0; j < detections.size(); j++)
             {
                 auto pos = std::lower_bound(tower_prefs[i].begin(), tower_prefs[i].end(), j, cmp);
                 tower_prefs[i].insert(pos, j);
             }
         }
 
-        for (int j = 0; j < detections.size(); j++)
+        for (size_t j = 0; j < detections.size(); j++)
         {
             point_prefs.push_back({});
             auto cmp = [&dists, j](int& pref, const int& tower)
             {
                 return dists[pref][j] < dists[tower][j];
             };
-            for (int i = 0; i < tower_count; i++)
+            for (size_t i = 0; i < tower_count; i++)
             {
                 auto pos = std::lower_bound(point_prefs[j].begin(), point_prefs[j].end(), i, cmp);
                 point_prefs[j].insert(pos, i);
             }
         }
 
-        for (int i = 0; i < tower_count; i++) delete [] dists[i];
+        for (size_t i = 0; i < tower_count; i++) delete [] dists[i];
         delete [] dists;
 
         stack<int> free;
         vector<Point<int>> news;
         vector<int> matches;
 
-        for (int j = 0; j < detections.size(); j++) free.push(j);
-        for (int i = 0; i < tower_count; i++) matches.push_back(NO_MATCH);
+        for (size_t j = 0; j < detections.size(); j++) free.push(j);
+        for (size_t i = 0; i < tower_count; i++) matches.push_back(NO_MATCH);
 
         while (!free.empty())
         {
@@ -443,7 +448,7 @@ namespace gamecontroller {
 
         Matching match;
         match.new_towers = news;
-        for (int i = 0; i < matches.size(); i++)
+        for (size_t i = 0; i < matches.size(); i++)
         {
             if (matches[i] == NO_MATCH)
             {

@@ -5,16 +5,12 @@
 
 #include "../../include/gameobject.h"
 
-using gameobject::GameObject;
-using gameobject::Point;
-using gameobject::TYPE;
-
 class Spawn : public GameObject {
 
 protected:
 
 public:
-	Spawn(gameobject::id_t id, manager::Manager* m);
+	Spawn(id_t id, manager::Manager* m);
 
 	virtual void init() override;
 	virtual void render() override;

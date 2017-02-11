@@ -21,13 +21,8 @@
 */
 
 #include "gamecore.h"
-#include "../include/VertexBuffer.h"
-#include "../include/RenderManager.h"
-
-using std::map;
-using graphics::VertexBuffer;
-using graphics::AnimatedTexture;
-using graphics::RenderManager;
+//#include "../include/VertexBuffer.h"
+//#include "../include/RenderManager.h"
 
 class ResourceManager {
 

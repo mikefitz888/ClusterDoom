@@ -5,7 +5,7 @@
 
 #include "../tower.h"
 #include "../unit.h"
-#include "../gameobject.h"
+//#include "../gameobject.h"
 
 namespace unit
 {
@@ -15,7 +15,7 @@ namespace unit
         BasicUnit(id_t key, Manager* m);
         void init() override;
         void render() override;
-		void onCollision(gameobject_ptr other) override;
+        void onCollision(gameobject_ptr other) override;
     };
 }
 

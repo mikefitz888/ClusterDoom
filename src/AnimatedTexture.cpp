@@ -1,5 +1,7 @@
 #include "../include/AnimatedTexture.h"
 #include "../include/ResourceManager.h"
+#include "../include/VertexBuffer.h"
+#include "../include/RenderManager.h"
 
 namespace graphics {
     // Create a new animated texture
@@ -58,7 +60,7 @@ namespace graphics {
 
             // Create vertex buffer
             VertexBuffer *vbuff = new VertexBuffer();
-            vbuff->addQuadExt(0, 0, frame_width, frame_height, u1, v1, u2, v2);
+            vbuff->addQuadExt(0.0f, 0.0f, (float) frame_width, (float) frame_height, u1, v1, u2, v2);
             vbuff->freeze();
 
             // Add vertex buffer to array

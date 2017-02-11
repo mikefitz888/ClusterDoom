@@ -1,11 +1,11 @@
 #include "../include/manager.h"
-/*#include "../include/RenderUtils.h"
-#include "../include/towerlogic.h"
-#include "../include/tower.h"
-#include "../include/unit.h"
-#include "../include/unitlogic.h"
 #include "../include/AudioManager.h"
-#include "../include/ResourceManager.h"*/
+#include "../include/gamecontroller.h"
+#include "../include/WorldRenderer.h"
+#include "../include/unit.h"
+#include "../include/tower.h"
+#include "../include/VertexBuffer.h"
+#include "../include/ResourceManager.h"
 
 namespace tower {
     using namespace graphics;

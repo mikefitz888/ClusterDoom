@@ -38,7 +38,7 @@ namespace tower {
         float getHealth() const;
 
         virtual void attack(unit_ptr tower); //Tower attacks unit
-        virtual void attacked(GameObject& aggressor); //Unit attacks tower
+        virtual void attacked(gameobject_ptr aggressor); //Unit attacks tower
     };
 }
 

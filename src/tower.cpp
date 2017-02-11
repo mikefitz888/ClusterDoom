@@ -103,12 +103,10 @@ namespace tower {
     }
 
     void Tower::attack(unit_ptr unit)    {
-        unit->attacked(*this);
+        unit->attacked(this->getSharedPtr());
     }
 
-    // BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
-    // TODO: Remove this and use getSharedPtr() instead!
-    void Tower::attacked(GameObject& aggressor) {
+    void Tower::attacked(gameobject_ptr aggressor) {
         if (health > 0)
         {
             health--;

@@ -114,11 +114,10 @@ namespace unit {
     }
 
     void Unit::attack(tower_ptr tower) {
-        tower->attacked(*this);
+        tower->attacked(this->getSharedPtr());
     }
 
-    // BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
-    void Unit::attacked(GameObject& aggressor) {
+    void Unit::attacked(gameobject_ptr aggressor) {
         health--;
         if(health <= 0) {
             destroySelf();

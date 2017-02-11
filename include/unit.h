@@ -36,7 +36,7 @@ namespace unit {
         //Gameplay methods
         virtual void step() override;
         virtual void attack(tower_ptr tower);
-        virtual void attacked(GameObject& aggressor);
+        virtual void attacked(gameobject_ptr aggressor);
     };
 }
 

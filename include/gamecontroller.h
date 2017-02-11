@@ -2,6 +2,8 @@
 #define GAMECONTROLLER_H
 
 #include "gamecore.h"
+#include "PathFinder.h"
+#include "AStar.h"
 
 #include "gameobject.h"
 #include "GameObjects/Spawn.h"
@@ -9,6 +11,9 @@
 #include "../include/network/Buffer.h"
 
 #define NO_MATCH -1
+
+#define TILE_H 20
+#define TILE_W 20
 
 namespace gamecontroller {
     using gameobject::GameObject;
@@ -34,8 +39,24 @@ namespace gamecontroller {
         vector<Point<int>> new_towers;
     };
 
+	class TileNode : public AStarNode {
+		inline float distanceTo(AStarNode* node) const override {
+			return abs( (float)(node->getX() - m_x) ) + abs( (float)(node->getY() - m_y) );
+		};
+	public:
+		inline TileNode() : AStarNode() {}
+		inline void addNode(TileNode* node) {
+			addChild(node, 1.0f);
+		}
+	};
+
     class GameController {
         Manager* manager;
+		PathFinder<TileNode> path_finder; //Path results are std::vector<TileNode*>
+		//Fixed tile dimensions
+
+		TileNode nodes[TILE_W * TILE_H];
+
         vector<Point<int>> cvList;
         // CV Network
         int                port;
@@ -83,6 +104,20 @@ namespace gamecontroller {
         void spawnTowers(std::vector<Point<int>> tower_list) const;
         std::vector<tower_ptr> findNearestTowers(Point<int> point);
         void parseCVList(std::vector<Point<int>> list);
+
+		inline bool getPath(Point<int> start, Point<int> end, std::vector<Point<int>>& ret_path) {
+			ret_path.clear();
+			std::vector<TileNode*> path;
+			TileNode& node1 = nodes[start.y*TILE_W + start.x];
+			TileNode& node2 = nodes[end.y*TILE_W + end.x];
+			path_finder.setStart(node1);
+			path_finder.setGoal(node2);
+			if (path_finder.findPath<AStar>(path)) {
+				for (auto node : path) {
+					ret_path.emplace_back(node->getX(), node->getY());
+				}
+			}
+		}
 
         int getScreenWidth();
         int getScreenHeight();

@@ -1,7 +1,31 @@
 #include "../include/gamecontroller.h"
 
 namespace gamecontroller {
-    GameController::GameController(Manager* m) : manager(m) {}
+    GameController::GameController(Manager* m) : manager(m) {
+		int w = getScreenWidth();
+		int h = getScreenHeight();
+
+		for (int i = 0; i < TILE_W * TILE_H; i++) {
+			int x = i % TILE_W;
+			int y = (i) / TILE_H;
+
+			if (x > 0) {
+				nodes[i].addNode(&nodes[y * TILE_W + x - 1]);
+			}
+
+			if (y > 0) {
+				nodes[i].addNode(&nodes[(y-1) * TILE_W + x]);
+			}
+
+			if (x < TILE_W - 1) {
+				nodes[i].addNode(&nodes[y * TILE_W + x + 1]);
+			}
+
+			if (y < TILE_H - 1) {
+				nodes[i].addNode(&nodes[(y+1) * TILE_W + x]);
+			}
+		}
+	}
 
     /*GameObject* GameController::createObject(id_t key){
         return nullptr;

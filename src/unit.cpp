@@ -124,6 +124,6 @@ namespace unit {
 		gamecontroller::GameController* gc = this->manager->getGameController();
 		int screenWidth = gc->getScreenWidth();
 		int screenHeight = gc->getScreenHeight();
-		aStar(start, target, screenWidth, screenHeight, gc, path);
+		//aStar(start, target, screenWidth, screenHeight, gc, path);
 	}
 }

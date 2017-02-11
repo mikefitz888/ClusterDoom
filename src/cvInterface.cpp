@@ -47,44 +47,44 @@ namespace cvinterface {
         //send_buffer.release();
     }
 
-	void CVInterface::findTowers2() {
-		cv::Mat frame2 = frame.clone();
+    void CVInterface::findTowers2() {
+        cv::Mat frame2 = frame.clone();
 
-		cv::medianBlur(frame2, frame2, 3);
-		// Convert input image to HSV
-		cv::Mat hsv_image;
-		cv::cvtColor(frame2, hsv_image, cv::COLOR_BGR2HSV);
+        cv::medianBlur(frame2, frame2, 3);
+        // Convert input image to HSV
+        cv::Mat hsv_image;
+        cv::cvtColor(frame2, hsv_image, cv::COLOR_BGR2HSV);
 
-		// Threshold the HSV image, keep only the red pixels
-		cv::Mat lower_red_hue_range;
-		cv::Mat upper_red_hue_range;
-		cv::inRange(hsv_image, cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255), lower_red_hue_range);
-		cv::inRange(hsv_image, cv::Scalar(160, 100, 100), cv::Scalar(179, 255, 255), upper_red_hue_range);
+        // Threshold the HSV image, keep only the red pixels
+        cv::Mat lower_red_hue_range;
+        cv::Mat upper_red_hue_range;
+        cv::inRange(hsv_image, cv::Scalar(0, 100, 100), cv::Scalar(10, 255, 255), lower_red_hue_range);
+        cv::inRange(hsv_image, cv::Scalar(160, 100, 100), cv::Scalar(179, 255, 255), upper_red_hue_range);
 
-		cv::Mat red_hue_image;
-		cv::addWeighted(lower_red_hue_range, 1.0, upper_red_hue_range, 1.0, 0.0, red_hue_image);
-		
-		cv::GaussianBlur(red_hue_image, red_hue_image, cv::Size(9, 9), 2, 2);
+        cv::Mat red_hue_image;
+        cv::addWeighted(lower_red_hue_range, 1.0, upper_red_hue_range, 1.0, 0.0, red_hue_image);
+        
+        cv::GaussianBlur(red_hue_image, red_hue_image, cv::Size(9, 9), 2, 2);
 
 
-		std::vector<cv::Vec3f> circles;
-		// void HoughCircles(InputArray image, OutputArray circles, int method, double dp, double minDist, double param1=100, double param2=100, int minRadius=0, int maxRadius=0 )
-		cv::HoughCircles(red_hue_image, circles, CV_HOUGH_GRADIENT, 1, red_hue_image.rows / 8, 100, 20, 20, 200);
+        std::vector<cv::Vec3f> circles;
+        // void HoughCircles(InputArray image, OutputArray circles, int method, double dp, double minDist, double param1=100, double param2=100, int minRadius=0, int maxRadius=0 )
+        cv::HoughCircles(red_hue_image, circles, CV_HOUGH_GRADIENT, 1, red_hue_image.rows / 8, 100, 20, 20, 200);
 
-		tower_locations.clear();
-		// Next step is to commit the findings to the tower_locations list...
-		for (size_t i = 0; i < circles.size(); i++) {
-			cv::Point center(std::round(circles[i][0]), std::round(circles[i][1]));
-			int radius = std::round(circles[i][2]);
-			cv::circle(frame, center, radius, cv::Scalar(0, 255, 0), 5);
-			tower_locations.push_back(gameobject::Point<int>(circles[i][0], circles[i][1]));
+        tower_locations.clear();
+        // Next step is to commit the findings to the tower_locations list...
+        for (size_t i = 0; i < circles.size(); i++) {
+            cv::Point center(std::lround(circles[i][0]), std::lround(circles[i][1]));
+            int radius = std::lround(circles[i][2]);
+            cv::circle(frame, center, radius, cv::Scalar(0, 255, 0), 5);
+            tower_locations.push_back(gameobject::Point<int>((int) circles[i][0], (int) circles[i][1]));
 
-			//cv::rectangle(frame, cv::Point(objects[i].x, objects[i].y), cv::Point(objects[i].x + objects[i].width, objects[i].y + objects[i].height), cv::Scalar(0, 255, 0), 2);
-			//tower_locations.push_back(gameobject::Point<int>(objects[i].x + objects[i].width / 2, objects[i].y + objects[i].height / 2));
-		}
+            //cv::rectangle(frame, cv::Point(objects[i].x, objects[i].y), cv::Point(objects[i].x + objects[i].width, objects[i].y + objects[i].height), cv::Scalar(0, 255, 0), 2);
+            //tower_locations.push_back(gameobject::Point<int>(objects[i].x + objects[i].width / 2, objects[i].y + objects[i].height / 2));
+        }
 
-		networkSendTowerPositions();
-	}
+        networkSendTowerPositions();
+    }
 
     void CVInterface::findTowers() {
         cv::Mat frame2 = frame.clone();

@@ -35,9 +35,6 @@
 
 #include "gamecore.h"
 
-#include "VertexBuffer.h"
-#include "manager.h"
-
 namespace graphics {
     class AnimatedTexture {
 

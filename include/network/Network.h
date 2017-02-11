@@ -3,10 +3,10 @@
 
 #include "../gamecore.h"
 
-#include "../manager.h"
+//#include "../manager.h"
 #include "Buffer.h"
-#include "../smartpointers.h"
-#include "../gameobject.h"
+#include "../smartpointers.h" // Not sure why I can't remove this one, but I'm waiting for Mike to be done
+#include "../gameobject.h" // Not sure why I can't remove this one, but I'm waiting for Mike to be done
 
 namespace network {
     using std::vector;
@@ -21,13 +21,13 @@ namespace network {
         explicit NetworkClient(sf::TcpSocket *socket, sf::IpAddress ip, NetworkManager* manager);
 
         int             connection_id = 0;
-        sf::TcpSocket   *socket;
-        sf::IpAddress    ip;
+        sf::TcpSocket*  socket;
+        sf::IpAddress   ip;
         ConnectionState connection_state = DISCONNECTED;
         Buffer          send_buffer, recv_buffer;
-        int                security_token, security_hash;
-        int                timeout = 0;
-        NetworkManager  *network_manager;
+        int             security_token, security_hash;
+        int             timeout = 0;
+        NetworkManager* network_manager;
 
         // Private functions
         void setID(int connection_id);                        // Used to set the unique connection identifier
@@ -51,13 +51,13 @@ namespace network {
         friend class NetworkClient;
 
     private:
-        int                       port;
-        sf::TcpListener           *listener;
-        sf::TcpSocket          *new_client;
+        int                    port;
+        sf::TcpListener*       listener;
+        sf::TcpSocket*         new_client;
         vector<NetworkClient*> clients;
-        int                       connection_identifier_max = 0;
-        Buffer                   *send_buffer;
-        Manager                   *manager;
+        int                    connection_identifier_max = 0;
+        Buffer*                send_buffer;
+        Manager*               manager;
 
         void removeConnection(NetworkClient *network_client);
 

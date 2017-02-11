@@ -3,7 +3,7 @@
 
 #include "gamecore.h"
 
-#include "gameobject.h"
+//#include "gameobject.h"
 
 #include "../include/network/Buffer.h"
 
@@ -18,9 +18,9 @@ namespace cvinterface {
         double dHeight;
         IplImage* pFrame;
 
-		// Network stuff
-		sf::TcpSocket *socket;
-		Buffer send_buffer;
+        // Network stuff
+        sf::TcpSocket *socket;
+        Buffer send_buffer;
     public:
         void init();
         void step();
@@ -30,11 +30,11 @@ namespace cvinterface {
         static int NON_RED_THRESHOLD;
     private:
         void findTowers();
-		void findTowers2();
+        void findTowers2();
 
-		// Network stuff
-		void networkConnect();
-		void networkSendTowerPositions();
+        // Network stuff
+        void networkConnect();
+        void networkSendTowerPositions();
     };
 }
 

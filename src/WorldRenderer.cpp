@@ -1,5 +1,8 @@
 #include "../include/WorldRenderer.h"
 #include "../include/AnimatedTexture.h"
+#include "../include/VertexBuffer.h"
+#include "../include/manager.h"
+#include "../include/ResourceManager.h"
 
 namespace worldrenderer {
 
@@ -23,8 +26,8 @@ namespace worldrenderer {
         game_bg_shader = manager->getResourceManager()->getShader("default");
 
         vbuff = new graphics::VertexBuffer();
-        float width = render_manager->getWindowWidth();
-        float height = render_manager->getWindowHeight();
+        float width = (float) render_manager->getWindowWidth();
+        float height = (float) render_manager->getWindowHeight();
         vbuff->addQuad(-width/2, -height/2, width/2, height/2);
         vbuff->freeze();
 
@@ -43,8 +46,8 @@ namespace worldrenderer {
     void WorldRenderer::renderGUI(){
         render_manager->setActiveShader(game_bg_shader);
         render_manager->setTexture(game_bg_texture);
-        float width = render_manager->getWindowWidth();
-        float height = render_manager->getWindowHeight();
+        float width = (float) render_manager->getWindowWidth();
+        float height = (float) render_manager->getWindowHeight();
         render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
 
         glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(width/2, height/2, 0.0));
@@ -55,7 +58,7 @@ namespace worldrenderer {
 
         // Render debug explosion
         render_manager->setBlendModeAdditive();
-        index += 0.60;
+        index += 0.60f;
         //at->render(index);
         render_manager->setBlendModeNormal();
     }

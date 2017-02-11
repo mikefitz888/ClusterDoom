@@ -1,5 +1,7 @@
 #include "../include/network/Network.h"
-
+#include "../include/manager.h"
+//#include "../include/gameobject.h"
+//#include "../include/smartpointers.h"
 
 namespace network {
     
@@ -148,7 +150,7 @@ namespace network {
         // Mark as being in security process
         connection_state = UNVERIFIED;
         // Generate random number
-        std::srand(std::time(0) * 1458484);
+        std::srand(((unsigned int) std::time(0)) * 1458484);
         security_token = rand();
 
         // Write a packet

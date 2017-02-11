@@ -4,9 +4,9 @@
 #include "gamecore.h"
 
 #include "RenderManager.h"
-#include "manager.h"
-#include "towerlogic.h"
-#include "ResourceManager.h"
+//#include "manager.h"
+//#include "towerlogic.h"
+//#include "ResourceManager.h"
 
 namespace worldrenderer {
     using graphics::IRenderable;

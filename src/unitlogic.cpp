@@ -1,5 +1,6 @@
 #include "../include/unitlogic.h"
 #include "../include/Units/BasicUnit.h"
+#include "../include/manager.h"
 
 namespace unitlogic
 {

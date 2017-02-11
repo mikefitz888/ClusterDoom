@@ -2,24 +2,21 @@
 #define MANAGER_H
 
 #include "gamecore.h"
-
-#include "smartpointers.h"
-#include "unitlogic.h"
-#include "towerlogic.h"
-#include "ObjectLogic.h"
-#include "gameobject.h"
-#include "gamecontroller.h"
-#include "RenderManager.h"
-#include "VertexBuffer.h"
-#include "WorldRenderer.h"
-#include "network/Network.h"
-#include "ResourceManager.h"
-#include "AudioManager.h"
+#include "../include/smartpointers.h"
+//#include "../include/ResourceManager.h"
+//#include "../include/AudioManager.h"
+//#include "../include/TowerLogic.h"
+//#include "../include/gamecontroller.h"
+//#include "../include/ObjectLogic.h"
+//#include "../include/network/Network.h"
+//#include "../include/unitlogic.h"
+//#include "../include/WorldRenderer.h"
 
 namespace manager {
     using gameobject::GameObject;
     using smartpointers::master_ptr;
     using smartpointers::slave_ptr;
+    using gameobject::gameobject_ptr;
     using smartpointers::static_pointer_cast;
     using towerlogic::TowerLogic;
     using unitlogic::UnitLogic;
@@ -30,8 +27,6 @@ namespace manager {
     using worldrenderer::WorldRenderer;
     using network::NetworkManager;
     using gameobject::Collision;
-
-    //typedef size_t id_t;
 
     class Manager {
         std::vector<master_ptr<GameObject>> game_object_pool;
@@ -51,6 +46,9 @@ namespace manager {
         void addToPool(GameObject* game_object);
         void removeFromPool(id_t id);
         id_t getFreePoolKey();
+
+		// Event management
+		Splitmap* splitmap;
 
     public:
         Manager();
@@ -82,7 +80,7 @@ namespace manager {
         //void receiveEvent();
 
         //Manager Methods
-        void init() const;
+        void init();
         void initRenderManager(RenderManager &rm);
         bool render() const;
         RenderManager*   getRenderManager() const;
@@ -97,6 +95,47 @@ namespace manager {
         bool step();
         void restart();
     };
+
+
+	/*
+		Splitmap:
+			- Splitmap is used by the collision system. It is a 2D array of vectors to type
+			gameobject_ptr.
+			- Each iteration, the splitmap is updated. Each cell contains a list of the objects
+			that intersect with it. This is then used to optimise collisions, as objects only
+			need to test collisions with those other objects sharing cells.
+	
+	
+	*/
+
+	class Splitmap {
+
+	private:
+		int splitmap_width, splitmap_height, splitmap_cellsize;
+		std::vector<gameobject_ptr> ***collision_splitmap;
+		std::unordered_set<std::pair<gameobject_ptr, gameobject_ptr>> tested_objects;
+
+	public:
+		Splitmap(int cellsize, int width, int height);
+		~Splitmap();
+
+		void clear();
+		void add(int cell_x, int cell_y, gameobject_ptr object); // Add object to specific cell
+		void add(gameobject_ptr object); // Add using objects collision profile to test intersection
+		int getWidth();
+		int getHeight();
+		int getCellSize();
+		glm::vec2 convertRealWorldPositionToCell(int rpos_x, int rpos_y);
+		
+		// Get a copy of the vector of objects in a given cell.
+		bool getCellObjects(int cell_x, int cell_y, std::vector<gameobject_ptr>& vector);
+		
+		// Perform all collision tests
+		/*
+			This will fire off collision events for the objects
+		*/
+		void performAllCollisions();
+	};
 }
 
 #endif //MANAGER_H

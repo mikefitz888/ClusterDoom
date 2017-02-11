@@ -5,10 +5,13 @@
 #include "PathFinder.h"
 #include "AStar.h"
 
-#include "gameobject.h"
-#include "GameObjects/Spawn.h"
-#include "manager.h"
-#include "../include/network/Buffer.h"
+#include "smartpointers.h"
+//#include "gameobject.h"
+//#include "GameObjects/Spawn.h"
+//#include "manager.h"
+//#include "../include/network/Buffer.h"
+//#include "../include/tower.h"
+//#include "../include/unit.h"
 
 #define NO_MATCH -1
 
@@ -17,7 +20,6 @@
 
 namespace gamecontroller {
     using gameobject::GameObject;
-    using gameobject::id_t;
     using gameobject::tower_ptr;
     using gameobject::unit_ptr;
     using gameobject::gameobject_ptr;
@@ -60,9 +62,9 @@ namespace gamecontroller {
         vector<Point<int>> cvList;
         // CV Network
         int                port;
-        sf::TcpListener   *listener;
-        Buffer            *recv_buffer;
-        sf::TcpSocket     *client;
+        sf::TcpListener*  listener;
+        Buffer*           recv_buffer;
+        sf::TcpSocket*    client;
         bool              cvConnectionEstablished;
 
         void startCVServer();

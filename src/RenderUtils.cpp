@@ -1,5 +1,6 @@
 #include "../include/RenderUtils.h"
 #include "../include/manager.h"
+#include "../include/ResourceManager.h"
 
 using graphics::RenderUtils;
 using graphics::Colour;
@@ -41,11 +42,11 @@ void RenderUtils::render_circular_health(int x, int y, int health, int health_ma
 }
 
 Colour RenderUtils::colour_blend(Colour a, Colour b, float factor) {
-	Colour result(
-		a.r*factor + b.r*(1.0 - factor),
-		a.g*factor + b.g*(1.0 - factor),
-		a.b*factor + b.b*(1.0 - factor),
-		a.a*factor + b.a*(1.0 - factor)
-	);
-	return result;
+    Colour result(
+        (unsigned char) (a.r*factor + b.r*(1.0f - factor)),
+        (unsigned char) (a.g*factor + b.g*(1.0f - factor)),
+        (unsigned char) (a.b*factor + b.b*(1.0f - factor)),
+        (unsigned char) (a.a*factor + b.a*(1.0f - factor))
+    );
+    return result;
 }

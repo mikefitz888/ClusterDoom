@@ -51,6 +51,7 @@ namespace smartpointers {
         template <typename Y> friend inline bool operator<=(std::nullptr_t lhs, const watch_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator>=(const watch_ptr<Y>& lhs, std::nullptr_t rhs);
         template <typename Y> friend inline bool operator>=(std::nullptr_t lhs, const watch_ptr<Y>& rhs);
+        template <typename Y, typename U, typename V> friend inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const watch_ptr<Y>& ptr);
         template <typename Y> friend struct std::hash;
 
         T** payload;
@@ -151,6 +152,7 @@ namespace smartpointers {
         template <typename Y> friend inline bool operator<=(const slave_ptr<Y>& lhs, const master_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator>=(const master_ptr<Y>& lhs, const slave_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator>=(const slave_ptr<Y>& lhs, const master_ptr<Y>& rhs);
+        template <typename Y, typename U, typename V> friend inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const master_ptr<Y>& ptr);
         template <typename U, typename V> friend inline slave_ptr<U> static_pointer_cast(const master_ptr<V>& ptr) noexcept;
         template <typename U, typename V> friend inline slave_ptr<U> dynamic_pointer_cast(const master_ptr<V>& ptr) noexcept;
         template <typename U, typename V> friend inline slave_ptr<U> const_pointer_cast(const master_ptr<V>& ptr) noexcept;
@@ -165,9 +167,8 @@ namespace smartpointers {
             return this->payload;
         }
 
-        inline void reset()
-        {
-            /*if (this->payload != nullptr)*/ delete this->payload;
+        inline void reset() {
+            delete this->payload;
             this->payload = nullptr;
             if (this->validity) {
                 if (*this->validity == 1) delete this->validity;
@@ -178,14 +179,12 @@ namespace smartpointers {
         }
 
     public:
-        master_ptr(std::nullptr_t ptr) : /*payload(ptr),*/ name("object") {
-            //this->validity = new int(1);
+        master_ptr(std::nullptr_t ptr) : name("object") {
             throw InvalidatedSmartPointerException("master", name);
         }
 
-        master_ptr(std::nullptr_t ptr, std::string name)/* : payload(ptr)*/ {
-            this->validity = new int(1);
-            //throw InvalidatedSmartPointerException("master", name);
+        master_ptr(std::nullptr_t ptr, std::string name) {
+            throw InvalidatedSmartPointerException("master", name);
         }
 
         master_ptr(T* ptr) : payload(ptr), name("object") {
@@ -264,7 +263,7 @@ namespace smartpointers {
         template <typename Y> friend inline bool operator<=(const slave_ptr<Y>& lhs, const master_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator>=(const master_ptr<Y>& lhs, const slave_ptr<Y>& rhs);
         template <typename Y> friend inline bool operator>=(const slave_ptr<Y>& lhs, const master_ptr<Y>& rhs);
-		template <typename Y, typename U, typename V> friend inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const slave_ptr<Y>& ptr);
+        template <typename Y, typename U, typename V> friend inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const slave_ptr<Y>& ptr);
         template <typename U, typename V> friend inline slave_ptr<U> static_pointer_cast(const slave_ptr<V>& ptr);
         template <typename U, typename V> friend inline slave_ptr<U> dynamic_pointer_cast(const slave_ptr<V>& ptr);
         template <typename U, typename V> friend inline slave_ptr<U> const_pointer_cast(const slave_ptr<V>& ptr);
@@ -287,8 +286,11 @@ namespace smartpointers {
             this->payload = payload;
             this->name = ptr.name;
             this->validity = ptr.validity;
-            if (*this->validity > 0) ++*this->validity;
-            else --*this->validity;
+            // This seems dangerous, but we have to roll with it for now
+            if (this->validity) {
+                if (*this->validity > 0) ++*this->validity;
+                else --*this->validity;
+            }
         }
 
         template <typename Y> explicit slave_ptr(const master_ptr<Y>& ptr, T* payload) {
@@ -297,12 +299,10 @@ namespace smartpointers {
             this->validity = ptr.validity;
             if (*this->validity > 0) ++*this->validity;
             else --*this->validity;
-            //else throw InvalidatedSmartPointerException("slave", name);
         }
 
     public:
         slave_ptr(std::nullptr_t ptr) : name("object") {
-            //throw InvalidatedSmartPointerException("slave", this->name);
             this->payload = ptr;
             this->validity = nullptr;
         }
@@ -313,20 +313,19 @@ namespace smartpointers {
             this->validity = ptr.validity;
             if (*this->validity > 0) ++*this->validity;
             else --*this->validity;
-            //else throw InvalidatedSmartPointerException("slave", this->name);
         }
 
         slave_ptr(const slave_ptr& ptr) {
-			//std::cout << "ONE" << std::endl;
             this->payload = ptr.payload;
             this->name = ptr.name;
             this->validity = ptr.validity;
-            if (*this->validity > 0) ++*this->validity;
-            else --*this->validity;
+            if (this->validity) {
+                if (*this->validity > 0) ++*this->validity;
+                else --*this->validity;
+            }
         }
 
         slave_ptr(slave_ptr&& ptr) noexcept {
-			//std::cout << "TWO" << std::endl;
             this->payload = ptr.payload;
             this->name = ptr.name;
             this->validity = ptr.validity;
@@ -344,21 +343,21 @@ namespace smartpointers {
         }
 
         inline bool valid() const {
-            return this->payload && this->validity && *this->validity > 0;
+            return this->payload and this->validity and *this->validity > 0;
         }
 
         inline slave_ptr<T>& operator=(const slave_ptr<T>& r) noexcept {
-			//std::cout << "THREE" << std::endl;
             this->payload = r.payload;
             this->name = r.name;
             this->validity = r.validity;
-            if (this->validity && *this->validity > 0) ++*this->validity;
-            else if(this->validity)--*this->validity;
+            if (this->validity) {
+                if (*this->validity > 0) ++*this->validity;
+                else --*this->validity;
+            }
             return *this;
         }
 
-		inline slave_ptr<T>& operator=(slave_ptr<T>&& r) noexcept {
-			//std::cout << "FOUR" << std::endl;
+        inline slave_ptr<T>& operator=(slave_ptr<T>&& r) noexcept {
             this->payload = r.payload;
             this->name = r.name;
             this->validity = r.validity;
@@ -382,11 +381,11 @@ namespace smartpointers {
     }
 
     template <typename T, typename U, typename V> inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const watch_ptr<T>& ptr) {
-		return os << ptr.get();
+		return os << ptr.payload;
     }
 
     template <typename T, typename U, typename V> inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const master_ptr<T>& ptr) {
-		return os << ptr.get();
+		return os << ptr.payload;
     }
 
     template <typename T, typename U, typename V> inline std::basic_ostream<U, V>& operator<<(std::basic_ostream<U, V>& os, const slave_ptr<T>& ptr) {
@@ -450,8 +449,8 @@ namespace smartpointers {
     template <typename T> inline bool operator==(const master_ptr<T>& lhs, const slave_ptr<T>& rhs)  { return lhs.payload == rhs.payload; }
     template <typename T> inline bool operator==(const slave_ptr<T>& lhs, const master_ptr<T>& rhs)  { return lhs.payload == rhs.payload; }
     //Raw Pointer Equivalence
-    template <typename T> inline bool operator==(const master_ptr<T>& lhs, const T* rhs) { return lhs.payload == rhs; }
-    template <typename T> inline bool operator==(const T* lhs, const master_ptr<T>& rhs) { return lhs == rhs.payload; }
+    template <typename T> inline bool operator==(const master_ptr<T>& lhs, const T* rhs)             { return lhs.payload == rhs; }
+    template <typename T> inline bool operator==(const T* lhs, const master_ptr<T>& rhs)             { return lhs == rhs.payload; }
     template <typename T> inline bool operator!=(const master_ptr<T>& lhs, const slave_ptr<T>& rhs)  { return not (lhs == rhs); }
     template <typename T> inline bool operator!=(const slave_ptr<T>& lhs, const master_ptr<T>& rhs)  { return not (lhs == rhs); }
     template <typename T> inline bool operator<(const master_ptr<T>& lhs, const slave_ptr<T>& rhs)   { return std::less<T*>()(lhs.payload, rhs.payload); }
@@ -468,9 +467,7 @@ namespace smartpointers {
     }
 
     template <typename T, typename U> inline slave_ptr<T> dynamic_pointer_cast(const master_ptr<U>& ptr) noexcept {
-        if (T* p = dynamic_cast<T*>(ptr.get())) {
-            return slave_ptr<T>(ptr, p);
-        }
+        if (T* p = dynamic_cast<T*>(ptr.get())) return slave_ptr<T>(ptr, p);
         else return slave_ptr<T>(nullptr);
     }
 
@@ -483,9 +480,7 @@ namespace smartpointers {
     }
 
     template <typename T, typename U> inline slave_ptr<T> dynamic_pointer_cast(const slave_ptr<U>& ptr) {
-        if (T* p = dynamic_cast<T*>(ptr.get())) {
-            return slave_ptr<T>(ptr, p);
-        }
+        if (T* p = dynamic_cast<T*>(ptr.get())) return slave_ptr<T>(ptr, p);
         else return slave_ptr<T>(nullptr);
     }
 
@@ -525,6 +520,16 @@ namespace std
         size_t operator()(const smartpointers::slave_ptr<T>& p) const
         {
             return std::hash<T*>()(p.get());
+        }
+    };
+
+    template <typename T, typename U>
+    struct hash<std::pair<T, U>> {
+        size_t operator () (const std::pair<T, U> & p) const {
+            //return (hash<smartpointers::slave_ptr<T>>()(p.first) + hash<smartpointers::slave_ptr<T>>()(p.second) * 458481);
+            //return std::hash<T>(p.first)()+ std::hash<U>(p.second)() * 458481;//std::hash<T*>()(p.first.get()) + std::hash<U*>()(p.second.get()) * 458481;
+            //return std::hash<T*>()(p.get())
+            return hash<T>()(p.first) + hash<U>()(p.second) * 458481;
         }
     };
 }

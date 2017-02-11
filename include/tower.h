@@ -4,12 +4,12 @@
 #include "gamecore.h"
 
 #include "gameobject.h"
-#include "manager.h"
+//#include "manager.h"
 
 namespace tower {
     using graphics::IRenderable;
     using gameobject::GameObject;
-    using gameobject::id_t;
+    //using gameobject::id_t;
     using gameobject::Point;
     using gameobject::tower_ptr;
     using gameobject::unit_ptr;
@@ -38,7 +38,7 @@ namespace tower {
         float getHealth() const;
 
         virtual void attack(unit_ptr tower); //Tower attacks unit
-        virtual void attacked(GameObject& aggressor); //Unit attacks tower
+        virtual void attacked(gameobject_ptr aggressor); //Unit attacks tower
     };
 }
 

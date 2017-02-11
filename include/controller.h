@@ -3,11 +3,9 @@
 
 #include "gamecore.h"
 
-#include "manager.h"
-
 namespace controller {
     class Controller {
-        Controller(Manager model);
+        Controller(manager::Manager* model);
     };
 }
 

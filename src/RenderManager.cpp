@@ -1,6 +1,8 @@
 #include "../include/RenderManager.h"
 #include "../include/manager.h"
 #include "../include/RenderUtils.h"
+#include "../include/VertexBuffer.h"
+#include "../include/ResourceManager.h"
 
 namespace graphics {
 
@@ -217,10 +219,10 @@ namespace graphics {
 
     void RenderManager::bind_colour_uniform() {
         GLuint _uniform_colour_id = glGetUniformLocation(active_shader->getNativeHandle(), "drawColour");
-        glUniform4f(_uniform_colour_id, (float)this->active_colour.r/255.0,
-                                        (float)this->active_colour.g/255.0,
-                                        (float)this->active_colour.b/255.0,
-                                        (float)this->active_colour.a/255.0 );
+        glUniform4f(_uniform_colour_id, (float)this->active_colour.r/255.0f,
+                                        (float)this->active_colour.g/255.0f,
+                                        (float)this->active_colour.b/255.0f,
+                                        (float)this->active_colour.a/255.0f );
     }
 
     void RenderManager::setRenderParent(IRenderable *render_instance) {
@@ -261,7 +263,7 @@ namespace graphics {
     }
 
     float RenderManager::getAspect() const {
-        return width / height;
+        return (float) (width / height);
     }
 
     void RenderManager::setViewProjection(glm::mat4 *vp_matrix) const {
@@ -386,7 +388,7 @@ namespace graphics {
     void graphics::Texture::createVertexBuffer() {
         // Create vertex buffer
         this->texture_quad = new VertexBuffer();
-        this->texture_quad->addQuad(0, 0, this->getSize().x, this->getSize().y);
+        this->texture_quad->addQuad(0.0f, 0.0f, (float) this->getSize().x, (float) this->getSize().y);
         this->texture_quad->freeze();
     }
 

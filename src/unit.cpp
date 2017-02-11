@@ -1,5 +1,10 @@
 #include "../include/unit.h"
 #include "../include/tower.h"
+#include "../include/ResourceManager.h"
+#include "../include/VertexBuffer.h"
+#include "../include/manager.h"
+#include "../include/aStar.h"
+#include "../include/gamecontroller.h"
 
 namespace unit {
     Unit::Unit(id_t id, TYPE unit_type, Manager* m) :
@@ -64,14 +69,15 @@ namespace unit {
         }
         render_facing = target->getPosition();
 
-        float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
+        //float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
+        int distance = DIST_SQ(getX(), target->getX(), getY(), target->getY());
         if (distance < 2000) {
            attack(target);
         }
         else {
             //Move to tower
-            float dx = target->getX() - getX();
-            float dy = target->getY() - getY();
+            int dx = target->getX() - getX();
+            int dy = target->getY() - getY();
 
             if (dx > 0) { position.x++; }
             else { position.x--; }
@@ -108,11 +114,10 @@ namespace unit {
     }
 
     void Unit::attack(tower_ptr tower) {
-        tower->attacked(*this);
+        tower->attacked(this->getSharedPtr());
     }
 
-    // BE VERY CAREFUL HERE, NON-SMARTPOINTER ACCESSIBLE
-    void Unit::attacked(GameObject& aggressor) {
+    void Unit::attacked(gameobject_ptr aggressor) {
         health--;
         if(health <= 0) {
             destroySelf();

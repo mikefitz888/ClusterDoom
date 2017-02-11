@@ -3,14 +3,13 @@
 
 #include "gamecore.h"
 
-#include "smartpointers.h"
-#include "tower.h"
-#include "manager.h"
+//#include "smartpointers.h"
+//#include "tower.h"
+//#include "manager.h"
 
 namespace towerlogic {
     using tower::Tower;
     using manager::Manager;
-    using gameobject::id_t;
 
     class TowerLogic {
         std::vector<tower_ptr> towers;

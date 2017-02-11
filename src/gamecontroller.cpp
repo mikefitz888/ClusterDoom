@@ -7,30 +7,30 @@
 
 namespace gamecontroller {
     GameController::GameController(Manager* m) : manager(m) {
-		int w = getScreenWidth();
-		int h = getScreenHeight();
+        int w = getScreenWidth();
+        int h = getScreenHeight();
 
-		for (int i = 0; i < TILE_W * TILE_H; i++) {
-			int x = i % TILE_W;
-			int y = (i) / TILE_H;
+        for (int i = 0; i < TILE_W * TILE_H; i++) {
+            int x = i % TILE_W;
+            int y = (i) / TILE_H;
 
-			if (x > 0) {
-				nodes[i].addNode(&nodes[y * TILE_W + x - 1]);
-			}
+            if (x > 0) {
+                nodes[i].addNode(&nodes[y * TILE_W + x - 1]);
+            }
 
-			if (y > 0) {
-				nodes[i].addNode(&nodes[(y-1) * TILE_W + x]);
-			}
+            if (y > 0) {
+                nodes[i].addNode(&nodes[(y-1) * TILE_W + x]);
+            }
 
-			if (x < TILE_W - 1) {
-				nodes[i].addNode(&nodes[y * TILE_W + x + 1]);
-			}
+            if (x < TILE_W - 1) {
+                nodes[i].addNode(&nodes[y * TILE_W + x + 1]);
+            }
 
-			if (y < TILE_H - 1) {
-				nodes[i].addNode(&nodes[(y+1) * TILE_W + x]);
-			}
-		}
-	}
+            if (y < TILE_H - 1) {
+                nodes[i].addNode(&nodes[(y+1) * TILE_W + x]);
+            }
+        }
+    }
 
     /*GameObject* GameController::createObject(id_t key){
         return nullptr;
@@ -128,24 +128,24 @@ namespace gamecontroller {
 
     void GameController::step() {
 
-		frame_clock++;
-		//In general, step() should be frame-based.
+        frame_clock++;
+        //In general, step() should be frame-based.
         
 
 
-		// Perform 
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			if (!spawned) {
-				sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-				spawnUnitAt(mouse_pos.x, mouse_pos.y);
-				//spawned = true;
-			}
-		} else {
-			spawned = false;
-		}
+        // Perform 
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            if (!spawned) {
+                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                spawnUnitAt(mouse_pos.x, mouse_pos.y);
+                //spawned = true;
+            }
+        } else {
+            spawned = false;
+        }
 
-		//In general, step() should be frame-based.
-		cvNetworkStep();
+        //In general, step() should be frame-based.
+        cvNetworkStep();
         manager->stepAll();
         manager->collisionAll();
 
@@ -371,10 +371,10 @@ namespace gamecontroller {
         }
     }
 
-    Matching GameController::stableMatching(vector<Point<int>>& detections)
+    Matching GameController::stableMatching(std::vector<Point<int>>& detections)
     {
-        vector<deque<int>> point_prefs;
-        vector<vector<int>> tower_prefs;
+        std::vector<deque<int>> point_prefs;
+        std::vector<std::vector<int>> tower_prefs;
         auto& _towers = manager->getTowers();
 
         std::vector<tower_ptr> towers;
@@ -433,8 +433,8 @@ namespace gamecontroller {
         delete [] dists;
 
         stack<int> free;
-        vector<Point<int>> news;
-        vector<int> matches;
+        std::vector<Point<int>> news;
+        std::vector<int> matches;
 
         for (size_t j = 0; j < detections.size(); j++) free.push(j);
         for (size_t i = 0; i < tower_count; i++) matches.push_back(NO_MATCH);
@@ -492,5 +492,31 @@ namespace gamecontroller {
 
     int GameController::getScreenHeight() {
         return sf::VideoMode::getDesktopMode().height;
+    }
+
+    bool GameController::getPath(Point<int> start, Point<int> end, std::vector<Point<int>>& ret_path) {
+        ret_path.clear();
+        std::vector<TileNode*> path;
+        TileNode& node1 = nodes[start.y*TILE_W + start.x];
+        TileNode& node2 = nodes[end.y*TILE_W + end.x];
+        path_finder.setStart(node1);
+        path_finder.setGoal(node2);
+        if (path_finder.findPath<paths::AStar>(path)) {
+            for (auto node : path) {
+                ret_path.emplace_back(node->getX(), node->getY());
+            }
+        }
+    }
+
+    float TileNode::distanceTo(AStarNode* node) const 
+    {
+        return abs((float)(node->getX() - m_x)) + abs((float)(node->getY() - m_y));
+    }
+    
+    TileNode::TileNode() : AStarNode() {}
+        
+    void TileNode::addNode(TileNode* node) 
+    {
+        addChild(node, 1.0f);
     }
 }

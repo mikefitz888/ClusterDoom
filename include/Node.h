@@ -1,60 +1,65 @@
 //Copyright (c) 2015, Antoine Vugliano
-#pragma once
+#ifndef NODE_H
+#define NODE_H
 
-#include <vector>
+#include "gamecore.h"
 
-/**
-	Represents a basic node for path finding with no added value. It can not be used
-	or instanciated as-is and is provided for implementing specific nodes for algorithms.
-
-	@see AStarNode
-*/
-class Node
+namespace paths
 {
-	public:
+    /**
+        Represents a basic node for path finding with no added value. It can not be used
+        or instanciated as-is and is provided for implementing specific nodes for algorithms.
 
-		Node();
-		virtual ~Node();
+        @see AStarNode
+    */
+    class Node
+    {
+    public:
 
-		/**
-			@brief Assigns the parent of the node. The parent of a node will
-			be evaluated when reconstituing the path form the goal.
-			@param[in] parent Pointer to the node to assign as the parent.
-		*/
-		void setParent(Node* parent);
+        Node();
+        virtual ~Node();
 
-		/**
-			@brief Returns a pointer to the parent node.
-			@return A pointer to the parent node.
-		*/
-		Node* getParent() const;
+        /**
+            @brief Assigns the parent of the node. The parent of a node will
+            be evaluated when reconstituing the path form the goal.
+            @param[in] parent Pointer to the node to assign as the parent.
+        */
+        void setParent(Node* parent);
 
-		/**
-			@brief Add a node to the children of the current node.
-			@param[in] child A pointer to the child.
-		*/
-		void addChild(Node* child, float distance);
+        /**
+            @brief Returns a pointer to the parent node.
+            @return A pointer to the parent node.
+        */
+        Node* getParent() const;
 
-		/**
-			@brief Returns a vector containing all the children of the current node.
-			@return A vector of Node pointers.
-		*/
-		std::vector<std::pair<Node*, float>>& getChildren();
+        /**
+            @brief Add a node to the children of the current node.
+            @param[in] child A pointer to the child.
+        */
+        void addChild(Node* child, float distance);
 
-	protected:
+        /**
+            @brief Returns a vector containing all the children of the current node.
+            @return A vector of Node pointers.
+        */
+        std::vector<std::pair<Node*, float>>& getChildren();
 
-		/**
-			@brief Clears the children of the node.
-		*/
-		void clearChildren();
+    protected:
 
-		/**
-			Pointer to the parent node.
-		*/
-		Node* m_parent;
+        /**
+            @brief Clears the children of the node.
+        */
+        void clearChildren();
 
-		/**
-			List of all the node's children.
-		*/
-		std::vector<std::pair<Node*, float>> m_children;
-};
+        /**
+            Pointer to the parent node.
+        */
+        Node* m_parent;
+
+        /**
+            List of all the node's children.
+        */
+        std::vector<std::pair<Node*, float>> m_children;
+    };
+}
+#endif // NODE_H

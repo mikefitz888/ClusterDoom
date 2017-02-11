@@ -21,6 +21,7 @@
 #include <unordered_map>
 #include <vector>
 #include <unordered_set>
+#include <limits>
 
 // Shared GLEW
 #include <GL/glew.h>
@@ -87,6 +88,7 @@ namespace cvinterface {
 
 namespace gamecontroller {
     class GameController;
+    class TileNode;
 
     struct Matching;
 }
@@ -116,6 +118,19 @@ namespace network {
     class INetworkInstance;
     class NetworkClient;
     class NetworkManager;
+}
+
+namespace paths
+{
+    class AStar;
+    class Dijsktra;
+    class Node;
+    template <typename T> class PathAlgorithm;
+    template <typename T> class PathFinder;
+    
+    struct AStarNode;
+    struct CompareNodes;
+    struct DijkstraNode;
 }
 
 namespace tower {

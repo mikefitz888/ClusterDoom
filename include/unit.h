@@ -2,7 +2,6 @@
 #define UNIT_H
 
 #include "gamecore.h"
-
 #include "gameobject.h"
 
 //void aStar(gameobject::Point<int> start, gameobject::Point<int> end, const int w, const int h, gamecontroller::GameController *gc, std::vector<gameobject::Point<int>>& ret);

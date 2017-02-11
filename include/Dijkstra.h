@@ -1,86 +1,55 @@
 //Copyright (c) 2015, Antoine Vugliano
-#pragma once
+#ifndef DIJKSTRA_H
+#define DIJKSTRA_H
 
+#include "gamecore.h"
 #include "PathAlgorithm.h"
 #include "Node.h"
-#include <vector>
 
-class DijkstraNode : public Node
+namespace paths
 {
-	static const float infinity;
+    struct DijkstraNode : public Node
+    {
+        DijkstraNode();
+        ~DijkstraNode();
 
-	public:
-		DijkstraNode() :
-			distance(infinity),
-			closed(false)
-		{}
+        void setClosed(bool value);
+        void setDistance(float value);
+        bool isClosed() const;
+        float getDistance() const;
 
-		~DijkstraNode()
-		{}
-
-		void setClosed(bool value)
-		{
-			closed = value;
-		}
-
-		void setDistance(float value)
-		{
-			distance = value;
-		}
-
-		inline bool isClosed() const
-		{
-			return closed;
-		}
-
-		inline float getDistance() const
-		{
-			return distance;
-		}
-
-		void release()
-		{
-			distance = infinity;
-			closed = false;
-			m_parent = nullptr;
-		}
-
-	protected:
-		bool closed;
-		float distance;
-};
+        void release();
+    private: static const float infinity;
+    protected:
+        bool closed;
+        float distance;
+    };
 
 
-struct CompareNodes
-{
-	bool operator() (const DijkstraNode* n1, const DijkstraNode* n2)
-	{
-		return n1->getDistance() < n2->getDistance();
-	}
-};
+    struct CompareNodes
+    {
+        bool operator()(const DijkstraNode* n1, const DijkstraNode* n2);
+    };
 
 
-class Dijkstra : public PathAlgorithm<DijkstraNode>
-{
-	public:
+    class Dijkstra : public PathAlgorithm<DijkstraNode>
+    {
+    public:
 
-		static Dijkstra& getInstance()
-		{
-			static Dijkstra instance;
-			return instance;
-		}
+        static Dijkstra& getInstance();
+        bool getPath(DijkstraNode* start, DijkstraNode* goal, std::vector<DijkstraNode*>& path);
+        void clear();
 
-		bool getPath(DijkstraNode* start, DijkstraNode* goal, std::vector<DijkstraNode*>& path);
-		void clear();
+    private:
 
-	private:
+        Dijkstra();
+        ~Dijkstra();
 
-		Dijkstra();
-		~Dijkstra();
+        void pushOpen(DijkstraNode* node);
+        void popOpen(DijkstraNode* node);
+        void releaseNodes();
 
-		void pushOpen(DijkstraNode* node);
-		void popOpen(DijkstraNode* node);
-		void releaseNodes();
-
-		std::vector<DijkstraNode*> open, closed;
-};
+        std::vector<DijkstraNode*> open, closed;
+    };
+}
+#endif // DIJKSTRA_H

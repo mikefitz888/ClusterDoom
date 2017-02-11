@@ -2,16 +2,9 @@
 #define GAMECONTROLLER_H
 
 #include "gamecore.h"
+#include "smartpointers.h"
 #include "PathFinder.h"
 #include "AStar.h"
-
-#include "smartpointers.h"
-//#include "gameobject.h"
-//#include "GameObjects/Spawn.h"
-//#include "manager.h"
-//#include "../include/network/Buffer.h"
-//#include "../include/tower.h"
-//#include "../include/unit.h"
 
 #define NO_MATCH -1
 
@@ -28,7 +21,6 @@ namespace gamecontroller {
 
     using std::cout;
     using std::endl;
-    using std::vector;
     using std::deque;
     using std::stack;
     using std::unordered_map;
@@ -37,29 +29,25 @@ namespace gamecontroller {
     struct Matching
     {
         unordered_map<tower_ptr, Point<int>> matches;
-        vector<tower_ptr> deleted_towers;
-        vector<Point<int>> new_towers;
+        std::vector<tower_ptr> deleted_towers;
+        std::vector<Point<int>> new_towers;
     };
 
-	class TileNode : public AStarNode {
-		inline float distanceTo(AStarNode* node) const override {
-			return abs( (float)(node->getX() - m_x) ) + abs( (float)(node->getY() - m_y) );
-		};
-	public:
-		inline TileNode() : AStarNode() {}
-		inline void addNode(TileNode* node) {
-			addChild(node, 1.0f);
-		}
-	};
+    class TileNode : public paths::AStarNode {
+        float distanceTo(AStarNode* node) const override;
+    public:
+        TileNode();
+        void addNode(TileNode* node);
+    };
 
     class GameController {
         Manager* manager;
-		PathFinder<TileNode> path_finder; //Path results are std::vector<TileNode*>
-		//Fixed tile dimensions
+        paths::PathFinder<TileNode> path_finder; //Path results are std::vector<TileNode*>
+        //Fixed tile dimensions
 
-		TileNode nodes[TILE_W * TILE_H];
+        TileNode nodes[TILE_W * TILE_H];
 
-        vector<Point<int>> cvList;
+        std::vector<Point<int>> cvList;
         // CV Network
         int                port;
         sf::TcpListener*  listener;
@@ -89,7 +77,7 @@ namespace gamecontroller {
         void init();
         void step();
         void restart() const;
-        Matching stableMatching(vector<Point<int>>& detections);
+        Matching stableMatching(std::vector<Point<int>>& detections);
         int getWeight(int x, int y);
 
         tower_ptr  spawnTowerAt(int x, int y, tower::TYPE type) const;
@@ -107,19 +95,7 @@ namespace gamecontroller {
         std::vector<tower_ptr> findNearestTowers(Point<int> point);
         void parseCVList(std::vector<Point<int>> list);
 
-		inline bool getPath(Point<int> start, Point<int> end, std::vector<Point<int>>& ret_path) {
-			ret_path.clear();
-			std::vector<TileNode*> path;
-			TileNode& node1 = nodes[start.y*TILE_W + start.x];
-			TileNode& node2 = nodes[end.y*TILE_W + end.x];
-			path_finder.setStart(node1);
-			path_finder.setGoal(node2);
-			if (path_finder.findPath<AStar>(path)) {
-				for (auto node : path) {
-					ret_path.emplace_back(node->getX(), node->getY());
-				}
-			}
-		}
+        bool getPath(Point<int> start, Point<int> end, std::vector<Point<int>>& ret_path);
 
         int getScreenWidth();
         int getScreenHeight();

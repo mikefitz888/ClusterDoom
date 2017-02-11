@@ -1,3 +1,4 @@
+//Copyright(c) 2015, Antoine Vugliano
 #pragma once
 
 #include <vector>

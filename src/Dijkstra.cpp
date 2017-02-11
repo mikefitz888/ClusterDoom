@@ -1,3 +1,4 @@
+//Copyright (c) 2015, Antoine Vugliano
 #include "../Include/Dijkstra.h"
 
 #include <limits>

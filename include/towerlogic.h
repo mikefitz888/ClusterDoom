@@ -3,10 +3,6 @@
 
 #include "gamecore.h"
 
-//#include "smartpointers.h"
-//#include "tower.h"
-//#include "manager.h"
-
 namespace towerlogic {
     using tower::Tower;
     using manager::Manager;

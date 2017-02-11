@@ -21,8 +21,6 @@
 */
 
 #include "gamecore.h"
-//#include "../include/VertexBuffer.h"
-//#include "../include/RenderManager.h"
 
 class ResourceManager {
 

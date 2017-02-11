@@ -3,14 +3,6 @@
 
 #include "gamecore.h"
 #include "../include/smartpointers.h"
-//#include "../include/ResourceManager.h"
-//#include "../include/AudioManager.h"
-//#include "../include/TowerLogic.h"
-//#include "../include/gamecontroller.h"
-//#include "../include/ObjectLogic.h"
-//#include "../include/network/Network.h"
-//#include "../include/unitlogic.h"
-//#include "../include/WorldRenderer.h"
 
 namespace manager {
     using gameobject::GameObject;

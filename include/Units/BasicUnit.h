@@ -5,7 +5,6 @@
 
 #include "../tower.h"
 #include "../unit.h"
-//#include "../gameobject.h"
 
 namespace unit
 {

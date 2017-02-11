@@ -3,8 +3,6 @@
 
 #include "gamecore.h"
 
-//#include "gameobject.h"
-
 #include "../include/network/Buffer.h"
 
 namespace cvinterface {

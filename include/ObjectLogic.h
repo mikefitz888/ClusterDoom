@@ -2,7 +2,6 @@
 #define _OBJECT_LOGIC_H
 
 #include "gamecore.h"
-//#include "gameobject.h"
 
 class ObjectLogic {
     std::vector<gameobject_ptr> game_objects;

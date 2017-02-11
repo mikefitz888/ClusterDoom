@@ -3,7 +3,6 @@
 
 #include "../gamecore.h"
 
-//#include "../manager.h"
 #include "Buffer.h"
 #include "../smartpointers.h" // Not sure why I can't remove this one, but I'm waiting for Mike to be done
 #include "../gameobject.h" // Not sure why I can't remove this one, but I'm waiting for Mike to be done

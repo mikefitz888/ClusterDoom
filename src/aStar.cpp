@@ -75,7 +75,9 @@ namespace paths
                 childNode = static_cast<AStarNode*>(children.first);
                 g = currentNode->getG() + children.second; // stance from start + distance between the two nodes
                 if ((childNode->isOpen() || childNode->isClosed()) && childNode->getG() < g) // n' is already in opend or closed with a lower cost g(n')
+                {
                     continue; // consider next successor
+                }
 
                 h = distanceBetween(childNode, goal);
                 f = g + h; // compute f(n')
@@ -84,10 +86,8 @@ namespace paths
                 childNode->setH(h);
                 childNode->setParent(currentNode);
 
-                if (childNode->isClosed())
-                    childNode->setClosed(false);
-                if (!childNode->isOpen())
-                    pushOpen(childNode);
+                if (childNode->isClosed()) childNode->setClosed(false);
+                if (!childNode->isOpen()) pushOpen(childNode);
             }
         }
         return false;
@@ -109,10 +109,8 @@ namespace paths
 
     void AStar::releaseNodes()
     {
-        for (const auto& node : open)
-            node->release();
-        for (const auto& node : closed)
-            node->release();
+        for (const auto& node : open) node->release();
+        for (const auto& node : closed) node->release();
     }
 
     void AStar::clear()

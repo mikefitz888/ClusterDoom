@@ -3,7 +3,6 @@
 #include "../include/ResourceManager.h"
 #include "../include/VertexBuffer.h"
 #include "../include/manager.h"
-#include "../include/aStar.h"
 #include "../include/gamecontroller.h"
 
 namespace unit {

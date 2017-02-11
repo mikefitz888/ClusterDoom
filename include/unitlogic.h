@@ -2,9 +2,6 @@
 #define UNITLOGIC_H
 
 #include "gamecore.h"
-//#include "smartpointers.h"
-//#include "unit.h"
-//#include "manager.h"
 
 namespace unitlogic {
     using unit::Unit;

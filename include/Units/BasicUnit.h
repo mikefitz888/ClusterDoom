@@ -19,6 +19,8 @@ namespace unit
         BasicUnit(id_t key, Manager* m);
         void init() override;
         void render() override;
+        void step() override;
+
         //void step();
         void onCollision(gameobject_ptr other) override;
 

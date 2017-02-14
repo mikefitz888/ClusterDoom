@@ -15,20 +15,20 @@ namespace unit {
         texture        = manager->getResourceManager()->getTexture("basic_unit");
     }
 
-    //void BasicUnit::step() {
+    void BasicUnit::step() {
         // Perform parent step
-        //Unit::step();
+        Unit::step();
 
         // Network timers
         /*
             Send the position every few steps
         */
-       /* network_update_position_timer--;
+        network_update_position_timer--;
         if (network_update_position_timer <= 0) {
             network_update_position_timer = network_update_position_timer_max;
             this->sendNetworkUpdate(BasicUnitUpdateEvents::SEND_POSITION);
         }
-    }*/
+    }
 
     void BasicUnit::render(){
         render_manager = manager->getRenderManager();
@@ -74,6 +74,7 @@ namespace unit {
 			case BasicUnitUpdateEvents::SEND_POSITION:
 				buffer << getX();
 				buffer << getY();
+                std::cout << "[NETWORK::BasicUnit] Sending Position to clients" << std::endl;
 				break;
 
 			case BasicUnitUpdateEvents::SEND_HEALTH:

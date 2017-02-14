@@ -1,5 +1,5 @@
 #include "../include/network/Network.h"
-
+#include "../include/manager.h"
 
 namespace network {
     
@@ -72,7 +72,7 @@ namespace network {
         }
     }
 
-    Buffer* NetworkManager::getSendBuffer() const {
+    Buffer& NetworkManager::getSendBuffer() const {
         return send_buffer;
     }
 
@@ -327,7 +327,7 @@ namespace network {
     // INetworkInstance (interface)
     void INetworkInstance::sendNetworkUpdate(int event_id){
         
-        Buffer buff = *manager->getSendBuffer();
+        Buffer& buff = *(manager->getSendBuffer());
         buff.seek(0);
         buff << NetworkManager::SERVER_PACKET_TYPE::SendInstanceUpdate;
         buff << network_instance_id;

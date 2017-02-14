@@ -3,10 +3,10 @@
 
 #include "../gamecore.h"
 
-#include "../manager.h"
+//#include "../manager.h"
 #include "Buffer.h"
-#include "../smartpointers.h"
-#include "../gameobject.h"
+//#include "../smartpointers.h"
+//#include "../gameobject.h"
 
 namespace network {
     using std::vector;

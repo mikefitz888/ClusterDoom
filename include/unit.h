@@ -47,8 +47,8 @@ namespace unit {
         virtual void attacked(GameObject& aggressor);
 
         // Network methods
-        virtual void writeNetworkUpdate(int event_id, Buffer &buffer) override;
-        virtual void recvNetworkInteraction(int event_id, Buffer &buffer) override;
+        //virtual void writeNetworkUpdate(int event_id, Buffer &buffer) override;
+        //virtual void recvNetworkInteraction(int event_id, Buffer &buffer) override;
     };
 }
 

@@ -12,9 +12,13 @@ void Spawn::init() {
 	//manager->getGameController()->spawnUnitAt(getX(), getY());
 }
 void Spawn::step() {
-	//manager->getGameController()->spawnUnitAt(getX(), getY());
-	if(manager->getTowers().size() >= 0 && manager->getUnits().size() < 10){
-		manager->getGameController()->spawnUnitAt(getX(), getY());
+	//Potential to get accurate game_time from game_controller
+	if(running && manager->getTowers().size() >= 0 && manager->getUnits().size() < 1000){
+        printf("%d\n", time);
+        if (time % spawn_rate == 0) {
+            manager->getGameController()->spawnUnitAt(getX(), getY());
+        }
+        time++;
 	}
 }
 void Spawn::render() {
@@ -24,10 +28,18 @@ void Spawn::render() {
 void Spawn::renderGUI() {}
 void Spawn::release() {}
 
-void Spawn::startSpawn(void* arg, void* ret) {
-
+void Spawn::startScenario(int scenario) {
+    running = true;
+    this->scenario = scenario;
+    startWave(0);
 }
 
-void Spawn::continueSpawn(void* arg, void* ret) {
+void Spawn::startWave(int wave) {
+    this->wave = wave;
+    beginWave();
+}
 
+void Spawn::beginWave() {
+    //Adjust parameters for the next wave based on this->wave and this->scenario here
+    spawn_rate = (6 - wave) * 60;
 }

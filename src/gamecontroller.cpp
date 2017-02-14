@@ -185,7 +185,7 @@ namespace gamecontroller {
 
         //Run scenarios for 10 minutes
         if (getElapsedTime() < 60*10) {
-            int scenario = (int) (getElapsedTime()/60.0f);
+            int scenario = (int) (getElapsedTime()/(float)time_per_scenario);
             runScenario(scenario);
         }
         else { //Ending sequence
@@ -198,21 +198,23 @@ namespace gamecontroller {
             //New stage
             this->scenario = scenario;
             this->wave = 0;
+            printf("Scenario %d, wave 0.\n", scenario);
             //Start wave 0
             //spawn short burst of troops from each spawn point
             for (auto spawn : spawn_points) {
-
+                spawn->startScenario(scenario);
             }
         }
         else {
             //Continue current scenario
-            int wave = ((int)getElapsedTime() % 60)/3;
+            int wave = ((int)getElapsedTime() / time_per_scenario) % waves_per_scenario;
             if (wave > this->wave) {
                 this->wave = wave;
                 //Start wave
+                printf("Scenario %d, wave %d.\n", scenario, wave);
                 //spawn short burst of troops from each spawn point
                 for (auto spawn : spawn_points) {
-
+                    spawn->startWave(wave);
                 }
             }
             else {

@@ -472,7 +472,7 @@ namespace manager {
 			}
 		}
 		
-		std::cout << "COLLISION TESTS: " << collision_tests << std::endl;
+		//std::cout << "COLLISION TESTS: " << collision_tests << std::endl;
 
 	}
 

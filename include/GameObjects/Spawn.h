@@ -8,7 +8,12 @@
 class Spawn : public GameObject {
 
 protected:
-
+    int scenario = 0;
+    int wave = 0;
+    int time = 0;
+    int units = 0;
+    int spawn_rate = 0;
+    bool running = false;
 public:
 	Spawn(id_t id, manager::Manager* m);
 
@@ -18,8 +23,10 @@ public:
 	virtual void release() override;
     virtual void step() override;
 
-	void startSpawn(void* arg, void* ret);
-	void continueSpawn(void* arg, void* ret);
+    virtual void beginWave();
+
+    void startScenario(int scenario);
+    void startWave(int wave);
 };
 
 #endif

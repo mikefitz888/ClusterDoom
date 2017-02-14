@@ -12,6 +12,9 @@
 #define TILE_W 20
 
 namespace gamecontroller {
+    const int time_per_scenario = 60;
+    const int waves_per_scenario = 3;
+
     using gameobject::GameObject;
     using gameobject::tower_ptr;
     using gameobject::unit_ptr;
@@ -63,7 +66,7 @@ namespace gamecontroller {
 
         bool game_started = false;
         int wave = 0;
-        int scenario = 0;
+        int scenario = -1;
 
         std::vector<smartpointers::slave_ptr<Spawn>> spawn_points = std::vector<smartpointers::slave_ptr<Spawn>>();
         // TEMP

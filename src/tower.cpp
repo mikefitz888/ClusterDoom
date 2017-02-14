@@ -109,7 +109,7 @@ namespace tower {
     void Tower::attacked(gameobject_ptr aggressor) {
         if (health > 0)
         {
-            health--;
+            //health--;
             if (health < 0)
             {
                 health = 0;

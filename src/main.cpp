@@ -7,7 +7,7 @@ using manager::Manager;
 using namespace graphics;
 
 
-void runCVInterface(cvinterface::CVInterface* cv){
+void runCVInterface(cvinterface::CvInterface* cv){
     cv->init();
 }
 
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
     std::cout << "O:!" << std::endl;
 
     // Networking
-    //NetworkManager nm;
+    //network::NetworkManager nm;
     smartpointers::slave_ptr<int> ptr = nullptr;
 
     if (ptr) {
@@ -30,12 +30,20 @@ int main(int argc, char* argv[]){
     RenderManager rm;
 
     //Render Manager must be initialized first to ensure GL context
+#ifndef CV_ONLY
     model.initRenderManager(rm);
+#endif
 
     //TODO: Pass an openCV component to manager
-    cvinterface::CVInterface cv;
-    //std::thread cv_thread = std::thread(runCVInterface, &cv);
+    cvinterface::CvInterface cv;
+#ifdef CV_ONLY
+    runCVInterface(&cv);
+#else
+    std::thread cv_thread = std::thread(runCVInterface, &cv);
+#endif
+    
 
+#ifndef CV_ONLY
     model.init();
     //rm.setWindowTitle("Clusterdoom");
 
@@ -51,12 +59,15 @@ int main(int argc, char* argv[]){
         running = model.step();
 
     }
+#endif
 
     // Cleanup
     cv.release();
-    //cv_thread.join();
+#ifndef CV_ONLY
+    cv_thread.join();
     //nm.release();
     model.release();
+#endif
 
     return 0;
 }

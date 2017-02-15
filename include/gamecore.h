@@ -62,7 +62,7 @@ class ResourceManager;
 class Spawn;
 class String;
 
-typedef unsigned char byte;
+typedef uint8_t byte;
 typedef size_t id_t;
 
 namespace containers {
@@ -82,7 +82,13 @@ namespace controller {
 }
 
 namespace cvinterface {
-    class CVInterface;
+    class CvInterface;
+
+    struct Square;
+
+    enum Code : int_fast8_t;
+
+    typedef int_fast8_t marker_t;
 }
 
 namespace gamecontroller {

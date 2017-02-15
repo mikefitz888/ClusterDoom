@@ -112,12 +112,17 @@ namespace manager {
         // Set shared pointer
         gameobject_ptr self = game_object_pool[id];
         self->setSharedPtr(self);
+		self->setNetworkManager(network_manager);
+		self->setNetworkID(id, game_object->getSuperType(), game_object->getSubType());
 
         // Run setup
         self->setup();
 
         // Network update
-        network_manager->sendInstanceCreate(id, game_object->getSuperType(), game_object->getSubType());
+        network_manager->sendInstanceCreate(id, game_object->getSuperType(), 
+												game_object->getSubType(), 
+												game_object->getX(),
+												game_object->getY());
     }
 
     // Destroys the master_ptr
@@ -138,7 +143,9 @@ namespace manager {
                 int id         = object->getID();
                 int super_type = object->getSuperType();
 				int sub_type   = object->getSubType();
-                network_manager->sendInstanceCreate(network_client, id, super_type, sub_type);
+				int x          = object->getX();
+				int y		   = object->getY();
+                network_manager->sendInstanceCreate(network_client, id, super_type, sub_type, x, y);
             }
         }
     }

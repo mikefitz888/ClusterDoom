@@ -72,13 +72,13 @@ namespace unit {
 	void BasicUnit::writeNetworkUpdate(int event_id, Buffer &buffer) {
 		switch (event_id) {
 			case BasicUnitUpdateEvents::SEND_POSITION:
-				buffer << getX();
-				buffer << getY();
-                std::cout << "[NETWORK::BasicUnit] Sending Position to clients" << std::endl;
+				buffer << (int)getX();
+				buffer << (int)getY();
+                //std::cout << "[NETWORK::BasicUnit] Sending Position to clients" << std::endl;
 				break;
 
 			case BasicUnitUpdateEvents::SEND_HEALTH:
-				buffer << 100;
+				buffer << (unsigned int)100;
 				break;
 		}
 	}

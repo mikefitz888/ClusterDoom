@@ -42,7 +42,7 @@ namespace network {
         void release();                                        // Force disconnects a socket and cleans up any data.
 
         // Network update functions
-        void sendInstanceCreate(int instance_id, int instance_super_type, int instance_sub_type);
+        void sendInstanceCreate(int instance_id, int instance_super_type, int instance_sub_type, int x, int y);
         void sendInstanceDestroy(int instance_id);
     };
 
@@ -51,13 +51,13 @@ namespace network {
         friend class NetworkClient;
 
     private:
-        int                       port;
-        sf::TcpListener           *listener;
+        int                    port;
+        sf::TcpListener        *listener;
         sf::TcpSocket          *new_client;
         vector<NetworkClient*> clients;
-        int                       connection_identifier_max = 0;
-        Buffer                   *send_buffer;
-        Manager                   *manager;
+        int                    connection_identifier_max = 0;
+        Buffer                 send_buffer;
+        Manager                *manager;
 
         void removeConnection(NetworkClient *network_client);
 
@@ -65,13 +65,13 @@ namespace network {
         NetworkManager(Manager *manager);
         void networkStep();
         void newConnection(sf::TcpSocket *sfc, sf::IpAddress ip);
-        Buffer* getSendBuffer() const;
+        Buffer& getSendBuffer();
         void sendToAll(Buffer &buff);    // Will broadcast a packet to ALL clients who are fully connected
         void release();
 
         // Network update functions
-        void sendInstanceCreate(NetworkClient *client, int instance_id, int instance_super_type, int instance_sub_type);
-        void sendInstanceCreate(int instance_id, int instance_super_type, int instance_sub_type);
+        void sendInstanceCreate(NetworkClient *client, int instance_id, int instance_super_type, int instance_sub_type, int x, int y);
+        void sendInstanceCreate(int instance_id, int instance_super_type, int instance_sub_type, int x, int y);
         void sendInstanceDestroy(int instance_id);
         void sendAllInstancesToClient(NetworkClient *network_client);
 
@@ -175,8 +175,13 @@ namespace network {
         virtual void recvNetworkInteraction(int event_id, Buffer &buffer) = 0;
 
     protected:
+	
         // CALL sendNetworkUpdate with the given event_id to begin the update process. This will invoke writeNetworkUpdate.
         void sendNetworkUpdate(int event_id);
+
+	public:
+		void setNetworkManager(NetworkManager* network_manager);
+		void setNetworkID(int object_instance_id, int instance_super_type, int instance_sub_type);
     };
 
 }

@@ -40,6 +40,8 @@ namespace gameobject {
 	void GameObject::release() {}
 	void GameObject::onCollision(gameobject_ptr other) {}
 	void GameObject::step() {}
+    void GameObject::writeNetworkUpdate(int event_id, Buffer &buffer) {}
+    void GameObject::recvNetworkInteraction(int event_id, Buffer &buffer) {}
 
     int GameObject::_destroySelf() {
         manager->destroy(this);

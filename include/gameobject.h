@@ -5,6 +5,7 @@
 
 #include "RenderManager.h"
 #include "smartpointers.h"
+#include "network\Network.h"
 
 
 // This is already defined in the CSTDLib
@@ -92,6 +93,7 @@ namespace gameobject {
     using graphics::IRenderable;
     using manager::Manager;
     using graphics::RenderManager;
+	using network::INetworkInstance;
 
     enum TYPE : unsigned int {TOWER=0, UNIT, OBJECT};
     enum OBJECT_TYPE : unsigned int { SPAWN = 0 };
@@ -101,7 +103,7 @@ namespace gameobject {
         Gameobject abstract class
 
     */
-    class GameObject : public IRenderable {
+    class GameObject : public IRenderable, public INetworkInstance {
         const id_t id_;
         const id_t super_type_ = 0;
         const id_t sub_type_ = 0;
@@ -140,7 +142,11 @@ namespace gameobject {
         virtual void renderGUI() override;
         virtual void release() override;
         virtual void onCollision(gameobject_ptr other);
-        virtual void step();
+        virtual void step() = 0;
+
+        // NETWORK EVENTS
+        virtual void writeNetworkUpdate(int event_id, Buffer &buffer) override;
+        virtual void recvNetworkInteraction(int event_id, Buffer &buffer) override;
 
         // CONTORL & DATA
         int getX() const;

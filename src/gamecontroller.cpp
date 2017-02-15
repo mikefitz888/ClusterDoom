@@ -136,9 +136,13 @@ namespace gamecontroller {
         // Perform 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             if (!spawned) {
+
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                spawnUnitAt(mouse_pos.x, mouse_pos.y);
-                //spawned = true;
+                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                    spawnUnitAt(mouse_pos.x, mouse_pos.y);
+                }
+                spawned = true;
             }
         } else {
             spawned = false;

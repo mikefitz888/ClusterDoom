@@ -14,11 +14,22 @@ namespace unit {
     void BasicUnit::init(){
 		collision_profile.setTypeCircle(20);
         render_manager = manager->getRenderManager();
-        /*texture = new sf::Texture();
-        if(!texture->loadFromFile("Resources/Textures/Units/Basic.jpg")){
-            std::cout << "[ERROR] Could not load texture! (BasicUnit)" << std::endl;
-        }*/
-        texture = manager->getResourceManager()->getTexture("basic_unit");
+        texture        = manager->getResourceManager()->getTexture("basic_unit");
+    }
+
+    void BasicUnit::step() {
+        // Perform parent step
+        Unit::step();
+
+        // Network timers
+        /*
+            Send the position every few steps
+        */
+        network_update_position_timer--;
+        if (network_update_position_timer <= 0) {
+            network_update_position_timer = network_update_position_timer_max;
+            this->sendNetworkUpdate(BasicUnitUpdateEvents::SEND_POSITION);
+        }
     }
 
     void BasicUnit::render(){
@@ -57,5 +68,23 @@ namespace unit {
 
 			} break;
 		}
+	}
+
+	// NETWORKING
+	void BasicUnit::writeNetworkUpdate(int event_id, Buffer &buffer) {
+		switch (event_id) {
+			case BasicUnitUpdateEvents::SEND_POSITION:
+				buffer << (int)getX();
+				buffer << (int)getY();
+                //std::cout << "[NETWORK::BasicUnit] Sending Position to clients" << std::endl;
+				break;
+
+			case BasicUnitUpdateEvents::SEND_HEALTH:
+				buffer << (unsigned int)100;
+				break;
+		}
+	}
+	void BasicUnit::recvNetworkInteraction(int event_id, Buffer &buffer) {
+		// TODO: BasicUnit interaction events
 	}
 }

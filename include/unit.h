@@ -29,7 +29,7 @@ namespace unit {
         void getPath(Point<int> target);
 
         //Gameplay methods
-        virtual void step() override;
+        virtual void step();
         virtual void attack(tower_ptr tower);
         virtual void attacked(gameobject_ptr aggressor);
     };

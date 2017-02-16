@@ -2,8 +2,10 @@
 #include "../../include/ResourceManager.h"
 #include "../../include/gameobject.h"
 #include "../../include/manager.h"
+#include "../../include/gamecontroller.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "../../include/RenderUtils.h"
 
 namespace unit {
     BasicUnit::BasicUnit(id_t key, Manager* m) : Unit(key, TYPE::BASIC, m)  {
@@ -15,11 +17,30 @@ namespace unit {
 		collision_profile.setTypeCircle(20);
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getTexture("basic_unit");
+
+        Path path;
+        path.push_back(vec2(100, 100));
+        path.push_back(vec2(500, 50));
+        path.push_back(vec2(250, 300));
+        path.push_back(vec2(1280, 720));
+        this->setPath(path, 10);
     }
 
     void BasicUnit::step() {
         // Perform parent step
         Unit::step();
+
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
+            Path path;
+            if (manager->getGameController()->getPath(position, vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), path)) {
+                this->setPath(path, 2);
+            }
+        }
+
+        // Check path
+        if (this->getPathComplete()) {
+            this->restartPath();
+        }
 
         // Network timers
         /*
@@ -32,12 +53,21 @@ namespace unit {
         }
     }
 
-    void BasicUnit::render(){
+    void BasicUnit::render() {
         render_manager = manager->getRenderManager();
 
 
-        float rotation = (float) (atan2(render_facing.y-getYr(), render_facing.x-getXr()) - M_PI/2);
+        float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
         texture->render(getXr(), getYr(), 0.10f, 0.10f, rotation);
+
+        Path path = this->getPath();
+        if (this->getFollowingPath() && path.size() > 0) {
+            for (int n = 0; n < path.size() - 1; n++) {
+                vec2 n1 = path[n];
+                vec2 n2 = path[n + 1];
+                graphics::RenderUtils::draw_line(n1.x, n1.y, n2.x, n2.y, 3, graphics::Colour(255,255,255,255));
+            }
+        }
     }
 
 	void BasicUnit::onCollision(gameobject_ptr other) {

@@ -41,6 +41,7 @@ namespace gamecontroller {
     public:
         TileNode();
         void addNode(TileNode* node);
+        void clearNodes(); // Remove links to other nodes
     };
 
     class GameController {
@@ -72,6 +73,10 @@ namespace gamecontroller {
         // TEMP
         bool spawned = false;
 
+        // Prepare pathfinding grid
+        void preparePathfindingGrid();
+
+
     public:
         GameController(Manager* m);
        // GameObject* createObject(id_t key);
@@ -98,7 +103,7 @@ namespace gamecontroller {
         std::vector<tower_ptr> findNearestTowers(Point<int> point);
         void parseCVList(std::vector<Point<int>> list);
 
-        bool getPath(Point<int> start, Point<int> end, std::vector<Point<int>>& ret_path);
+        bool getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path);
 
         int getScreenWidth();
         int getScreenHeight();

@@ -167,21 +167,22 @@ namespace gameobject {
         int current_target_node_id = 0;     // Keeps track of pathfinding progress
         int distance_threshold     = 10;    // Distance to destination to register as arrived
 
-        vec2 current_destination;
-        vec2 speed;                 // Speed at which the object has been told to move towards its destination
+        vec2  current_destination;
+        float speed;                 // Speed at which the object has been told to move towards its destination
 
     protected:
         void navigationStep();
 
     public:
         
-        void setPath(Path path, vec2 speed);                    // Tell the object to follow a given path
-        void setDestination(int x, int y, vec2 speed);
-        void setDestination(vec2 destination, vec2 speed);
+        void setPath(Path path, float speed);                    // Tell the object to follow a given path
+        void setDestination(int x, int y, float speed);
+        void setDestination(vec2 destination, float speed);
         void setDestination();                      // Will call clearDestination
         void setDistanceThreshold(int distance);
         void clearDestination();                    // Will stop the object from navigating (Does not clear path destinations)
-        void resetPath();                           // Clears the current path
+        void clearPath();                           // Clears the current path
+        void restartPath();                         // Will restart the path
 
         bool getFollowingPath();
         bool getPathComplete();
@@ -191,7 +192,7 @@ namespace gameobject {
         int  getDistanceThreshold();
         bool getHasDestination();       // Returns whether the object has a set destination or not
         bool getAtDestination();        // Will return true if at destination. If no destination is set, will return false.
-
+        Path getPath();
         
     };
     // ****************************************************************************** //

@@ -6,11 +6,17 @@
 #include "../include/GameObjects/spawn.h"
 
 namespace gamecontroller {
-    GameController::GameController(Manager* m) : manager(m) {
-        int w = getScreenWidth();
-        int h = getScreenHeight();
 
+    /*
+        Generate grid linkage
+    
+    */
+    void GameController::preparePathfindingGrid() {
         for (int i = 0; i < TILE_W * TILE_H; i++) {
+
+            // Clear node links:
+            nodes[i].clearNodes();
+
             int x = i % TILE_W;
             int y = (i) / TILE_H;
 
@@ -19,7 +25,7 @@ namespace gamecontroller {
             }
 
             if (y > 0) {
-                nodes[i].addNode(&nodes[(y-1) * TILE_W + x]);
+                nodes[i].addNode(&nodes[(y - 1) * TILE_W + x]);
             }
 
             if (x < TILE_W - 1) {
@@ -27,14 +33,15 @@ namespace gamecontroller {
             }
 
             if (y < TILE_H - 1) {
-                nodes[i].addNode(&nodes[(y+1) * TILE_W + x]);
+                nodes[i].addNode(&nodes[(y + 1) * TILE_W + x]);
             }
         }
     }
 
-    /*GameObject* GameController::createObject(id_t key){
-        return nullptr;
-    }*/
+
+    GameController::GameController(Manager* m) : manager(m) {
+        preparePathfindingGrid();
+    }
 
     int GameController::getWeight(int x, int y){
         //Return negative for an obstacle
@@ -500,7 +507,7 @@ namespace gamecontroller {
         return sf::VideoMode::getDesktopMode().height;
     }
 
-    bool GameController::getPath(Point<int> start, Point<int> end, std::vector<Point<int>>& ret_path) {
+    bool GameController::getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path) {
         ret_path.clear();
         std::vector<TileNode*> path;
         TileNode& node1 = nodes[start.y*TILE_W + start.x];
@@ -511,7 +518,9 @@ namespace gamecontroller {
             for (auto node : path) {
                 ret_path.emplace_back(node->getX(), node->getY());
             }
+            return true;
         }
+        return false;
     }
 
     float TileNode::distanceTo(AStarNode* node) const 
@@ -524,5 +533,9 @@ namespace gamecontroller {
     void TileNode::addNode(TileNode* node) 
     {
         addChild(node, 1.0f);
+    }
+
+    void TileNode::clearNodes() {
+        this->clearChildren();
     }
 }

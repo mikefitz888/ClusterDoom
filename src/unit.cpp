@@ -41,6 +41,8 @@ namespace unit {
 
         vbuff->freeze();
         hpbar_buff->freeze();
+
+        
     }
     void Unit::render() {
         render_manager->setActiveShader(shader);
@@ -68,7 +70,7 @@ namespace unit {
         if (!target) {
             return; //NO TARGET
         }
-        this->setDestination(target->getPosition(), vec2(1));
+        this->setDestination(target->getPosition(), 1.25f);
         this->setSmoothingRate(0.25f);
 
         render_facing = getDestination();//target->getPosition();

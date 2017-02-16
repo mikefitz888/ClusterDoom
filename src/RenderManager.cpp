@@ -15,6 +15,7 @@ namespace graphics {
         rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png")->setOriginCentre();
         rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
         rm->textureLoad("red", "src/Resources/Textures/red.png")->setOriginCentre();
+        rm->textureLoad("white", "src/Resources/Textures/white.png");// ->setOriginCentre();
         rm->textureLoad("base_image", "src/Resources/Textures/base.png");
         rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
         rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
@@ -411,8 +412,9 @@ namespace graphics {
     void graphics::Texture::render(int x, int y, float xscale, float yscale, float rotation) {
         glm::mat4 transform = glm::mat4();
         transform = glm::translate(transform, glm::vec3(x, y, 0.0));
-        transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+        
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
         transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
 
         this->render_manager->setWorldMatrix(transform);
@@ -424,8 +426,9 @@ namespace graphics {
         float yscale = (float)height / (float)this->getSize().y;
         glm::mat4 transform = glm::mat4();
         transform = glm::translate(transform, glm::vec3(x, y, 0.0));
-        transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+        
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
         transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
 
         this->render_manager->setWorldMatrix(transform);

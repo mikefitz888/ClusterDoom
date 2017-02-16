@@ -453,7 +453,7 @@ namespace gameobject {
     }
 
 
-    void NavigationComponent::setPath(Path path, vec2 speed) {
+    void NavigationComponent::setPath(Path path, float speed) {
         if (path.size() > 0) {
             this->path  = path;
             this->current_target_node_id = 0;
@@ -463,11 +463,11 @@ namespace gameobject {
         }
     }
 
-    void NavigationComponent::setDestination(int x, int y, vec2 speed) {
+    void NavigationComponent::setDestination(int x, int y, float speed) {
         this->setDestination(vec2(x, y), speed);
     }
 
-    void NavigationComponent::setDestination(vec2 destination, vec2 speed) {
+    void NavigationComponent::setDestination(vec2 destination, float speed) {
         this->current_destination = destination;
         this->speed               = speed;
         this->has_destination     = true;
@@ -486,11 +486,17 @@ namespace gameobject {
         this->has_destination = false;
     }
 
-    void NavigationComponent::resetPath() {
+    void NavigationComponent::clearPath() {
         if (this->is_following_path) {
             this->is_following_path = false;
             this->path.clear();
             this->clearDestination();
+        }
+    }
+
+    void NavigationComponent::restartPath() {
+        if (this->is_following_path) {
+            this->setPath(this->path, this->speed);
         }
     }
 
@@ -526,6 +532,10 @@ namespace gameobject {
         
         this->at_destination = glm::length(this->current_destination - this->position) <= this->distance_threshold;
         return this->at_destination;
+    }
+
+    Path NavigationComponent::getPath() {
+        return this->path;
     }
 
     // ****************************************************************************** //

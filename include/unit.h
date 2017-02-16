@@ -17,7 +17,6 @@ namespace unit {
         tower_ptr getNearestTower() const;
         Point<float> velocity = Point<float>(0, 0);
         float health = 1000;
-        std::vector<Point<int>> path;
 
     public:
         Unit(id_t id, TYPE unit_type, Manager* m);
@@ -26,7 +25,6 @@ namespace unit {
         virtual void render() override;
         virtual void renderGUI() override;
         virtual void release() override;
-        void getPath(Point<int> target);
 
         //Gameplay methods
         virtual void step();

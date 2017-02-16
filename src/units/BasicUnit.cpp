@@ -36,8 +36,8 @@ namespace unit {
         render_manager = manager->getRenderManager();
 
 
-        float rotation = (float) (atan2(render_facing.y-getY(), render_facing.x-getX()) - M_PI/2);
-        texture->render(getX(), getY(), 0.10f, 0.10f, rotation);
+        float rotation = (float) (atan2(render_facing.y-getYr(), render_facing.x-getXr()) - M_PI/2);
+        texture->render(getXr(), getYr(), 0.10f, 0.10f, rotation);
     }
 
 	void BasicUnit::onCollision(gameobject_ptr other) {

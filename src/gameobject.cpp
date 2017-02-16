@@ -5,7 +5,6 @@
 namespace gameobject {
 
     //// GAME OBJECT
-
     GameObject::GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m) :
         id_(id),
         super_type_(super_type),
@@ -39,7 +38,10 @@ namespace gameobject {
 	void GameObject::renderGUI() {}
 	void GameObject::release() {}
 	void GameObject::onCollision(gameobject_ptr other) {}
-	void GameObject::step() {}
+	void GameObject::step() {
+        this->navigationStep();
+        this->MotionComponent::motionStep();
+    }
     void GameObject::writeNetworkUpdate(int event_id, Buffer &buffer) {}
     void GameObject::recvNetworkInteraction(int event_id, Buffer &buffer) {}
 
@@ -48,25 +50,24 @@ namespace gameobject {
         return 0;
     }
 
-    int GameObject::getX() const { return position.x; }
+   /* int GameObject::getX() const { return position.x; }
     int GameObject::getY() const { return position.y; }
     int GameObject::getXr() const { return render_position.x; }
     int GameObject::getYr() const { return render_position.y; }
-    Point<int> GameObject::getPosition() const { return position; }
+    Point<int> GameObject::getPosition() const { return position; }*/
 
     int GameObject::distanceTo(smartpointers::slave_ptr<GameObject> other) const {
-        //int x = (other->getX() - getX());
-        //int y = (other->getY() - getY());
-        //return (x*x + y*y);
-        return position.distanceTo(other->getPosition());
+        return (other->getPosition() - position).length();
+        
     }
 
     int GameObject::distanceTo(Point<int> point) const {
-        //int x = (point.x - getX());
-        //int y = (point.y - getY());
-        //return (x*x + y*y);
-        return position.distanceTo(point);
+        return (vec2(point.x, point.y) - position).length();
 	}
+
+    int GameObject::distanceTo(glm::vec2 point) const {
+        return (point - position).length();
+    }
 
 	// Setup
 	/*
@@ -322,4 +323,210 @@ namespace gameobject {
 		return false;
 	}
 
+    // ****************************************************************************** //
+    // GameObject motion component
+    void MotionComponent::motionStep() {
+        position += velocity;
+        velocity *= friction;
+
+        render_position += (position - render_position)*smoothing_rate;
+    }
+
+    void MotionComponent::setPosition(int x, int y) {
+        this->position = glm::vec2(x, y);
+    }
+
+    void MotionComponent::setPosition(glm::vec2 position) {
+        this->position = position;
+    }
+
+    void MotionComponent::setX(int x) {
+        this->position.x = x;
+    }
+
+    void MotionComponent::setY(int y) {
+        this->position.y = y;
+    }
+
+    void MotionComponent::setVelocity(float x, float y) {
+        this->velocity = vec2(x, y);
+    }
+
+    void MotionComponent::setVelocity(glm::vec2 velocity) {
+        this->velocity = velocity;
+    }
+
+    void MotionComponent::setSmoothingRate(float rate) {
+        this->smoothing_rate = rate;
+    }
+
+    void MotionComponent::setFriction(vec2 friction) {
+        this->friction = friction;
+    }
+
+    void MotionComponent::addVelocity(vec2 vel) {
+        this->velocity += vel;
+    }
+
+    int MotionComponent::getX() const {
+        return this->position.x;
+    }
+
+    int MotionComponent::getY() const {
+        return this->position.y;
+    }
+
+    int MotionComponent::getXr() const {
+        return this->render_position.x;
+    }
+
+    int MotionComponent::getYr() const {
+        return this->render_position.y;
+    }
+
+    vec2 MotionComponent::getPosition() const {
+        return this->position;
+    }
+
+    float MotionComponent::getVelocityX() const {
+        return this->velocity.x;
+    }
+
+    float MotionComponent::getVelocityY() const {
+        return this->velocity.y;
+    }
+
+    vec2 MotionComponent::getVelocity() const {
+        return this->velocity;
+    }
+
+    float MotionComponent::getSmoothingRate()const {
+        return this->smoothing_rate;
+    }
+
+    vec2 MotionComponent::getFriction() const {
+        return this->friction;
+    }
+    // ****************************************************************************** //
+
+    // ****************************************************************************** //
+    // GameObject navigation component
+    void NavigationComponent::navigationStep() {
+
+        // Follow path
+        if (this->is_following_path && !this->path_complete) {
+
+            // Check if we have arrived at our destination
+            if (this->getAtDestination()) {
+
+                // Check if there are more nodes:
+                if (current_target_node_id < path.size() - 1) {
+                    current_target_node_id++;
+                    this->setDestination(path[current_target_node_id], this->speed);
+                    this->path_complete = false;
+                } else {
+                    this->path_complete = true; // We have finished the path
+                }
+
+            } else {
+                // Force destination to next node
+                this->setDestination(path[current_target_node_id], this->speed);
+                this->path_complete = false;
+            }
+        }
+
+        // Process destination
+        if (this->has_destination) {
+            
+            // If we are not at our destination, navigate towards.
+            /*
+                This is done by setting the velocity of the object
+            */
+            if (!this->getAtDestination()) {
+                vec2 direction = glm::normalize(this->current_destination - this->position);
+                this->setVelocity(direction * this->speed);
+                
+            } else {
+                this->setVelocity(vec2(0));
+            }
+        }
+    }
+
+
+    void NavigationComponent::setPath(Path path, vec2 speed) {
+        if (path.size() > 0) {
+            this->path  = path;
+            this->current_target_node_id = 0;
+            this->setDestination(path[this->current_target_node_id], speed);
+            this->is_following_path = true;
+            this->path_complete     = false;
+        }
+    }
+
+    void NavigationComponent::setDestination(int x, int y, vec2 speed) {
+        this->setDestination(vec2(x, y), speed);
+    }
+
+    void NavigationComponent::setDestination(vec2 destination, vec2 speed) {
+        this->current_destination = destination;
+        this->speed               = speed;
+        this->has_destination     = true;
+        this->at_destination      = ((this->current_destination - this->position).length() <= this->distance_threshold);
+    }
+
+    void NavigationComponent::setDestination() {
+        this->clearDestination();
+    }
+
+    void NavigationComponent::setDistanceThreshold(int distance) {
+        this->distance_threshold = distance;
+    }
+
+    void NavigationComponent::clearDestination() {
+        this->has_destination = false;
+    }
+
+    void NavigationComponent::resetPath() {
+        if (this->is_following_path) {
+            this->is_following_path = false;
+            this->path.clear();
+            this->clearDestination();
+        }
+    }
+
+    bool NavigationComponent::getFollowingPath() {
+        return this->is_following_path;
+    }
+
+    bool NavigationComponent::getPathComplete() {
+        return this->path_complete;
+    }
+
+    int  NavigationComponent::getPathnodeID() {
+        return this->current_target_node_id;
+    }
+
+    int  NavigationComponent::getPathLength() {
+        return (is_following_path) ? this->path.size() : 0;
+    }
+
+    vec2 NavigationComponent::getDestination() {
+        return this->current_destination;
+    }
+
+    int  NavigationComponent::getDistanceThreshold() {
+        return this->distance_threshold;
+    }
+
+    bool NavigationComponent::getHasDestination() {
+        return this->has_destination;
+    }
+
+    bool NavigationComponent::getAtDestination() {
+        
+        this->at_destination = glm::length(this->current_destination - this->position) <= this->distance_threshold;
+        return this->at_destination;
+    }
+
+    // ****************************************************************************** //
 }

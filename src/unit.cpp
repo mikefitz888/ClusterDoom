@@ -62,28 +62,22 @@ namespace unit {
     void Unit::release() {}
 
     void Unit::step() {
+        GameObject::step();
+
         auto target = getNearestTower();
         if (!target) {
             return; //NO TARGET
         }
-        render_facing = target->getPosition();
+        this->setDestination(target->getPosition(), vec2(1));
+        this->setSmoothingRate(0.25f);
+
+        render_facing = getDestination();//target->getPosition();
 
         //float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
-        int distance = DIST_SQ(getX(), target->getX(), getY(), target->getY());
+        ivec2 destination = getDestination();
+        int distance = DIST_SQ(getX(), destination.x, getY(), destination.y);
         if (distance < 2000) {
            attack(target);
-        }
-        else {
-            //Move to tower
-            int dx = target->getX() - getX();
-            int dy = target->getY() - getY();
-
-            if (dx > 0) { position.x++; }
-            else { position.x--; }
-
-            if (dy > 0) { position.y++; }
-            else { position.y--; }
-
         }
     }
 
@@ -123,11 +117,11 @@ namespace unit {
         }
     }
 
-	void Unit::getPath(Point<int> target) {
+	/*void Unit::getPath(Point<int> target) {
 		Point<int> start = this->position;
 		gamecontroller::GameController* gc = this->manager->getGameController();
 		int screenWidth = gc->getScreenWidth();
 		int screenHeight = gc->getScreenHeight();
 		//aStar(start, target, screenWidth, screenHeight, gc, path);
-	}
+	}*/
 }

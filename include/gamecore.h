@@ -155,6 +155,7 @@ namespace unit {
 
 namespace gameobject {
     class Collision;
+    class MotionComponent;
     class GameObject;
 
     struct BoundingBox;
@@ -184,6 +185,8 @@ namespace worldrenderer {
     class WorldRenderer;
 }
 
+
+
 // Usings
 using gameobject::GameObject;
 using gameobject::Point;
@@ -193,6 +196,8 @@ using std::map;
 using graphics::VertexBuffer;
 using graphics::AnimatedTexture;
 using graphics::RenderManager;
+using glm::vec2;
+using glm::ivec2;
 
 namespace unit {
     //using gameobject::gameobject_ptr;
@@ -202,5 +207,9 @@ namespace unit {
     using gameobject::Point;
     using manager::Manager;
 }
+
+// Typedefs
+using paths::DijkstraNode;
+typedef std::vector<vec2> Path;
 
 #endif //_CORE_HEADER

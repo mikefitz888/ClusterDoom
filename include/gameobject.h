@@ -99,11 +99,109 @@ namespace gameobject {
     enum OBJECT_TYPE : unsigned int { SPAWN = 0 };
 
 
+    // ****************************************************************************** //
+    // GameObject motion component
+    /*
+        Give this to any object which needs motion.
+        The render_position of the object is the regular position with the applied smoothing
+        rate.
+
+        - In motion step, position will be modified by the velocity factor.
+        - Velocity factor will be multiplied by the friction factor
+
+    */
+    class MotionComponent {
+
+    protected:
+        vec2 position, render_position, velocity, friction = vec2(1.0f,1.0f);
+        float smoothing_rate = 1.0;
+
+
+        void motionStep();
+    public:
+        void setPosition(int x, int y);
+        void setPosition(glm::vec2 position);
+        void setX(int x);
+        void setY(int y);
+        void setVelocity(float x, float y);
+        void setVelocity(glm::vec2 velocity);
+        void setSmoothingRate(float rate);
+        void setFriction(vec2 friction);
+
+        void addVelocity(vec2 vel);
+
+        int getX() const;
+        int getY() const;
+        int getXr() const;
+        int getYr() const;
+        glm::vec2 getPosition() const;
+        float getVelocityX() const;
+        float getVelocityY() const;
+        glm::vec2 getVelocity() const;
+        float getSmoothingRate()const;
+        vec2 getFriction() const;
+    };
+    // ****************************************************************************** //
+
+    // ****************************************************************************** //
+    // GameObject navigation component
+    /*
+        Can give this to any object that requires navigation.
+        DEPENDS ON: [MotionComponent]
+
+        In navigation step:
+            - An object will follow a path whilst a path exists.
+                This is done by setting the destination to the next node in the path
+            - An object will move towards a destination at the designated speed
+           
+        Paths are treated as a vector of points. A path is copied into the object that 
+        is following it, rather than being a reference.
+    */
+    class NavigationComponent : public MotionComponent {
+        bool is_following_path = false;
+        bool at_destination    = false;
+        bool has_destination   = false;
+        bool path_complete     = false;
+        Path path;
+
+        int current_target_node_id = 0;     // Keeps track of pathfinding progress
+        int distance_threshold     = 10;    // Distance to destination to register as arrived
+
+        vec2 current_destination;
+        vec2 speed;                 // Speed at which the object has been told to move towards its destination
+
+    protected:
+        void navigationStep();
+
+    public:
+        
+        void setPath(Path path, vec2 speed);                    // Tell the object to follow a given path
+        void setDestination(int x, int y, vec2 speed);
+        void setDestination(vec2 destination, vec2 speed);
+        void setDestination();                      // Will call clearDestination
+        void setDistanceThreshold(int distance);
+        void clearDestination();                    // Will stop the object from navigating (Does not clear path destinations)
+        void resetPath();                           // Clears the current path
+
+        bool getFollowingPath();
+        bool getPathComplete();
+        int  getPathnodeID();           // Returns the ID 
+        int  getPathLength();           //
+        vec2 getDestination();
+        int  getDistanceThreshold();
+        bool getHasDestination();       // Returns whether the object has a set destination or not
+        bool getAtDestination();        // Will return true if at destination. If no destination is set, will return false.
+
+        
+    };
+    // ****************************************************************************** //
+
+
     /*
         Gameobject abstract class
 
     */
-    class GameObject : public IRenderable, public INetworkInstance {
+    class GameObject : public IRenderable, public INetworkInstance, public NavigationComponent{
         const id_t id_;
         const id_t super_type_ = 0;
         const id_t sub_type_ = 0;
@@ -112,11 +210,8 @@ namespace gameobject {
         RenderManager* render_manager = nullptr;
         Collision collision_profile = Collision(nullptr);
 
-        Point<int> position = Point<int>(0, 0);
         Point<int> jitter_offset = Point<int>(0, 0);
-
-        Point<int> render_position = Point<int>(0, 0);
-        Point<int> render_facing = Point<int>(0, 0);
+        ivec2 render_facing = ivec2(0, 0);
 
 
         gameobject_ptr self = nullptr;
@@ -149,19 +244,15 @@ namespace gameobject {
         virtual void recvNetworkInteraction(int event_id, Buffer &buffer) override;
 
         // CONTORL & DATA
-        int getX() const;
-        int getY() const;
-        int getXr() const;
-        int getYr() const;
-        Point<int> getPosition() const;
         int distanceTo(smartpointers::slave_ptr<GameObject> other) const;
 
         int distanceTo(Point<int> point) const;
+        int distanceTo(glm::vec2 point) const;
         inline Collision* getCollision() { return &this->collision_profile; }
 
-        inline void setX(int x_) { position.x = x_; }
-        inline void setY(int y_) { position.y = y_; }
-        inline void setPosition(int x, int y) { setX(x); setY(y); }
+        //inline void setX(int x_) { position.x = x_; }
+        //inline void setY(int y_) { position.y = y_; }
+        //inline void setPosition(int x, int y) { setX(x); setY(y); }
         inline void setJitter(int x, int y){jitter_offset.x=x; jitter_offset.y=y;};
         inline Point<int> getJitter(){return jitter_offset;};
 

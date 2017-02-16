@@ -16,9 +16,13 @@ namespace gamecontroller {
 
             // Clear node links:
             nodes[i].clearNodes();
+            
 
             int x = i % TILE_W;
             int y = (i) / TILE_H;
+
+            // Set position of node
+            nodes[i].setPosition(x, y);
 
             if (x > 0) {
                 nodes[i].addNode(&nodes[y * TILE_W + x - 1]);
@@ -531,12 +535,15 @@ namespace gamecontroller {
 
         TileNode& node1 = nodes[start.y*TILE_W + start.x];
         TileNode& node2 = nodes[end.y*TILE_W + end.x];
+
         path_finder.setStart(node1);
         path_finder.setGoal(node2);
         if (path_finder.findPath<paths::AStar>(path)) {
             for (auto node : path) {
+                std::cout << "      " <<node->getX() << " " << node->getY() << std::endl;
                 ret_path.emplace_back(node->getX()*tile_width, node->getY()*tile_height);
             }
+            
             return true;
         }
         return false;

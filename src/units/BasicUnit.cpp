@@ -18,12 +18,12 @@ namespace unit {
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getTexture("basic_unit");
 
-        Path path;
+       /* Path path;
         path.push_back(vec2(100, 100));
         path.push_back(vec2(500, 50));
         path.push_back(vec2(250, 300));
         path.push_back(vec2(1280, 720));
-        this->setPath(path, 10);
+        this->setPath(path, 10);*/
     }
 
     void BasicUnit::step() {
@@ -33,10 +33,16 @@ namespace unit {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
             if (!pressed) {
                 Path path;
+                path.clear();
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                if (manager->getGameController()->getPath(position, vec2(mouse_pos.x, mouse_pos.y), path)) {
+                if (manager->getGameController()->getPath(ivec2(render_position.x, render_position.y), vec2(mouse_pos.x, mouse_pos.y), path)) {
                     this->clearPath();
                     this->setPath(path, 2);
+
+                    std::cout << "NEW PATH: LENGTH: " << path.size() << std::endl;
+                    for (auto a : path) {
+                        std::cout << "  (" << a.x << "," << a.y << ")" << std::endl;
+                    }
                 }
                 pressed = true;
             }
@@ -67,14 +73,19 @@ namespace unit {
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
         texture->render(getXr(), getYr(), 0.10f, 0.10f, rotation);
 
+        // ******************************************************************************************************//
+        // DRAW PATH
+        graphics::Texture* red = manager->getResourceManager()->getTexture("red");
         Path path = this->getPath();
         if (this->getFollowingPath() && path.size() > 0) {
             for (int n = 0; n < path.size() - 1; n++) {
                 vec2 n1 = path[n];
                 vec2 n2 = path[n + 1];
                 graphics::RenderUtils::draw_line(n1.x, n1.y, n2.x, n2.y, 3, graphics::Colour(255,255,255,255));
+                red->render(n2.x, n2.y, 0.10f, 0.10f, 0.0f);
             }
         }
+        // ******************************************************************************************************//
     }
 
 	void BasicUnit::onCollision(gameobject_ptr other) {

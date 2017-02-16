@@ -8,8 +8,8 @@
 
 #define NO_MATCH -1
 
-#define TILE_H 20
 #define TILE_W 20
+#define TILE_H 20
 
 namespace gamecontroller {
     const int time_per_scenario = 60;

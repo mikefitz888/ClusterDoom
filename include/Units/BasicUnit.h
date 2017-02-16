@@ -14,6 +14,8 @@ namespace unit
         int network_update_position_timer_max = 45;
         int network_update_position_timer = network_update_position_timer_max;
 
+        bool pressed = false; //TEMP;
+
     public:
         BasicUnit(id_t key, Manager* m);
         void init() override;

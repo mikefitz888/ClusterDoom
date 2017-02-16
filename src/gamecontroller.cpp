@@ -19,7 +19,7 @@ namespace gamecontroller {
             
 
             int x = i % TILE_W;
-            int y = (i) / TILE_H;
+            int y = (i) / TILE_W;
 
             // Set position of node
             nodes[i].setPosition(x, y);
@@ -543,15 +543,16 @@ namespace gamecontroller {
                 std::cout << "      " <<node->getX() << " " << node->getY() << std::endl;
                 ret_path.emplace_back(node->getX()*tile_width, node->getY()*tile_height);
             }
-            
             return true;
         }
+        
         return false;
     }
 
     float TileNode::distanceTo(AStarNode* node) const 
     {
-        return abs((float)(node->getX() - m_x)) + abs((float)(node->getY() - m_y));
+        int distance = (node->getX() - this->getX())*(node->getX() - this->getX()) + (node->getY() - this->getY())*(node->getY() - this->getY());
+        return distance;
     }
     
     TileNode::TileNode() : AStarNode() {}

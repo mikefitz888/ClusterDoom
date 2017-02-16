@@ -31,10 +31,17 @@ namespace unit {
         Unit::step();
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
-            Path path;
-            if (manager->getGameController()->getPath(position, vec2(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y), path)) {
-                this->setPath(path, 2);
+            if (!pressed) {
+                Path path;
+                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                if (manager->getGameController()->getPath(position, vec2(mouse_pos.x, mouse_pos.y), path)) {
+                    this->clearPath();
+                    this->setPath(path, 2);
+                }
+                pressed = true;
             }
+        } else {
+            pressed = false;
         }
 
         // Check path

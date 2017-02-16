@@ -508,15 +508,34 @@ namespace gamecontroller {
     }
 
     bool GameController::getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path) {
+        if (start.x < 0 || start.x >= manager->getRenderManager()->getWindowWidth() ||
+            start.y < 0 || start.y >= manager->getRenderManager()->getWindowHeight() ||
+            end.x < 0 || end.x >= manager->getRenderManager()->getWindowWidth() ||
+            end.y < 0 || end.y >= manager->getRenderManager()->getWindowHeight()
+            ) {
+            return false;
+        }
         ret_path.clear();
         std::vector<TileNode*> path;
+
+        int tile_width  = manager->getRenderManager()->getWindowWidth() / TILE_W;
+        int tile_height = manager->getRenderManager()->getWindowHeight() / TILE_H;
+
+        start /= vec2(tile_width, tile_height);
+        end /= vec2(tile_width, tile_height);
+
+        if (start.x < 0 || start.x >= TILE_W || start.y < 0 || start.y >= TILE_H) { return false; }
+        if (end.x < 0 || end.x >= TILE_W || end.y < 0 || end.y >= TILE_H) { return false; }
+
+        std::cout << "PATHING START ID: " << start.x << " END ID: " << end.x << std::endl;
+
         TileNode& node1 = nodes[start.y*TILE_W + start.x];
         TileNode& node2 = nodes[end.y*TILE_W + end.x];
         path_finder.setStart(node1);
         path_finder.setGoal(node2);
         if (path_finder.findPath<paths::AStar>(path)) {
             for (auto node : path) {
-                ret_path.emplace_back(node->getX(), node->getY());
+                ret_path.emplace_back(node->getX()*tile_width, node->getY()*tile_height);
             }
             return true;
         }

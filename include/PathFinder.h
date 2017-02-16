@@ -74,9 +74,10 @@ namespace paths
             A &algorithm = A::getInstance();
 
             if (hint > 0) path.reserve(hint);
-
+            
             bool pathFound = algorithm.getPath(m_start, m_goal, path);
-
+            algorithm.clear();
+            
             if (!pathFound)  return false;
             if (hint > 0)  solution.reserve(hint);
             for (auto rit = std::rbegin(path); rit != std::rend(path); ++rit) solution.push_back(static_cast<T*>(*rit));

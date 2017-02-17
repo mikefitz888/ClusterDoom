@@ -2,7 +2,7 @@
 #define _SPAWN_H
 
 #include "../gamecore.h"
-
+#include "../../include/unit.h"
 #include "../../include/gameobject.h"
 
 class Spawn : public GameObject {
@@ -14,6 +14,12 @@ protected:
     int units = 0;
     int spawn_rate = 0;
     bool running = false;
+    struct unit_spawn {
+        const int time;
+        const unit::TYPE unit_type;
+        unit_spawn(unit::TYPE type, int t = 0);
+    };
+    std::vector<unit_spawn> spawn_queue;
 public:
 	Spawn(id_t id, manager::Manager* m);
 

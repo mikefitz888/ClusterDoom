@@ -164,8 +164,8 @@ namespace graphics {
     }
 
     // These functions can be used to manipulate the game window
-    void RenderManager::setWindowFullScreen(bool fullscreen) {
-        fullscreen = !fullscreen;
+    void RenderManager::setWindowFullScreen(bool fullscreen_) {
+        fullscreen = !fullscreen_;
         window->close();
         delete window;
         createWindow();
@@ -175,9 +175,9 @@ namespace graphics {
         window->setTitle(title);
     }
 
-    void RenderManager::setWindowSize(int width, int height) const {
-        width  = width;
-        height = height;
+    void RenderManager::setWindowSize(int width_, int height_) {
+        width  = width_;
+        height = height_;
         window->setSize(sf::Vector2u(width, height));
     }
 

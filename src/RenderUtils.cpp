@@ -64,7 +64,7 @@ Colour RenderUtils::colour_blend(Colour a, Colour b, float factor) {
 }
 
 void RenderUtils::draw_line(int x1, int y1, int x2, int y2, int thickness, Colour colour) {
-    RenderManager *rm = manager->getRenderManager();
+    //RenderManager *rm = manager->getRenderManager();
     float length = glm::length(vec2(x1, y1) - vec2(x2, y2));
     float angle  = (float)(atan2(y2- y1, x2 - x1));
 

@@ -74,7 +74,7 @@ namespace graphics {
         void init(Manager *manager);
         void setWindowFullScreen(bool fullscreen);
         void setWindowTitle(const sf::String title) const;
-        void setWindowSize(int width, int height) const;
+        void setWindowSize(int width, int height);
         int getWindowWidth() const;
         int getWindowHeight() const;
         bool render();

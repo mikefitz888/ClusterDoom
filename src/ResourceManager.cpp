@@ -252,6 +252,7 @@ sf::Font* ResourceManager::fontLoad(sf::String resource_name, sf::String resourc
 
         // Font loaded sucecssfully (add to map)
         fontMap.insert(std::pair<sf::String, sf::Font*>(resource_name, new_font));
+        return getFont(resource_name);
     }
 }
 

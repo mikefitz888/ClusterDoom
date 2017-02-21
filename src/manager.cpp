@@ -1,5 +1,5 @@
 #include "../include/manager.h"
-#include "../include/TowerLogic.h"
+#include "../include/towerlogic.h"
 #include "../include/ObjectLogic.h"
 #include "../include/network/Network.h"
 #include "../include/unitlogic.h"

@@ -3,7 +3,7 @@
 #include "../include/network/Buffer.h"
 #include "../include/unit.h"
 #include "../include/tower.h"
-#include "../include/GameObjects/spawn.h"
+#include "../include/GameObjects/Spawn.h"
 
 namespace gamecontroller {
 

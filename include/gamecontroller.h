@@ -4,7 +4,7 @@
 #include "gamecore.h"
 #include "smartpointers.h"
 #include "PathFinder.h"
-#include "AStar.h"
+#include "aStar.h"
 
 #define NO_MATCH -1
 

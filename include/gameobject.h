@@ -5,7 +5,7 @@
 
 #include "RenderManager.h"
 #include "smartpointers.h"
-#include "network\Network.h"
+#include "network/Network.h"
 
 
 // This is already defined in the CSTDLib

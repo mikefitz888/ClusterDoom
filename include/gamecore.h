@@ -63,7 +63,9 @@ class Spawn;
 class String;
 
 typedef unsigned char byte;
+#ifdef _WIN32
 typedef size_t id_t;
+#endif
 
 namespace containers {
     class InvalidOptionalAccessException;

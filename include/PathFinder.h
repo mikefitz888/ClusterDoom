@@ -70,7 +70,7 @@ namespace paths
         */
         template <typename A> bool findPath(std::vector<T*>& solution, int hint = 0)
         {
-            std::vector<A::node_t*> path;
+            std::vector<typename A::node_t*> path;
             A &algorithm = A::getInstance();
 
             if (hint > 0) path.reserve(hint);
@@ -80,7 +80,8 @@ namespace paths
             
             if (!pathFound)  return false;
             if (hint > 0)  solution.reserve(hint);
-            for (auto rit = std::rbegin(path); rit != std::rend(path); ++rit) solution.push_back(static_cast<T*>(*rit));
+            //for (auto rit = std::rbegin(path); rit != std::rend(path); ++rit) solution.push_back(static_cast<T*>(*rit));
+            for(auto rit = path.rbegin(); rit != path.rend(); ++rit) solution.push_back(static_cast<T*>(*rit));
             return true;
         }
     };

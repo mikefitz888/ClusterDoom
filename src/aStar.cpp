@@ -1,5 +1,5 @@
 //Copyright (c) 2015, Antoine Vugliano
-#include "../include/AStar.h"
+#include "../include/aStar.h"
 
 namespace paths
 {

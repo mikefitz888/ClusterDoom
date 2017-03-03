@@ -112,8 +112,8 @@ namespace manager {
                 std::cout << "Invalid key, investigate.";
             }
         }
-        std::cout << "Object added to pool with id = " << id << std::endl;
-        std::cout << "Pool size now = " << game_object_pool.size() << std::endl;
+        //std::cout << "Object added to pool with id = " << id << std::endl;
+        //std::cout << "Pool size now = " << game_object_pool.size() << std::endl;
 
         // Set shared pointer
         gameobject_ptr self = game_object_pool[id];
@@ -173,8 +173,9 @@ namespace manager {
     bool Manager::step(){
         audio_manager->stepSounds();
         network_manager->networkStep();
-        game_controller->step();
-        return render();
+        bool gc = game_controller->step(); 
+        return render() && gc;
+        //return render();
     }
 
     void Manager::initRenderManager(RenderManager &rm) {

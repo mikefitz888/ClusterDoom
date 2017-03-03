@@ -91,7 +91,7 @@ namespace gameobject {
 
 	// Create new empty collision profile
 	Collision::Collision(gameobject_ptr parent) {
-		std::cout << "PARENT: " << parent << std::endl;
+		//std::cout << "PARENT: " << parent << std::endl;
 		this->parent = parent;
 		this->setTypeNone();
 	}

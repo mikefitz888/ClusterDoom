@@ -31,6 +31,7 @@ int main(int argc, char* argv[]){
 
     //Render Manager must be initialized first to ensure GL context
     model.initRenderManager(rm);
+    
 
     //TODO: Pass an openCV component to manager
     cvinterface::CVInterface cv;

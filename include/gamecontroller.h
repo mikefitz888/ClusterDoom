@@ -12,7 +12,7 @@
 #define TILE_H 20
 
 namespace gamecontroller {
-    const int time_per_scenario = 60;
+    const float time_per_scenario = 20.f;
     const int waves_per_scenario = 3;
 
     using gameobject::GameObject;
@@ -83,15 +83,15 @@ namespace gamecontroller {
         float getElapsedTime() const;
         void resetClock();
         void init();
-        void step();
+        bool step();
         void restart() const;
         Matching stableMatching(std::vector<Point<int>>& detections);
         int getWeight(int x, int y);
 
         tower_ptr  spawnTowerAt(int x, int y, tower::TYPE type) const;
         tower_ptr  spawnTowerAt(Point<int> position, tower::TYPE type) const;
-        unit_ptr   spawnUnitAt(int x, int y) const;
-        unit_ptr   spawnUnitAt(Point<int> position) const;
+        unit_ptr   spawnUnitAt(int x, int y, unit::TYPE type) const;
+        unit_ptr   spawnUnitAt(Point<int> position, unit::TYPE type) const;
         gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, int x, int y) const;
         gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, Point<int> position) const;
         void moveTower(tower_ptr tower, Point<int> point) const;

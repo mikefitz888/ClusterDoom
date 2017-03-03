@@ -52,14 +52,14 @@ namespace gamecontroller {
         return 0;
     }
 
-    unit_ptr GameController::spawnUnitAt(int x, int y) const {
-        auto unit = manager->createUnit(unit::TYPE::BASIC);
+    unit_ptr GameController::spawnUnitAt(int x, int y, unit::TYPE type) const {
+        auto unit = manager->createUnit(type);
         unit->setPosition(x, y);
         return unit;
     }
 
-    unit_ptr GameController::spawnUnitAt(Point<int> position) const {
-        return spawnUnitAt(position.x, position.y);
+    unit_ptr GameController::spawnUnitAt(Point<int> position, unit::TYPE type) const {
+        return spawnUnitAt(position.x, position.y, type);
     }
 
 
@@ -137,7 +137,7 @@ namespace gamecontroller {
         startCVServer();
     }
 
-    void GameController::step() {
+    bool GameController::step() {
 
         frame_clock++;
         //In general, step() should be frame-based.
@@ -151,7 +151,7 @@ namespace gamecontroller {
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                 if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                     mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                    spawnUnitAt(mouse_pos.x, mouse_pos.y);
+                    spawnUnitAt(mouse_pos.x, mouse_pos.y, unit::TYPE::BASIC);
                 }
                 spawned = true;
             }
@@ -174,11 +174,15 @@ namespace gamecontroller {
             game_started = false;
             wave = 0;
             scenario = 0;
+            //TODO: clear towers/units
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
                 //Exit Game
+                std::cout << "EXITING GAME (SUPPOSEDLY)\n";
+                return false;
             }
-            return;
+            manager->clearTowers();
+            return true;
         }
 
         if (!game_started) {
@@ -187,11 +191,12 @@ namespace gamecontroller {
                 if (manager->getTowers().size()) {
                     std::cout << "ERROR! There should not be any towers existing at this point, before base has spawned." << std::endl;
                 }
-                tower_ptr t = spawnTowerAt(400, 200, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
+                
+                tower_ptr t = spawnTowerAt(getScreenWidth()/2, getScreenHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
                 frame_clock = 0;
             }
             else {
-                return;
+                return true;
             }
         }
 
@@ -206,9 +211,11 @@ namespace gamecontroller {
         else { //Ending sequence
 
         }
+        return true;
     }
 
     void GameController::runScenario(int scenario) {
+        //std::cout << scenario << " " << wave << " " << getElapsedTime() << "\n";
         if (scenario > this->scenario) {
             //New stage
             this->scenario = scenario;
@@ -222,7 +229,7 @@ namespace gamecontroller {
         }
         else {
             //Continue current scenario
-            int wave = ((int)getElapsedTime() / time_per_scenario) % waves_per_scenario;
+            int wave = (int)(getElapsedTime() * waves_per_scenario / time_per_scenario) % waves_per_scenario;
             if (wave > this->wave) {
                 this->wave = wave;
                 //Start wave
@@ -234,9 +241,9 @@ namespace gamecontroller {
             }
             else {
                 //Continue wave
-                for (auto spawn : spawn_points) {
+                //for (auto spawn : spawn_points) {
 
-                }
+                //}
             }
         }
     }

@@ -23,6 +23,7 @@ private:
     int damage = 75;
     int blast_radius  = 75;
     int falloff_range = 25; // Damage is maximal up to 50 units off
+    int knockback_force = 24;
 
     // Animation variables
     float animation_rate = 0.05f;
@@ -43,6 +44,12 @@ public:
     virtual void renderGUI() override;
     virtual void release() override;
     virtual void step() override;
+
+    // Property modifiers
+    void setExplosionDamage(int damage);
+    void setExplosionRadius(int radius, int damage_falloff_radius); 
+    void setExplosionTimer(int timer);
+    void setExplosionKnockback(int knockback);
 };
 
 

@@ -70,7 +70,7 @@ void ProjectileBomb::explode() {
                     glm::vec2 dir = obj->getPosition() - this->position;
                     dir = glm::normalize(dir);
                     //obj->addVelocity(dir*0.25f);
-                    float knockback_force = force_factor*24.0f;
+                    float knockback_force = force_factor*(float)this->knockback_force;
                     obj->setPosition(obj->getX() + dir.x*knockback_force, obj->getY() + dir.y*knockback_force);
                 }
             }
@@ -98,6 +98,24 @@ void ProjectileBomb::render() {
 
 void ProjectileBomb::renderGUI() {}
 void ProjectileBomb::release() {}
+
+// Property modifiers
+void ProjectileBomb::setExplosionDamage(int damage) {
+    this->damage = damage;
+}
+
+void ProjectileBomb::setExplosionRadius(int radius, int damage_falloff_radius) {
+    this->blast_radius = radius;
+    this->falloff_range = damage_falloff_radius;
+}
+
+void ProjectileBomb::setExplosionTimer(int timer) {
+    this->timer = timer;
+}
+
+void ProjectileBomb::setExplosionKnockback(int knockback) {
+    this->knockback_force = knockback;
+}
 
 
 

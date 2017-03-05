@@ -45,7 +45,7 @@ namespace tower {
 
             elec->setForkParent( this->getSharedPtr() );
             elec->setRange(1000);
-            elec->setDamage(1);
+            elec->setDamage( (requestEfficiency(cost_per_attack) * damage) );
             elec->setTargetObject(units[0]);
             timer = cooldown;
         }

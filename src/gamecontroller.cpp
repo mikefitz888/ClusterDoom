@@ -142,6 +142,10 @@ namespace gamecontroller {
     bool GameController::step() {
 
         frame_clock++;
+        increaseWealth(std::log10(frame_clock));
+        if (frame_clock % 100 == 0) {
+            std::cout << wealth << "\n";
+        }
         //In general, step() should be frame-based.
         
 

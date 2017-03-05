@@ -176,7 +176,7 @@ namespace gamecontroller {
 
                     auto units = getNNearestUnits(glm::vec2(mouse_pos.x, mouse_pos.y), 1000, 1000);
                     if (units.size() > 1) {
-                        std::cout << "ELECTRICITY!!" << std::endl;
+                       // std::cout << "ELECTRICITY!!" << std::endl;
                         gameobject_ptr obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<int>(mouse_pos.x, mouse_pos.y));
                         smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
                         elec->setForkParent(units[0].second->getSharedPtr());

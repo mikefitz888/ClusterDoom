@@ -103,14 +103,14 @@ private:
     // Gameplay properties
     int damage_per_frame = 1; // The amount of damage the electricity inflicts
     int fork_count = 2;       // The number of subsequent objects the electricity will fork to.
-    int fork_depth = 4;       // Number of subsequent objects that can then themselves branch
+    int fork_depth = 3;       // Number of subsequent objects that can then themselves branch
     int range = 200;           // The range of the beam
 
     // Timers
     int fork_alive_timer_max = 30;
     int fork_alive_timer = fork_alive_timer_max;
-    int fork_check_timer_max = 2;
-    int fork_check_timer = fork_check_timer_max;
+    int fork_check_timer_max = 100; // If higher than alive timer, it wont check again
+    int fork_check_timer = 1;// fork_check_timer_max;
 
 
 public:

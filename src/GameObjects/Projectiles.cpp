@@ -152,7 +152,7 @@ void ProjectileElectricity::step() {
     
     // Existence check: (We need to check that our source object and the targeting object still exist)
     if (!fork_parent || !target_object) {
-        std::cout << "ELECTRICITY DESTROYED (EXISTANCE)!!" << std::endl;
+        //std::cout << "ELECTRICITY DESTROYED (EXISTANCE)!!" << std::endl;
         destroySelf();
     }
     this->position        = fork_parent->getPosition();
@@ -160,7 +160,7 @@ void ProjectileElectricity::step() {
 
     // Verify if fork is still in range of target
     if (glm::distance(source_position, target_object->getPosition()) > range) {
-        std::cout << "ELECTRICITY DESTROYED (RANGE)!!" << range << "  " << glm::distance(source_position, target_object->getPosition()) << std::endl;
+        //std::cout << "ELECTRICITY DESTROYED (RANGE)!!" << range << "  " << glm::distance(source_position, target_object->getPosition()) << std::endl;
         destroySelf();
     }
 
@@ -201,7 +201,7 @@ void ProjectileElectricity::step() {
         if (available_forks > 0 && fork_depth > 0) {
 
             // Find 
-            std::vector<std::pair<float, gameobject::unit_ptr>> nearest_units = this->manager->getGameController()->getNNearestUnits(this->target_object->getPosition(), fork_count + 2, range);
+            std::vector<std::pair<float, gameobject::unit_ptr>> nearest_units = this->manager->getGameController()->getNNearestUnits(this->target_object->getPosition(), fork_count + 10, range);
             for (auto distance_unit_pair : nearest_units) {
                 float distance = distance_unit_pair.first;
                 gameobject::unit_ptr obj = distance_unit_pair.second;
@@ -238,9 +238,9 @@ void ProjectileElectricity::step() {
                         // Add fork-object pair to list
                         forks.push_back(std::pair<gameobject::unit_ptr, electricity_ptr>(obj, new_fork));
 
-                        std::cout << "..FORKING!" << std::endl;
+                        /*std::cout << "..FORKING!" << std::endl;
                         std::cout << "      Parent: " << this->getSharedPtr() << " location: (" << this->getX() << "," << this->getY() << ")" << std::endl;
-                        std::cout << "      Target: " << obj->getSharedPtr() << " location: (" << obj->getX() << "," << obj->getY() << ")" << std::endl;
+                        std::cout << "      Target: " << obj->getSharedPtr() << " location: (" << obj->getX() << "," << obj->getY() << ")" << std::endl;*/
                         // Decrement available forks
                         available_forks--;
                         if (available_forks <= 0) {

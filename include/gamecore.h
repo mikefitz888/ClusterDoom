@@ -61,6 +61,7 @@ class ObjectLogic;
 class ResourceManager;
 class Spawn;
 class String;
+class ProjectileBomb;
 
 typedef unsigned char byte;
 #ifdef _WIN32

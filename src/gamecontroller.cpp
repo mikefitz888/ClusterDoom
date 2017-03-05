@@ -159,6 +159,20 @@ namespace gamecontroller {
             spawned = false;
         }
 
+        // TEMP: Spawn bomb
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) {
+            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<int>(mouse_pos.x, mouse_pos.y));
+            }
+
+            spawned = true;
+        } else {
+            spawned = false;
+        }
+
+
         //In general, step() should be frame-based.
         cvNetworkStep();
         manager->stepAll();
@@ -253,6 +267,17 @@ namespace gamecontroller {
         std::vector<tower_ptr> points(manager->getTowers());
         std::sort(begin(points), end(points), [point](const tower_ptr& lhs, const tower_ptr& rhs) { return lhs->distanceTo(point) < rhs->distanceTo(point); });
         return points;
+    }
+
+    // Returns a list of the units within range
+    std::vector<unit_ptr> GameController::getUnitsInRange(glm::vec2 position, int radius) {
+        std::vector<unit_ptr> units_in_range;
+        for (unit_ptr unit : manager->getUnits()) {
+            if (unit->distanceTo(position) <= radius) {
+                units_in_range.push_back(unit);
+            }
+        }
+        return units_in_range;
     }
 
     void GameController::parseCVList(std::vector<Point<int>> list) {

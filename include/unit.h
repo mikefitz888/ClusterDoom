@@ -30,6 +30,7 @@ namespace unit {
         virtual void step();
         virtual void attack(tower_ptr tower);
         virtual void attacked(gameobject_ptr aggressor);
+        virtual void attacked(gameobject_ptr aggressor, int damage);
     };
 }
 

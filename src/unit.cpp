@@ -113,8 +113,12 @@ namespace unit {
     }
 
     void Unit::attacked(gameobject_ptr aggressor) {
-        health--;
-        if(health <= 0) {
+        this->attacked(aggressor, 1);
+    }
+
+    void Unit::attacked(gameobject_ptr aggressor, int damage) {
+        health -= damage;
+        if (health <= 0) {
             destroySelf();
         }
     }

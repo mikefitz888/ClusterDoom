@@ -3,6 +3,7 @@
 
 #include "../gamecore.h"
 #include "../../include/gameobject.h"
+#include "../../include/smartpointers.h"
 
 
 
@@ -87,6 +88,30 @@ Longer range laser fired from the wizard towers
 
 */
 class ProjectileElectricity : public GameObject {
+    typedef smartpointers::slave_ptr<ProjectileElectricity> electricity_ptr;
+private:
+    graphics::Texture* electricity_texture;
+
+    // Targeting properties
+    glm::vec2 source_position;              // Position from which the electricity is eminating
+    gameobject::unit_ptr target_object = nullptr; // Gameobject that this is targeting.
+    gameobject_ptr fork_parent = nullptr;   // The object from which the electricity eminated
+
+    // Forks
+    std::vector<std::pair<gameobject::unit_ptr, electricity_ptr>> forks;
+
+    // Gameplay properties
+    int damage_per_frame = 1; // The amount of damage the electricity inflicts
+    int fork_count = 2;       // The number of subsequent objects the electricity will fork to.
+    int fork_depth = 3;       // Number of subsequent objects that can then themselves branch
+    int range = 200;           // The range of the beam
+
+    // Timers
+    int fork_alive_timer_max = 30;
+    int fork_alive_timer = fork_alive_timer_max;
+    int fork_check_timer_max = 100; // If higher than alive timer, it wont check again
+    int fork_check_timer = 1;// fork_check_timer_max;
+
 
 public:
     // Constructor
@@ -98,6 +123,13 @@ public:
     virtual void renderGUI() override;
     virtual void release() override;
     virtual void step() override;
+
+    // Property modifiers
+    void setDamage(int damage_per_frame);
+    void setForkCount(int fork_count, int fork_depth);
+    void setRange(int range);
+    void setTargetObject(gameobject::unit_ptr target);
+    void setForkParent(gameobject_ptr parent);
 };
 
 

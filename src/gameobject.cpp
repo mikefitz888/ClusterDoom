@@ -334,10 +334,12 @@ namespace gameobject {
 
     void MotionComponent::setPosition(int x, int y) {
         this->position = glm::vec2(x, y);
+        this->render_position = this->position;
     }
 
     void MotionComponent::setPosition(glm::vec2 position) {
         this->position = position;
+        this->render_position = this->position;
     }
 
     void MotionComponent::setX(int x) {

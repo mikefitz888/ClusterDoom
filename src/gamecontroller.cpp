@@ -127,6 +127,7 @@ namespace gamecontroller {
         spawnTowerAt(800, 600);
         spawnTowerAt(400, 600);*/
         //spawnUnitAt(100, 50);
+        
 
         //Gotta love smartpointers, look how clean this is :^)
         spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
@@ -224,6 +225,7 @@ namespace gamecontroller {
                 }
                 
                 tower_ptr t = spawnTowerAt(getScreenWidth()/2, getScreenHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
+                spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
                 frame_clock = 0;
             }
             else {

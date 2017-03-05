@@ -99,6 +99,22 @@ namespace tower {
         }
     }
 
+    unit_ptr Tower::getUnit() {
+        getUnits(1);
+        if (units.size()) return units[0];
+        return nullptr;
+    }
+
+    std::vector<unit_ptr>& Tower::getUnits(size_t amt) {
+        units.clear();
+        if (amt == 0) return units;
+
+        for (auto& unit : manager->getUnits()) {
+            units.emplace_back(unit);
+            if (--amt == 0) return units;
+        }
+    }
+
     float Tower::getHealth() const {
         return health;
     }

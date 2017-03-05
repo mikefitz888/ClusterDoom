@@ -544,6 +544,16 @@ namespace gamecontroller {
         return sf::VideoMode::getDesktopMode().height;
     }
 
+    void GameController::increaseWealth(size_t amt) {
+        wealth += amt;
+    }
+    
+    int GameController::requestWealth(size_t amt){
+        int ret = std::min(amt, wealth);
+        wealth -= ret;
+        return ret;
+    }
+
     bool GameController::getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path) {
         if (start.x < 0 || start.x >= manager->getRenderManager()->getWindowWidth() ||
             start.y < 0 || start.y >= manager->getRenderManager()->getWindowHeight() ||

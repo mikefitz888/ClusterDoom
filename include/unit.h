@@ -19,6 +19,8 @@ namespace unit {
         Point<float> velocity = Point<float>(0, 0);
         float health = 1000;
 
+        void deliverWealth(size_t amt);
+
     public:
         Unit(id_t id, TYPE unit_type, Manager* m);
 

@@ -15,6 +15,7 @@ namespace tower {
 
     void Tower::init(){
         render_manager = manager->getRenderManager();
+        game_controller = manager->getGameController();
 
         texture = manager->getResourceManager()->getTexture("basic_tower");
         /*if(!texture->loadFromFile("src/Resources/Textures/chess_piece_rook.png")){
@@ -62,7 +63,7 @@ namespace tower {
     }
 
     void Tower::renderGUI(){
-
+        
     }
 
     void Tower::release(){
@@ -115,5 +116,13 @@ namespace tower {
                 health = 0;
             }
         }
+    }
+
+    size_t Tower::requestMoney(size_t amt) {
+        return game_controller->requestWealth(amt);
+    }
+
+    float Tower::requestEfficiency(size_t amt) {
+        return (float)requestMoney(amt) / (float)amt;
     }
 }

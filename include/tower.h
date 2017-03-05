@@ -22,8 +22,11 @@ namespace tower {
         graphics::VertexBuffer* vbuff;
         graphics::VertexBuffer* hpbar_buff;
     protected:
+        gamecontroller::GameController* game_controller;
         float max_health = 10000;
         float health=max_health;
+        size_t requestMoney(size_t amt);
+        float requestEfficiency(size_t amt);
     public:
         Tower(id_t id, TYPE tower_type, Manager* m);
         virtual void init() override;

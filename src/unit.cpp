@@ -122,8 +122,13 @@ namespace unit {
     void Unit::attacked(gameobject_ptr aggressor, int damage) {
         health -= damage;
         if (health <= 0) {
+            deliverWealth(20);
             destroySelf();
         }
+    }
+
+    void Unit::deliverWealth(size_t amt) {
+        manager->getGameController()->increaseWealth(amt);
     }
 
 	/*void Unit::getPath(Point<int> target) {

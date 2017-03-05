@@ -65,13 +65,16 @@ namespace unit {
 
     void Unit::step() {
         GameObject::step();
+        this->setSmoothingRate(0.25f);
+
+
 
         auto target = getNearestTower();
         if (!target) {
             return; //NO TARGET
         }
         this->setDestination(target->getPosition(), 1.25f);
-        this->setSmoothingRate(0.25f);
+       
 
         render_facing = getDestination();//target->getPosition();
 

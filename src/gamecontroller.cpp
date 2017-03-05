@@ -272,8 +272,9 @@ namespace gamecontroller {
     // Returns a list of the units within range
     std::vector<unit_ptr> GameController::getUnitsInRange(glm::vec2 position, int radius) {
         std::vector<unit_ptr> units_in_range;
+        units_in_range.clear();
         for (unit_ptr unit : manager->getUnits()) {
-            if (unit->distanceTo(position) <= radius) {
+            if (glm::distance(unit->getPosition(), position) <= radius) {
                 units_in_range.push_back(unit);
             }
         }

@@ -37,19 +37,28 @@
 
 namespace graphics {
     class AnimatedTexture {
-
+        friend class RenderManager;
     private:
-        RenderManager               *render_manager;
-        sf::Texture                   *animated_texture_source;
+        RenderManager               *render_manager = nullptr;
+        sf::Texture           *animated_texture_source = nullptr;
         std::vector<VertexBuffer*>  vertex_buffers;
 
         int frame_count = 0;
+        int width = 0;
+        int height = 0;
+
+        int origin_x, origin_y;
+        void setOrigin(int x, int y);
+        void setOriginCentre();
 
         void release();
 
     public:
-        AnimatedTexture(sf::String filename, bool split_both_ways, int frame_count_h, int frame_count_v, int total_frames);
+        AnimatedTexture(sf::String filename, bool split_both_ways, int frame_count_h, int frame_count_v, int total_frames, RenderManager* render_manager);
         void render(int frame);
+        void render(int frame, int x, int y, float rotation = 0);
+        void render(int frame, int x, int y, float xscale, float yscale, float rotation = 0);
+        void render(int frame, int x, int y, int width, int height, float rotation = 0);
         int getTotalFrames();
         ~AnimatedTexture();
 

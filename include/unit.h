@@ -13,6 +13,7 @@ namespace unit {
         sf::Shader* shader;
         graphics::VertexBuffer* vbuff;
         graphics::VertexBuffer* hpbar_buff;
+
     protected:
         tower_ptr getNearestTower() const;
         Point<float> velocity = Point<float>(0, 0);
@@ -20,6 +21,7 @@ namespace unit {
 
     public:
         Unit(id_t id, TYPE unit_type, Manager* m);
+
         //IRenderable methods
         virtual void init() override;
         virtual void render() override;

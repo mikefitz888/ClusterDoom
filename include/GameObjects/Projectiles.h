@@ -16,12 +16,21 @@
 */
 class ProjectileBomb : public GameObject {
 private:
-    graphics::Texture* bomb_texture;
-    int timer = 300;
-    int damage = 150;
-    int blast_radius  = 150;
-    int falloff_range = 50; // Damage is maximal up to 50 units off
+    graphics::Texture* bomb_texture, *bomb_white_texture;
+    graphics::AnimatedTexture* explosion_texture;
 
+    int timer = 150;
+    int damage = 75;
+    int blast_radius  = 75;
+    int falloff_range = 25; // Damage is maximal up to 50 units off
+
+    // Animation variables
+    float animation_rate = 0.05f;
+    float animation_progress = 0.0f;
+    bool exploded = false;
+    int num_explosion_frames = 0;
+
+    // Private methods
     void explode();
 
 public:

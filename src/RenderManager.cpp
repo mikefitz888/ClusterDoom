@@ -3,6 +3,7 @@
 #include "../include/RenderUtils.h"
 #include "../include/VertexBuffer.h"
 #include "../include/ResourceManager.h"
+#include "../include/AnimatedTexture.h"
 
 namespace graphics {
 
@@ -21,9 +22,10 @@ namespace graphics {
         rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
         rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();
         rm->textureLoad("bomb_texture", "src/Resources/Textures/bomb.png")->setOrigin(30, 36);
+        rm->textureLoad("bomb_texture_white", "src/Resources/Textures/bomb_white.png")->setOrigin(30, 36);
 
         // Load Animated Textures
-        //rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
+        rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();
 
         // Load Shaders
         rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");

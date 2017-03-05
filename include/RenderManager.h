@@ -112,6 +112,9 @@ namespace graphics {
         IRenderable *render_parent = nullptr;        /* The top-most node in the composite rendering pattern (This should render any children in its own render method)*/
         Manager *manager;
 
+        // Active texture
+        sf::Texture *active_texture[4];
+
         // Transformation + Rendering
         glm::mat4 world_matrix;            /* Matrix used to represent the current transformation state */
 

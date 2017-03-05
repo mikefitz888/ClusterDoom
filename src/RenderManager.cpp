@@ -66,6 +66,11 @@ namespace graphics {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glOrtho(0, 800, 600, 0, 1, -1);
 
+        // Clear textures
+        for (int i = 0; i < 4; i++) {
+            active_texture[i] = nullptr;
+        }
+
         // Set identify matrix
         world_matrix = glm::mat4(1.0);
 
@@ -236,26 +241,34 @@ namespace graphics {
     void RenderManager::setTexture(sf::Texture *tex) {
         //active_shader->setUniform("texture_diffuse", tex);
         //sf::Texture::bind(tex);
-        GLuint gl_tex_id = tex->getNativeHandle();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+        if (active_texture[0] != tex) {
+            GLuint gl_tex_id = tex->getNativeHandle();
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+            active_texture[0] = tex;
+        }
     }
 
     void RenderManager::setTextureExt(sf::Texture *tex, GLuint texture_unit, GLchar* texture_uniform_name) {
         //active_shader->setUniform("texture_diffuse", tex);
         //sf::Texture::bind(tex);
-        GLuint gl_tex_id = tex->getNativeHandle();
-        switch (texture_unit) {
-            case 0:glActiveTexture(GL_TEXTURE0); break;
-            case 1:glActiveTexture(GL_TEXTURE1); break;
-            case 2:glActiveTexture(GL_TEXTURE2); break;
-            default:glActiveTexture(GL_TEXTURE0); break;
-        }
-        glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+        if (texture_unit >= 0 && texture_unit <= 2) {
+            if (active_texture[texture_unit] != tex) {
+                GLuint gl_tex_id = tex->getNativeHandle();
+                switch (texture_unit) {
+                    case 0:glActiveTexture(GL_TEXTURE0); break;
+                    case 1:glActiveTexture(GL_TEXTURE1); break;
+                    case 2:glActiveTexture(GL_TEXTURE2); break;
+                    default:glActiveTexture(GL_TEXTURE0); break;
+                }
+                glBindTexture(GL_TEXTURE_2D, gl_tex_id);
 
-        // Bind texture unit to uniform name
-        GLuint tex_location = glGetUniformLocation(active_shader->getNativeHandle(), texture_uniform_name);
-        glUniform1i(tex_location, texture_unit);
+                // Bind texture unit to uniform name
+                GLuint tex_location = glGetUniformLocation(active_shader->getNativeHandle(), texture_uniform_name);
+                glUniform1i(tex_location, texture_unit);
+                active_texture[texture_unit] = tex;
+            }
+        }
     }
 
     void RenderManager::release() const {
@@ -398,8 +411,9 @@ namespace graphics {
 
     void graphics::Texture::render() {
         GLuint gl_tex_id = this->getNativeHandle();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+        //glActiveTexture(GL_TEXTURE0);
+        //glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+        this->render_manager->setTexture(this);
         this->texture_quad->render();
     }
 

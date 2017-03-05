@@ -14,7 +14,7 @@ namespace unit {
     }
 
     void BasicUnit::init(){
-		collision_profile.setTypeCircle(20);
+		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getTexture("basic_unit");
 
@@ -71,7 +71,7 @@ namespace unit {
 
 
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
-        texture->render(getXr(), getYr(), 0.10f, 0.10f, rotation);
+        texture->render(getXr(), getYr(), 0.40f, 0.40f, rotation);
 
         // ******************************************************************************************************//
         // DRAW PATH

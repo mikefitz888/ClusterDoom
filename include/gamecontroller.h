@@ -102,6 +102,7 @@ namespace gamecontroller {
         void spawnTowers(std::vector<Point<int>> tower_list) const;
         std::vector<tower_ptr> findNearestTowers(Point<int> point);
         std::vector<unit_ptr> getUnitsInRange(glm::vec2 position, int radius);
+        std::vector<std::pair<float, unit_ptr>> getNNearestUnits(glm::vec2 position, int N, int maxrange);
         void parseCVList(std::vector<Point<int>> list);
         
 

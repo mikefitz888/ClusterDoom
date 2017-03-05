@@ -4,6 +4,7 @@
 #include "../include/unit.h"
 #include "../include/tower.h"
 #include "../include/GameObjects/Spawn.h"
+#include "../include/GameObjects/Projectiles.h"
 
 namespace gamecontroller {
 
@@ -153,12 +154,9 @@ namespace gamecontroller {
                     mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
                     spawnUnitAt(mouse_pos.x, mouse_pos.y, unit::TYPE::BASIC);
                 }
-                spawned = true;
+               // spawned = true;
             }
-        } else {
-            spawned = false;
-        }
-
+        } else 
         // TEMP: Spawn bomb
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) {
             sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
@@ -168,10 +166,29 @@ namespace gamecontroller {
             }
 
             spawned = true;
+        } else
+        // TEMP: TESTING SPAWNING OF ELECTRICITY
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+            if (!spawned) {
+                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+
+                    auto units = getNNearestUnits(glm::vec2(mouse_pos.x, mouse_pos.y), 1000, 1000);
+                    if (units.size() > 1) {
+                        std::cout << "ELECTRICITY!!" << std::endl;
+                        gameobject_ptr obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<int>(mouse_pos.x, mouse_pos.y));
+                        smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
+                        elec->setForkParent(units[0].second->getSharedPtr());
+                        elec->setTargetObject(units[1].second);
+                    }
+                }
+
+                spawned = true;
+            }
         } else {
             spawned = false;
         }
-
 
         //In general, step() should be frame-based.
         cvNetworkStep();
@@ -279,6 +296,38 @@ namespace gamecontroller {
             }
         }
         return units_in_range;
+    }
+
+    // Returns a list of distance-unit pairs for the N nearest objects
+    //  - If there are less than N objects within that range, it ignores them.
+    //  - List returned is distance ordered
+    std::vector<std::pair<float, unit_ptr>> GameController::getNNearestUnits(glm::vec2 position, int N, int maxrange) {
+        std::vector<std::pair<float, unit_ptr>> distance_unit_pairs;
+
+        for (unit_ptr unit : manager->getUnits()) {
+            float distance = glm::distance(unit->getPosition(), position);
+            if (distance <= maxrange) {
+                distance_unit_pairs.push_back(std::pair<float, unit_ptr>(distance, unit));
+            }
+        }
+
+        // Sort based on distance (closest first)
+        std::sort(distance_unit_pairs.begin(), distance_unit_pairs.end(), 
+                  [](const std::pair<float, unit_ptr> & a, const std::pair<float, unit_ptr> & b) -> bool {
+                        return a.first < b.first;
+                  });
+
+        // Trim so only keep first N
+        std::vector<std::pair<float, unit_ptr>> keep;
+        int count = 0;
+        for (auto pair : distance_unit_pairs) {
+            if (count >= N) {
+                break;
+            }
+            keep.push_back(pair);
+            count++;
+        }
+        return keep;
     }
 
     void GameController::parseCVList(std::vector<Point<int>> list) {

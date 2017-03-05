@@ -23,7 +23,7 @@ namespace graphics {
         rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();
         rm->textureLoad("bomb_texture", "src/Resources/Textures/bomb.png")->setOrigin(30, 36);
         rm->textureLoad("bomb_texture_white", "src/Resources/Textures/bomb_white.png")->setOrigin(30, 36);
-
+        rm->textureLoad("beam_segment", "src/Resources/Textures/beam_segment_small.png")->setOriginCentre();
         // Load Animated Textures
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();
 
@@ -417,8 +417,8 @@ namespace graphics {
         this->texture_quad->render();
     }
 
-    void graphics::Texture::render(int x, int y, float rotation) {
-        glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
+    void graphics::Texture::render(int x, int y, float rotation, float z) {
+        glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, z));
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f) );
         transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
 
@@ -426,9 +426,9 @@ namespace graphics {
         this->render();
     }
 
-    void graphics::Texture::render(int x, int y, float xscale, float yscale, float rotation) {
+    void graphics::Texture::render(int x, int y, float xscale, float yscale, float rotation, float z) {
         glm::mat4 transform = glm::mat4();
-        transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+        transform = glm::translate(transform, glm::vec3(x, y, z));
         
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
         transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
@@ -438,11 +438,11 @@ namespace graphics {
         this->render();
     }
 
-    void graphics::Texture::render(int x, int y, int width, int height, float rotation) {
+    void graphics::Texture::render(int x, int y, int width, int height, float rotation, float z) {
         float xscale = (float)width / (float)this->getSize().x;
         float yscale = (float)height / (float)this->getSize().y;
         glm::mat4 transform = glm::mat4();
-        transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+        transform = glm::translate(transform, glm::vec3(x, y, z));
         
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
         transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));

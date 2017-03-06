@@ -33,6 +33,14 @@ namespace gameobject {
         return this->self;
     }
 
+    void GameObject::setReady(bool ready) {
+        this->is_ready = ready;
+    }
+
+    bool GameObject::getReady() {
+        return this->is_ready;
+    }
+
 	void GameObject::render() {}
 	void GameObject::init() {}
 	void GameObject::renderGUI() {}

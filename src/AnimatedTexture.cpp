@@ -29,20 +29,20 @@ namespace graphics {
         }
 
         // Determine width and height and split size:
-        int width = animated_texture_source->getSize().x;
-        int height = animated_texture_source->getSize().y;
+        int _width = animated_texture_source->getSize().x;
+        int _height = animated_texture_source->getSize().y;
 
         int frame_width, frame_height;
         if (split_both_ways) {
 
-            frame_width = width / frame_count_h;
-            frame_height = height / frame_count_v;
+            frame_width = _width / frame_count_h;
+            frame_height = _height / frame_count_v;
 
         }
         else {
 
-            frame_width = width / frame_count_h;
-            frame_height = height;
+            frame_width = _width / frame_count_h;
+            frame_height = _height;
 
         }
 

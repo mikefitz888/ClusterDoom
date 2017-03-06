@@ -109,8 +109,8 @@ private:
     // Timers
     int fork_alive_timer_max = 30;
     int fork_alive_timer = fork_alive_timer_max;
-    int fork_check_timer_max = 100; // If higher than alive timer, it wont check again
-    int fork_check_timer = 1;// fork_check_timer_max;
+    int fork_check_timer_max = 8; // If higher than alive timer, it wont check again
+    int fork_check_timer = 2;// fork_check_timer_max;
 
 
 public:

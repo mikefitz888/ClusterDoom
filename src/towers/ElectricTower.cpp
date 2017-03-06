@@ -37,8 +37,9 @@ namespace tower {
             return;
         }
         
-        getUnits(1);
-        if (units.size()) {
+        //getUnits(1);
+        auto units_nearby = this->manager->getGameController()->getNNearestUnits(this->position, 5, 1000);
+        if (units_nearby.size() > 0) {
             std::cout << "ELECTRICITY!!" << std::endl;
             gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<int>(getX(), getY()));
             smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
@@ -46,7 +47,7 @@ namespace tower {
             elec->setForkParent( this->getSharedPtr() );
             elec->setRange(1000);
             elec->setDamage( (requestEfficiency(cost_per_attack) * damage) );
-            elec->setTargetObject(units[0]);
+            elec->setTargetObject(units_nearby[0].second);
             timer = cooldown;
         }
     }

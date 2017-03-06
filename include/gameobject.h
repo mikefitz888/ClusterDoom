@@ -207,6 +207,7 @@ namespace gameobject {
         const id_t super_type_ = 0;
         const id_t sub_type_ = 0;
     protected:
+        bool is_ready = false; // This is to prevent the draw event running before the step event
         Manager* manager;
         RenderManager* render_manager = nullptr;
         Collision collision_profile = Collision(nullptr);
@@ -231,6 +232,8 @@ namespace gameobject {
         void setSharedPtr(gameobject_ptr myself);
         gameobject_ptr getSharedPtr();
         void setup(); // The setup to be run for all gameobjects to configure default properties
+        void setReady(bool ready);
+        bool getReady();
 
         // EVENTS
         virtual void render() override;

@@ -181,6 +181,8 @@ void ProjectileElectricity::step() {
         We clear the old list and fill it with the contents of the new list.
     */
     std::vector<std::pair<gameobject::unit_ptr, electricity_ptr>> alive_forks;
+    alive_forks.clear();
+
     for (auto fork : forks) {
         if (fork.first && fork.second) { 
             alive_forks.push_back(fork); 
@@ -194,6 +196,7 @@ void ProjectileElectricity::step() {
 
     // Check if we can output more forks:
     fork_check_timer--;
+    //fork_check_timer = 0;
     if (fork_check_timer <= 0) {
         fork_check_timer = fork_check_timer_max;
 
@@ -201,50 +204,53 @@ void ProjectileElectricity::step() {
         if (available_forks > 0 && fork_depth > 0) {
 
             // Find 
-            std::vector<std::pair<float, gameobject::unit_ptr>> nearest_units = this->manager->getGameController()->getNNearestUnits(this->target_object->getPosition(), fork_count + 10, range);
-            for (auto distance_unit_pair : nearest_units) {
-                float distance = distance_unit_pair.first;
-                gameobject::unit_ptr obj = distance_unit_pair.second;
+            std::vector<std::pair<float, gameobject::unit_ptr>> nearest_units = this->manager->getGameController()->getNNearestUnits(this->target_object->getPosition(), fork_count + 10, range*100);
+            if (nearest_units.size() > 0) {
+                for (std::pair<float, gameobject::unit_ptr> distance_unit_pair : nearest_units) {
+                    float distance = distance_unit_pair.first;
+                    gameobject::unit_ptr obj = distance_unit_pair.second;
 
-                // check distance (and also ensure the objects aren't the same)
-                if (distance <= range && this->fork_parent && this->target_object &&
-                    obj->getSharedPtr() != this->getSharedPtr() &&
-                    obj->getSharedPtr() != this->fork_parent &&
-                    obj->getSharedPtr() != this->target_object->getSharedPtr()) {
+                    // check distance (and also ensure the objects aren't the same)
+                    if (distance <= range && this->fork_parent->getSharedPtr() && this->target_object->getSharedPtr() &&
+                        obj->getSharedPtr() != this->getSharedPtr() &&
+                        obj->getSharedPtr() != this->fork_parent &&
+                        obj->getSharedPtr() != this->target_object->getSharedPtr()) {
 
-                    // Check to ensure the element is not in the list of objects already forked to
-                    bool exists;
-                    for (auto fork : forks) {
-                        if (fork.first == obj) {
-                            exists = true;
-                            break;
+                        // Check to ensure the element is not in the list of objects already forked to
+                        bool exists = false;
+                        for (auto fork : forks) {
+                            if (fork.first && fork.first == obj) {
+                                exists = true;
+                                break;
+                            }
                         }
-                    }
-                    if (!exists) {
+                        if (!exists) {
 
-                        // Create new fork
-                        electricity_ptr new_fork = smartpointers::static_pointer_cast<ProjectileElectricity>(
-                            this->manager->getGameController()->spawnObjectAt(
-                                gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY,
-                                this->target_object->getX(),
-                                this->target_object->getY()
-                                ));
+                            // Create new fork
+                            electricity_ptr new_fork = smartpointers::static_pointer_cast<ProjectileElectricity>(
+                                this->manager->getGameController()->spawnObjectAt(
+                                    gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY,
+                                    this->target_object->getX(),
+                                    this->target_object->getY()
+                                    ));
 
-                        new_fork->setTargetObject(obj);
-                        new_fork->setForkCount(this->fork_count, this->fork_depth - 1);
-                        new_fork->setForkParent(this->target_object->getSharedPtr());
+                            new_fork->setTargetObject(obj);
+                            new_fork->setForkCount(this->fork_count, this->fork_depth - 1);
+                            new_fork->setForkParent(this->target_object->getSharedPtr());
 
 
-                        // Add fork-object pair to list
-                        forks.push_back(std::pair<gameobject::unit_ptr, electricity_ptr>(obj, new_fork));
+                            // Add fork-object pair to list
+                            this->forks.push_back(std::pair<gameobject::unit_ptr, electricity_ptr>(obj, new_fork));
 
-                        /*std::cout << "..FORKING!" << std::endl;
-                        std::cout << "      Parent: " << this->getSharedPtr() << " location: (" << this->getX() << "," << this->getY() << ")" << std::endl;
-                        std::cout << "      Target: " << obj->getSharedPtr() << " location: (" << obj->getX() << "," << obj->getY() << ")" << std::endl;*/
-                        // Decrement available forks
-                        available_forks--;
-                        if (available_forks <= 0) {
-                            break;
+                            //std::cout << "..FORKING!" << std::endl;
+                            /*std::cout << "      Parent: " << this->getSharedPtr() << " location: (" << this->getX() << "," << this->getY() << ")" << std::endl;
+                            std::cout << "      Target: " << obj->getSharedPtr() << " location: (" << obj->getX() << "," << obj->getY() << ")" << std::endl;*/
+
+                            // Decrement available forks
+                            available_forks--;
+                            if (available_forks <= 0) {
+                                break;
+                            }
                         }
                     }
                 }
@@ -256,8 +262,8 @@ void ProjectileElectricity::step() {
 
 void ProjectileElectricity::render() {
     if (target_object) {
-        glm::vec2 midpoint = (source_position + target_object->getPosition())*0.5f;
-        int dist = glm::distance(source_position, target_object->getPosition());
+        glm::vec2 midpoint = (source_position + glm::vec2(target_object->getXr(),target_object->getYr()) )*0.5f;
+        int dist = glm::distance(source_position, glm::vec2(target_object->getXr(), target_object->getYr()));
 
         if (dist <= range) {
             float angle = point_direction(source_position, target_object->getPosition());

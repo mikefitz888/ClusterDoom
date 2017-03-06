@@ -224,7 +224,11 @@ namespace manager {
 
     void Manager::renderAll() {
         for (slave_ptr<GameObject> obj : game_object_pool) {
-            if(obj) obj->render();
+            if (obj) {
+                if (obj->getReady()) {
+                    obj->render();
+                }
+            }
         }
     }
 
@@ -235,7 +239,10 @@ namespace manager {
             copy.push_back(obj);
         }
         for (slave_ptr<GameObject> obj :copy) {
-            if(obj) obj->step();
+            if (obj) {
+                obj->setReady(true);
+                obj->step();
+            }
         }
     }
 
@@ -313,7 +320,11 @@ namespace manager {
 
 		// Add all objects
 		for (slave_ptr<GameObject> obj : copy) {
-			splitmap->add(obj);
+            if (obj) {
+                if (obj->getReady()) {
+                    splitmap->add(obj);
+                }
+            }
 		}
 
 		// Perform collisions

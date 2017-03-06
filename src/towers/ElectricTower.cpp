@@ -22,9 +22,9 @@ namespace tower {
 		float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);
 		//setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) 
-		render_manager->setActiveColour(255, 255, 255, (int)(255.0 * mod));
+		render_manager->setActiveColour(255, 255, 255, (char)(255.0 * mod));
 		if (health <= 0) {
-			render_manager->setActiveColour(255, 0, 0, (int)(255.0 * mod / 2));
+			render_manager->setActiveColour(255, 0, 0, (char)(255.0 * mod / 2));
 		}
 		texture->render(getXr(), getYr(), size, size);
 
@@ -46,7 +46,7 @@ namespace tower {
 
             elec->setForkParent( this->getSharedPtr() );
             elec->setRange(1000);
-            elec->setDamage( (requestEfficiency(cost_per_attack) * damage) );
+            elec->setDamage( (int)(requestEfficiency(cost_per_attack) * damage) );
             elec->setTargetObject(units_nearby[0].second);
             timer = cooldown;
         }

@@ -119,9 +119,9 @@ namespace graphics {
         this->render_manager->setWorldMatrix(transform);
         this->render(frame);
     }
-    void AnimatedTexture::render(int frame, int x, int y, int width, int height, float rotation) {
-        float xscale = (float)width / (float)this->width;
-        float yscale = (float)height / (float)this->height;
+    void AnimatedTexture::render(int frame, int x, int y, int render_width, int render_height, float rotation) {
+        float xscale = (float)render_width / (float)this->width;
+        float yscale = (float)render_height / (float)this->height;
         glm::mat4 transform = glm::mat4();
         transform = glm::translate(transform, glm::vec3(x, y, 0.0));
 

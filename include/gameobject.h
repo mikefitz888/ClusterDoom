@@ -261,7 +261,7 @@ namespace gameobject {
         inline Point<int> getJitter(){return jitter_offset;};
 
         inline bool getRunCollisionEvent() { return run_collision_event; }
-        inline void setRunCollisionEvent(bool run_collision_event) { this->run_collision_event = run_collision_event; }
+        inline void setRunCollisionEvent(bool run_collisionevent) { this->run_collision_event = run_collisionevent; }
 
         inline void demoDestroy() { _destroySelf(); return; }
 

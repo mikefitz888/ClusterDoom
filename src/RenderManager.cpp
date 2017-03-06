@@ -461,4 +461,14 @@ namespace graphics {
         return result;
     }
 
+    ////////////////////////////////////////////////////
+    // IRENDERABLE SHARED METHODS
+    void IRenderable::setDepth(int render_depth) {
+        this->depth = render_depth;
+    }
+
+    int IRenderable::getDepth() {
+        return this->depth;
+    }
+
 }

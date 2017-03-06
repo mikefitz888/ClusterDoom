@@ -223,13 +223,57 @@ namespace manager {
     }
 
     void Manager::renderAll() {
+        /*
+            Depth object pairs are used to allow objects to be depth sorted.
+            This allows us to customise the render order of different objects.
+        */
+
+        std::vector<std::pair<int, gameobject_ptr>> depth_object_pairs;
         for (slave_ptr<GameObject> obj : game_object_pool) {
             if (obj) {
                 if (obj->getReady()) {
-                    obj->render();
+                    //obj->render();
+                    depth_object_pairs.push_back(std::pair<int, gameobject_ptr>(obj->getDepth(), obj));
                 }
             }
         }
+
+        // SORT LIST
+        /*
+            If both objects are at the same depth:
+                If both objects have the same super type:
+                    Order by sub type
+                Else
+                    Order by super type
+            Else
+               Order by depth
+            --------------------------------------------------
+            This sorting function aims to accomplish two things:
+            - Put objects with larger depths at the top of the list so that they render first (Objects with small, or negative depths, will render after
+            - For objects at the same depth, group them together by type so that objects of the same type render one after another. (This will improve rendering
+            optimisation by reducing the number of context changes, as the same objects are unlikely to have GPU pipeline state changes between them)
+        
+        */
+        std::sort(depth_object_pairs.begin(), depth_object_pairs.end(),
+                  [](const std::pair<int, gameobject_ptr> & a, const std::pair<int, gameobject_ptr> & b) -> bool {
+                        return (a.first == b.first) ? (
+                            (a.second->getSuperType() == b.second->getSuperType()) ?
+                            (a.second->getSubType() < b.second->getSubType()) :
+                            (a.second->getSuperType() < b.second->getSuperType())) :
+                            (a.first > b.first);
+                  });
+
+        // RENDER
+        for (auto obj : depth_object_pairs) {
+            obj.second->render();
+        }
+
+        // RENDER GUI
+        for (auto obj : depth_object_pairs) {
+            //obj.second->renderGUI();
+        }
+
+        
     }
 
     void Manager::stepAll() {

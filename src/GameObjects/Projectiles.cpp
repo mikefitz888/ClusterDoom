@@ -21,6 +21,9 @@ void ProjectileBomb::init() {
     this->explosion_texture = this->manager->getResourceManager()->getAnimatedTexture("explosion");
 
     num_explosion_frames = this->explosion_texture->getTotalFrames();
+
+    // Set depth
+    this->setDepth(-10);
 }
 
 void ProjectileBomb::step() {
@@ -146,6 +149,9 @@ ProjectileElectricity::ProjectileElectricity(id_t id, manager::Manager* m) : Gam
 void ProjectileElectricity::init() {
     forks.clear();
     electricity_texture = this->manager->getResourceManager()->getTexture("beam_segment");
+
+    // Set depth
+    this->setDepth(-10);
 };
 
 void ProjectileElectricity::step() {

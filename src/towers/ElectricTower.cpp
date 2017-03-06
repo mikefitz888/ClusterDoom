@@ -10,6 +10,7 @@ namespace tower {
     ElectricTower::ElectricTower(id_t key, Manager* m) : Tower(key, TYPE::ELECTRIC, m) {
         position.x = 700;
         position.y = 400;
+        this->setDepth(-5);
     }
 
     void ElectricTower::init(){

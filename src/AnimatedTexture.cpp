@@ -57,10 +57,10 @@ namespace graphics {
 
             // Determine uv coordinates of frame
             float u1, v1, u2, v2;
-            u1 = (float)(hframe_id*frame_width) / (float)width;
-            v1 = (float)(vframe_id*frame_height) / (float)height;
-            u2 = (float)((hframe_id + 1)*frame_width) / (float)width;
-            v2 = (float)((vframe_id + 1)*frame_height) / (float)height;
+            u1 = (float)(hframe_id*frame_width) / (float)_width;
+            v1 = (float)(vframe_id*frame_height) / (float)_height;
+            u2 = (float)((hframe_id + 1)*frame_width) / (float)_width;
+            v2 = (float)((vframe_id + 1)*frame_height) / (float)_height;
 
             // Create vertex buffer
             VertexBuffer *vbuff = new VertexBuffer();

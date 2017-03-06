@@ -210,6 +210,7 @@ namespace gameobject {
         bool is_ready = false; // This is to prevent the draw event running before the step event
         Manager* manager;
         RenderManager* render_manager = nullptr;
+        gamecontroller::GameController* game_controller;
         Collision collision_profile = Collision(nullptr);
 
         Point<int> jitter_offset = Point<int>(0, 0);

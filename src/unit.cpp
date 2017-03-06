@@ -67,9 +67,7 @@ namespace unit {
         GameObject::step();
         this->setSmoothingRate(0.25f);
 
-
-
-        auto target = getNearestTower();
+        auto& target = game_controller->getBase();
         if (!target) {
             return; //NO TARGET
         }

@@ -66,6 +66,7 @@ namespace gamecontroller {
 
     tower_ptr GameController::spawnTowerAt(int x, int y, tower::TYPE type) const {
         auto tower = manager->createTower(type);
+        //printf("Tower spawned at: %d %d\n", x, y);
         tower->setPosition(x, y);
         return tower;
     }
@@ -336,6 +337,10 @@ namespace gamecontroller {
             count++;
         }
         return keep;
+    }
+
+    tower_ptr& GameController::getBase() {
+        return manager->getTowers()[0];
     }
 
     void GameController::parseCVList(std::vector<Point<int>> list) {

@@ -8,7 +8,7 @@ using graphics::Colour;
 
 namespace tower {
     ElectricTower::ElectricTower(id_t key, Manager* m) : Tower(key, TYPE::ELECTRIC, m) {
-        position.x = 200;
+        position.x = 700;
         position.y = 400;
     }
 
@@ -38,16 +38,24 @@ namespace tower {
         }
         
         //getUnits(1);
-        auto units_nearby = this->manager->getGameController()->getNNearestUnits(this->position, 5, 1000);
-        if (units_nearby.size() > 0) {
-            std::cout << "ELECTRICITY!!" << std::endl;
+        if (!current_target || current_target->distanceTo(position) > max_range) {
+            auto units_nearby = this->manager->getGameController()->getNNearestUnits(this->position, 1, max_range);
+            if (units_nearby.size()) current_target = units_nearby[0].second;
+            else current_target = nullptr;
+        }
+
+        //std::cout << "ELECTRICITY!!" << std::endl;
+
+        if (current_target) {
+            //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
+            //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
             gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<int>(getX(), getY()));
             smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
 
-            elec->setForkParent( this->getSharedPtr() );
-            elec->setRange(1000);
-            elec->setDamage( (int)(requestEfficiency(cost_per_attack) * damage) );
-            elec->setTargetObject(units_nearby[0].second);
+            elec->setForkParent(this->getSharedPtr());
+            elec->setRange(max_range);
+            elec->setDamage((int)(requestEfficiency(cost_per_attack) * damage));
+            elec->setTargetObject(current_target);
             timer = cooldown;
         }
     }

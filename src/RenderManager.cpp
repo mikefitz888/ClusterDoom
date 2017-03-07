@@ -24,6 +24,10 @@ namespace graphics {
         rm->textureLoad("bomb_texture", "src/Resources/Textures/bomb.png")->setOrigin(30, 36);
         rm->textureLoad("bomb_texture_white", "src/Resources/Textures/bomb_white.png")->setOrigin(30, 36);
         rm->textureLoad("beam_segment", "src/Resources/Textures/beam_segment_small.png")->setOriginCentre();
+        rm->textureLoad("begin", "src/Resources/Textures/begin.jpg")->setOriginCentre();
+        rm->textureLoad("win", "src/Resources/Textures/begin.jpg")->setOriginCentre();
+        rm->textureLoad("lose", "src/Resources/Textures/begin.jpg")->setOriginCentre();
+
         // Load Animated Textures
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();
 

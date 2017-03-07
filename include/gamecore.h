@@ -187,6 +187,7 @@ namespace unitlogic {
 
 namespace worldrenderer {
     class WorldRenderer;
+    //enum SCREEN : unsigned int;
 }
 
 

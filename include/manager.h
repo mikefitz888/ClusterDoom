@@ -22,6 +22,7 @@ namespace manager {
 
     class Manager {
         std::vector<master_ptr<GameObject>> game_object_pool;
+        std::vector<id_t> free_id_list_tmp;
         std::vector<id_t> free_id_list;
 
         TowerLogic* tower_logic;

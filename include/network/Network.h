@@ -29,8 +29,8 @@ namespace network {
         void setID(int connection_id);                        // Used to set the unique connection identifier
         void beginSecurityProcess();                        // Begins the security evaluation process for the client
         void completeSecurityProcess(int received_token);    // Completes the security process by comparing received token
-        void processConnection();                            // The NetworkClient can process its own connection. This is for evaluating connection state and managing the connection.
-        void listenForData();                                // As the NetworkClient is the link between the client and the server, it is responsible for listening to data.
+        void processConnection(Manager* manager);                            // The NetworkClient can process its own connection. This is for evaluating connection state and managing the connection.
+        void listenForData(Manager* manager);                                // As the NetworkClient is the link between the client and the server, it is responsible for listening to data.
         void prepareSecurityHash();                            // Performs a simple operation on the security_token. This needs to be paralleled by the client.
         void disconnect(char* reason);                        // Call this to force-disconnect a client.
         void sendPacket(Buffer &buff) const;                        // Sends a packet with the given Buffer to the client represented by NetworkClient

@@ -1,5 +1,6 @@
 #include "../include/network/Network.h"
 #include "../include/manager.h"
+#include "../include/gamecontroller.h"
 
 namespace network {
     
@@ -48,7 +49,7 @@ namespace network {
 
         // Process existing connections
         for (NetworkClient* it : clients) {
-            it->processConnection();
+            it->processConnection(manager);
         }
 
     }
@@ -173,7 +174,7 @@ namespace network {
         security_hash -= 3590324;
         connection_state = SECURITY;
     }
-
+	
     /*
         Completes the security process by comparing the 
         received token against the stored security hash.
@@ -182,6 +183,8 @@ namespace network {
         validated itself.
     */
     void NetworkClient::completeSecurityProcess(int received_token) {
+		std::cout << "[network client] recieved token: " << received_token << std::endl;
+		std::cout << "[network client] security hash: " << security_hash << std::endl;
         if (received_token == security_hash) {
             connection_state = VERIFIED;
             std::cout << "[NETWORK CLIENT] Client successfully verified!" << std::endl;
@@ -235,7 +238,7 @@ namespace network {
 
         Otherwise, we can handle the data that has been received.
     */
-    void NetworkClient::listenForData() {
+    void NetworkClient::listenForData(Manager *manager) {
         std::size_t message_size;
         sf::TcpSocket::Status st = socket->receive((void*)recv_buffer.getPtr(), (std::size_t)recv_buffer.maxSize(), message_size);
         switch (st) {
@@ -264,6 +267,12 @@ namespace network {
 
                     case NetworkManager::CLIENT_PACKET_TYPE::RecvInstanceInteraction:
                         // TODO: Respond to instance interactions from clients
+						std::cout << "[NETWORK CLIENT] Client " << ip << " has sent a instance interaction!" << std::endl;
+						int x;
+						int y;
+						recv_buffer >> x;
+						recv_buffer >> y;
+						manager->getGameController()->spawnUnitAt(x, y);
                         break;
 
                     default: // INVALID PACKET RECEIVED FROM CLIENT
@@ -279,9 +288,9 @@ namespace network {
         }
     }
 
-    void NetworkClient::processConnection() {
+    void NetworkClient::processConnection(Manager *manager) {
         // Listen for incoming data
-        listenForData();
+        listenForData(manager);
     }
 
     void NetworkClient::disconnect(char* reason) {

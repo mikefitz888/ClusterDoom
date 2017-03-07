@@ -95,7 +95,7 @@ namespace gameobject {
     using graphics::RenderManager;
 	using network::INetworkInstance;
 
-    enum TYPE : unsigned int {TOWER=0, UNIT, OBJECT};
+    enum TYPE : unsigned int {TOWER=0, UNIT=1, OBJECT=2};
     enum OBJECT_TYPE : unsigned int { SPAWN = 0 };
 
 

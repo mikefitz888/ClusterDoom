@@ -90,13 +90,14 @@ namespace tower {
 		render_position.x -= (render_position.x - position.x) / 20;
 		render_position.y -= (render_position.y - position.y) / 20;
 
-        auto units = manager->getUnits();
-        for(auto unit : units) {
+        //Unsafe code, removed it. Only code general to all towers should go here
+        /*auto units = manager->getUnits();
+        for(auto& unit : units) {
             if( (unit->getX()-getX())*(unit->getX()-getX()) + (unit->getY() - getY())*(unit->getY() - getY()) < 10000) {
                 attack(unit);
                 return;
             }
-        }
+        }*/
     }
 
     unit_ptr Tower::getUnit() {

@@ -10,6 +10,7 @@ namespace worldrenderer {
         manager(model) {}
 
     void WorldRenderer::init(){
+        this->setDepth(1000);
         render_manager = manager->getRenderManager();
 
         /*game_bg_texture = new sf::Texture();

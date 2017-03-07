@@ -21,9 +21,10 @@ namespace manager {
     using gameobject::Collision;
 
     class Manager {
-        std::vector<master_ptr<GameObject>> game_object_pool;
-        std::vector<id_t> free_id_list_tmp;
-        std::vector<id_t> free_id_list;
+        //std::vector<master_ptr<GameObject>> game_object_pool;
+        //std::vector<id_t> free_id_list;
+        unsigned int game_object_max_id = 0;
+        std::map<unsigned int, master_ptr<GameObject>*> game_object_pool;
 
         TowerLogic* tower_logic;
         UnitLogic* unit_logic;

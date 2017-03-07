@@ -54,6 +54,7 @@ namespace gameobject {
         gameobject_ptr parent = nullptr;
 
         int radius;
+        unsigned int state; // GameObjects act as finite-state automata, can be used with an enum
         BoundingBox bounding_box = BoundingBox(0, 0, 0, 0);
         bool is_collidable;
 

@@ -64,14 +64,23 @@ namespace unit {
     void Unit::release() {}
 
     void Unit::step() {
+        /*
+        *  Description of Unit activity: 
+        *  Move towards Base.
+        *  If tower is in range and able to shoot: stop -> attack tower -> continue with step 1
+        * 
+        *  There should be a cooldown between shots so the unit can "stutter-step"
+        */
         GameObject::step();
+        this->setSmoothingRate(0.05f);
 
         auto target = getNearestTower();
         if (!target) {
             return; //NO TARGET
         }
         this->setDestination(target->getPosition(), 1.25f);
-        this->setSmoothingRate(0.25f);
+        
+
 
         render_facing = getDestination();//target->getPosition();
 

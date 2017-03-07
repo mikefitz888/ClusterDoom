@@ -13,13 +13,17 @@ namespace unit {
         sf::Shader* shader;
         graphics::VertexBuffer* vbuff;
         graphics::VertexBuffer* hpbar_buff;
+
     protected:
         tower_ptr getNearestTower() const;
         Point<float> velocity = Point<float>(0, 0);
         float health = 1000;
 
+        void deliverWealth(size_t amt);
+
     public:
         Unit(id_t id, TYPE unit_type, Manager* m);
+
         //IRenderable methods
         virtual void init() override;
         virtual void render() override;
@@ -30,6 +34,7 @@ namespace unit {
         virtual void step();
         virtual void attack(tower_ptr tower);
         virtual void attacked(gameobject_ptr aggressor);
+        virtual void attacked(gameobject_ptr aggressor, int damage);
     };
 }
 

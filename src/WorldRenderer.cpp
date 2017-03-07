@@ -10,13 +10,25 @@ namespace worldrenderer {
         manager(model) {}
 
     void WorldRenderer::init(){
+        this->setDepth(1000);
         render_manager = manager->getRenderManager();
 
         /*game_bg_texture = new sf::Texture();
         if (!game_bg_texture->loadFromFile("src/Resources/Textures/background.png")) {
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/
-        game_bg_texture = manager->getResourceManager()->getTexture("background");
+        
+        /*graphics::Texture* game_bg_texture = nullptr;
+        graphics::Texture* game_begin_texture = nullptr;
+        graphics::Texture* game_win_texture = nullptr;
+        graphics::Texture* game_lose_texture = nullptr;
+
+        std::map<SCREEN, graphics::Texture*> textures;*/
+
+        textures[SCREEN::NONE] = manager->getResourceManager()->getTexture("background");
+        textures[SCREEN::GAME_START] = manager->getResourceManager()->getTexture("begin");
+        textures[SCREEN::GAME_LOSE] = manager->getResourceManager()->getTexture("win");
+        textures[SCREEN::GAME_WIN] = manager->getResourceManager()->getTexture("lose");
 
 
         /*game_bg_shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
@@ -39,13 +51,12 @@ namespace worldrenderer {
 
     void WorldRenderer::render(){
         renderGUI();
-
-        manager->renderAll();
+        if(!display_screen) manager->renderAll();
     }
 
     void WorldRenderer::renderGUI(){
         render_manager->setActiveShader(game_bg_shader);
-        render_manager->setTexture(game_bg_texture);
+        render_manager->setTexture(textures[display_screen]);
         float width = (float) render_manager->getWindowWidth();
         float height = (float) render_manager->getWindowHeight();
         render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
@@ -57,10 +68,10 @@ namespace worldrenderer {
 
 
         // Render debug explosion
-        render_manager->setBlendModeAdditive();
+       /* render_manager->setBlendModeAdditive();
         index += 0.60f;
         //at->render(index);
-        render_manager->setBlendModeNormal();
+        render_manager->setBlendModeNormal();*/
     }
 
     void WorldRenderer::release(){

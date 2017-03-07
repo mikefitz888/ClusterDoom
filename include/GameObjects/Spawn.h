@@ -12,11 +12,10 @@ protected:
     int wave = 0;
     int time = 0;
     int units = 0;
-    int spawn_rate = 0;
     bool running = false;
     struct unit_spawn {
-        const int time;
-        const unit::TYPE unit_type;
+        int delay;
+        unit::TYPE unit_type;
         unit_spawn(unit::TYPE type, int t = 0);
     };
     std::vector<unit_spawn> spawn_queue;

@@ -27,7 +27,7 @@ namespace manager {
         auto obj = object_logic->createObject(getFreePoolKey(), type);
         addToPool(obj);
         obj->init();
-        auto passback = slave_ptr<GameObject>(static_pointer_cast<GameObject>(game_object_pool[obj->getID()]));
+        auto passback = slave_ptr<GameObject>(static_pointer_cast<GameObject>(/*game_object_pool[obj->getID()]*/obj->getSharedPtr()));
         return passback;
     }
 
@@ -40,7 +40,7 @@ namespace manager {
         auto obj = tower_logic->createTower(getFreePoolKey(), type );
         addToPool(obj);
         obj->init();
-        auto passback = slave_ptr<Tower>( static_pointer_cast<Tower>(game_object_pool[obj->getID()]) );
+        auto passback = slave_ptr<Tower>( static_pointer_cast<Tower>(obj->getSharedPtr() /* game_object_pool[obj->getID()]    game_object_pool.find(obj->getID())*/ ));
         tower_logic->giveSlavePtr(passback);
         std::cout << "end of tower create manager" << std::endl;
         return passback;
@@ -53,8 +53,10 @@ namespace manager {
     void Manager::clearTowers() {
         for (auto tower : (this->tower_logic)->getTowers()) {
             id_t id = tower->getID();
-            game_object_pool[id].invalidate();
-            free_id_list.push_back(id);
+            (*game_object_pool[id]).invalidate();
+            
+           // mstr_ptr.invalidate();
+            //free_id_list.push_back(id);
             network_manager->sendInstanceDestroy(id);
         }
 
@@ -71,7 +73,7 @@ namespace manager {
         auto obj = unit_logic->createUnit( getFreePoolKey(), type );
         addToPool(obj);
         obj->init();
-        auto passback = slave_ptr<Unit>( static_pointer_cast<Unit>(game_object_pool[obj->getID()]) );
+        auto passback = slave_ptr<Unit>( static_pointer_cast<Unit>(/*game_object_pool[obj->getID()]*/obj->getSharedPtr()) );
         unit_logic->giveSlavePtr(passback);
         return passback;
     }
@@ -103,20 +105,40 @@ namespace manager {
     // Object Pool Methods
     void Manager::addToPool(GameObject* game_object){
         auto id = game_object->getID();
-        if(id < game_object_pool.size()){
+
+        // Check if ID exists
+        bool exists = false;
+        exists = (this->game_object_pool.find(id) != this->game_object_pool.end());
+        if (!exists) {
+            //auto kek = master_ptr<GameObject>(game_object);
+            //game_object_pool[id] = &master_ptr<GameObject>(game_object);
+            //game_object_pool.insert(std::map<unsigned int, master_ptr<GameObject>>::value_type(id, master_ptr<GameObject>(game_object)));
+            master_ptr<GameObject>* ptr = new master_ptr<GameObject>(game_object);
+            game_object_pool.insert(std::pair<unsigned int, master_ptr<GameObject>*>(id, ptr));
+            std::cout << "INSERTED OBJECT WITH ID: " << id << " INTO MAP" << std::endl;
+            //game_object_pool.emplace(id, game_object);
+        }
+        else {
+            std::cout << "FATAL ERROR! ID ALREADY IN USE: " << id << std::endl;
+        }
+
+
+        /*if(id < game_object_pool.size()){
             game_object_pool[id] = master_ptr<GameObject>(game_object);
+            //game_object_pool.emplace(game_object_pool.begin()+id, game_object);
         }else{
             if(id == game_object_pool.size()){
                 game_object_pool.push_back(master_ptr<GameObject>(game_object));
             }else{
                 std::cout << "Invalid key, investigate.";
             }
-        }
-        std::cout << "Object added to pool with id = " << id << std::endl;
-        std::cout << "Pool size now = " << game_object_pool.size() << std::endl;
+        }*/
+        //std::cout << "Object added to pool with id = " << id << std::endl;
+        //std::cout << "Pool size now = " << game_object_pool.size() << std::endl;
 
         // Set shared pointer
-        gameobject_ptr self = game_object_pool[id];
+        auto ptr = game_object_pool[id];
+        gameobject_ptr self = gameobject_ptr(*ptr);
         self->setSharedPtr(self);
 		self->setNetworkManager(network_manager);
 		self->setNetworkID(id, game_object->getSuperType(), game_object->getSubType());
@@ -133,8 +155,9 @@ namespace manager {
 
     // Destroys the master_ptr
     void Manager::removeFromPool(id_t id){
-        game_object_pool[id].invalidate();
-        free_id_list.push_back(id);
+        (*game_object_pool[id]).invalidate();
+        //free_id_list.push_back(id); // <- Broken
+
         tower_logic->clean();
         unit_logic->clean();
         network_manager->sendInstanceDestroy(id);
@@ -144,7 +167,8 @@ namespace manager {
         return game_object_pool;
     }*/
     void Manager::sendAllInstancesToClient(network::NetworkClient *network_client) {
-        for (slave_ptr<GameObject> object : game_object_pool) {
+        for (auto map_elem = game_object_pool.begin(); map_elem != game_object_pool.end(); map_elem++) {
+            slave_ptr<GameObject> object = *map_elem->second;
             if (object) {
                 int id         = object->getID();
                 int super_type = object->getSuperType();
@@ -158,12 +182,15 @@ namespace manager {
 
     // This removes the free key from list so ensure it is used to create a GameObject
     id_t Manager::getFreePoolKey(){
-        if(!free_id_list.size()){
+        unsigned int free_id = this->game_object_max_id;
+        game_object_max_id++;
+        return free_id;
+        /*if(free_id_list.size() == 0){
             return game_object_pool.size();
         }
         id_t id = free_id_list.back();
         free_id_list.pop_back();
-        return id;
+        return id;*/
     }
 
     void Manager::init() {
@@ -173,8 +200,10 @@ namespace manager {
     bool Manager::step(){
         audio_manager->stepSounds();
         network_manager->networkStep();
-        game_controller->step();
-        return render();
+        bool gc = game_controller->step(); 
+
+        return render() && gc;
+        //return render();
     }
 
     void Manager::initRenderManager(RenderManager &rm) {
@@ -222,19 +251,81 @@ namespace manager {
     }
 
     void Manager::renderAll() {
-        for (slave_ptr<GameObject> obj : game_object_pool) {
-            if(obj) obj->render();
+        /*
+            Depth object pairs are used to allow objects to be depth sorted.
+            This allows us to customise the render order of different objects.
+        */
+
+        std::vector<std::pair<int, gameobject_ptr>> depth_object_pairs;
+        depth_object_pairs.clear();
+
+        for (auto map_elem = game_object_pool.begin(); map_elem != game_object_pool.end(); map_elem++) {
+            slave_ptr<GameObject> obj = *map_elem->second;
+            if (obj) {
+                if (obj->getReady()) {
+                    //obj->render();
+                    depth_object_pairs.push_back(std::pair<int, gameobject_ptr>(obj->getDepth(), obj));
+                }
+            }
         }
+        //return;
+
+        // SORT LIST
+        /*
+            If both objects are at the same depth:
+                If both objects have the same super type:
+                    Order by sub type
+                Else
+                    Order by super type
+            Else
+               Order by depth
+            --------------------------------------------------
+            This sorting function aims to accomplish two things:
+            - Put objects with larger depths at the top of the list so that they render first (Objects with small, or negative depths, will render after
+            - For objects at the same depth, group them together by type so that objects of the same type render one after another. (This will improve rendering
+            optimisation by reducing the number of context changes, as the same objects are unlikely to have GPU pipeline state changes between them)
+        
+        */
+        std::sort(depth_object_pairs.begin(), depth_object_pairs.end(),
+                  [](const std::pair<int, gameobject_ptr> & a, const std::pair<int, gameobject_ptr> & b) -> bool {
+                        return (a.first == b.first) ? (
+                            (a.second->getSuperType() == b.second->getSuperType()) ?
+                                ((a.second->getSubType() == b.second->getSubType()) ?
+                                    (a.second->getID() < b.second->getID()) :
+                                    (a.second->getSubType() < b.second->getSubType())) :
+                                (a.second->getSuperType() < b.second->getSuperType())) :
+                            (a.first > b.first);
+                  });
+
+        // RENDER
+        for (auto obj : depth_object_pairs) {
+            obj.second->render();
+        }
+
+        // RENDER GUI
+        for (auto obj : depth_object_pairs) {
+            //obj.second->renderGUI();
+        }
+
+        
     }
 
     void Manager::stepAll() {
         //std::cout << "stepAll()" << std::endl;
         std::vector<slave_ptr<GameObject>> copy;
-        for (slave_ptr<GameObject> obj : game_object_pool) {
-            copy.push_back(obj);
+        copy.clear();
+
+        for (auto map_elem = game_object_pool.begin(); map_elem != game_object_pool.end(); map_elem++) {
+            slave_ptr<GameObject> obj = *map_elem->second;
+            if (obj) {
+                copy.push_back(obj);
+            }
         }
         for (slave_ptr<GameObject> obj :copy) {
-            if(obj) obj->step();
+            if (obj) {
+                obj->setReady(true);
+                obj->step();
+            }
         }
     }
 
@@ -256,7 +347,9 @@ namespace manager {
 		*/
 
 		std::vector<slave_ptr<GameObject>> copy;
-		for (slave_ptr<GameObject> obj : game_object_pool) {
+        copy.clear();
+        for (auto map_elem = game_object_pool.begin(); map_elem != game_object_pool.end(); map_elem++) {
+            slave_ptr<GameObject> obj = *map_elem->second;
 			copy.push_back(obj);
 		}
 
@@ -312,7 +405,11 @@ namespace manager {
 
 		// Add all objects
 		for (slave_ptr<GameObject> obj : copy) {
-			splitmap->add(obj);
+            if (obj) {
+                if (obj->getReady()) {
+                    splitmap->add(obj);
+                }
+            }
 		}
 
 		// Perform collisions

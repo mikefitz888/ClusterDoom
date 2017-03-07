@@ -64,14 +64,21 @@ namespace unit {
     void Unit::release() {}
 
     void Unit::step() {
+        /*
+        *  Description of Unit activity: 
+        *  Move towards Base.
+        *  If tower is in range and able to shoot: stop -> attack tower -> continue with step 1
+        * 
+        *  There should be a cooldown between shots so the unit can "stutter-step"
+        */
         GameObject::step();
+        this->setSmoothingRate(0.25f);
 
-        auto target = getNearestTower();
+        auto& target = game_controller->getBase();
         if (!target) {
             return; //NO TARGET
         }
         this->setDestination(target->getPosition(), 1.25f);
-        this->setSmoothingRate(0.25f);
 
         render_facing = getDestination();//target->getPosition();
 
@@ -113,10 +120,19 @@ namespace unit {
     }
 
     void Unit::attacked(gameobject_ptr aggressor) {
-        health--;
-        if(health <= 0) {
+        this->attacked(aggressor, 1);
+    }
+
+    void Unit::attacked(gameobject_ptr aggressor, int damage) {
+        health -= damage;
+        if (health <= 0) {
+            deliverWealth(20);
             destroySelf();
         }
+    }
+
+    void Unit::deliverWealth(size_t amt) {
+        manager->getGameController()->increaseWealth(amt);
     }
 
 	/*void Unit::getPath(Point<int> target) {

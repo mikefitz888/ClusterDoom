@@ -61,6 +61,8 @@ class ObjectLogic;
 class ResourceManager;
 class Spawn;
 class String;
+class ProjectileBomb;
+class ProjectileElectricity;
 
 typedef unsigned char byte;
 #ifdef _WIN32
@@ -185,6 +187,7 @@ namespace unitlogic {
 
 namespace worldrenderer {
     class WorldRenderer;
+    //enum SCREEN : unsigned int;
 }
 
 

@@ -12,7 +12,7 @@
 #define TILE_H 20
 
 namespace gamecontroller {
-    const int time_per_scenario = 60;
+    const float time_per_scenario = 20.f;
     const int waves_per_scenario = 3;
 
     using gameobject::GameObject;
@@ -68,6 +68,7 @@ namespace gamecontroller {
         bool game_started = false;
         int wave = 0;
         int scenario = -1;
+        size_t wealth = 0;
 
         std::vector<smartpointers::slave_ptr<Spawn>> spawn_points = std::vector<smartpointers::slave_ptr<Spawn>>();
         // TEMP
@@ -83,15 +84,15 @@ namespace gamecontroller {
         float getElapsedTime() const;
         void resetClock();
         void init();
-        void step();
+        bool step();
         void restart() const;
         Matching stableMatching(std::vector<Point<int>>& detections);
         int getWeight(int x, int y);
 
         tower_ptr  spawnTowerAt(int x, int y, tower::TYPE type) const;
         tower_ptr  spawnTowerAt(Point<int> position, tower::TYPE type) const;
-        unit_ptr   spawnUnitAt(int x, int y) const;
-        unit_ptr   spawnUnitAt(Point<int> position) const;
+        unit_ptr   spawnUnitAt(int x, int y, unit::TYPE type) const;
+        unit_ptr   spawnUnitAt(Point<int> position, unit::TYPE type) const;
         gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, int x, int y) const;
         gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, Point<int> position) const;
         void moveTower(tower_ptr tower, Point<int> point) const;
@@ -101,12 +102,19 @@ namespace gamecontroller {
         void clearTowers() const;
         void spawnTowers(std::vector<Point<int>> tower_list) const;
         std::vector<tower_ptr> findNearestTowers(Point<int> point);
+        std::vector<unit_ptr> getUnitsInRange(glm::vec2 position, int radius);
+        std::vector<std::pair<float, unit_ptr>> getNNearestUnits(glm::vec2 position, int N, int maxrange);
+        tower_ptr& getBase();
         void parseCVList(std::vector<Point<int>> list);
+        
 
         bool getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path);
 
         int getScreenWidth();
         int getScreenHeight();
+
+        void increaseWealth(size_t amt);
+        int requestWealth(size_t amt); //returns the min(amt, wealth)
     };
 }
 

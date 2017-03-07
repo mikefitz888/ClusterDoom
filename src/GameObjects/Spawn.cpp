@@ -13,11 +13,16 @@ void Spawn::init() {
 }
 void Spawn::step() {
 	//Potential to get accurate game_time from game_controller
+    int t = time;
 	if(running && manager->getTowers().size() >= 0 && manager->getUnits().size() < 1000){
-        //printf("%d\n", time);
-        if (time % spawn_rate == 0) {
-            manager->getGameController()->spawnUnitAt(getX(), getY());
-        }
+        spawn_queue.erase(
+            std::remove_if(spawn_queue.begin(), spawn_queue.end(), [this](const unit_spawn s) -> bool { 
+                if (time > s.delay) {
+                    manager->getGameController()->spawnUnitAt(getX(), getY(), s.unit_type);
+                    return true;
+                }
+                return false;
+            }), spawn_queue.end());
         time++;
 	}
 }
@@ -41,8 +46,16 @@ void Spawn::startWave(int wave_number) {
 
 void Spawn::beginWave() {
     //Adjust parameters for the next wave based on this->wave and this->scenario here
-    spawn_rate = (6 - wave) * 60;
-    spawn_queue.emplace_back(unit::TYPE::BASIC);
+    int spawn_rate = 15 - scenario;
+    int delay = time;
+    std::cout << scenario << "\n";
+    spawn_queue.clear();
+    for (int number_of_enemies = 1 + scenario*scenario; number_of_enemies > 0; number_of_enemies--) {
+        std::cout << number_of_enemies << "\n";
+        spawn_queue.emplace_back(unit::TYPE::BASIC, delay);
+        delay += spawn_rate;
+    }
+    
 }
 
-Spawn::unit_spawn::unit_spawn(unit::TYPE type, int t) : unit_type(type), time(t) {}
+Spawn::unit_spawn::unit_spawn(unit::TYPE type, int d) : unit_type(type), delay(d) {}

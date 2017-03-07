@@ -9,7 +9,8 @@ namespace gameobject {
         id_(id),
         super_type_(super_type),
         sub_type_(sub_type),
-        manager(m) {}
+        manager(m),
+        game_controller(m->getGameController()) {}
 
     GameObject::~GameObject() {}
 
@@ -31,6 +32,14 @@ namespace gameobject {
 
     gameobject_ptr GameObject::getSharedPtr() {
         return this->self;
+    }
+
+    void GameObject::setReady(bool ready) {
+        this->is_ready = ready;
+    }
+
+    bool GameObject::getReady() {
+        return this->is_ready;
     }
 
 	void GameObject::render() {}
@@ -57,16 +66,16 @@ namespace gameobject {
     Point<int> GameObject::getPosition() const { return position; }*/
 
     int GameObject::distanceTo(smartpointers::slave_ptr<GameObject> other) const {
-        return (other->getPosition() - position).length();
+        return glm::distance(other->getPosition(), position);
         
     }
 
     int GameObject::distanceTo(Point<int> point) const {
-        return (vec2(point.x, point.y) - position).length();
+        return glm::distance(vec2(point.x, point.y), position);
 	}
 
     int GameObject::distanceTo(glm::vec2 point) const {
-        return (point - position).length();
+        return glm::distance(point, position);
     }
 
 	// Setup
@@ -91,7 +100,7 @@ namespace gameobject {
 
 	// Create new empty collision profile
 	Collision::Collision(gameobject_ptr parent) {
-		std::cout << "PARENT: " << parent << std::endl;
+		//std::cout << "PARENT: " << parent << std::endl;
 		this->parent = parent;
 		this->setTypeNone();
 	}
@@ -333,11 +342,16 @@ namespace gameobject {
     }
 
     void MotionComponent::setPosition(int x, int y) {
-        this->position = glm::vec2(x, y);
+        //printf("Motion Component recieved move to: %d %d\n", x, y);
+        //glm::vec2 tmp((float)x, (float)y);
+        this->position = glm::ivec2(x, y);
+        //printf("Checking updated position reveals: %f %f\n", tmp.x, tmp.y);
+        this->render_position = this->position;
     }
 
     void MotionComponent::setPosition(glm::vec2 position) {
         this->position = position;
+        this->render_position = this->position;
     }
 
     void MotionComponent::setX(int x) {
@@ -471,7 +485,7 @@ namespace gameobject {
         this->current_destination = destination;
         this->speed               = speed;
         this->has_destination     = true;
-        this->at_destination      = ((this->current_destination - this->position).length() <= this->distance_threshold);
+        this->at_destination      = (glm::distance(this->current_destination, this->position) <= this->distance_threshold);
     }
 
     void NavigationComponent::setDestination() {

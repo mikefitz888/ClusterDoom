@@ -3,6 +3,7 @@
 #include "../include/RenderUtils.h"
 #include "../include/VertexBuffer.h"
 #include "../include/ResourceManager.h"
+#include "../include/AnimatedTexture.h"
 
 namespace graphics {
 
@@ -16,13 +17,19 @@ namespace graphics {
         rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
         rm->textureLoad("red", "src/Resources/Textures/red.png")->setOriginCentre();
         rm->textureLoad("white", "src/Resources/Textures/white.png");// ->setOriginCentre();
-        rm->textureLoad("base_image", "src/Resources/Textures/base.png");
+        rm->textureLoad("base_image", "src/Resources/Textures/base.png")->setOriginCentre();
         rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
         rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
         rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();
+        rm->textureLoad("bomb_texture", "src/Resources/Textures/bomb.png")->setOrigin(30, 36);
+        rm->textureLoad("bomb_texture_white", "src/Resources/Textures/bomb_white.png")->setOrigin(30, 36);
+        rm->textureLoad("beam_segment", "src/Resources/Textures/beam_segment_small.png")->setOriginCentre();
+        rm->textureLoad("begin", "src/Resources/Textures/begin.jpg")->setOriginCentre();
+        rm->textureLoad("win", "src/Resources/Textures/begin.jpg")->setOriginCentre();
+        rm->textureLoad("lose", "src/Resources/Textures/begin.jpg")->setOriginCentre();
 
         // Load Animated Textures
-        //rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 12, 4, -1);
+        rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();
 
         // Load Shaders
         rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
@@ -62,6 +69,11 @@ namespace graphics {
         glDepthFunc(GL_LEQUAL);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glOrtho(0, 800, 600, 0, 1, -1);
+
+        // Clear textures
+        for (int i = 0; i < 4; i++) {
+            active_texture[i] = nullptr;
+        }
 
         // Set identify matrix
         world_matrix = glm::mat4(1.0);
@@ -233,26 +245,34 @@ namespace graphics {
     void RenderManager::setTexture(sf::Texture *tex) {
         //active_shader->setUniform("texture_diffuse", tex);
         //sf::Texture::bind(tex);
-        GLuint gl_tex_id = tex->getNativeHandle();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+        if (active_texture[0] != tex) {
+            GLuint gl_tex_id = tex->getNativeHandle();
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+            active_texture[0] = tex;
+        }
     }
 
     void RenderManager::setTextureExt(sf::Texture *tex, GLuint texture_unit, GLchar* texture_uniform_name) {
         //active_shader->setUniform("texture_diffuse", tex);
         //sf::Texture::bind(tex);
-        GLuint gl_tex_id = tex->getNativeHandle();
-        switch (texture_unit) {
-            case 0:glActiveTexture(GL_TEXTURE0); break;
-            case 1:glActiveTexture(GL_TEXTURE1); break;
-            case 2:glActiveTexture(GL_TEXTURE2); break;
-            default:glActiveTexture(GL_TEXTURE0); break;
-        }
-        glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+        if (texture_unit >= 0 && texture_unit <= 2) {
+            if (active_texture[texture_unit] != tex) {
+                GLuint gl_tex_id = tex->getNativeHandle();
+                switch (texture_unit) {
+                    case 0:glActiveTexture(GL_TEXTURE0); break;
+                    case 1:glActiveTexture(GL_TEXTURE1); break;
+                    case 2:glActiveTexture(GL_TEXTURE2); break;
+                    default:glActiveTexture(GL_TEXTURE0); break;
+                }
+                glBindTexture(GL_TEXTURE_2D, gl_tex_id);
 
-        // Bind texture unit to uniform name
-        GLuint tex_location = glGetUniformLocation(active_shader->getNativeHandle(), texture_uniform_name);
-        glUniform1i(tex_location, texture_unit);
+                // Bind texture unit to uniform name
+                GLuint tex_location = glGetUniformLocation(active_shader->getNativeHandle(), texture_uniform_name);
+                glUniform1i(tex_location, texture_unit);
+                active_texture[texture_unit] = tex;
+            }
+        }
     }
 
     void RenderManager::release() const {
@@ -395,13 +415,14 @@ namespace graphics {
 
     void graphics::Texture::render() {
         GLuint gl_tex_id = this->getNativeHandle();
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+        //glActiveTexture(GL_TEXTURE0);
+        //glBindTexture(GL_TEXTURE_2D, gl_tex_id);
+        this->render_manager->setTexture(this);
         this->texture_quad->render();
     }
 
-    void graphics::Texture::render(int x, int y, float rotation) {
-        glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
+    void graphics::Texture::render(int x, int y, float rotation, float z) {
+        glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, z));
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f) );
         transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
 
@@ -409,9 +430,9 @@ namespace graphics {
         this->render();
     }
 
-    void graphics::Texture::render(int x, int y, float xscale, float yscale, float rotation) {
+    void graphics::Texture::render(int x, int y, float xscale, float yscale, float rotation, float z) {
         glm::mat4 transform = glm::mat4();
-        transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+        transform = glm::translate(transform, glm::vec3(x, y, z));
         
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
         transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
@@ -421,11 +442,11 @@ namespace graphics {
         this->render();
     }
 
-    void graphics::Texture::render(int x, int y, int width, int height, float rotation) {
+    void graphics::Texture::render(int x, int y, int width, int height, float rotation, float z) {
         float xscale = (float)width / (float)this->getSize().x;
         float yscale = (float)height / (float)this->getSize().y;
         glm::mat4 transform = glm::mat4();
-        transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+        transform = glm::translate(transform, glm::vec3(x, y, z));
         
         transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
         transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
@@ -442,6 +463,16 @@ namespace graphics {
             this->createVertexBuffer();
         }
         return result;
+    }
+
+    ////////////////////////////////////////////////////
+    // IRENDERABLE SHARED METHODS
+    void IRenderable::setDepth(int render_depth) {
+        this->depth = render_depth;
+    }
+
+    int IRenderable::getDepth() {
+        return this->depth;
     }
 
 }

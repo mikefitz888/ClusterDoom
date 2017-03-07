@@ -54,6 +54,7 @@ namespace gameobject {
         gameobject_ptr parent = nullptr;
 
         int radius;
+        unsigned int state; // GameObjects act as finite-state automata, can be used with an enum
         BoundingBox bounding_box = BoundingBox(0, 0, 0, 0);
         bool is_collidable;
 
@@ -95,8 +96,8 @@ namespace gameobject {
     using graphics::RenderManager;
 	using network::INetworkInstance;
 
-    enum TYPE : unsigned int {TOWER=0, UNIT=1, OBJECT=2};
-    enum OBJECT_TYPE : unsigned int { SPAWN = 0 };
+    enum TYPE : unsigned int {TOWER=0, UNIT, OBJECT};
+    enum OBJECT_TYPE : unsigned int { SPAWN = 0, PROJECTILE_BOMB = 1, PROJECTILE_LASTER = 2, PROJECTILE_ELECTRICITY = 3 };
 
 
     // ****************************************************************************** //
@@ -207,8 +208,10 @@ namespace gameobject {
         const id_t super_type_ = 0;
         const id_t sub_type_ = 0;
     protected:
+        bool is_ready = false; // This is to prevent the draw event running before the step event
         Manager* manager;
         RenderManager* render_manager = nullptr;
+        gamecontroller::GameController* game_controller;
         Collision collision_profile = Collision(nullptr);
 
         Point<int> jitter_offset = Point<int>(0, 0);
@@ -231,6 +234,8 @@ namespace gameobject {
         void setSharedPtr(gameobject_ptr myself);
         gameobject_ptr getSharedPtr();
         void setup(); // The setup to be run for all gameobjects to configure default properties
+        void setReady(bool ready);
+        bool getReady();
 
         // EVENTS
         virtual void render() override;
@@ -258,7 +263,7 @@ namespace gameobject {
         inline Point<int> getJitter(){return jitter_offset;};
 
         inline bool getRunCollisionEvent() { return run_collision_event; }
-        inline void setRunCollisionEvent(bool run_collision_event) { this->run_collision_event = run_collision_event; }
+        inline void setRunCollisionEvent(bool run_collisionevent) { this->run_collision_event = run_collisionevent; }
 
         inline void demoDestroy() { _destroySelf(); return; }
 

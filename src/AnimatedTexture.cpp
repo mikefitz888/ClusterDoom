@@ -5,7 +5,8 @@
 
 namespace graphics {
     // Create a new animated texture
-    AnimatedTexture::AnimatedTexture(sf::String filename, bool split_both_ways, int frame_count_h, int frame_count_v, int total_frames) {
+    AnimatedTexture::AnimatedTexture(sf::String filename, bool split_both_ways, int frame_count_h, int frame_count_v, int total_frames, RenderManager* render_manager) {
+        this->render_manager = render_manager;
 
         // Set frame count
         if (total_frames < 1) {
@@ -28,22 +29,25 @@ namespace graphics {
         }
 
         // Determine width and height and split size:
-        int width = animated_texture_source->getSize().x;
-        int height = animated_texture_source->getSize().y;
+        int _width = animated_texture_source->getSize().x;
+        int _height = animated_texture_source->getSize().y;
 
         int frame_width, frame_height;
         if (split_both_ways) {
 
-            frame_width = width / frame_count_h;
-            frame_height = height / frame_count_v;
+            frame_width = _width / frame_count_h;
+            frame_height = _height / frame_count_v;
 
         }
         else {
 
-            frame_width = width / frame_count_h;
-            frame_height = height;
+            frame_width = _width / frame_count_h;
+            frame_height = _height;
 
         }
+
+        this->width = frame_width;
+        this->height = frame_height;
 
         // Create vertex buffers
         int hframe_id = 0;
@@ -53,10 +57,10 @@ namespace graphics {
 
             // Determine uv coordinates of frame
             float u1, v1, u2, v2;
-            u1 = (float)(hframe_id*frame_width) / (float)width;
-            v1 = (float)(vframe_id*frame_height) / (float)height;
-            u2 = (float)((hframe_id + 1)*frame_width) / (float)width;
-            v2 = (float)((vframe_id + 1)*frame_height) / (float)height;
+            u1 = (float)(hframe_id*frame_width) / (float)_width;
+            v1 = (float)(vframe_id*frame_height) / (float)_height;
+            u2 = (float)((hframe_id + 1)*frame_width) / (float)_width;
+            v2 = (float)((vframe_id + 1)*frame_height) / (float)_height;
 
             // Create vertex buffer
             VertexBuffer *vbuff = new VertexBuffer();
@@ -78,6 +82,15 @@ namespace graphics {
 
     }
 
+    void AnimatedTexture::setOrigin(int x, int y) {
+        this->origin_x = x;
+        this->origin_y = y;
+    }
+
+    void AnimatedTexture::setOriginCentre() {
+        setOrigin(width / 2, height / 2);
+    }
+
     // Render a specified frame of the animated texture.
     void AnimatedTexture::render(int frame) {
         int frame_id = frame % this->frame_count;
@@ -85,6 +98,39 @@ namespace graphics {
 
         this->render_manager->setTexture(this->animated_texture_source);
         vbuff->render();
+    }
+
+    void AnimatedTexture::render(int frame, int x, int y, float rotation) {
+        glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(x, y, 0.0));
+        transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
+
+        this->render_manager->setWorldMatrix(transform);
+        this->render(frame);
+    }
+    void AnimatedTexture::render(int frame, int x, int y, float xscale, float yscale, float rotation) {
+        glm::mat4 transform = glm::mat4();
+        transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+
+        transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+        transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
+
+        this->render_manager->setWorldMatrix(transform);
+        this->render(frame);
+    }
+    void AnimatedTexture::render(int frame, int x, int y, int render_width, int render_height, float rotation) {
+        float xscale = (float)render_width / (float)this->width;
+        float yscale = (float)render_height / (float)this->height;
+        glm::mat4 transform = glm::mat4();
+        transform = glm::translate(transform, glm::vec3(x, y, 0.0));
+
+        transform = glm::rotate(transform, rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+        transform = glm::scale(transform, glm::vec3(xscale, yscale, 1.0));
+        transform = glm::translate(transform, glm::vec3(-origin_x, -origin_y, 0.0f));
+
+        this->render_manager->setWorldMatrix(transform);
+        this->render(frame);
     }
 
     // Get total frames

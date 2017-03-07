@@ -179,6 +179,9 @@ namespace smartpointers {
         }
 
     public:
+        master_ptr(){
+            this->invalidate();
+        }
         master_ptr(std::nullptr_t ptr) : name("object") {
             throw InvalidatedSmartPointerException("master", name);
         }

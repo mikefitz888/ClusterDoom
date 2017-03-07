@@ -217,7 +217,7 @@ void ProjectileElectricity::step() {
                     gameobject::unit_ptr obj = distance_unit_pair.second;
 
                     // check distance (and also ensure the objects aren't the same)
-                    if (distance <= range && obj && this->fork_parent->getSharedPtr() && this->target_object->getSharedPtr() &&
+                    if (distance <= range && obj && this->fork_parent && this->fork_parent->getSharedPtr() && this->target_object->getSharedPtr() &&
                         obj->getSharedPtr() != this->getSharedPtr() &&
                         obj->getSharedPtr() != this->fork_parent &&
                         obj->getSharedPtr() != this->target_object->getSharedPtr()) {

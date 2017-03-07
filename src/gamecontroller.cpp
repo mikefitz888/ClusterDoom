@@ -4,6 +4,7 @@
 #include "../include/unit.h"
 #include "../include/tower.h"
 #include "../include/GameObjects/Spawn.h"
+#include "../include/GameObjects/Projectiles.h"
 
 namespace gamecontroller {
 
@@ -65,6 +66,7 @@ namespace gamecontroller {
 
     tower_ptr GameController::spawnTowerAt(int x, int y, tower::TYPE type) const {
         auto tower = manager->createTower(type);
+        //printf("Tower spawned at: %d %d\n", x, y);
         tower->setPosition(x, y);
         return tower;
     }
@@ -126,6 +128,7 @@ namespace gamecontroller {
         spawnTowerAt(800, 600);
         spawnTowerAt(400, 600);*/
         //spawnUnitAt(100, 50);
+        
 
         //Gotta love smartpointers, look how clean this is :^)
         spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
@@ -140,6 +143,10 @@ namespace gamecontroller {
     bool GameController::step() {
 
         frame_clock++;
+        increaseWealth(std::log10(frame_clock));
+        if (frame_clock % 100 == 0) {
+            std::cout << wealth << "\n";
+        }
         //In general, step() should be frame-based.
         
 
@@ -153,6 +160,49 @@ namespace gamecontroller {
                     mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
                     spawnUnitAt(mouse_pos.x, mouse_pos.y, unit::TYPE::BASIC);
                 }
+               // spawned = true;
+            }
+        } else 
+        // TEMP: Spawn bomb
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) {
+            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<int>(mouse_pos.x, mouse_pos.y));
+            }
+
+            spawned = true;
+        } else
+        // TEMP: TESTING SPAWNING OF ELECTRICITY
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+            if (!spawned) {
+                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+
+                    auto units = getNNearestUnits(glm::vec2(mouse_pos.x, mouse_pos.y), 1000, 1000);
+                    if (units.size() > 1) {
+                       // std::cout << "ELECTRICITY!!" << std::endl;
+                        gameobject_ptr obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<int>(mouse_pos.x, mouse_pos.y));
+                        smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
+                        elec->setForkParent(units[0].second->getSharedPtr());
+                        elec->setTargetObject(units[1].second);
+                    }
+                }
+
+                spawned = true;
+            }
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+            if (!spawned) {
+                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+
+                    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BASIC);
+                    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::ELECTRIC);
+                }
+
                 spawned = true;
             }
         } else {
@@ -193,6 +243,7 @@ namespace gamecontroller {
                 }
                 
                 tower_ptr t = spawnTowerAt(getScreenWidth()/2, getScreenHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
+                spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
                 frame_clock = 0;
             }
             else {
@@ -253,6 +304,56 @@ namespace gamecontroller {
         std::vector<tower_ptr> points(manager->getTowers());
         std::sort(begin(points), end(points), [point](const tower_ptr& lhs, const tower_ptr& rhs) { return lhs->distanceTo(point) < rhs->distanceTo(point); });
         return points;
+    }
+
+    // Returns a list of the units within range
+    std::vector<unit_ptr> GameController::getUnitsInRange(glm::vec2 position, int radius) {
+        std::vector<unit_ptr> units_in_range;
+        units_in_range.clear();
+        for (unit_ptr unit : manager->getUnits()) {
+            if (unit && glm::distance(unit->getPosition(), position) <= radius) {
+                units_in_range.push_back(unit);
+            }
+        }
+        return units_in_range;
+    }
+
+    // Returns a list of distance-unit pairs for the N nearest objects
+    //  - If there are less than N objects within that range, it ignores them.
+    //  - List returned is distance ordered
+    std::vector<std::pair<float, unit_ptr>> GameController::getNNearestUnits(glm::vec2 position, int N, int maxrange) {
+        std::vector<std::pair<float, unit_ptr>> distance_unit_pairs;
+
+        for (unit_ptr unit : manager->getUnits()) {
+            if (unit) {
+                float distance = glm::distance(unit->getPosition(), position);
+                if (distance <= maxrange) {
+                    distance_unit_pairs.push_back(std::pair<float, unit_ptr>(distance, unit));
+                }
+            }
+        }
+
+        // Sort based on distance (closest first)
+        std::sort(distance_unit_pairs.begin(), distance_unit_pairs.end(), 
+                  [](const std::pair<float, unit_ptr> & a, const std::pair<float, unit_ptr> & b) -> bool {
+                        return a.first < b.first;
+                  });
+
+        // Trim so only keep first N
+        std::vector<std::pair<float, unit_ptr>> keep;
+        int count = 0;
+        for (auto pair : distance_unit_pairs) {
+            if (count >= N) {
+                break;
+            }
+            keep.push_back(pair);
+            count++;
+        }
+        return keep;
+    }
+
+    tower_ptr& GameController::getBase() {
+        return manager->getTowers()[0];
     }
 
     void GameController::parseCVList(std::vector<Point<int>> list) {
@@ -516,6 +617,16 @@ namespace gamecontroller {
 
     int GameController::getScreenHeight() {
         return sf::VideoMode::getDesktopMode().height;
+    }
+
+    void GameController::increaseWealth(size_t amt) {
+        wealth += amt;
+    }
+    
+    int GameController::requestWealth(size_t amt){
+        int ret = std::min(amt, wealth);
+        wealth -= ret;
+        return ret;
     }
 
     bool GameController::getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path) {

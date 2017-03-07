@@ -49,7 +49,7 @@ void RenderUtils::render_circular_health(int x, int y, int health, int health_ma
 	// Draw mask
 	rm->setActiveColour(colour);
 	RenderUtils::health_bar_diffuse_mask->render(x, y);
-
+    rm->setActiveColour(255,255,255,255);
 	rm->resetActiveShader();
 }
 

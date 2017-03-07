@@ -57,10 +57,10 @@ namespace worldrenderer {
 
 
         // Render debug explosion
-        render_manager->setBlendModeAdditive();
+       /* render_manager->setBlendModeAdditive();
         index += 0.60f;
         //at->render(index);
-        render_manager->setBlendModeNormal();
+        render_manager->setBlendModeNormal();*/
     }
 
     void WorldRenderer::release(){

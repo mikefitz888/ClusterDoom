@@ -15,6 +15,7 @@ namespace tower {
 
     void Tower::init(){
         render_manager = manager->getRenderManager();
+        game_controller = manager->getGameController();
 
         texture = manager->getResourceManager()->getTexture("basic_tower");
         /*if(!texture->loadFromFile("src/Resources/Textures/chess_piece_rook.png")){
@@ -62,7 +63,7 @@ namespace tower {
     }
 
     void Tower::renderGUI(){
-
+        
     }
 
     void Tower::release(){
@@ -89,12 +90,29 @@ namespace tower {
 		render_position.x -= (render_position.x - position.x) / 20;
 		render_position.y -= (render_position.y - position.y) / 20;
 
-        auto units = manager->getUnits();
-        for(auto unit : units) {
+        //Unsafe code, removed it. Only code general to all towers should go here
+        /*auto units = manager->getUnits();
+        for(auto& unit : units) {
             if( (unit->getX()-getX())*(unit->getX()-getX()) + (unit->getY() - getY())*(unit->getY() - getY()) < 10000) {
                 attack(unit);
                 return;
             }
+        }*/
+    }
+
+    unit_ptr Tower::getUnit() {
+        getUnits(1);
+        if (units.size()) return units[0];
+        return nullptr;
+    }
+
+    std::vector<unit_ptr>& Tower::getUnits(size_t amt) {
+        units.clear();
+        if (amt == 0) return units;
+
+        for (auto& unit : manager->getUnits()) {
+            units.emplace_back(unit);
+            if (--amt == 0) return units;
         }
     }
 
@@ -115,5 +133,13 @@ namespace tower {
                 health = 0;
             }
         }
+    }
+
+    size_t Tower::requestMoney(size_t amt) {
+        return game_controller->requestWealth(amt);
+    }
+
+    float Tower::requestEfficiency(size_t amt) {
+        return (float)requestMoney(amt) / (float)amt;
     }
 }

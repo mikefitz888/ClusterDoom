@@ -51,11 +51,15 @@ namespace graphics {
     */
     class IRenderable {
 
+        int depth = 0; // Depth is used to control the render order of objects. Objects with a higher depth will be rendered first. (The objects with lower depths, last).
+
         public:
             virtual void init() = 0;            // Function called once openGL context is guaranteed to exist. Useful for loading resources/initialises mesh's/shaders.
             virtual void render() = 0;        // Function called during main render loop to allow an object to perform its rendering
             virtual void renderGUI() = 0;        // Function called after main render loop with an orthographic context that match the window dimensions
             virtual void release() = 0;        // Called when the openGL context is destroyed
+            void setDepth(int depth);
+            int  getDepth();
     };
 
     /*
@@ -112,6 +116,9 @@ namespace graphics {
         IRenderable *render_parent = nullptr;        /* The top-most node in the composite rendering pattern (This should render any children in its own render method)*/
         Manager *manager;
 
+        // Active texture
+        sf::Texture *active_texture[4];
+
         // Transformation + Rendering
         glm::mat4 world_matrix;            /* Matrix used to represent the current transformation state */
 
@@ -136,9 +143,9 @@ namespace graphics {
         Texture(RenderManager *render_manager);
         bool loadFromFile(sf::String filepath);
         void render();
-        void render(int x, int y, float rotation = 0);
-        void render(int x, int y, float xscale, float yscale, float rotation = 0);
-        void render(int x, int y, int width, int height, float rotation = 0);
+        void render(int x, int y, float rotation = 0, float z = 0.0f);
+        void render(int x, int y, float xscale, float yscale, float rotation = 0, float z = 0.0f);
+        void render(int x, int y, int width, int height, float rotation = 0, float z = 0.0f);
 
     };
 }

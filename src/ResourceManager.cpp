@@ -113,7 +113,7 @@ AnimatedTexture* ResourceManager::animatedTextureLoad(sf::String resource_name, 
         AnimatedTexture *new_anim_tex = getAnimatedTexture(resource_name);
         return new_anim_tex;
     } else {
-        AnimatedTexture *new_anim_tex = new AnimatedTexture(resource_filepath, split_both_ways, frame_count_h, frame_count_v, total_frames);
+        AnimatedTexture *new_anim_tex = new AnimatedTexture(resource_filepath, split_both_ways, frame_count_h, frame_count_v, total_frames, this->manager->getRenderManager());
         if (new_anim_tex == nullptr) {
             std::cout << "[ERROR] Failed to create Animated Texture '" << resource_filepath.toAnsiString() << "'!" << std::endl;
             delete new_anim_tex;

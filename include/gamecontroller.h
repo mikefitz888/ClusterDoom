@@ -68,6 +68,7 @@ namespace gamecontroller {
         bool game_started = false;
         int wave = 0;
         int scenario = -1;
+        size_t wealth = 0;
 
         std::vector<smartpointers::slave_ptr<Spawn>> spawn_points = std::vector<smartpointers::slave_ptr<Spawn>>();
         // TEMP
@@ -101,12 +102,19 @@ namespace gamecontroller {
         void clearTowers() const;
         void spawnTowers(std::vector<Point<int>> tower_list) const;
         std::vector<tower_ptr> findNearestTowers(Point<int> point);
+        std::vector<unit_ptr> getUnitsInRange(glm::vec2 position, int radius);
+        std::vector<std::pair<float, unit_ptr>> getNNearestUnits(glm::vec2 position, int N, int maxrange);
+        tower_ptr& getBase();
         void parseCVList(std::vector<Point<int>> list);
+        
 
         bool getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path);
 
         int getScreenWidth();
         int getScreenHeight();
+
+        void increaseWealth(size_t amt);
+        int requestWealth(size_t amt); //returns the min(amt, wealth)
     };
 }
 

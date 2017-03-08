@@ -272,7 +272,7 @@ namespace network {
 						int y;
 						recv_buffer >> x;
 						recv_buffer >> y;
-//						manager->getGameController()->spawnUnitAt(x, y);
+						manager->getGameController()->spawnUnitAt(gameobject::Point<int>(x, y), (unit::TYPE) 1);
                         break;
 
                     default: // INVALID PACKET RECEIVED FROM CLIENT

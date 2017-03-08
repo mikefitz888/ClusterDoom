@@ -172,6 +172,15 @@ void ProjectileLaser::onCollision(gameobject_ptr other) {
     }
 }
 
+// Properties
+void ProjectileLaser::setDamage(int damage) {
+    this->damage = damage;
+}
+
+int ProjectileLaser::getDamage() {
+    return this->damage;
+}
+
 // ****************************************************** //
 // Projectile Electricity
 ProjectileElectricity::ProjectileElectricity(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, m) {

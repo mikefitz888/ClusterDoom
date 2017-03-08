@@ -75,6 +75,7 @@ public:
     virtual void renderGUI() override;
     virtual void release() override;
     virtual void step() override;
+    void onCollision(gameobject_ptr other) override;
 };
 
 

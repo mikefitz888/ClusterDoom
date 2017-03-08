@@ -553,7 +553,7 @@ namespace manager {
 						my_collision->setParent(object);
 
 						for (auto other : objects) {
-							if (other && object != other) {
+							if (other && object && object != other) {
 
 								// Check if already tested
 								std::pair<gameobject_ptr, gameobject_ptr> object_pair(object, other);
@@ -566,9 +566,10 @@ namespace manager {
 									if (my_collision->intersects(other_collision)) {
 										object->onCollision(other);
 									}
-
-									// Mark this as tested, so we don't run the collision event twice
-									tested_objects.insert(object_pair);
+                                    if (object && other) {
+                                        // Mark this as tested, so we don't run the collision event twice
+                                        tested_objects.insert(object_pair);
+                                    }
 								}
 							}
 						}

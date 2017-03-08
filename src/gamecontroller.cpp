@@ -173,6 +173,23 @@ namespace gamecontroller {
 
             spawned = true;
         } else
+        // TEMP: Spawn bullet
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
+            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                auto obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(mouse_pos.x, mouse_pos.y));
+
+                // Find nearest object
+                auto objs = this->manager->getGameController()->getNNearestUnits(obj->getPosition(), 1, 1000);
+                if (objs.size() > 0) {
+                    glm::vec2 dir = glm::normalize(objs[0].second->getPosition() - obj->getPosition());
+                    obj->setVelocity(dir*7.0f);
+                }
+            }
+
+            spawned = true;
+        } else
         // TEMP: TESTING SPAWNING OF ELECTRICITY
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
             if (!spawned) {

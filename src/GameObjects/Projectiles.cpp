@@ -5,11 +5,14 @@
 #include "../../include/unit.h"
 #include "../../include/util.h"
 #include "../../include/AnimatedTexture.h"
+#include "../../include/smartpointers.h"
+
+using gameobject::unit_ptr;
 
 // ****************************************************** //
 // Projectile Bomb
 
-ProjectileBomb::ProjectileBomb(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::SPAWN, m) {
+ProjectileBomb::ProjectileBomb(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::PROJECTILE_BOMB, m) {
 
 }
 
@@ -130,19 +133,48 @@ void ProjectileBomb::setExplosionKnockback(int knockback) {
 
 // ****************************************************** //
 // Projectile Laser
-ProjectileLaser::ProjectileLaser(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::SPAWN, m) {
-
+ProjectileLaser::ProjectileLaser(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::PROJECTILE_LASER, m) {
+    // TEMP: apply some default motion
+    setVelocity(0.0f, -7.0f);
+    
+}
+void ProjectileLaser::init() {
+    this->getCollision()->setTypeCircle(10);
 }
 
-void ProjectileLaser::init() {};
-void ProjectileLaser::render() {};
+void ProjectileLaser::step() {
+
+    GameObject::step();
+
+    // Bounds check
+    int x, y;
+    x = this->getX();
+    y = this->getY();
+    if (x < 32 || y < 32 || x > manager->getGameController()->getScreenWidth() + 32 || y > manager->getGameController()->getScreenHeight() + 32) {
+        destroySelf();
+    }
+};
+
+void ProjectileLaser::render() {
+    float angle = point_direction(glm::vec2(0.0f, 0.0f), this->getVelocity());
+    this->manager->getResourceManager()->getTexture("bullet")->render(this->getX(), this->getY(), angle);
+};
 void ProjectileLaser::renderGUI() {};
 void ProjectileLaser::release() {};
-void ProjectileLaser::step() {};
+
+
+void ProjectileLaser::onCollision(gameobject_ptr other) {
+    if (other->getSuperType() == gameobject::TYPE::UNIT) {
+        unit_ptr oth = smartpointers::static_pointer_cast<unit::Unit>(other);
+        oth->attacked(this->getSharedPtr(), 30);
+        //destroyed = true;
+        destroySelf();
+    }
+}
 
 // ****************************************************** //
 // Projectile Electricity
-ProjectileElectricity::ProjectileElectricity(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::SPAWN, m) {
+ProjectileElectricity::ProjectileElectricity(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, m) {
 
 }
 

@@ -32,7 +32,7 @@ namespace worldrenderer {
         
         // Game Screens
         enum SCREEN : unsigned int {NONE = 0, GAME_START, GAME_LOSE, GAME_WIN};
-        SCREEN display_screen = SCREEN::GAME_START;
+        SCREEN display_screen = SCREEN::NONE;
         std::map<SCREEN, graphics::Texture*> textures;
 
     public:

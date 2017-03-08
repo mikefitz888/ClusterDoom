@@ -27,7 +27,7 @@ namespace graphics {
         rm->textureLoad("begin", "src/Resources/Textures/begin.jpg")->setOriginCentre();
         rm->textureLoad("win", "src/Resources/Textures/begin.jpg")->setOriginCentre();
         rm->textureLoad("lose", "src/Resources/Textures/begin.jpg")->setOriginCentre();
-
+        rm->textureLoad("bullet", "src/Resources/Textures/bullet.png")->setOriginCentre();
         // Load Animated Textures
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();
 

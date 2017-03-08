@@ -14,7 +14,7 @@ GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
         return new ProjectileBomb(key, manager);
         break;
 
-    case gameobject::OBJECT_TYPE::PROJECTILE_LASTER:
+    case gameobject::OBJECT_TYPE::PROJECTILE_LASER:
         return new ProjectileLaser(key, manager);
         break;
 

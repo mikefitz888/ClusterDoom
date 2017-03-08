@@ -540,7 +540,12 @@ namespace std
             //return (hash<smartpointers::slave_ptr<T>>()(p.first) + hash<smartpointers::slave_ptr<T>>()(p.second) * 458481);
             //return std::hash<T>(p.first)()+ std::hash<U>(p.second)() * 458481;//std::hash<T*>()(p.first.get()) + std::hash<U*>()(p.second.get()) * 458481;
             //return std::hash<T*>()(p.get())
-            return hash<T>()(p.first) + hash<U>()(p.second) * 458481;
+            if (p.first && p.second) { // Need an existence check here
+                return hash<T>()(p.first) + hash<U>()(p.second) * 458481;
+            } else {
+                return 0;
+            }
+            
         }
     };
 }

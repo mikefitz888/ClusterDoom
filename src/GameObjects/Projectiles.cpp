@@ -166,7 +166,7 @@ void ProjectileLaser::release() {};
 void ProjectileLaser::onCollision(gameobject_ptr other) {
     if (other->getSuperType() == gameobject::TYPE::UNIT) {
         unit_ptr oth = smartpointers::static_pointer_cast<unit::Unit>(other);
-        oth->attacked(this->getSharedPtr(), 30);
+        oth->attacked(this->getSharedPtr(), this->getDamage());
         //destroyed = true;
         destroySelf();
     }

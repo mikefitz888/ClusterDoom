@@ -64,7 +64,7 @@ Longer range laser fired from the wizard towers
 
 */
 class ProjectileLaser : public GameObject {
-
+    int damage = 30;
 public:
     // Constructor
     ProjectileLaser(id_t id, manager::Manager* m);
@@ -76,6 +76,10 @@ public:
     virtual void release() override;
     virtual void step() override;
     void onCollision(gameobject_ptr other) override;
+
+    // Property modifiers
+    void setDamage(int damage);
+    int  getDamage();
 };
 
 

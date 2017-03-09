@@ -191,6 +191,9 @@ namespace network {
 
             // Send verify packet
 
+			send_buffer.seek(0);
+			send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendConfirmConnect;
+			socket->send(send_buffer.getPtr(), send_buffer.tell());
 
             // Send all instances
             network_manager->sendAllInstancesToClient(this);

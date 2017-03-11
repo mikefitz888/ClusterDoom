@@ -35,7 +35,7 @@ int main(int argc, char* argv[]){
 
     //TODO: Pass an openCV component to manager
     cvinterface::CVInterface cv;
-    //std::thread cv_thread = std::thread(runCVInterface, &cv);
+    std::thread cv_thread = std::thread(runCVInterface, &cv);
 
     model.init();
     //rm.setWindowTitle("Clusterdoom");
@@ -55,7 +55,7 @@ int main(int argc, char* argv[]){
 
     // Cleanup
     cv.release();
-    //cv_thread.join();
+    cv_thread.join();
     //nm.release();
     model.release();
 

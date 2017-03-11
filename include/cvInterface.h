@@ -21,7 +21,7 @@ namespace cvinterface {
         Buffer send_buffer;
     public:
         void init();
-        void step();
+        void step(std::vector<std::vector<cv::Point>>& squares);
         void release();
         // These are both essentially final! Consider them const!
         static int RED_THRESHOLD;

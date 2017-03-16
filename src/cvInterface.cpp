@@ -14,6 +14,52 @@ namespace cvinterface {
 
     typedef std::vector<cv::Point> Square;
 
+#define CALIB_TOPLEFT 0
+#define CALIB_TOPRIGHT 1
+#define CALIB_BOTTOMRIGHT 2
+#define CALIB_BOTTOMLEFT 3
+
+/*struct CalibPoint{
+    int x, y;
+    CalibPoint(){
+        x = 0;
+        y = 0;
+    }
+    CalibPoint(int x, int y){
+        this->x = x;
+        this->y = y;
+    }
+};*/
+
+cv::Point calibration_points[4];
+int current_calibration_point_id = 0;
+    /*struct Marker
+    {
+        int x, y, marker_type;
+        explicit Marker(int x, int y, int marker_type)
+        {
+            this->x = x;
+            this->y = y;
+            this->marker_type = marker_type;
+        }
+    };*/
+    void mouseHandle(int event, int x, int y, int flags, void* userdata){
+        if( event== cv::EVENT_LBUTTONDOWN){
+
+            // Reset calibration point
+            if( flags ==  cv::EVENT_FLAG_CTRLKEY){
+                current_calibration_point_id = 0;
+            }
+            std::cout << "Point: " << current_calibration_point_id << " CALIBRATED AT: " << x << " " << y << std::endl;
+
+            calibration_points[current_calibration_point_id % 4] = cv::Point(x, y);
+            current_calibration_point_id ++;
+            /*if( current_calibration_point_id >= 4 ){
+                current_calibration_point_id = 0;
+            }*/
+        }
+    }
+
     void CVInterface::init() {
         if (!cascade.load("src/Resources/OpenCV/cascade.xml")) {
             std::cout << "Cannot load cascade!" << std::endl;
@@ -30,7 +76,11 @@ namespace cvinterface {
         dHeight = camera.get(CV_CAP_PROP_FRAME_HEIGHT);
         std::cout << dWidth << std::endl;
         std::cout << dHeight << std::endl;
-        //cv::namedWindow("WebCam", CV_WINDOW_AUTOSIZE);
+        cv::namedWindow("WebCam", CV_WINDOW_AUTOSIZE);
+
+        // Detect mouse press
+        cv::setMouseCallback("WebCam", mouseHandle, NULL);
+
 
         networkConnect();
 
@@ -49,6 +99,13 @@ namespace cvinterface {
         double dx2 = pt2.x - pt0.x;
         double dy2 = pt2.y - pt0.y;
         return (dx1*dx2 + dy1*dy2) / sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2));
+    }
+
+    double angle(cv::Point& pt1, cv::Point& pt2)
+    {
+        double dx = std::abs(pt2.x - pt1.x);
+        double dy = std::abs(pt2.y - pt1.y);
+        return std::abs(std::atan2(dy, dx));
     }
 
     // returns sequence of squares detected on the image.
@@ -126,6 +183,165 @@ namespace cvinterface {
         }
     }
 
+    int averageValue(cv::Mat& integral, int x1, int x2, int y1, int y2, int size)
+    {
+        return (integral.at<int>(x2, y2) 
+              - integral.at<int>(x1, y2) 
+              - integral.at<int>(x2, y1)
+              + integral.at<int>(x1, y1)) / (size*size);
+    }
+    void decodeSquares(cv::Mat& frame, std::vector<Square>& squares, std::vector<Marker>& markers)
+    {
+        markers.clear();
+        // We know the four points of a square
+        // We need to work out the rotation, rotate the image
+        // then divide into a grid
+        // threshold each segment and perform decoding
+        // Outer 8 squares are summed, +8 if centre is black
+        for (Square& square : squares)
+        {
+            // Find center of marker
+            int cx = (square[0].x + square[1].x + square[2].x + square[3].x) / 4;
+            int cy = (square[0].y + square[1].y + square[2].y + square[3].y) / 4;
+
+            // Find size of marker
+            double l1 = std::hypot(square[0].x - square[1].x, square[0].y - square[1].y);
+            double l2 = std::hypot(square[1].x - square[2].x, square[1].y - square[2].y);
+            double l = (l1 + l2) / 2;
+
+            // Determine bounding box
+            int minx = 2147483647;
+            int maxx = -1;
+            int miny = 2147483647;
+            int maxy = -1;
+            for (auto& point : square)
+            {
+                minx = MIN(minx, point.x);
+                maxx = MAX(maxx, point.x);
+                miny = MIN(miny, point.y);
+                maxy = MAX(maxy, point.y);
+            }
+            cv::Mat bounding_box = frame(cv::Rect(minx, miny, maxx - minx, maxy - miny));
+
+            // Find the rotation matrix and apply it
+            cv::Point center(bounding_box.cols / 2, bounding_box.rows / 2);
+            double rot = angle(square[0], square[1]);
+            cv::Mat rot_mat = cv::getRotationMatrix2D(center, 180*rot/PI, 1.0);
+            cv::warpAffine(bounding_box, bounding_box, rot_mat, bounding_box.size());
+
+            // Normalise the points to the rotated bounding box
+            int cxb = cx - minx;
+            int cyb = cy - miny;
+            for (auto& point : square)
+            {
+                int x = point.x - (minx + cxb);
+                int y = point.y - (miny + cyb);
+                point.x = x*std::cos(-rot) - y*std::sin(-rot) + cxb;
+                point.y = x*std::sin(-rot) + y*std::cos(-rot) + cyb;
+            }
+
+            // compute the new minimum point
+            minx = 2147483647;
+            miny = 2147483647;
+            for (auto& point : square)
+            {
+                minx = MIN(minx, point.x);
+                miny = MIN(miny, point.y);
+            }
+
+            imshow("Marker", bounding_box);
+
+            // Determine characteristics of marker
+            int border_offset = l * 0.125;
+            int blob_size = l * 0.25;
+
+            // Decode
+//#define STATIC_THRESHOLD
+#ifdef STATIC_THRESHOLD
+            const int THRESHOLD = 128; // This could be calibrated based on centre?
+#endif
+            cv::Mat bounding_box_gray, sum;
+            cv::cvtColor(bounding_box, bounding_box_gray, CV_BGR2GRAY);
+#ifndef STATIC_THRESHOLD
+            int THRESHOLD = 0;
+            for (int x = minx + border_offset + blob_size; x < minx + border_offset + blob_size * 2; ++x)
+            {
+                for (int y = miny + border_offset + blob_size; y < miny + border_offset + blob_size * 2; ++y)
+                {
+                    THRESHOLD += bounding_box_gray.at<uint8_t>(x, y);
+                }
+            }
+            THRESHOLD /= (blob_size * blob_size);
+            //std::cout << "Threshold set at " << THRESHOLD << "\n";
+#endif
+            cv::threshold(bounding_box_gray, bounding_box_gray, THRESHOLD, 255, CV_THRESH_BINARY);
+            cv::integral(bounding_box_gray, sum);
+
+            int blob0 = averageValue(sum, minx + border_offset, 
+                                          minx + border_offset + blob_size, 
+                                          miny + border_offset, 
+                                          miny + border_offset + blob_size, 
+                                     blob_size) < 128;
+            int blob1 = averageValue(sum, minx + border_offset + blob_size,
+                                          minx + border_offset + blob_size * 2,
+                                          miny + border_offset,
+                                          miny + border_offset + blob_size,
+                                     blob_size) < 128;
+            int blob2 = averageValue(sum, minx + border_offset + blob_size * 2,
+                                          minx + border_offset + blob_size * 3,
+                                          miny + border_offset,
+                                          miny + border_offset + blob_size,
+                                     blob_size) < 128;
+            int blob3 = averageValue(sum, minx + border_offset,
+                                          minx + border_offset + blob_size,
+                                          miny + border_offset + blob_size,
+                                          miny + border_offset + blob_size * 2,
+                                     blob_size) < 128;
+            // center blob
+#ifdef STATIC_THRESHOLD
+            int blob4 = averageValue(sum, minx + border_offset + blob_size,
+                                          minx + border_offset + blob_size * 2,
+                                          miny + border_offset + blob_size,
+                                          miny + border_offset + blob_size * 2,
+                                     blob_size);
+#endif
+            int blob5 = averageValue(sum, minx + border_offset + blob_size * 2,
+                                          minx + border_offset + blob_size * 3,
+                                          miny + border_offset + blob_size,
+                                          miny + border_offset + blob_size * 2,
+                                     blob_size) < 128;
+            int blob6 = averageValue(sum, minx + border_offset,
+                                          minx + border_offset + blob_size,
+                                          miny + border_offset + blob_size * 2,
+                                          miny + border_offset + blob_size * 3,
+                                     blob_size) < 128;
+            int blob7 = averageValue(sum, minx + border_offset + blob_size,
+                                          minx + border_offset + blob_size * 2,
+                                          miny + border_offset + blob_size * 2,
+                                          miny + border_offset + blob_size * 3,
+                                     blob_size) < 128;
+            int blob8 = averageValue(sum, minx + border_offset + blob_size * 2,
+                                          minx + border_offset + blob_size * 3,
+                                          miny + border_offset + blob_size * 2,
+                                          miny + border_offset + blob_size * 3,
+                                     blob_size) < 128;
+            int marker_type = blob0 + /*blob1 +*/ blob2 + /*blob3 +*/ /*blob5 +*/ blob6 + /*blob7 +*/ blob8;
+           /* std::cout << "Found marker (" 
+                      << blob0// << ", " 
+                      << blob1// << ", " 
+                      << blob2// << ", " 
+                      << blob3// << ", " 
+#ifdef STATIC_THRESHOLD
+                      << blob4// << ", "
+#endif
+                      << blob5// << ", " 
+                      << blob6// << ", " 
+                      << blob7// << ", " 
+                      << blob8 << ") = " << marker_type << "\n";*/
+            markers.push_back(Marker(cx, cy, marker_type));
+        }
+    }
+
 
     void CVInterface::step(std::vector<Square>& squares)
     {
@@ -136,25 +352,35 @@ namespace cvinterface {
         }
 
         resize(frame, frame, cv::Size(frame.cols * 2, frame.rows * 2), 0, 0, cv::INTER_NEAREST);
+        if(current_calibration_point_id >= 4){
+            findSquares(frame, squares);
+           // std::cout << "There were " << squares.size() << " squares detected\n";
 
-        findSquares(frame, squares);
-        std::cout << "There were " << squares.size() << " squares detected\n";
+            /*tower_locations.clear();
+            for (Square& square : squares)
+            {
+                int cx = (square[0].x + square[1].x + square[2].x + square[3].x) / 4;
+                int cy = (square[0].y + square[1].y + square[2].y + square[3].y) / 4;
+                tower_locations.push_back(gameobject::Point<int>(cx, cy));
+            }*/
 
-        tower_locations.clear();
-        for (Square& square : squares)
-        {
-            int cx = (square[0].x + square[1].x + square[2].x + square[3].x) / 4;
-            int cy = (square[0].y + square[1].y + square[2].y + square[3].y) / 4;
-            tower_locations.push_back(gameobject::Point<int>(cx, cy));
+            decodeSquares(frame, squares, markers);
+
+            networkSendTowerPositions();
         }
 
-        networkSendTowerPositions();
-
-        std::cout << "There were " << squares.size() << " squares detected\n";
+      //  std::cout << "There were " << squares.size() << " squares detected\n";
         //drawSquares(frame, squares);
 
-        //imshow("Webcam", frame);
+        // DRAW CALIBRATION POINTS
+        circle(frame, calibration_points[0], 16, cv::Scalar(255.0,255.0,255.0), 4);
+        circle(frame, calibration_points[1], 16, cv::Scalar(255.0,0.0,0.0), 4);
+        circle(frame, calibration_points[2], 16, cv::Scalar(0.0,255.0,0.0), 4);
+        circle(frame, calibration_points[3], 16, cv::Scalar(0.0,0.0,255.0), 4);
 
+
+        cv::setMouseCallback("WebCam", mouseHandle, NULL);
+        imshow("WebCam", frame);
         //findTowers2();
         //cv::imshow("WebCam", frame);
          // This is essential as if we leave it, the main thread will receive multiple packets of data containing updated lists every frame.
@@ -257,6 +483,7 @@ std::vector<Square> squares;
         for (size_t i = 0; i < objects.size(); i++)
         {
             cv::rectangle(frame, cv::Point(objects[i].x, objects[i].y), cv::Point(objects[i].x + objects[i].width, objects[i].y + objects[i].height), cv::Scalar(0, 255, 0), 2);
+            //TODO: calibrate using corners: calibration_points[0]
             tower_locations.push_back(gameobject::Point<int>(objects[i].x + objects[i].width/2, objects[i].y + objects[i].height/2));
         }
         
@@ -265,7 +492,7 @@ std::vector<Square> squares;
 
     void CVInterface::networkConnect() {
         socket = new sf::TcpSocket();
-        sf::TcpSocket::Status st = socket->connect("127.0.0.1", 31654, sf::seconds(10.0f));
+        sf::TcpSocket::Status st = socket->connect("127.0.0.1", 31654, sf::seconds(30.0f));
         if (st == sf::TcpSocket::Status::Done) {
             std::cout << "[CV] Connected to CV interface successfully!" << std::endl;
         }
@@ -276,9 +503,43 @@ std::vector<Square> squares;
 
         // Write data to buffer
         send_buffer.seek(0);
-        send_buffer << (int)tower_locations.size();
-        for (auto location : tower_locations) {
-            send_buffer << location;
+        send_buffer << (int)markers.size();
+        for (auto& marker : markers) {
+            cv::Point i,j;
+
+            // Translate
+            marker.x -= calibration_points[0].x;
+            marker.y -= calibration_points[0].y;
+
+            // Calculate calibrated basis vectors
+            i =(calibration_points[1] - calibration_points[0]);
+            j = (calibration_points[3] - calibration_points[0]);
+
+            float magA = sqrt(i.x*i.x + i.y*i.y);
+            float magB = sqrt(j.x*j.x + j.y*j.y);
+            // normalize
+            float ifx = (float)i.x/magA;
+            float ify = (float)i.y/magA;
+            float jfx = (float)j.x/magB;
+            float jfy = (float)j.y/magB;
+
+            float mfx = (float)marker.x;
+            float mfy = (float)marker.y;
+
+            // Project
+            float xfactor = mfx*ifx + mfy*ify;
+            float yfactor = mfx*jfx + mfy*jfy;
+
+            float newx = (1280.0f/magA)*(xfactor);
+            float newy = (720.0f/magB)*(yfactor);
+
+            marker.x = 1280.0-(int)newx;
+            marker.y = (int)newy;
+            //width = frame.cols
+            //height = frame.rows
+
+            send_buffer << marker;
+            cv::circle(frame, cv::Point(marker.x, marker.y), 6, cv::Scalar(0, 128, 0), 5);
         }
 
         // Send

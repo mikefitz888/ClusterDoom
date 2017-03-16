@@ -149,6 +149,13 @@ namespace graphics {
         return running;
     }
 
+    /*void RenderManager::clear(){
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearDepth(1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        window->display();
+    }*/
+
     /*
         Loads a shader from a file and performs the required openGL calls to prepare the shader for the current
         rendering environment.

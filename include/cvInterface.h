@@ -6,8 +6,21 @@
 #include "../include/network/Buffer.h"
 
 namespace cvinterface {
+
+    struct Marker
+    {
+        int x, y, marker_type;
+        explicit inline Marker(int x, int y, int marker_type)
+        {
+            this->x = x;
+            this->y = y;
+            this->marker_type = marker_type;
+        }
+    };
+
     class CVInterface {
     private:
+        std::vector<Marker> markers;
         std::vector<gameobject::Point<int>> tower_locations;
         cv::VideoCapture camera;
         cv::Mat frame;

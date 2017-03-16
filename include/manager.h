@@ -44,6 +44,7 @@ namespace manager {
 		// Event management
 		Splitmap* splitmap;
 
+        int stepc = 0;
     public:
         Manager();
         GameController* getGameController() const;

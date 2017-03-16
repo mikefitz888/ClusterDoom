@@ -33,13 +33,14 @@ int main(int argc, char* argv[]){
     model.initRenderManager(rm);
     
 
-    //TODO: Pass an openCV component to manager
-    cvinterface::CVInterface cv;
-    std::thread cv_thread = std::thread(runCVInterface, &cv);
+
 
     model.init();
     //rm.setWindowTitle("Clusterdoom");
 
+    //TODO: Pass an openCV component to manager
+    cvinterface::CVInterface cv;
+    std::thread cv_thread = std::thread(runCVInterface, &cv);
 
 	sf::Clock clock = sf::Clock();
     bool running = true;

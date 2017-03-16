@@ -97,9 +97,21 @@ namespace gamecontroller {
         }
     }
 
-    void GameController::spawnTowers(std::vector<Point<int>> tower_list) const {
+    void GameController::spawnTowers(std::vector<std::pair<Point<int>, int>> tower_list) const {
         for (auto location : tower_list) {
-            spawnTowerAt(location, tower::TYPE::BASIC);
+            switch(location.second)
+            {
+                case 0:
+                case 1:
+                    spawnTowerAt(location.first, tower::TYPE::BASIC);
+                    break;
+                case 2:
+                case 3:
+                case 4:
+                    spawnTowerAt(location.first, tower::TYPE::ELECTRIC);
+                    break;
+
+            }
         }
     }
 
@@ -152,7 +164,7 @@ namespace gamecontroller {
 
 
         // Perform 
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
             if (!spawned) {
 
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
@@ -373,7 +385,7 @@ namespace gamecontroller {
         return manager->getTowers()[0];
     }
 
-    void GameController::parseCVList(std::vector<Point<int>> list) {
+    void GameController::parseCVList(std::vector<std::pair<Point<int>, int>> list) {
         // For Demo Only
         clearTowers();
         std::cout << "Towers cleared!" << std::endl;
@@ -428,6 +440,10 @@ namespace gamecontroller {
                 cvConnectionEstablished = true;
             } else if (st == sf::Socket::Error || st == sf::Socket::Disconnected) {
                 std::cout << "FAILED TO ESTABLISH CONNECTION WITH CV INTERFACE " << st << std::endl;
+                delete listener;
+                delete this->recv_buffer;
+                startCVServer();
+
             }
         } else {
             // Listen for messages from cv interface
@@ -461,13 +477,16 @@ namespace gamecontroller {
 
                     // Read packet:
                     int number_of_positions;
-                    Point<int> point(0,0);
+                    //Point<int> point(0,0);
+                    int x, y, marker_type;
 
                     recv_buffer->seek(0);
                     (*recv_buffer) >> number_of_positions;
                     for (int c = 0; c < number_of_positions; c++) {
-                        (*recv_buffer) >> point;
-                        cvList.push_back(point);
+                        (*recv_buffer) >> x;
+                        (*recv_buffer) >> y;
+                        (*recv_buffer) >> marker_type;
+                        cvList.push_back(std::pair<Point<int>, int>(Point<int>(x, y), marker_type));
                         //std::cout << "\tReceived Point (" << point.x << "," << point.y << ")" << std::endl;
                     }
 
@@ -513,7 +532,7 @@ namespace gamecontroller {
         }
     }
 
-    Matching GameController::stableMatching(std::vector<Point<int>>& detections)
+    Matching GameController::stableMatching(std::vector<std::pair<Point<int>, int>>& detections)
     {
         std::vector<deque<int>> point_prefs;
         std::vector<std::vector<int>> tower_prefs;
@@ -539,7 +558,7 @@ namespace gamecontroller {
             dists[i] = new int[detections.size()];
             for (size_t j = 0; j < detections.size(); j++)
             {
-                dists[i][j] = (int) towers[i]->distanceTo(detections[j]);
+                dists[i][j] = (int) towers[i]->distanceTo(detections[j].first);
             }
         }
 
@@ -587,7 +606,7 @@ namespace gamecontroller {
             if (point_prefs[p].empty())
             {
                 // Clearly, this is a new tower
-                news.push_back(detections[p]);
+                news.push_back(detections[p].first);
                 free.pop();
                 continue;
             }
@@ -622,7 +641,7 @@ namespace gamecontroller {
             }
             else
             {
-                match.matches.emplace(towers[i], detections[matches[i]]);
+                match.matches.emplace(towers[i], detections[matches[i]].first);
             }
         }
         return match;

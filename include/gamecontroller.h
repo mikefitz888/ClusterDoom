@@ -51,7 +51,7 @@ namespace gamecontroller {
 
         TileNode nodes[TILE_W * TILE_H];
 
-        std::vector<Point<int>> cvList;
+        std::vector<std::pair<Point<int>, int>> cvList;
         // CV Network
         int                port;
         sf::TcpListener*  listener;
@@ -86,7 +86,7 @@ namespace gamecontroller {
         void init();
         bool step();
         void restart() const;
-        Matching stableMatching(std::vector<Point<int>>& detections);
+        Matching stableMatching(std::vector<std::pair<Point<int>, int>>& detections);
         int getWeight(int x, int y);
 
         tower_ptr  spawnTowerAt(int x, int y, tower::TYPE type) const;
@@ -100,12 +100,12 @@ namespace gamecontroller {
         void runScenario(int scenario);
 
         void clearTowers() const;
-        void spawnTowers(std::vector<Point<int>> tower_list) const;
+        void spawnTowers(std::vector<std::pair<Point<int>, int>> tower_list) const;
         std::vector<tower_ptr> findNearestTowers(Point<int> point);
         std::vector<unit_ptr> getUnitsInRange(glm::vec2 position, int radius);
         std::vector<std::pair<float, unit_ptr>> getNNearestUnits(glm::vec2 position, int N, int maxrange);
         tower_ptr& getBase();
-        void parseCVList(std::vector<Point<int>> list);
+        void parseCVList(std::vector<std::pair<Point<int>, int>> list);
         
 
         bool getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path);

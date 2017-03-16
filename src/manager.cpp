@@ -202,6 +202,7 @@ namespace manager {
         network_manager->networkStep();
         bool gc = game_controller->step(); 
 
+        stepc ++;
         return render() && gc;
         //return render();
     }
@@ -221,6 +222,7 @@ namespace manager {
     }
 
     bool Manager::render() const {
+        //if( stepc % 2 == 0){ render_manager->clear(); return true; }
         if(render_manager) {
             return render_manager->render();
         }

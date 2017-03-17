@@ -11,23 +11,36 @@ namespace graphics {
     void RenderManager::loadResources() {
         ResourceManager *rm = this->manager->getResourceManager();
 
-        // Load Textures
-        rm->textureLoad("background", "src/Resources/Textures/grass/grass_template.jpg");
+        /// Load Textures
+        //Temp
         rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png")->setOriginCentre();
-        rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
-        rm->textureLoad("red", "src/Resources/Textures/red.png")->setOriginCentre();
-        rm->textureLoad("white", "src/Resources/Textures/white.png");// ->setOriginCentre();
         rm->textureLoad("base_image", "src/Resources/Textures/base.png")->setOriginCentre();
-        rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
+
+        //Backgrounds
+        rm->textureLoad("background", "src/Resources/Textures/grass/grass_template.jpg");
+
+        //Units
+        rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
+        
+        //UI Elements
         rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
         rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();
+        rm->textureLoad("red", "src/Resources/Textures/red.png")->setOriginCentre();
+        rm->textureLoad("white", "src/Resources/Textures/white.png");// ->setOriginCentre();
+       
+        //Game Screens
+        rm->textureLoad("begin", "src/Resources/Textures/begin.jpg")->setOriginCentre();
+        rm->textureLoad("win", "src/Resources/Textures/win.jpg")->setOriginCentre();
+        rm->textureLoad("lose", "src/Resources/Textures/lose.png")->setOriginCentre();
+
+        //GameObjects
         rm->textureLoad("bomb_texture", "src/Resources/Textures/bomb.png")->setOrigin(30, 36);
         rm->textureLoad("bomb_texture_white", "src/Resources/Textures/bomb_white.png")->setOrigin(30, 36);
         rm->textureLoad("beam_segment", "src/Resources/Textures/beam_segment_small.png")->setOriginCentre();
-        rm->textureLoad("begin", "src/Resources/Textures/begin.jpg")->setOriginCentre();
-        rm->textureLoad("win", "src/Resources/Textures/begin.jpg")->setOriginCentre();
-        rm->textureLoad("lose", "src/Resources/Textures/begin.jpg")->setOriginCentre();
         rm->textureLoad("bullet", "src/Resources/Textures/bullet.png")->setOriginCentre();
+        rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
+
+
         // Load Animated Textures
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();
 

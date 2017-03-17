@@ -4,6 +4,7 @@
 #include "../include/VertexBuffer.h"
 #include "../include/manager.h"
 #include "../include/gamecontroller.h"
+#include <stdexcept>
 
 namespace unit {
     Unit::Unit(id_t id, TYPE unit_type, Manager* m) :

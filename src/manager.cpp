@@ -185,12 +185,6 @@ namespace manager {
         unsigned int free_id = this->game_object_max_id;
         game_object_max_id++;
         return free_id;
-        /*if(free_id_list.size() == 0){
-            return game_object_pool.size();
-        }
-        id_t id = free_id_list.back();
-        free_id_list.pop_back();
-        return id;*/
     }
 
     void Manager::init() {
@@ -202,7 +196,7 @@ namespace manager {
         network_manager->networkStep();
         bool gc = game_controller->step(); 
 
-        stepc ++;
+        stepc++;
         return render() && gc;
         //return render();
     }

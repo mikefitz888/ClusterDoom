@@ -32,8 +32,11 @@ namespace cvinterface {
         // Network stuff
         sf::TcpSocket *socket;
         Buffer send_buffer;
+
+        bool running = true;
     public:
         void init();
+        inline void stop() { running = false; }
         void step(std::vector<std::vector<cv::Point>>& squares);
         void release();
         // These are both essentially final! Consider them const!

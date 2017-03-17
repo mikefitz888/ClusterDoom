@@ -3,6 +3,7 @@
 #include "../include/VertexBuffer.h"
 #include "../include/manager.h"
 #include "../include/ResourceManager.h"
+#include "../include/gamecontroller.h"
 
 namespace worldrenderer {
 
@@ -27,8 +28,8 @@ namespace worldrenderer {
 
         textures[SCREEN::NONE] = manager->getResourceManager()->getTexture("background");
         textures[SCREEN::GAME_START] = manager->getResourceManager()->getTexture("begin");
-        textures[SCREEN::GAME_LOSE] = manager->getResourceManager()->getTexture("win");
-        textures[SCREEN::GAME_WIN] = manager->getResourceManager()->getTexture("lose");
+        textures[SCREEN::GAME_LOSE] = manager->getResourceManager()->getTexture("lose");
+        textures[SCREEN::GAME_WIN] = manager->getResourceManager()->getTexture("win");
 
 
         /*game_bg_shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
@@ -50,6 +51,22 @@ namespace worldrenderer {
     }
 
     void WorldRenderer::render(){
+        auto game_state = manager->getGameController()->getGameState();
+
+        switch (game_state) {
+            case gamecontroller::GameState::LOSE:
+                display_screen = SCREEN::GAME_LOSE;
+                break;
+            case gamecontroller::GameState::START:
+                display_screen = SCREEN::GAME_START;
+                break;
+            case gamecontroller::GameState::WIN:
+                display_screen = SCREEN::GAME_WIN;
+                break;
+            default:
+                display_screen = SCREEN::NONE;
+        }
+
         renderGUI();
         if(!display_screen) manager->renderAll();
     }

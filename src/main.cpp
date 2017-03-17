@@ -54,6 +54,9 @@ int main(int argc, char* argv[]){
 
     }
 
+    //Tell CV thread to stop what it's doing, this gives it a chance to free resources etc.
+    cv.stop();
+
     // Cleanup
     cv.release();
     cv_thread.join();

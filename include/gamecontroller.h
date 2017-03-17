@@ -29,6 +29,8 @@ namespace gamecontroller {
     using std::unordered_map;
     using std::tuple;
 
+    enum GameState : unsigned int { START = 0, RUNNING, WIN, LOSE };
+
     struct Matching
     {
         unordered_map<tower_ptr, Point<int>> matches;
@@ -50,6 +52,9 @@ namespace gamecontroller {
         //Fixed tile dimensions
 
         TileNode nodes[TILE_W * TILE_H];
+
+        
+        GameState current_state = GameState::START;
 
         std::vector<std::pair<Point<int>, int>> cvList;
         // CV Network
@@ -85,9 +90,16 @@ namespace gamecontroller {
         void resetClock();
         void init();
         bool step();
-        void restart() const;
+        void restart() const; //Not yet implemented, clears towers + units
         Matching stableMatching(std::vector<std::pair<Point<int>, int>>& detections);
         int getWeight(int x, int y);
+
+        //GameState Modifiers
+        GameState getGameState();
+        GameState stopGame();
+        GameState startGame();
+        GameState winGame();
+        GameState loseGame();
 
         tower_ptr  spawnTowerAt(int x, int y, tower::TYPE type) const;
         tower_ptr  spawnTowerAt(Point<int> position, tower::TYPE type) const;

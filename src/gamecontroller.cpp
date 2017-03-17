@@ -134,21 +134,14 @@ namespace gamecontroller {
         frame_clock = 0;
     }
 
-    void GameController::init() {
-        /*spawnTowerAt(400, 200);
-        spawnTowerAt(800, 200);
-        spawnTowerAt(800, 600);
-        spawnTowerAt(400, 600);*/
-        //spawnUnitAt(100, 50);
-        
-
-        //Gotta love smartpointers, look how clean this is :^)
-        spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
-        spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0)));
-        spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672)));
-        spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672)));
+    GameState GameController::getGameState() { return current_state; }
+    GameState GameController::startGame() { return current_state = GameState::RUNNING; }
+    GameState GameController::stopGame() { return current_state = GameState::START; }
+    GameState GameController::winGame() { return current_state = GameState::WIN; }
+    GameState GameController::loseGame() { return current_state = GameState::LOSE; }
 
 
+    void GameController::init() { //Recommend not touching any game objects in this function
         startCVServer();
     }
 
@@ -250,7 +243,7 @@ namespace gamecontroller {
         //TODO: implement Stage class
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             //Restart Game
-            game_started = false;
+            stopGame();
             wave = 0;
             scenario = 0;
             //TODO: clear towers/units
@@ -260,19 +253,26 @@ namespace gamecontroller {
                 std::cout << "EXITING GAME (SUPPOSEDLY)\n";
                 return false;
             }
-            manager->clearTowers();
+            restart();
             return true;
         }
 
-        if (!game_started) {
+        if (getGameState() == GameState::START) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
-                game_started = true; //Start game
+                startGame();
                 if (manager->getTowers().size()) {
                     std::cout << "ERROR! There should not be any towers existing at this point, before base has spawned." << std::endl;
                 }
                 
                 tower_ptr t = spawnTowerAt(getScreenWidth()/2, getScreenHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
-                spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
+                //spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
+
+                //Adding Spawn Points
+                spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
+                spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0)));
+                spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672)));
+                spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672)));
+
                 frame_clock = 0;
             }
             else {
@@ -284,12 +284,12 @@ namespace gamecontroller {
         manager->stepAll();
 
         //Run scenarios for 10 minutes
-        if (getElapsedTime() < 60*10) {
+        if (getElapsedTime() < 60*10 && getElapsedTime() < 5) {
             int scenario = (int) (getElapsedTime()/(float)time_per_scenario);
             runScenario(scenario);
         }
         else { //Ending sequence
-
+            winGame();
         }
         return true;
     }

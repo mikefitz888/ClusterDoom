@@ -86,7 +86,7 @@ int current_calibration_point_id = 0;
 
         std::vector<Square> squares;
 
-        while (true) {
+        while (running) { //Use this so main thread can stop it safely, no while(true) please
             step(squares);
         }
     }

@@ -53,6 +53,7 @@ namespace worldrenderer {
     void WorldRenderer::render(){
         auto game_state = manager->getGameController()->getGameState();
 
+        //If any of these screens need animations just do it in renderGUI()
         switch (game_state) {
             case gamecontroller::GameState::LOSE:
                 display_screen = SCREEN::GAME_LOSE;

@@ -486,44 +486,53 @@ namespace gamecontroller {
                         (*recv_buffer) >> x;
                         (*recv_buffer) >> y;
                         (*recv_buffer) >> marker_type;
-                        cvList.push_back(std::pair<Point<int>, int>(Point<int>(x, y), marker_type));
+                        //cvList.push_back(std::pair<Point<int>, int>(Point<int>(x, y), marker_type));
+                        cvList[marker_type].emplace_back(x, y);
                         //std::cout << "\tReceived Point (" << point.x << "," << point.y << ")" << std::endl;
                     }
 
 
-                    // TODO: Do something with the new list.
-                    Matching match = stableMatching(cvList);
-                    //matches, deleted_towers, new_towers
-                    //Order of Operations: Move > Create > Delete
-
-                    //For move
-
-                    for(auto& result : match.matches){
-                        result.first->setPosition((result.second).x, (result.second).y);
-                        result.first->delete_queue = 0;
-                    }
-
-                    //For creation:
-                        //If tower to create:
-                            //Increment create_queue
-                            //If > n then actually spawn
-                    if(match.new_towers.size() > 0){
-                        create_count++;
-                        if(create_count > 10){
-                            spawnTowerAt(match.new_towers[0], tower::TYPE::BASIC);
+                    // TODO: Separate cvList by marker_type, run stableMatching on each, merge matchings
+                    std::map<tower_ptr, int> delete_tally;
+                    for (auto& marker_set : cvList) {
+                        //For move
+                        Matching match = stableMatching(marker_set.second);
+                        for (auto& result : match.matches) {
+                            result.first->setPosition((result.second).x, (result.second).y);
+                            result.first->delete_queue = 0;
                         }
-                    }else{
-                        create_count = 0;
+
+                        //For creation:
+                        //If tower to create:
+                        //Increment create_queue
+                        //If > n then actually spawn
+                        if (match.new_towers.size() > 0) {
+                            create_count++;
+                            if (create_count > 10) {
+                                spawnTowerAt(match.new_towers[0], tower::TYPE::BASIC);
+                            }
+                        }
+                        else {
+                            create_count = 0;
+                        }
+
+                        //Increase a tally for each tower, only delete a tower if it's in none of the sets
+                        for (auto tower : match.deleted_towers) {
+                            if (delete_tally.find(tower) == delete_tally.end()) { delete_tally[tower] = 1; }
+                            else { delete_tally[tower]++; }
+                        }
                     }
 
                     //For deletion:
-                        //Increase tower->delete_queue
-                        //If > n then actually delete
-                    for(auto tower : match.deleted_towers){
-                        tower->delete_queue++;
-                        if(tower->delete_queue > 200){
-                            tower->demoDestroy();
-                            break; //Have to break I think to prevent seg-fault
+                    //Increase tower->delete_queue
+                    //If > n then actually delete
+                    for (auto& dt : delete_tally) {
+                        if (dt.second == cvList.size()) {
+                            dt.first->delete_queue++;
+                            if (dt.first->delete_queue > 200) {
+                                dt.first->demoDestroy();
+                                break; //Have to break I think to prevent seg-fault
+                            }
                         }
                     }
                 }
@@ -532,7 +541,7 @@ namespace gamecontroller {
         }
     }
 
-    Matching GameController::stableMatching(std::vector<std::pair<Point<int>, int>>& detections)
+    Matching GameController::stableMatching(std::vector<Point<int>>& detections)
     {
         std::vector<deque<int>> point_prefs;
         std::vector<std::vector<int>> tower_prefs;
@@ -558,7 +567,7 @@ namespace gamecontroller {
             dists[i] = new int[detections.size()];
             for (size_t j = 0; j < detections.size(); j++)
             {
-                dists[i][j] = (int) towers[i]->distanceTo(detections[j].first);
+                dists[i][j] = (int) towers[i]->distanceTo(detections[j]);
             }
         }
 
@@ -606,7 +615,7 @@ namespace gamecontroller {
             if (point_prefs[p].empty())
             {
                 // Clearly, this is a new tower
-                news.push_back(detections[p].first);
+                news.push_back(detections[p]);
                 free.pop();
                 continue;
             }
@@ -641,7 +650,7 @@ namespace gamecontroller {
             }
             else
             {
-                match.matches.emplace(towers[i], detections[matches[i]].first);
+                match.matches.emplace(towers[i], detections[matches[i]]);
             }
         }
         return match;

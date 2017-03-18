@@ -56,7 +56,7 @@ namespace gamecontroller {
         
         GameState current_state = GameState::START;
 
-        std::vector<std::pair<Point<int>, int>> cvList;
+        std::map<int, std::vector<Point<int>>> cvList;
         // CV Network
         int                port;
         sf::TcpListener*  listener;
@@ -91,7 +91,7 @@ namespace gamecontroller {
         void init();
         bool step();
         void restart() const; //Not yet implemented, clears towers + units
-        Matching stableMatching(std::vector<std::pair<Point<int>, int>>& detections);
+        Matching stableMatching(std::vector<Point<int>>& detections);
         int getWeight(int x, int y);
 
         //GameState Modifiers

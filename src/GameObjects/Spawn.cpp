@@ -59,3 +59,17 @@ void Spawn::beginWave() {
 }
 
 Spawn::unit_spawn::unit_spawn(unit::TYPE type, int d) : unit_type(type), delay(d) {}
+
+// NETWORK EVENTS
+void Spawn::recvNetworkInteraction(int event_id, Buffer &buffer) {
+
+    // Switch on events
+    switch (event_id) {
+        case NetworkInteractionEvent::SPAWN_UNIT:
+            unsigned int unit_type = 0;
+            buffer >> unit_type;
+            std::cout << "SPAWN RECEIVED";
+            manager->getGameController()->spawnUnitAt(getX(), getY(), (unit::TYPE)unit_type);
+            break;
+    }
+}

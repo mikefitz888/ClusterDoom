@@ -1,6 +1,7 @@
 #include "../include/network/Network.h"
 #include "../include/manager.h"
 #include "../include/gamecontroller.h"
+#include "../include/gameobject.h"
 
 namespace network {
     
@@ -251,7 +252,7 @@ namespace network {
 
                 // Read packet:
                 recv_buffer.seek(0);
-                int global_event_id = 0;
+                unsigned int global_event_id = 0;
                 recv_buffer >> global_event_id;
 
                 switch (global_event_id) {
@@ -268,18 +269,30 @@ namespace network {
                         disconnect("Player disconnected from the server");
                         break;
 
-                    case NetworkManager::CLIENT_PACKET_TYPE::RecvInstanceInteraction:
+                    case NetworkManager::CLIENT_PACKET_TYPE::RecvInstanceInteraction:{
                         // TODO: Respond to instance interactions from clients
-						std::cout << "[NETWORK CLIENT] Client " << ip << " has sent a instance interaction!" << std::endl;
-						int x;
-						int y;
-						recv_buffer >> x;
-						recv_buffer >> y;
-						manager->getGameController()->spawnUnitAt(gameobject::Point<int>(x, y), (unit::TYPE) 1);
-                        break;
+                        std::cout << "[NETWORK CLIENT] Client " << ip << " has sent a instance interaction!" << std::endl;
+                        /*int x;
+                        int y;
+                        recv_buffer >> x;
+                        recv_buffer >> y;
+                        manager->getGameController()->spawnUnitAt(gameobject::Point<int>(x, y), (unit::TYPE) 1);*/
+
+                        unsigned int object_id = 0;
+                        unsigned int event_id = 0;
+
+                        recv_buffer >> object_id;
+                        recv_buffer >> event_id;
+
+                        // Check if object exists
+                        gameobject_ptr obj = manager->getObjectById(object_id);
+                        if (obj) {
+                            obj->recvNetworkInteraction(event_id, recv_buffer);
+                        }
+                    } break;
 
                     default: // INVALID PACKET RECEIVED FROM CLIENT
-                        std::cout << "[NETWORK CLIENT] ERROR: Invalid packet received from " << ip << ". Disconnecting!" << std::endl;
+                        std::cout << "[NETWORK CLIENT] ERROR: Invalid packet received from " << ip << ". Disconnecting! Event: " << global_event_id << std::endl;
                         disconnect("Invalid Request Rejected By Server");
                         break;
                 }

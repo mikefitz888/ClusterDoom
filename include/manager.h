@@ -67,6 +67,8 @@ namespace manager {
 
         //GameObject Methods
         void destroy(GameObject* obj);
+        gameobject_ptr getObjectById(unsigned int id);
+        bool getObjectExists(unsigned int id);
 
         //Network Methods
         void sendAllInstancesToClient(network::NetworkClient *network_client);

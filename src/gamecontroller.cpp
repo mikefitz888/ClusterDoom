@@ -500,7 +500,8 @@ namespace gamecontroller {
 
 
                     // TODO: Separate cvList by marker_type, run stableMatching on each, merge matchings
-                    std::map<tower_ptr, int> delete_tally, int ccc = create_count;
+                    std::map<tower_ptr, int> delete_tally;
+                    int ccc = create_count;
                     for (auto& marker_set : cvList) {
                         //For move
                         Matching match = stableMatching(marker_set.second);

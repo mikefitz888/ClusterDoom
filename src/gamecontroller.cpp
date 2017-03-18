@@ -135,7 +135,14 @@ namespace gamecontroller {
     }
 
     GameState GameController::getGameState() { return current_state; }
-    GameState GameController::startGame() { return current_state = GameState::RUNNING; }
+    GameState GameController::startGame() {
+        create_count = 0; //Reset game variables
+        frame_clock = 0;
+        wave = 0;
+        scenario = -1;
+        wealth = 0;
+        return current_state = GameState::RUNNING; 
+    }
     GameState GameController::stopGame() { return current_state = GameState::START; }
     GameState GameController::winGame() { return current_state = GameState::WIN; }
     GameState GameController::loseGame() { return current_state = GameState::LOSE; }
@@ -283,8 +290,8 @@ namespace gamecontroller {
         cvNetworkStep();
         manager->stepAll();
 
-        //Run scenarios for 10 minutes
-        if (getElapsedTime() < 60*10 && getElapsedTime() < 5) {
+        //Run scenarios for 5 minutes
+        if (getElapsedTime() < 60*5) {
             int scenario = (int) (getElapsedTime()/(float)time_per_scenario);
             runScenario(scenario);
         }
@@ -493,7 +500,7 @@ namespace gamecontroller {
 
 
                     // TODO: Separate cvList by marker_type, run stableMatching on each, merge matchings
-                    std::map<tower_ptr, int> delete_tally;
+                    std::map<tower_ptr, int> delete_tally, int ccc = create_count;
                     for (auto& marker_set : cvList) {
                         //For move
                         Matching match = stableMatching(marker_set.second);
@@ -512,9 +519,6 @@ namespace gamecontroller {
                                 spawnTowerAt(match.new_towers[0], tower::TYPE::BASIC);
                             }
                         }
-                        else {
-                            create_count = 0;
-                        }
 
                         //Increase a tally for each tower, only delete a tower if it's in none of the sets
                         for (auto tower : match.deleted_towers) {
@@ -522,6 +526,8 @@ namespace gamecontroller {
                             else { delete_tally[tower]++; }
                         }
                     }
+
+                    if (ccc == create_count) create_count = 0;
 
                     //For deletion:
                     //Increase tower->delete_queue
@@ -536,6 +542,7 @@ namespace gamecontroller {
                         }
                     }
                 }
+                
                 break;
             }
         }

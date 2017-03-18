@@ -70,7 +70,6 @@ namespace gamecontroller {
         int create_count = 0;
         int frame_clock = 0;
 
-        bool game_started = false;
         int wave = 0;
         int scenario = -1;
         size_t wealth = 0;

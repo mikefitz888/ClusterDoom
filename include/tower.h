@@ -14,7 +14,7 @@ namespace tower {
     using gameobject::unit_ptr;
     using manager::Manager;
 
-    enum TYPE : unsigned int {BASE=0, BASIC, ELECTRIC};
+    enum TYPE : unsigned int {BASE=0, BASIC, ELECTRIC, BOMB, LASER};
 
     class Tower : public GameObject {
         graphics::Texture* texture;

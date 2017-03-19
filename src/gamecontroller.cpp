@@ -272,7 +272,9 @@ namespace gamecontroller {
                 }
                 
                 tower_ptr t = spawnTowerAt(getScreenWidth()/2, getScreenHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
-                //spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
+                spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
+                spawnTowerAt(500, 200, tower::TYPE::BOMB);
+                spawnTowerAt(500, 500, tower::TYPE::LASER);
 
                 //Adding Spawn Points
                 spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));

@@ -2,6 +2,8 @@
 #include "../include/Towers/BasicTower.h"
 #include "../include/Towers/Base.h"
 #include "../include/Towers/ElectricTower.h"
+#include "../include/Towers/BombTower.h"
+#include "../include/Towers/LaserTower.h"
 #include "../include/manager.h"
 
 namespace towerlogic {
@@ -22,6 +24,10 @@ namespace towerlogic {
             return new tower::Base(key, manager);
         case tower::TYPE::ELECTRIC:
             return new tower::ElectricTower(key, manager);
+        case tower::TYPE::BOMB:
+            return new tower::BombTower(key, manager);
+        case tower::TYPE::LASER:
+            return new tower::LaserTower(key, manager);
         default:
             std::cout << "FATAL ERROR! INCORRECT INSTANCE, nullptr RETURNED" << std::endl;
             return nullptr;

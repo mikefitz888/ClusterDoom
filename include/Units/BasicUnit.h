@@ -11,7 +11,7 @@ namespace unit
     class BasicUnit : public Unit {
         graphics::Texture* texture = nullptr;
 
-        int network_update_position_timer_max = 45;
+        int network_update_position_timer_max = 300;
         int network_update_position_timer = network_update_position_timer_max;
 
         bool pressed = false; //TEMP;

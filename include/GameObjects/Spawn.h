@@ -32,6 +32,11 @@ public:
 
     void startScenario(int scenario);
     void startWave(int wave);
+
+
+    // Network events
+    enum NetworkInteractionEvent { SPAWN_UNIT = 0 };
+    void recvNetworkInteraction(int event_id, Buffer &buffer) override;
 };
 
 #endif

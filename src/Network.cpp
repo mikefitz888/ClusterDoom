@@ -1,6 +1,7 @@
 #include "../include/network/Network.h"
 #include "../include/manager.h"
 #include "../include/gamecontroller.h"
+#include "../include/gameobject.h"
 
 namespace network {
     
@@ -153,10 +154,17 @@ namespace network {
         security_token = rand();
 
         // Write a packet
-        send_buffer.seek(0);
+        send_buffer.seek(4);
         send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendWelcome;
         send_buffer << security_token;
-        socket->send(send_buffer.getPtr(), send_buffer.tell());
+
+        // Write size
+        unsigned int size = send_buffer.tell();
+        send_buffer.seek(0);
+        send_buffer << (unsigned int)size;
+        send_buffer.seek(size); // < Jump back to previous end
+
+        socket->send(send_buffer.getPtr(), size);
 
         // Debug
         std::cout << "[ClientSecurityProcess] Sent security token: " << security_token << " to client" << std::endl;
@@ -191,9 +199,16 @@ namespace network {
 
             // Send verify packet
 
-			send_buffer.seek(0);
+			send_buffer.seek(4);
 			send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendConfirmConnect;
-			socket->send(send_buffer.getPtr(), send_buffer.tell());
+
+            // Write size
+            unsigned int size = send_buffer.tell();
+            send_buffer.seek(0);
+            send_buffer << (unsigned int)size;
+            send_buffer.seek(size); // < Jump back to previous end
+
+			socket->send(send_buffer.getPtr(), size);
 
             // Send all instances
             network_manager->sendAllInstancesToClient(this);
@@ -210,23 +225,37 @@ namespace network {
         //socket->setBlocking(true);
         size_t ss;
         std::cout << "[NETWORK CLIENT] SENDING INSTANCE: " << instance_id << " to client: " << ip << std::endl;
-        send_buffer.seek(0);
+        send_buffer.seek(4);
         send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendInstanceCreate;
         send_buffer << (unsigned int)instance_id;
 		send_buffer << (unsigned int)instance_super_type;
 		send_buffer << (unsigned int)instance_sub_type;
 		send_buffer << (unsigned int)x;
 		send_buffer << (unsigned int)y;
-        socket->send(send_buffer.getPtr(), send_buffer.tell(), ss);
+
+        // Write size
+        unsigned int size = send_buffer.tell();
+        send_buffer.seek(0);
+        send_buffer << (unsigned int)size;
+        send_buffer.seek(size); // < Jump back to previous end
+
+        socket->send(send_buffer.getPtr(), size, ss);
         std::cout << "STATUS: " << ss << std::endl;
         //socket->setBlocking(false);
     }
 
     void NetworkClient::sendInstanceDestroy(int instance_id) {
-        send_buffer.seek(0);
+        send_buffer.seek(4);
         send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendInstanceDestroy;
         send_buffer << (unsigned int)instance_id;
-        socket->send(send_buffer.getPtr(), send_buffer.tell());
+
+        // Write size
+        unsigned int size = send_buffer.tell();
+        send_buffer.seek(0);
+        send_buffer << (unsigned int)size;
+        send_buffer.seek(size); // < Jump back to previous end
+
+        socket->send(send_buffer.getPtr(), size);
     }
 
     /*
@@ -251,7 +280,7 @@ namespace network {
 
                 // Read packet:
                 recv_buffer.seek(0);
-                int global_event_id = 0;
+                unsigned int global_event_id = 0;
                 recv_buffer >> global_event_id;
 
                 switch (global_event_id) {
@@ -268,18 +297,30 @@ namespace network {
                         disconnect("Player disconnected from the server");
                         break;
 
-                    case NetworkManager::CLIENT_PACKET_TYPE::RecvInstanceInteraction:
+                    case NetworkManager::CLIENT_PACKET_TYPE::RecvInstanceInteraction:{
                         // TODO: Respond to instance interactions from clients
-						std::cout << "[NETWORK CLIENT] Client " << ip << " has sent a instance interaction!" << std::endl;
-						int x;
-						int y;
-						recv_buffer >> x;
-						recv_buffer >> y;
-						manager->getGameController()->spawnUnitAt(gameobject::Point<int>(x, y), (unit::TYPE) 1);
-                        break;
+                        std::cout << "[NETWORK CLIENT] Client " << ip << " has sent a instance interaction!" << std::endl;
+                        /*int x;
+                        int y;
+                        recv_buffer >> x;
+                        recv_buffer >> y;
+                        manager->getGameController()->spawnUnitAt(gameobject::Point<int>(x, y), (unit::TYPE) 1);*/
+
+                        unsigned int object_id = 0;
+                        unsigned int event_id = 0;
+
+                        recv_buffer >> object_id;
+                        recv_buffer >> event_id;
+
+                        // Check if object exists
+                        gameobject_ptr obj = manager->getObjectById(object_id);
+                        if (obj) {
+                            obj->recvNetworkInteraction(event_id, recv_buffer);
+                        }
+                    } break;
 
                     default: // INVALID PACKET RECEIVED FROM CLIENT
-                        std::cout << "[NETWORK CLIENT] ERROR: Invalid packet received from " << ip << ". Disconnecting!" << std::endl;
+                        std::cout << "[NETWORK CLIENT] ERROR: Invalid packet received from " << ip << ". Disconnecting! Event: " << global_event_id << std::endl;
                         disconnect("Invalid Request Rejected By Server");
                         break;
                 }
@@ -299,11 +340,18 @@ namespace network {
     void NetworkClient::disconnect(char* reason) {
         if (connection_state != DISCONNECTED) {
             // Send packet to gracefully disconnect
-            send_buffer.seek(0);
+            send_buffer.seek(4);
             send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendDisconnect;
             send_buffer << "You have been disconnected by the server";    // <- Message
             send_buffer << reason;    // <- Reason
-            socket->send(send_buffer.getPtr(), send_buffer.tell());
+
+            // Write size
+            unsigned int size = send_buffer.tell();
+            send_buffer.seek(0);
+            send_buffer << (unsigned int)size;
+            send_buffer.seek(size); // < Jump back to previous end
+
+            socket->send(send_buffer.getPtr(), size);
 
             std::cout << "[NETWORK CLIENT] Client " << ip << " has been disconnected." << std::endl << "\t\tREASON: " << reason << std::endl;
             connection_state = DISCONNECTED;
@@ -344,7 +392,7 @@ namespace network {
     void INetworkInstance::sendNetworkUpdate(int event_id){
         
         Buffer& buff = manager->getSendBuffer();
-        buff.seek(0);
+        buff.seek(4);
         buff << NetworkManager::SERVER_PACKET_TYPE::SendInstanceUpdate;
         buff << (unsigned int)network_instance_id;
         buff << (unsigned int)event_id;
@@ -355,6 +403,13 @@ namespace network {
             "     Size: " << buff.tell() << std::endl <<
             "     Instance ID: " << network_instance_id << std::endl <<
             "     Event ID:    " << event_id << std::endl;*/
+
+        // Write size
+        unsigned int size = buff.tell();
+        buff.seek(0);
+        buff << (unsigned int)size;
+        buff.seek(size); // < Jump back to previous end
+
         // Broadcast update to all clients
         manager->sendToAll(buff);
     }

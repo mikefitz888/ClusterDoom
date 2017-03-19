@@ -150,11 +150,9 @@ namespace gamecontroller {
 
     void GameController::init() { //Recommend not touching any game objects in this function
         startCVServer();
-        startUIServer();
     }
 
     bool GameController::step() {
-        uiNetworkStep();
 
         frame_clock++;
         increaseWealth(std::log10(frame_clock));
@@ -414,25 +412,6 @@ namespace gamecontroller {
             //Increase tower->delete_queue
             //If > n then actually delete
 
-    }
-
-    ////////////////////////////////////////////////////
-    // UI Server logic
-    void GameController::startUIServer() {
-        ui_socket = new sf::TcpSocket();
-        sf::TcpSocket::Status st = ui_socket->connect("178.62.54.42", 8001, sf::seconds(30.0f));
-        if (st == sf::TcpSocket::Status::Done) {
-            std::cout << "[UI] Connected to User interface successfully!" << std::endl;
-            uiNetworkStep();
-        }
-    }
-
-    void GameController::uiNetworkStep() {
-        ui_send_buffer.seek(0);
-        ui_send_buffer << 5;
-        
-        // Send
-        ui_socket->send(ui_send_buffer.getPtr(), ui_send_buffer.tell());
     }
 
     ////////////////////////////////////////////////////
@@ -763,7 +742,10 @@ namespace gamecontroller {
     }
 
     sf::Time GameController::timeUntilNextWave() {
-        return sf::Time(sf::milliseconds(0));
+        //const float time_per_scenario = 20.f;
+        //const int waves_per_scenario = 3;
+        int t = (int)getElapsedTime() % (int)(time_per_scenario / waves_per_scenario);
+        return sf::Time(sf::seconds(t));
     }
 
     std::vector<std::string> GameController::getWarnings() {

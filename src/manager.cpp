@@ -35,6 +35,18 @@ namespace manager {
         return game_controller;
     }
 
+    gameobject_ptr Manager::getObjectById(unsigned int id) {
+        if (this->getObjectExists(id)) {
+            return *game_object_pool[id];
+        } else {
+            return nullptr;
+        }
+    }
+
+    bool Manager::getObjectExists(unsigned int id) {
+        return (this->game_object_pool.find(id) != this->game_object_pool.end());
+    }
+
     //Tower Methods
     slave_ptr<Tower> Manager::createTower(tower::TYPE type){
         auto obj = tower_logic->createTower(getFreePoolKey(), type );
@@ -196,7 +208,6 @@ namespace manager {
         network_manager->networkStep();
         bool gc = game_controller->step(); 
 
-        stepc++;
         return render() && gc;
         //return render();
     }

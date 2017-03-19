@@ -1,0 +1,5 @@
+font size 450
+grow outline by 7
+grow inside by 19, fill red
+shrink red by 19, fill yellow
+drop shadow all 40x40, 15 radius, 100 opacity

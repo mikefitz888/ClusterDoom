@@ -150,9 +150,11 @@ namespace gamecontroller {
 
     void GameController::init() { //Recommend not touching any game objects in this function
         startCVServer();
+        startUIServer();
     }
 
     bool GameController::step() {
+        uiNetworkStep();
 
         frame_clock++;
         increaseWealth(std::log10(frame_clock));
@@ -415,6 +417,25 @@ namespace gamecontroller {
     }
 
     ////////////////////////////////////////////////////
+    // UI Server logic
+    void GameController::startUIServer() {
+        ui_socket = new sf::TcpSocket();
+        sf::TcpSocket::Status st = ui_socket->connect("178.62.54.42", 8001, sf::seconds(30.0f));
+        if (st == sf::TcpSocket::Status::Done) {
+            std::cout << "[UI] Connected to User interface successfully!" << std::endl;
+            uiNetworkStep();
+        }
+    }
+
+    void GameController::uiNetworkStep() {
+        ui_send_buffer.seek(0);
+        ui_send_buffer << 5;
+        
+        // Send
+        ui_socket->send(ui_send_buffer.getPtr(), ui_send_buffer.tell());
+    }
+
+    ////////////////////////////////////////////////////
     // CV Server logic
     void GameController::startCVServer() {
         listener = new sf::TcpListener();
@@ -500,7 +521,8 @@ namespace gamecontroller {
 
 
                     // TODO: Separate cvList by marker_type, run stableMatching on each, merge matchings
-                    std::map<tower_ptr, int> delete_tally, int ccc = create_count;
+                    std::map<tower_ptr, int> delete_tally; 
+                    int ccc = create_count;
                     for (auto& marker_set : cvList) {
                         //For move
                         Matching match = stableMatching(marker_set.second);
@@ -734,5 +756,17 @@ namespace gamecontroller {
 
     void TileNode::clearNodes() {
         this->clearChildren();
+    }
+
+    size_t GameController::availableWealth() {
+        return wealth;
+    }
+
+    sf::Time GameController::timeUntilNextWave() {
+        return sf::Time(sf::milliseconds(0));
+    }
+
+    std::vector<std::string> GameController::getWarnings() {
+        return std::vector<std::string>();
     }
 }

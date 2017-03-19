@@ -63,6 +63,7 @@ class Spawn;
 class String;
 class ProjectileBomb;
 class ProjectileElectricity;
+class GameStateNotifier;
 
 typedef unsigned char byte;
 #ifdef _WIN32

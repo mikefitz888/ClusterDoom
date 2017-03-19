@@ -3,6 +3,7 @@
 #include "../include/GameObjects/Projectiles.h"
 #include "../include/manager.h"
 #include "../include/gameobject.h"
+#include "../include/GameObjects/GameStateNotifier.h"
 
 GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
     switch (type) {
@@ -20,6 +21,10 @@ GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
 
     case gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY:
         return new ProjectileElectricity(key, manager);
+        break;
+
+    case gameobject::OBJECT_TYPE::GAME_STATE_NOTIFIER:
+        return new GameStateNotifier(key, manager);
         break;
 
     default:

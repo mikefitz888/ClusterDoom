@@ -5,6 +5,7 @@
 #include "smartpointers.h"
 #include "PathFinder.h"
 #include "aStar.h"
+#include "../include/network/Buffer.h"
 
 #define NO_MATCH -1
 
@@ -57,6 +58,7 @@ namespace gamecontroller {
         GameState current_state = GameState::START;
 
         std::map<int, std::vector<Point<int>>> cvList;
+
         // CV Network
         int                port;
         sf::TcpListener*  listener;
@@ -126,6 +128,10 @@ namespace gamecontroller {
 
         void increaseWealth(size_t amt);
         int requestWealth(size_t amt); //returns the min(amt, wealth)
+
+        size_t availableWealth();
+        sf::Time timeUntilNextWave();
+        std::vector<std::string> getWarnings();
     };
 }
 

@@ -44,6 +44,7 @@ namespace tower {
 
         virtual void attack(unit_ptr tower); //Tower attacks unit
         virtual void attacked(gameobject_ptr aggressor); //Unit attacks tower
+        virtual void attacked(gameobject_ptr aggressor, float damage);
     };
 }
 

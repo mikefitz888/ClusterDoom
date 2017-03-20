@@ -132,6 +132,7 @@ namespace gamecontroller {
         size_t availableWealth();
         sf::Time timeUntilNextWave();
         std::vector<std::string> getWarnings();
+        float getBaseHealth();
     };
 }
 

@@ -3,6 +3,7 @@
 #include "../../include/gameobject.h"
 #include "../../include/manager.h"
 #include "../../include/gamecontroller.h"
+#include "../../include/GameObjects/Projectiles.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "../../include/RenderUtils.h"
@@ -18,7 +19,7 @@ namespace unit {
 		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getAnimatedTexture("robot_unit");
-        this->setDistanceThreshold(80);
+        this->setDistanceThreshold(150);
        /* Path path;
         path.push_back(vec2(100, 100));
         path.push_back(vec2(500, 50));
@@ -67,8 +68,20 @@ namespace unit {
         }
         
         auto& base = game_controller->getBase();
-        if (distanceTo(base->getPosition()) < 100 && cooldown-- == 0) {
-            attack(base);
+        if (distanceTo(base->getPosition()) < 160 && cooldown-- == 0) {
+            //gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
+            //smartpointers::static_pointer_cast<unit::Unit>(other);
+            smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY())));
+            obj1->setCollisionType(gameobject::TYPE::TOWER);
+            //std::cout << "unit fired\n";
+            auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
+            obj1->setVelocity(dir * 7.f);
+            //auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
+            //obj1->setPosition(getPosition() + sdir);
+            //obj2->setPosition(getPosition() - sdir);
+
+            
+            //attack(base);
             cooldown = 40;
         }
     }
@@ -81,7 +94,7 @@ namespace unit {
         animation_progress = (animation_progress + 1) % 16;
         int m = 1;
         if (this->getAtDestination()) m = 0;
-        texture->render(m*animation_progress/8, getXr(), getYr(), 0.20f, 0.20f, rotation);
+        texture->render(m*animation_progress/8, getXr(), getYr(), 0.10f, 0.10f, rotation);
 
         // ******************************************************************************************************//
         // DRAW PATH

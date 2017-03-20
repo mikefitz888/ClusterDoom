@@ -11,10 +11,12 @@ namespace tower {
 	void Base::init() {
 		render_manager = manager->getRenderManager();
 		texture = manager->getResourceManager()->getTexture("base_image");
-
-        exuhporoshun[unit::TYPE::BASIC] = manager->getResourceManager()->getAnimatedTexture("explosion3");
-        exuhporoshun[unit::TYPE::WIZARD] = manager->getResourceManager()->getAnimatedTexture("explosion2");
+        game_controller = manager->getGameController();
+        health = 1000;
+        exuhporoshun[gameobject::TYPE::OBJECT][gameobject::OBJECT_TYPE::PROJECTILE_LASER] = manager->getResourceManager()->getAnimatedTexture("explosion4");
+        //exuhporoshun[unit::TYPE::WIZARD] = manager->getResourceManager()->getAnimatedTexture("explosion2");
 		//Get Screen dims and position in center
+        this->collision_profile.setTypeCircle(50);
 	}
 
 	void Base::render() {
@@ -33,12 +35,23 @@ namespace tower {
     }
 
     void Base::attacked(gameobject_ptr aggressor) {
-        if (exuhporoshun.find((unit::TYPE) aggressor->getSubType()) != exuhporoshun.end() ) {
+        //gameobject::OBJECT_TYPE::PROJECTILE_LASER
+        if (exuhporoshun.find(aggressor->getSuperType()) != exuhporoshun.end() ) {
             //exuhporoshun[(unit::TYPE) aggressor->getSubType()]->render()
-            auto r = glm::linearRand(-glm::vec2(20), glm::vec2(20));
-            auto pair = std::make_pair<float, Point<int>>(0.f, Point<int>(getX()+r.x, getY()+r.y));
-            auto pair2 = std::make_pair(exuhporoshun[(unit::TYPE) aggressor->getSubType()], pair);
-            animations.push_back(pair2);
+            if ( exuhporoshun[aggressor->getSuperType()].find(aggressor->getSubType()) != exuhporoshun[aggressor->getSuperType()].end() ) {
+                auto r = glm::linearRand(-glm::vec2(20), glm::vec2(20));
+                auto pair = std::make_pair<float, Point<int>>(0.f, Point<int>(getX() + r.x, getY() + r.y));
+                auto pair2 = std::make_pair(exuhporoshun[aggressor->getSuperType()][aggressor->getSubType()], pair);
+                animations.push_back(pair2);
+            }
+        }
+    }
+
+    void Base::attacked(gameobject_ptr aggressor, float damage) {
+        attacked(aggressor);
+        health -= damage;
+        if (health <= 0) {
+            game_controller->loseGame();
         }
     }
 }

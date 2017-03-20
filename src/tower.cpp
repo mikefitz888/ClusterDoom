@@ -135,6 +135,8 @@ namespace tower {
         }
     }
 
+    void Tower::attacked(gameobject_ptr aggressor, float damage){}
+
     size_t Tower::requestMoney(size_t amt) {
         return game_controller->requestWealth(amt);
     }

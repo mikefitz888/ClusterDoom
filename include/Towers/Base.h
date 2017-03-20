@@ -8,7 +8,7 @@ namespace tower
 {
 	class Base : public Tower {
 		graphics::Texture* texture = nullptr;
-        std::map<unit::TYPE, graphics::AnimatedTexture*> exuhporoshun;
+        std::map<id_t, std::map<id_t, graphics::AnimatedTexture*>> exuhporoshun;
         std::vector<std::pair<graphics::AnimatedTexture*, std::pair<float, Point<int>>>> animations;
 	public:
 		Base(id_t key, Manager* m);
@@ -16,6 +16,7 @@ namespace tower
 		void render() override;
         void step() override;
         void attacked(gameobject_ptr aggressor) override;
+        void attacked(gameobject_ptr aggressor, float damage) override;
 	};
 }
 

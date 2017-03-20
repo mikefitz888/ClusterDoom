@@ -742,6 +742,8 @@ namespace gamecontroller {
         this->clearChildren();
     }
 
+
+    ///Display Methods
     size_t GameController::availableWealth() {
         return wealth;
     }
@@ -755,5 +757,9 @@ namespace gamecontroller {
 
     std::vector<std::string> GameController::getWarnings() {
         return std::vector<std::string>();
+    }
+
+    float GameController::getBaseHealth() {
+        return getBase()->getHealth();
     }
 }

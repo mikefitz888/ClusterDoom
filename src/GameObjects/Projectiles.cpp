@@ -3,6 +3,7 @@
 #include "../../include/ResourceManager.h"
 #include "../../include/gamecontroller.h"
 #include "../../include/unit.h"
+#include "../../include/tower.h"
 #include "../../include/util.h"
 #include "../../include/AnimatedTexture.h"
 #include "../../include/smartpointers.h"
@@ -164,15 +165,28 @@ void ProjectileLaser::release() {};
 
 
 void ProjectileLaser::onCollision(gameobject_ptr other) {
-    if (other->getSuperType() == gameobject::TYPE::UNIT) {
-        unit_ptr oth = smartpointers::static_pointer_cast<unit::Unit>(other);
-        oth->attacked(this->getSharedPtr(), this->getDamage());
+    if (other->getSuperType() == collision_type) {
+        if (collision_type == gameobject::TYPE::UNIT) {
+            unit_ptr oth = smartpointers::static_pointer_cast<unit::Unit>(other);
+            oth->attacked(this->getSharedPtr(), this->getDamage());
+        }
+        else if (collision_type == gameobject::TYPE::TOWER) {
+            tower::tower_ptr oth = smartpointers::static_pointer_cast<tower::Tower>(other);
+            oth->attacked(this->getSharedPtr(), (float)(this->getDamage()));
+            std::cout << "tower attacked\n";
+        }
+        
+        
         //destroyed = true;
         destroySelf();
     }
 }
 
 // Properties
+void ProjectileLaser::setCollisionType(gameobject::TYPE type) {
+    collision_type = type;
+}
+
 void ProjectileLaser::setDamage(int damage) {
     this->damage = damage;
 }

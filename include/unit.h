@@ -5,7 +5,7 @@
 #include "gameobject.h"
 
 namespace unit {
-    enum TYPE : unsigned int {BASE=0, BASIC};
+    enum TYPE : unsigned int {BASE=0, BASIC, WIZARD};
 
     class Unit : public GameObject {
         graphics::Texture* texture;
@@ -18,6 +18,7 @@ namespace unit {
         tower_ptr getNearestTower() const;
         Point<float> velocity = Point<float>(0, 0);
         float health = 1000;
+        size_t cooldown = 0;
 
         void deliverWealth(size_t amt);
 

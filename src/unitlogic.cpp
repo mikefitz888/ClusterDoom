@@ -1,5 +1,6 @@
 #include "../include/unitlogic.h"
 #include "../include/Units/BasicUnit.h"
+#include "../include/Units/Wizard.h"
 #include "../include/manager.h"
 
 namespace unitlogic
@@ -27,6 +28,8 @@ namespace unitlogic
         {
         case unit::TYPE::BASIC:
             return new unit::BasicUnit(key, manager);
+        case unit::TYPE::WIZARD:
+            return new unit::Wizard(key, manager);
         case unit::TYPE::BASE:
         default:
             std::cout << "FATAL ERROR! INCORRECT INSTANCE, nullptr RETURNED" << std::endl;

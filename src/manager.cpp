@@ -127,7 +127,7 @@ namespace manager {
             //game_object_pool.insert(std::map<unsigned int, master_ptr<GameObject>>::value_type(id, master_ptr<GameObject>(game_object)));
             master_ptr<GameObject>* ptr = new master_ptr<GameObject>(game_object);
             game_object_pool.insert(std::pair<unsigned int, master_ptr<GameObject>*>(id, ptr));
-            std::cout << "INSERTED OBJECT WITH ID: " << id << " INTO MAP" << std::endl;
+            //std::cout << "INSERTED OBJECT WITH ID: " << id << " INTO MAP" << std::endl;
             //game_object_pool.emplace(id, game_object);
         }
         else {

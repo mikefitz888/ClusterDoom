@@ -6,6 +6,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "../../include/RenderUtils.h"
+#include "../../include/AnimatedTexture.h"
 
 namespace unit {
     BasicUnit::BasicUnit(id_t key, Manager* m) : Unit(key, TYPE::BASIC, m)  {
@@ -16,7 +17,7 @@ namespace unit {
     void BasicUnit::init(){
 		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
-        texture        = manager->getResourceManager()->getTexture("basic_unit");
+        texture        = manager->getResourceManager()->getAnimatedTexture("robot_unit");
 
        /* Path path;
         path.push_back(vec2(100, 100));
@@ -64,6 +65,11 @@ namespace unit {
             network_update_position_timer = network_update_position_timer_max;
             this->sendNetworkUpdate(BasicUnitUpdateEvents::SEND_POSITION);
         }
+        
+        auto& base = game_controller->getBase();
+        if (distanceTo(base->getPosition()) < 1000) {
+            attack(base);
+        }
     }
 
     void BasicUnit::render() {
@@ -71,7 +77,8 @@ namespace unit {
 
 
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
-        texture->render(getXr(), getYr(), 0.40f, 0.40f, rotation);
+        animation_progress = (animation_progress + 1) % 16;
+        texture->render(animation_progress/8, getXr(), getYr(), 0.20f, 0.20f, rotation);
 
         // ******************************************************************************************************//
         // DRAW PATH

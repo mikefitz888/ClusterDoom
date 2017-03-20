@@ -21,6 +21,7 @@ namespace graphics {
 
         //Units
         rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
+        rm->animatedTextureLoad("robot_unit", "src/Resources/Textures/robot_animated_simple.png", false, 2, 1, -1)->setOriginCentre();
         
         //UI Elements
         rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
@@ -29,8 +30,8 @@ namespace graphics {
         rm->textureLoad("white", "src/Resources/Textures/white.png");// ->setOriginCentre();
        
         //Game Screens
-        rm->textureLoad("begin", "src/Resources/Textures/begin.jpg")->setOriginCentre();
-        rm->textureLoad("win", "src/Resources/Textures/win.jpg")->setOriginCentre();
+        rm->textureLoad("begin", "src/Resources/Textures/begin.png")->setOriginCentre();
+        rm->textureLoad("win", "src/Resources/Textures/win.png")->setOriginCentre();
         rm->textureLoad("lose", "src/Resources/Textures/lose.png")->setOriginCentre();
 
         //GameObjects
@@ -41,15 +42,22 @@ namespace graphics {
         rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
 
 
-        // Load Animated Textures
+        /// Load Animated Textures
+        //  Explosions
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();
+        rm->animatedTextureLoad("explosion1", "src/Resources/Textures/Explosions/explosion48.png", true, 4, 4, -1)->setOriginCentre();
+        rm->animatedTextureLoad("explosion2", "src/Resources/Textures/Explosions/explosion51.png", true, 4, 4, -1)->setOriginCentre();
+        rm->animatedTextureLoad("explosion3", "src/Resources/Textures/Explosions/explosion55.png", true, 4, 4, -1)->setOriginCentre();
+        rm->animatedTextureLoad("explosion4", "src/Resources/Textures/Explosions/explosion71.png", true, 4, 4, -1)->setOriginCentre();
 
-        // Load Shaders
+        //  Projectiles
+
+        /// Load Shaders
         rm->shaderLoad("default", "src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
         rm->shaderLoad( "health_bar_mask_shader",
                         "src/Resources/Shaders/health_bar_mask_shd_vert.glsl",
                         "src/Resources/Shaders/health_bar_mask_shd_frag.glsl");
-        // Load fonts
+        //  Load fonts
         rm->fontLoad("agency", "src/Resources/Fonts/AGENCYR.TTF");
     }
 

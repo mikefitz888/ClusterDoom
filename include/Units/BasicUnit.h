@@ -9,12 +9,13 @@
 namespace unit
 {
     class BasicUnit : public Unit {
-        graphics::Texture* texture = nullptr;
+        graphics::AnimatedTexture* texture = nullptr;
 
         int network_update_position_timer_max = 300;
         int network_update_position_timer = network_update_position_timer_max;
 
         bool pressed = false; //TEMP;
+        size_t animation_progress = 0;
 
     public:
         BasicUnit(id_t key, Manager* m);

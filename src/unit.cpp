@@ -42,7 +42,6 @@ namespace unit {
 
         vbuff->freeze();
         hpbar_buff->freeze();
-
         
     }
     void Unit::render() {
@@ -84,10 +83,11 @@ namespace unit {
         render_facing = getDestination();//target->getPosition();
 
         //float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
-        ivec2 destination = getDestination();
-        int distance = DIST_SQ(getX(), destination.x, getY(), destination.y);
-        if (distance < 2000) {
+        /*ivec2 destination = getDestination();
+        int distance = DIST_SQ(getX(), destination.x, getY(), destination.y);*/
+        if (distanceTo(target->getPosition()) < 100 && cooldown-- == 0) {
            attack(target);
+           cooldown = 40;
         }
     }
 

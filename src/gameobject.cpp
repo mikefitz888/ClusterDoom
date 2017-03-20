@@ -543,8 +543,7 @@ namespace gameobject {
     }
 
     bool NavigationComponent::getAtDestination() {
-        
-        this->at_destination = glm::length(this->current_destination - this->position) <= this->distance_threshold;
+        this->at_destination = glm::distance(this->current_destination, this->position) <= this->distance_threshold;
         return this->at_destination;
     }
 

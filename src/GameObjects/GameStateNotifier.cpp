@@ -29,7 +29,7 @@ void GameStateNotifier::step() {
     }
 
     // Send warnings
-    std::vector<std::string>& alerts = this->game_controller->getWarnings();
+    std::vector<std::string> alerts = this->game_controller->getWarnings();
     if (alerts.size() > this->last_warnings_list_length) {
         // We have a new warning, so send:
         this->last_warning = alerts.back();

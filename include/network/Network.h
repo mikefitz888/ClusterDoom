@@ -3,6 +3,7 @@
 
 #include "../gamecore.h"
 #include "Buffer.h"
+#include "../smartpointers.h"
 
 namespace network {
     using std::vector;
@@ -124,6 +125,7 @@ namespace network {
         int instance_type;
         int network_instance_id;
         NetworkManager *manager;
+        gameobject::gameobject_ptr instance_ptr = nullptr;
 
         /*
             writeNetworkUpdate should be overriden in all cases. It is used for preparing the update data.
@@ -176,8 +178,10 @@ namespace network {
         void sendNetworkUpdate(int event_id);
 
 	public:
+        INetworkInstance();
 		void setNetworkManager(NetworkManager* network_manager);
-		void setNetworkID(int object_instance_id, int instance_super_type, int instance_sub_type);
+		void setNetworkID(gameobject::gameobject_ptr instance, int object_instance_id, int instance_super_type, int instance_sub_type);
+        gameobject::gameobject_ptr getInstance();
     };
 
 }

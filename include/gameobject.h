@@ -208,6 +208,7 @@ namespace gameobject {
         const id_t id_;
         const id_t super_type_ = 0;
         const id_t sub_type_ = 0;
+        bool dont_send = false; // Set this to true for objects that do not need to be sent over the network.
     protected:
         bool is_ready = false; // This is to prevent the draw event running before the step event
         Manager* manager;
@@ -221,9 +222,10 @@ namespace gameobject {
 
         gameobject_ptr self = nullptr;
         bool run_collision_event = true;
-
+        
 
         int _destroySelf();
+        void setNetworkSync(bool sync); // Set this to false to avoid sending data
     public:
         int delete_queue = 0;
         GameObject(id_t id, TYPE super_type, id_t sub_type, Manager* m); //Very important to get key from manager (for memory management + networking)
@@ -237,6 +239,7 @@ namespace gameobject {
         void setup(); // The setup to be run for all gameobjects to configure default properties
         void setReady(bool ready);
         bool getReady();
+        bool getNetworkSend(); // Returns whether this object is synced over the network or not.
 
         // EVENTS
         virtual void render() override;

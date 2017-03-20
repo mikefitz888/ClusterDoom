@@ -75,6 +75,7 @@ namespace unit {
         this->setSmoothingRate(0.25f);
 
         auto& target = game_controller->getBase();
+
         if (!target) {
             return; //NO TARGET
         }

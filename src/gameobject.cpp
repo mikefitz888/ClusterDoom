@@ -42,6 +42,10 @@ namespace gameobject {
         return this->is_ready;
     }
 
+    bool GameObject::getNetworkSend() {
+        return !this->dont_send;
+    }
+
 	void GameObject::render() {}
 	void GameObject::init() {}
 	void GameObject::renderGUI() {}
@@ -76,6 +80,10 @@ namespace gameobject {
 
     int GameObject::distanceTo(glm::vec2 point) const {
         return glm::distance(point, position);
+    }
+
+    void GameObject::setNetworkSync(bool sync) {
+        this->dont_send = !sync;
     }
 
 	// Setup

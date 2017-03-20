@@ -39,6 +39,11 @@ class GameStateNotifier : public GameObject {
     int send_wealth_timer = 0;
     int send_wealth_timer_max = 30; // Send wealth every half second
 
+    // Base health
+    int send_base_health_timer = 0;
+    int send_base_health_timer_max = 30; // Send base health every half second
+    float last_sent_base_health = 9999999.0f;
+
 public:
     // Constructor
     GameStateNotifier(id_t id, manager::Manager* m);
@@ -51,7 +56,7 @@ public:
     virtual void step() override;
 
     // NETWORK EVENTS
-    enum GameStateNotifierUpdateEvents { SEND_WAVE_TIMER = 0, SEND_WARNINGS = 1, SEND_WEALTH = 2 };
+    enum GameStateNotifierUpdateEvents { SEND_WAVE_TIMER = 0, SEND_WARNINGS = 1, SEND_WEALTH = 2, SEND_BASE_HEALTH = 3 };
     void writeNetworkUpdate(int event_id, Buffer &buffer) override;
 };
 

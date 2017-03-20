@@ -65,11 +65,14 @@ namespace manager {
     void Manager::clearTowers() {
         for (auto tower : (this->tower_logic)->getTowers()) {
             id_t id = tower->getID();
+            bool synced = (*game_object_pool[id])->getNetworkSend();
             (*game_object_pool[id]).invalidate();
             
            // mstr_ptr.invalidate();
             //free_id_list.push_back(id);
-            network_manager->sendInstanceDestroy(id);
+            if (synced) {
+                network_manager->sendInstanceDestroy(id);
+            }
         }
 
         tower_logic->clean();
@@ -153,26 +156,30 @@ namespace manager {
         gameobject_ptr self = gameobject_ptr(*ptr);
         self->setSharedPtr(self);
 		self->setNetworkManager(network_manager);
-		self->setNetworkID(id, game_object->getSuperType(), game_object->getSubType());
+		self->setNetworkID(self, id, game_object->getSuperType(), game_object->getSubType());
 
         // Run setup
         self->setup();
 
         // Network update
-        network_manager->sendInstanceCreate(id, game_object->getSuperType(), 
-												game_object->getSubType(), 
-												game_object->getX(),
-												game_object->getY());
+        network_manager->sendInstanceCreate(id, game_object->getSuperType(),
+                                            game_object->getSubType(),
+                                            game_object->getX(),
+                                            game_object->getY());
     }
 
     // Destroys the master_ptr
     void Manager::removeFromPool(id_t id){
+        bool synced = (*game_object_pool[id])->getNetworkSend();
         (*game_object_pool[id]).invalidate();
         //free_id_list.push_back(id); // <- Broken
 
         tower_logic->clean();
         unit_logic->clean();
-        network_manager->sendInstanceDestroy(id);
+
+        if (synced) {
+            network_manager->sendInstanceDestroy(id);
+        }
     }
 
     /*std::vector<master_ptr<GameObject>>& Manager::getObjectPool() {

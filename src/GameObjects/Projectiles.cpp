@@ -14,7 +14,7 @@ using gameobject::unit_ptr;
 // Projectile Bomb
 
 ProjectileBomb::ProjectileBomb(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::PROJECTILE_BOMB, m) {
-
+    this->setNetworkSync(false);
 }
 
 void ProjectileBomb::init() {
@@ -137,7 +137,7 @@ void ProjectileBomb::setExplosionKnockback(int knockback) {
 ProjectileLaser::ProjectileLaser(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::PROJECTILE_LASER, m) {
     // TEMP: apply some default motion
     setVelocity(0.0f, -7.0f);
-    
+    this->setNetworkSync(false);
 }
 void ProjectileLaser::init() {
     this->getCollision()->setTypeCircle(10);
@@ -198,7 +198,7 @@ int ProjectileLaser::getDamage() {
 // ****************************************************** //
 // Projectile Electricity
 ProjectileElectricity::ProjectileElectricity(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, m) {
-
+    this->setNetworkSync(false);
 }
 
 void ProjectileElectricity::init() {

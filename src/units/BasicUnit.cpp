@@ -61,11 +61,13 @@ namespace unit {
         /*
             Send the position every few steps
         */
-        network_update_position_timer--;
+
+        // TEMP: Temporarily disabling the basic unit update, as it doesn't really serve a purpose atm
+        /*network_update_position_timer--;
         if (network_update_position_timer <= 0) {
             network_update_position_timer = network_update_position_timer_max;
             this->sendNetworkUpdate(BasicUnitUpdateEvents::SEND_POSITION);
-        }
+        }*/
         
         auto& base = game_controller->getBase();
         if (distanceTo(base->getPosition()) < 160 && cooldown-- == 0) {

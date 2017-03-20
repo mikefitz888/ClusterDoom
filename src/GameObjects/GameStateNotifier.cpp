@@ -55,6 +55,15 @@ void GameStateNotifier::step() {
         last_send_time = 0;
     }
 
+    // Send base health
+    float base_health = this->game_controller->getBaseHealth();
+    this->send_base_health_timer--;
+    if (this->send_base_health_timer <= 0 || (base_health < this->last_sent_base_health-1.0f)) {
+        this->last_sent_base_health  = base_health;
+        this->send_base_health_timer = this->send_base_health_timer_max;
+        this->sendNetworkUpdate(GameStateNotifierUpdateEvents::SEND_BASE_HEALTH);
+    }
+
 
 }
 
@@ -79,6 +88,12 @@ void GameStateNotifier::writeNetworkUpdate(int event_id, Buffer &buffer) {
         // WARNINGS
         case GameStateNotifierUpdateEvents::SEND_WARNINGS:
             buffer << this->last_warning.c_str();
+            break;
+
+        // SEND BASE HEALTH
+        case GameStateNotifierUpdateEvents::SEND_BASE_HEALTH:
+            buffer << this->last_sent_base_health;
+            buffer << this->game_controller->getBaseMaxHealth();
             break;
 
     }

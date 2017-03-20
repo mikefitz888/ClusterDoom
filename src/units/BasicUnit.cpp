@@ -18,7 +18,7 @@ namespace unit {
 		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getAnimatedTexture("robot_unit");
-
+        this->setDistanceThreshold(80);
        /* Path path;
         path.push_back(vec2(100, 100));
         path.push_back(vec2(500, 50));
@@ -67,8 +67,9 @@ namespace unit {
         }
         
         auto& base = game_controller->getBase();
-        if (distanceTo(base->getPosition()) < 1000) {
+        if (distanceTo(base->getPosition()) < 100 && cooldown-- == 0) {
             attack(base);
+            cooldown = 40;
         }
     }
 
@@ -78,7 +79,9 @@ namespace unit {
 
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
         animation_progress = (animation_progress + 1) % 16;
-        texture->render(animation_progress/8, getXr(), getYr(), 0.20f, 0.20f, rotation);
+        int m = 1;
+        if (this->getAtDestination()) m = 0;
+        texture->render(m*animation_progress/8, getXr(), getYr(), 0.20f, 0.20f, rotation);
 
         // ******************************************************************************************************//
         // DRAW PATH

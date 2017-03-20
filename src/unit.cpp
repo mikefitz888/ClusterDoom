@@ -85,10 +85,10 @@ namespace unit {
         //float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
         /*ivec2 destination = getDestination();
         int distance = DIST_SQ(getX(), destination.x, getY(), destination.y);*/
-        if (distanceTo(target->getPosition()) < 100 && cooldown-- == 0) {
+        /*if (distanceTo(target->getPosition()) < 100 && cooldown-- == 0) {
            attack(target);
            cooldown = 40;
-        }
+        }*/
     }
 
     tower_ptr Unit::getNearestTower() const

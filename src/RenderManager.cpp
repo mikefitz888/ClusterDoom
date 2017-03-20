@@ -22,6 +22,8 @@ namespace graphics {
         //Units
         rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
         rm->animatedTextureLoad("robot_unit", "src/Resources/Textures/robot_animated_simple.png", false, 2, 1, -1)->setOriginCentre();
+        rm->animatedTextureLoad("wizard_unit", "src/Resources/Textures/wizard_animated_simple.png", false, 2, 1, -1)->setOriginCentre();
+
         
         //UI Elements
         rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();

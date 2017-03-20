@@ -22,6 +22,7 @@ namespace tower {
 		int size = (int)(96.0f);
 		//setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) 
 		render_manager->setActiveColour(255, 255, 255, (char)(255.0 * mod));
+        
 		if (health <= 0) {
 			render_manager->setActiveColour(255, 0, 0, (char)(255.0 * mod / 2));
 		}

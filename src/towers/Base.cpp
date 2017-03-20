@@ -12,11 +12,12 @@ namespace tower {
 		render_manager = manager->getRenderManager();
 		texture = manager->getResourceManager()->getTexture("base_image");
         game_controller = manager->getGameController();
-        health = 1000;
+        health = max_health;
         exuhporoshun[gameobject::TYPE::OBJECT][gameobject::OBJECT_TYPE::PROJECTILE_LASER] = manager->getResourceManager()->getAnimatedTexture("explosion4");
         //exuhporoshun[unit::TYPE::WIZARD] = manager->getResourceManager()->getAnimatedTexture("explosion2");
 		//Get Screen dims and position in center
         this->collision_profile.setTypeCircle(50);
+
 	}
 
 	void Base::render() {

@@ -11,6 +11,7 @@ protected:
     int scenario = 0;
     int wave = 0;
     int time = 0;
+    size_t spawn_id = 0;
     int units = 0;
     bool running = false;
     struct unit_spawn {
@@ -32,7 +33,7 @@ public:
 
     void startScenario(int scenario);
     void startWave(int wave);
-
+    void setSpawnID(size_t id);
 
     // Network events
     enum NetworkInteractionEvent { SPAWN_UNIT = 0 };

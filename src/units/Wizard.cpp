@@ -3,9 +3,11 @@
 #include "../../include/gameobject.h"
 #include "../../include/manager.h"
 #include "../../include/gamecontroller.h"
+#include "../../include/GameObjects/Projectiles.h"
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "../../include/RenderUtils.h"
+#include "../../include/AnimatedTexture.h"
 
 namespace unit {
     Wizard::Wizard(id_t key, Manager* m) : Unit(key, TYPE::WIZARD, m)  {
@@ -16,7 +18,7 @@ namespace unit {
     void Wizard::init(){
 		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
-        texture        = manager->getResourceManager()->getTexture("basic_unit");
+        texture        = manager->getResourceManager()->getAnimatedTexture("wizard_unit");
 
 
         adjust.push_back(glm::linearRand(-adjust_max, adjust_max));
@@ -38,6 +40,45 @@ namespace unit {
 
         //Walks towards base
         //If tower near, teleport closer to base (channelled w/ cd)
+        auto& base = game_controller->getBase();
+        setFrozen(false);
+        if (channeling) {
+            setFrozen(true);
+            if (channel_time-- == 100) {
+                glm::vec2 dir = glm::normalize(base->getPosition() - getPosition());
+                float dist = distanceTo(base->getPosition());
+                setPosition(getPosition() + dir * std::fmin(dist - 80, 200.f));
+                
+            }
+            else if (channel_time-- == 0) {
+                channeling = false;
+                channel_cooldown = 150;
+            }
+            else return;
+        }
+
+        if (!getAtDestination() && distanceTo(base->getPosition()) > 200 && channel_cooldown-- == 0) {
+            channeling = true;
+            channel_time = 200;
+        }
+        
+
+        if (distanceTo(base->getPosition()) < 160 && cooldown-- == 0) {
+            //gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
+            //smartpointers::static_pointer_cast<unit::Unit>(other);
+            smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY())));
+            obj1->setCollisionType(gameobject::TYPE::TOWER);
+            //std::cout << "unit fired\n";
+            auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
+            obj1->setVelocity(dir * 7.f);
+            //auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
+            //obj1->setPosition(getPosition() + sdir);
+            //obj2->setPosition(getPosition() - sdir);
+
+
+            //attack(base);
+            cooldown = 40;
+        }
         
 
         // Network timers
@@ -56,7 +97,13 @@ namespace unit {
 
 
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
-        texture->render(getXr(), getYr(), 0.40f, 0.40f, rotation);
+        //texture->render(getXr(), getYr(), 0.40f, 0.40f, rotation);
+        animation_progress = (animation_progress + 1) % 16;
+        int m = 1;
+        if (this->getAtDestination()) m = 0;
+        float n = std::fabs(channel_time - 100.f) / 100.f;
+        if (!channeling) n = 1.f;
+        texture->render(m*animation_progress / 8, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation);
 
         // ******************************************************************************************************//
         // DRAW PATH

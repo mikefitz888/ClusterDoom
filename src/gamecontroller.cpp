@@ -5,6 +5,7 @@
 #include "../include/tower.h"
 #include "../include/GameObjects/Spawn.h"
 #include "../include/GameObjects/Projectiles.h"
+#include "../include/Towers/Base.h"
 
 namespace gamecontroller {
 
@@ -278,9 +279,13 @@ namespace gamecontroller {
 
                 //Adding Spawn Points
                 spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
+                spawn_points.back()->setSpawnID(0);
                 spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0)));
+                spawn_points.back()->setSpawnID(1);
                 spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672)));
+                spawn_points.back()->setSpawnID(2);
                 spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672)));
+                spawn_points.back()->setSpawnID(3);
 
                 // Add notifier
                 spawnObjectAt(gameobject::OBJECT_TYPE::GAME_STATE_NOTIFIER, 0, 0);
@@ -761,5 +766,9 @@ namespace gamecontroller {
 
     float GameController::getBaseHealth() {
         return getBase()->getHealth();
+    }
+
+    float GameController::getBaseMaxHealth() {
+        return smartpointers::static_pointer_cast<tower::Base>(getBase())->max_health;
     }
 }

@@ -335,6 +335,7 @@ namespace gameobject {
     // ****************************************************************************** //
     // GameObject motion component
     void MotionComponent::motionStep() {
+        if (frozen) return;
         position += velocity;
         velocity *= friction;
 
@@ -376,6 +377,10 @@ namespace gameobject {
 
     void MotionComponent::setFriction(vec2 friction) {
         this->friction = friction;
+    }
+
+    void MotionComponent::setFrozen(bool state) {
+        frozen = state;
     }
 
     void MotionComponent::addVelocity(vec2 vel) {

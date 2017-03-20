@@ -32,6 +32,9 @@ void Spawn::render() {
 }
 void Spawn::renderGUI() {}
 void Spawn::release() {}
+void Spawn::setSpawnID(size_t id) {
+    spawn_id = id;
+}
 
 void Spawn::startScenario(int scenario_number) {
     running = true;
@@ -50,9 +53,12 @@ void Spawn::beginWave() {
     int delay = time;
     std::cout << scenario << "\n";
     spawn_queue.clear();
+    int focus = (wave + 3 * scenario) % 4;
+    if (focus != spawn_id) return;
     for (int number_of_enemies = 1 + scenario*scenario; number_of_enemies > 0; number_of_enemies--) {
         std::cout << number_of_enemies << "\n";
-        spawn_queue.emplace_back(unit::TYPE::BASIC, delay);
+        auto k = 0 < 4 ? unit::TYPE::WIZARD : unit::TYPE::BASIC;
+        spawn_queue.emplace_back((number_of_enemies+focus) % 2 ? unit::TYPE::WIZARD : unit::TYPE::BASIC, delay);
         delay += spawn_rate;
     }
     

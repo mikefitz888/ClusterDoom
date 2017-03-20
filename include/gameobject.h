@@ -116,7 +116,7 @@ namespace gameobject {
     protected:
         vec2 position, render_position, velocity, friction = vec2(1.0f,1.0f);
         float smoothing_rate = 1.0;
-
+        bool frozen = false;
 
         void motionStep();
     public:
@@ -128,6 +128,7 @@ namespace gameobject {
         void setVelocity(glm::vec2 velocity);
         void setSmoothingRate(float rate);
         void setFriction(vec2 friction);
+        void setFrozen(bool state);
 
         void addVelocity(vec2 vel);
 

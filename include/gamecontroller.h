@@ -133,6 +133,7 @@ namespace gamecontroller {
         sf::Time timeUntilNextWave();
         std::vector<std::string> getWarnings();
         float getBaseHealth();
+        float getBaseMaxHealth();
     };
 }
 

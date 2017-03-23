@@ -14,13 +14,21 @@ namespace tower {
     }
 
     void LaserTower::init(){
+
+		Tower::init();
+
+		damage = 1;
+
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
         texture = manager->getResourceManager()->getTexture("basic_tower");
     }
 
 	void LaserTower::render() {
-		float mod = (200.0f - delete_queue) / 200.0f;
+
+		Tower::render();
+
+		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);
 		//setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) 
 		render_manager->setActiveColour(255, 255, 255, (char)(255.0 * mod));
@@ -30,6 +38,7 @@ namespace tower {
 		texture->render(getXr(), getYr(), size, size);
 
 		RenderUtils::render_circular_health(getXr(), getYr(), (int) health, (int) max_health, RenderUtils::colour_blend(Colour(0,255,0,255), Colour(255,0,0,255), health/max_health));
+		*/
 	}
 
     void LaserTower::step() {

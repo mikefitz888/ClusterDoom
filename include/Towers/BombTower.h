@@ -9,7 +9,7 @@ namespace tower
 {
     class BombTower : public Tower {
         graphics::Texture* texture = nullptr;
-        size_t cooldown = 200;
+        size_t cooldown = 600;
         size_t timer = 0;
         size_t cost_per_attack = 10;
         size_t max_range = 200;

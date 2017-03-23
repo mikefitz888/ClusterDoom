@@ -45,7 +45,11 @@ namespace unit {
         
     }
     void Unit::render() {
-        render_manager->setActiveShader(shader);
+
+		if (health < maxHealth) {
+			red->render(getX() - 26, getY() - 30, 0.4f*health / maxHealth, 0.07f, 0.0f, 0.0f);
+		}
+        /*render_manager->setActiveShader(shader);
         render_manager->setTexture(texture);
 
         render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
@@ -56,9 +60,9 @@ namespace unit {
         render_manager->setTexture(red);
         render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
         transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY()-30.0f, 0.0f) );
-        transform = glm::scale(transform, glm::vec3(health/1000, 1.0f, 1.0f));
+        transform = glm::scale(transform, glm::vec3(health/maxHealth, 1.0f, 1.0f));
         render_manager->setWorldMatrix(transform);
-        hpbar_buff->render();
+        hpbar_buff->render();*/
     }
     void Unit::renderGUI() {}
     void Unit::release() {}
@@ -72,14 +76,14 @@ namespace unit {
         *  There should be a cooldown between shots so the unit can "stutter-step"
         */
         GameObject::step();
-        this->setSmoothingRate(0.25f);
+        this->setSmoothingRate(.25f);
 
         auto& target = game_controller->getBase();
 
         if (!target) {
             return; //NO TARGET
         }
-        this->setDestination(target->getPosition(), .25f);
+        this->setDestination(target->getPosition(), unitSpeed);
 
         render_facing = getDestination();//target->getPosition();
 

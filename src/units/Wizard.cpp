@@ -16,6 +16,9 @@ namespace unit {
     }
 
     void Wizard::init(){
+
+		Unit::init();
+
 		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getAnimatedTexture("wizard_unit");
@@ -26,6 +29,10 @@ namespace unit {
         adjust.push_back(glm::linearRand(-adjust_max, adjust_max));
         adjust.push_back(glm::linearRand(-adjust_max, adjust_max));
         this->setDistanceThreshold(50);
+
+		health = 2500;
+		maxHealth = 2500;
+		unitSpeed = 0.6f;
        /* Path path;
         path.push_back(vec2(100, 100));
         path.push_back(vec2(500, 50));
@@ -94,7 +101,7 @@ namespace unit {
 
     void Wizard::render() {
         //render_manager = manager->getRenderManager();
-
+		Unit::render();
 
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
         //texture->render(getXr(), getYr(), 0.40f, 0.40f, rotation);

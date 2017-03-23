@@ -16,10 +16,18 @@ namespace unit {
     }
 
     void BasicUnit::init(){
+
+		Unit::init();
+
 		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getAnimatedTexture("robot_unit");
         this->setDistanceThreshold(150);
+
+		health = 8000;
+		maxHealth = 8000;
+		unitSpeed = 0.25f;
+
        /* Path path;
         path.push_back(vec2(100, 100));
         path.push_back(vec2(500, 50));
@@ -89,6 +97,9 @@ namespace unit {
     }
 
     void BasicUnit::render() {
+
+		Unit::render();
+
         render_manager = manager->getRenderManager();
 
 

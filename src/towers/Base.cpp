@@ -9,6 +9,9 @@ namespace tower {
 	}
 
 	void Base::init() {
+
+		Tower::init();
+
 		render_manager = manager->getRenderManager();
 		texture = manager->getResourceManager()->getTexture("base_image");
         game_controller = manager->getGameController();
@@ -21,6 +24,7 @@ namespace tower {
 	}
 
 	void Base::render() {
+
 		int size = 100;
 		texture->render(getXr(), getYr(), size, size);
         animations.erase(std::remove_if(animations.begin(), animations.end(), [this](std::pair<graphics::AnimatedTexture*, std::pair<float, Point<int>>>& a)->bool {

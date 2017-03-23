@@ -22,13 +22,13 @@ namespace graphics {
         //Units
         rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
         rm->animatedTextureLoad("robot_unit", "src/Resources/Textures/robotAnimation.png", true, 2, 2, -1)->setOriginCentre();
-        rm->animatedTextureLoad("wizard_unit", "src/Resources/Textures/wizard_animated_simple.png", false, 2, 1, -1)->setOriginCentre();
+        rm->animatedTextureLoad("wizard_unit", "src/Resources/Textures/wizardAnimation.png", false, 1, 1, -1)->setOriginCentre();
 
         
         //UI Elements
         rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
         rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();
-        rm->textureLoad("red", "src/Resources/Textures/red.png")->setOriginCentre();
+		rm->textureLoad("red", "src/Resources/Textures/red.png");
         rm->textureLoad("white", "src/Resources/Textures/white.png");// ->setOriginCentre();
        
         //Game Screens

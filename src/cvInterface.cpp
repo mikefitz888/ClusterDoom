@@ -61,6 +61,7 @@ int current_calibration_point_id = 0;
     }
 
     void CVInterface::init() {
+        
         if (!cascade.load("src/Resources/OpenCV/cascade.xml")) {
             std::cout << "Cannot load cascade!" << std::endl;
             // Exit? This is pretty fatal!
@@ -81,7 +82,7 @@ int current_calibration_point_id = 0;
         // Detect mouse press
         cv::setMouseCallback("WebCam", mouseHandle, NULL);
 
-
+        
         networkConnect();
 
         std::vector<Square> squares;
@@ -345,6 +346,7 @@ int current_calibration_point_id = 0;
 
     void CVInterface::step(std::vector<Square>& squares)
     {
+        
         bool success = camera.read(frame);
         if (!success) {
             // std::cout << "Cannot read frame from video stream!" << std::endl;
@@ -355,14 +357,6 @@ int current_calibration_point_id = 0;
         if(current_calibration_point_id >= 4){
             findSquares(frame, squares);
            // std::cout << "There were " << squares.size() << " squares detected\n";
-
-            /*tower_locations.clear();
-            for (Square& square : squares)
-            {
-                int cx = (square[0].x + square[1].x + square[2].x + square[3].x) / 4;
-                int cy = (square[0].y + square[1].y + square[2].y + square[3].y) / 4;
-                tower_locations.push_back(gameobject::Point<int>(cx, cy));
-            }*/
 
             decodeSquares(frame, squares, markers);
 
@@ -381,11 +375,32 @@ int current_calibration_point_id = 0;
 
         cv::setMouseCallback("WebCam", mouseHandle, NULL);
         imshow("WebCam", frame);
+        
         //findTowers2();
         //cv::imshow("WebCam", frame);
          // This is essential as if we leave it, the main thread will receive multiple packets of data containing updated lists every frame.
          // (Realistically, this only needs to run at 24 fps, as this is the maximum performance of the camera.)
-        cvWaitKey(42);
+        /*Marker marker1(200, 400, 2);
+        Marker marker2(500, 200, 3);
+        Marker marker3(800, 400, 2);
+
+        send_buffer.seek(0);
+        send_buffer << (int)3;
+        send_buffer << (int)marker1.x;
+        send_buffer << (int)marker1.y;
+        send_buffer << (int)marker1.marker_type;
+        send_buffer << (int)marker2.x;
+        send_buffer << (int)marker2.y;
+        send_buffer << (int)marker2.marker_type;
+        send_buffer << (int)marker3.x;
+        send_buffer << (int)marker3.y;
+        send_buffer << (int)marker3.marker_type;
+
+        socket->send(send_buffer.getPtr(), send_buffer.tell());
+
+        //std::cout << "Sent markers" << std::endl;*/
+        cv::waitKey(42); //42
+        //while (true);
     }
 
 /*

@@ -143,7 +143,8 @@ namespace tower {
     class BasicTower;
     class Tower;
 
-    enum TYPE : unsigned int;
+    //enum TYPE : unsigned int;
+    enum TYPE : unsigned int { BASE = 0, BASIC, ELECTRIC, BOMB, LASER, num_types };
 }
 
 namespace towerlogic {

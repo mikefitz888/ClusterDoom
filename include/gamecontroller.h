@@ -5,6 +5,7 @@
 #include "smartpointers.h"
 #include "PathFinder.h"
 #include "aStar.h"
+//#include "../include/tower.h"
 #include "../include/network/Buffer.h"
 
 #define NO_MATCH -1
@@ -57,10 +58,11 @@ namespace gamecontroller {
         
         GameState current_state = GameState::START;
 
-        std::map<int, std::vector<Point<int>>> cvList;
+        //std::map<int, std::vector<Point<int>>> cvList;
+        std::vector<Point<int>> cvList[tower::TYPE::num_types];
 
         // CV Network
-        int                port;
+        int               port;
         sf::TcpListener*  listener;
         Buffer*           recv_buffer;
         sf::TcpSocket*    client;
@@ -92,7 +94,7 @@ namespace gamecontroller {
         void init();
         bool step();
         void restart() const; //Not yet implemented, clears towers + units
-        Matching stableMatching(std::vector<Point<int>>& detections);
+        Matching stableMatching(tower::TYPE type, std::vector<Point<int>>& detections);
         int getWeight(int x, int y);
 
         //GameState Modifiers

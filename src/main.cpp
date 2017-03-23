@@ -42,9 +42,9 @@ int main(int argc, char* argv[]){
     cvinterface::CVInterface cv;
     std::thread cv_thread = std::thread(runCVInterface, &cv);
 
-	sf::Clock clock = sf::Clock();
+    sf::Clock clock = sf::Clock();
     bool running = true;
-	int i = 0;
+    int i = 0;
     while (running) {
         // Networking
         //nm.networkStep();

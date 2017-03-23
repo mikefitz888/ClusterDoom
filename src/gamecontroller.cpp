@@ -2,7 +2,6 @@
 #include "../include/manager.h"
 #include "../include/network/Buffer.h"
 #include "../include/unit.h"
-#include "../include/tower.h"
 #include "../include/GameObjects/Spawn.h"
 #include "../include/GameObjects/Projectiles.h"
 #include "../include/Towers/Base.h"
@@ -274,6 +273,8 @@ namespace gamecontroller {
                 
                 tower_ptr t = spawnTowerAt(getScreenWidth()/2, getScreenHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
                 spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
+                //JAMIE
+                //spawnTowerAt(800, 300, tower::TYPE::ELECTRIC);
                 spawnTowerAt(500, 200, tower::TYPE::BOMB);
                 spawnTowerAt(500, 500, tower::TYPE::LASER);
 
@@ -487,10 +488,14 @@ namespace gamecontroller {
                 case sf::TcpSocket::Done:
                 {
                     // Data received
-                    //std::cout << "[CV NETWORK] Data received from CV interface. Size: " << message_size << " bytes!" << std::endl;
+                    std::cout << "[CV NETWORK] Data received from CV interface. Size: " << message_size << " bytes!" << std::endl;
 
                     // Clear cv list
-                    cvList.clear();
+                    //cvList.clear();
+                    for (auto& vec : cvList)
+                    {
+                        vec.clear();
+                    }
 
                     // Read packet:
                     int number_of_positions;
@@ -504,21 +509,26 @@ namespace gamecontroller {
                         (*recv_buffer) >> y;
                         (*recv_buffer) >> marker_type;
                         //cvList.push_back(std::pair<Point<int>, int>(Point<int>(x, y), marker_type));
-                        cvList[marker_type].emplace_back(x, y);
-                        //std::cout << "\tReceived Point (" << point.x << "," << point.y << ")" << std::endl;
+                        cvList[marker_type].push_back(Point<int>(x, y));
+                        std::cout << "\tReceived Point (" << x << "," << y << "): " << marker_type << std::endl;
                     }
 
-
-                    // TODO: Separate cvList by marker_type, run stableMatching on each, merge matchings
-                    std::map<tower_ptr, int> delete_tally; 
+                    // Separate cvList by marker_type, run stableMatching on each, merge matchings
+                    //std::map<tower_ptr, int> delete_tally; 
+                    std::vector<tower_ptr> delete_list;
                     int ccc = create_count;
-                    for (auto& marker_set : cvList) {
+                    //for (auto& marker_set : cvList) {
+                    for (int type = 0; type < tower::TYPE::num_types; type++) {
                         //For move
-                        Matching match = stableMatching(marker_set.second);
+                        //std::cout << "Attempting to match" << std::endl;
+                        Matching match = stableMatching((tower::TYPE) type, cvList[type]);
+                        //std::cout << "Matched" << std::endl;
                         for (auto& result : match.matches) {
+                            //std::cout << "For marker type " << type << " we have tower " << result.first->getID() << " moved" << std::endl;
                             result.first->setPosition((result.second).x, (result.second).y);
                             result.first->delete_queue = 0;
                         }
+                        //std::cout << "Moved towers" << std::endl;
 
                         //For creation:
                         //If tower to create:
@@ -527,14 +537,19 @@ namespace gamecontroller {
                         if (match.new_towers.size() > 0) {
                             create_count++;
                             if (create_count > 10) {
-                                spawnTowerAt(match.new_towers[0], tower::TYPE::BASIC);
+                                spawnTowerAt(match.new_towers[0], (tower::TYPE) type);
                             }
                         }
 
                         //Increase a tally for each tower, only delete a tower if it's in none of the sets
-                        for (auto tower : match.deleted_towers) {
+                        /*for (auto tower : match.deleted_towers) {
                             if (delete_tally.find(tower) == delete_tally.end()) { delete_tally[tower] = 1; }
                             else { delete_tally[tower]++; }
+                        }*/
+                        for (auto& tower : match.deleted_towers)
+                        {
+                            //std::cout << "tower " << tower->getID() << " is schedualed for deletion" << std::endl;
+                            delete_list.push_back(tower);
                         }
                     }
 
@@ -543,7 +558,7 @@ namespace gamecontroller {
                     //For deletion:
                     //Increase tower->delete_queue
                     //If > n then actually delete
-                    for (auto& dt : delete_tally) {
+                    /*for (auto& dt : delete_tally) {
                         if (dt.second == cvList.size()) {
                             dt.first->delete_queue++;
                             if (dt.first->delete_queue > 200) {
@@ -551,34 +566,56 @@ namespace gamecontroller {
                                 break; //Have to break I think to prevent seg-fault
                             }
                         }
+                    }*/
+                    for (auto& tower : delete_list)
+                    {
+                        tower->delete_queue++;
+                        if (tower->delete_queue > 200) {
+                            tower->demoDestroy();
+                            // This seems dodgy
+                            break; //Have to break I think to prevent seg-fault
+                        }
                     }
+                    break;
                 }
-                
-                break;
             }
         }
     }
 
-    Matching GameController::stableMatching(std::vector<Point<int>>& detections)
+    Matching GameController::stableMatching(tower::TYPE type, std::vector<Point<int>>& detections)
     {
         std::vector<deque<int>> point_prefs;
         std::vector<std::vector<int>> tower_prefs;
         auto& _towers = manager->getTowers();
 
         std::vector<tower_ptr> towers;
-        if (_towers.size()) {
+        if (_towers.size() > 0) {
             if (_towers[0]->getSubType() != tower::TYPE::BASE) {
                 std::cout << "ERROR! 1st tower is not base" << std::endl;
             }
-            std::vector<tower_ptr>::const_iterator begin = _towers.begin();
-            std::vector<tower_ptr>::const_iterator last = _towers.begin() + _towers.size();
-            towers = std::vector<tower_ptr>(begin+1, last); //skip first tower without needing to change Jamie's algorithm
+            /*auto begin = _towers.begin();
+            // Just because
+            auto last = _towers.end();//_towers.begin() + _towers.size();
+            towers = std::vector<tower_ptr>(begin+1, last); //skip first tower without needing to change Jamie's algorithm*/
+            for (size_t i = 1; i < _towers.size(); i++)
+            {
+                if (_towers[i]->getSubType() == type)
+                {
+                    towers.push_back(_towers[i]);
+                }
+            }
         }
-        else {
+        /*else
+        {
+            // To skip initial phase... rip
+            return Matching();
+        }*/
+        // Not necessary
+        /*else {
             towers = std::vector<tower_ptr>();
-        }
+        }*/
 
-        size_t tower_count = towers.size(); //base exists and is first tower
+        size_t tower_count = towers.size(); //base exists and is NOT first in tower, it was explicitly removed
         int** dists = new int*[tower_count];
         for (size_t i = 0; i < tower_count; i++)
         {

@@ -16,17 +16,16 @@ namespace tower {
     void BombTower::init(){
 
 		Tower::init();
-		
-		damage = 20;
 
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
-        texture = manager->getResourceManager()->getTexture("basic_tower");
+        texture = manager->getResourceManager()->getTexture("greenTower");
     }
 
 	void BombTower::render() {
 
 		Tower::render();
+		texture->render(getXr(), getYr(), 96, 96);
 
 		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);
@@ -68,6 +67,7 @@ namespace tower {
             gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<int>(getX(), getY()));
             float m = target[0].first / max_range;
             obj->setVelocity(m*(current_target->getX()-getX())/10, m*(current_target->getY()-getY())/10 );
+			//obj->setDamage(damage);
             timer = cooldown;
             bomb_queue.push_back(obj);
             //bomb_queue[obj] = Point<float>(current_target->getX(), current_target->getY());

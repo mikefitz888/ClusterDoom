@@ -16,15 +16,14 @@ namespace tower {
 
 		Tower::init();
 
-		damage = 10;
-
         render_manager = manager->getRenderManager();
-        texture = manager->getResourceManager()->getTexture("basic_tower");
+        texture = manager->getResourceManager()->getTexture("blackTower");
     }
 
 	void BasicTower::render() {
 
 		Tower::render();
+		texture->render(getXr(), getYr(), 96, 96);
 
 		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);

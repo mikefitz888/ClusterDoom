@@ -17,16 +17,15 @@ namespace tower {
 
 		Tower::init();
 
-		damage = 1;
-
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
-        texture = manager->getResourceManager()->getTexture("basic_tower");
+        texture = manager->getResourceManager()->getTexture("redTower");
     }
 
 	void LaserTower::render() {
 
 		Tower::render();
+		texture->render(getXr(), getYr(), 96, 96);
 
 		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);
@@ -59,18 +58,22 @@ namespace tower {
         if (current_target) {
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
             //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
-            gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
-            gameobject_ptr obj2 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
-            
-            auto dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first/7.f) - obj1->getPosition() );
+			gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
 
-            auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
-            obj1->setPosition(getPosition() + sdir);
-            obj2->setPosition(getPosition() - sdir);
-
-            obj1->setVelocity(dir * 7.f);
-            obj2->setVelocity(dir * 7.f);
-
+			auto dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first / 7.f) - obj->getPosition());
+			auto sdir = glm::vec2(-dir.y, dir.x) * 20.0f;
+			if (leftFire) {
+				obj->setPosition(getPosition() + sdir);
+				leftFire = false;
+			}
+			else {
+				obj->setPosition(getPosition() - sdir);
+				leftFire = true;
+			}
+			dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first / 7.f) - obj->getPosition());
+			obj->setVelocity(dir * 9.f);
+			//obj->setDamage(damage);
+			timer = cooldown;
         }
     }
 }

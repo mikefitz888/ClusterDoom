@@ -13,7 +13,12 @@ namespace graphics {
 
         /// Load Textures
         //Temp
-        rm->textureLoad("basic_tower", "src/Resources/Textures/chess_piece_rook.png")->setOriginCentre();
+        rm->textureLoad("blackTower", "src/Resources/Textures/rookBlack.png")->setOriginCentre();
+		rm->textureLoad("blueTower", "src/Resources/Textures/rookBlue.png")->setOriginCentre();
+		rm->textureLoad("greenTower", "src/Resources/Textures/rookGreen.png")->setOriginCentre();
+		rm->textureLoad("redTower", "src/Resources/Textures/rookRed.png")->setOriginCentre();
+		rm->textureLoad("yellowTower", "src/Resources/Textures/rookYellow.png")->setOriginCentre();
+
         rm->textureLoad("base_image", "src/Resources/Textures/base.png")->setOriginCentre();
 
         //Backgrounds

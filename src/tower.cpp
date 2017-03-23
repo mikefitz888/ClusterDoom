@@ -18,7 +18,7 @@ namespace tower {
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
 
-        texture = manager->getResourceManager()->getTexture("basic_tower");
+        texture = manager->getResourceManager()->getTexture("blacktower");
         /*if(!texture->loadFromFile("src/Resources/Textures/chess_piece_rook.png")){
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/
@@ -54,9 +54,8 @@ namespace tower {
 		if (health <= 0) {
 			render_manager->setActiveColour(255, 0, 0, (char)(255.0 * mod / 2));
 		}
-		texture->render(getXr(), getYr(), size, size);
 
-		//RenderUtils::render_circular_health(getXr(), getYr(), (int)health, (int)max_health, RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), health / max_health));
+		RenderUtils::render_circular_health(getXr(), getYr(), (int)health, (int)max_health, RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), health / max_health));
 
         /*render_manager->setActiveShader(shader);
         render_manager->setTexture(texture);

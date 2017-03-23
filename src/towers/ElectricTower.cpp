@@ -17,16 +17,15 @@ namespace tower {
 
 		Tower::init();
 
-		damage = 5;
-
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
-        texture = manager->getResourceManager()->getTexture("basic_tower");
+        texture = manager->getResourceManager()->getTexture("blueTower");
     }
 
 	void ElectricTower::render() {
 
 		Tower::render();
+		texture->render(getXr(), getYr(), 96, 96);
 
 		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);
@@ -66,6 +65,7 @@ namespace tower {
             elec->setRange(max_range);
             elec->setDamage((int)(requestEfficiency(cost_per_attack) * damage));
             elec->setTargetObject(current_target);
+			//elec->setDamage(damage);
             timer = cooldown;
         }
     }

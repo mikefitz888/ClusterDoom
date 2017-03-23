@@ -79,7 +79,7 @@ namespace unit {
         if (!target) {
             return; //NO TARGET
         }
-        this->setDestination(target->getPosition(), 1.25f);
+        this->setDestination(target->getPosition(), .25f);
 
         render_facing = getDestination();//target->getPosition();
 

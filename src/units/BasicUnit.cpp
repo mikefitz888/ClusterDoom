@@ -93,10 +93,12 @@ namespace unit {
 
 
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
-        animation_progress = (animation_progress + 1) % 16;
+		float animationSpeed = 0.1f;
+        animation_progress = animation_progress + animationSpeed;
         int m = 1;
+		int frame[6] = { 0,1,2,3,2,1 };
         if (this->getAtDestination()) m = 0;
-        texture->render(m*animation_progress/8, getXr(), getYr(), 0.10f, 0.10f, rotation);
+        texture->render(m*frame[((int)animation_progress)%6], getXr(), getYr(), 0.10f, 0.10f, rotation);
 
         // ******************************************************************************************************//
         // DRAW PATH

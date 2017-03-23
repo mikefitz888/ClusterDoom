@@ -14,13 +14,20 @@ namespace tower {
     }
 
     void BombTower::init(){
+
+		Tower::init();
+
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
-        texture = manager->getResourceManager()->getTexture("basic_tower");
+        texture = manager->getResourceManager()->getTexture("greenTower");
     }
 
 	void BombTower::render() {
-		float mod = (200.0f - delete_queue) / 200.0f;
+
+		Tower::render();
+		texture->render(getXr(), getYr(), 96, 96);
+
+		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);
 		//setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) 
 		render_manager->setActiveColour(255, 255, 255, (char)(255.0 * mod));
@@ -30,6 +37,7 @@ namespace tower {
 		texture->render(getXr(), getYr(), size, size);
 
 		RenderUtils::render_circular_health(getXr(), getYr(), (int) health, (int) max_health, RenderUtils::colour_blend(Colour(0,255,0,255), Colour(255,0,0,255), health/max_health));
+		*/
 	}
 
     void BombTower::step() {
@@ -59,6 +67,7 @@ namespace tower {
             gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<int>(getX(), getY()));
             float m = target[0].first / max_range;
             obj->setVelocity(m*(current_target->getX()-getX())/10, m*(current_target->getY()-getY())/10 );
+			//obj->setDamage(damage);
             timer = cooldown;
             bomb_queue.push_back(obj);
             //bomb_queue[obj] = Point<float>(current_target->getX(), current_target->getY());

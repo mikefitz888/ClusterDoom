@@ -222,7 +222,7 @@ namespace gamecontroller {
                 spawned = true;
             }
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
             if (!spawned) {
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                 if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
@@ -230,6 +230,8 @@ namespace gamecontroller {
 
                     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BASIC);
                     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::ELECTRIC);
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BOMB);
+					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::LASER);
                 }
 
                 spawned = true;

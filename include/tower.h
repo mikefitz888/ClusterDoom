@@ -24,6 +24,7 @@ namespace tower {
         graphics::VertexBuffer* hpbar_buff;
     protected:
         gamecontroller::GameController* game_controller;
+		int damage = 1;
         float max_health = 10000;
         float health=max_health;
         size_t requestMoney(size_t amt);

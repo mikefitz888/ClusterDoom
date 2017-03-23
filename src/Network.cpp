@@ -164,7 +164,9 @@ namespace network {
         send_buffer << (unsigned int)size;
         send_buffer.seek(size); // < Jump back to previous end
 
+        socket->setBlocking(true);
         socket->send(send_buffer.getPtr(), size);
+        socket->setBlocking(false);
 
         // Debug
         std::cout << "[ClientSecurityProcess] Sent security token: " << security_token << " to client" << std::endl;
@@ -208,7 +210,9 @@ namespace network {
             send_buffer << (unsigned int)size;
             send_buffer.seek(size); // < Jump back to previous end
 
+            socket->setBlocking(true);
 			socket->send(send_buffer.getPtr(), size);
+            socket->setBlocking(false);
 
             // Send all instances
             network_manager->sendAllInstancesToClient(this);
@@ -242,7 +246,9 @@ namespace network {
             send_buffer << (unsigned int)size;
             send_buffer.seek(size); // < Jump back to previous end
 
+            socket->setBlocking(true);
             socket->send(send_buffer.getPtr(), size, ss);
+            socket->setBlocking(false);
             std::cout << "STATUS: " << ss << std::endl;
             //socket->setBlocking(false);
         }
@@ -261,7 +267,9 @@ namespace network {
             send_buffer << (unsigned int)size;
             send_buffer.seek(size); // < Jump back to previous end
 
+            socket->setBlocking(true);
             socket->send(send_buffer.getPtr(), size);
+            socket->setBlocking(false);
        // }
     }
 
@@ -358,7 +366,9 @@ namespace network {
             send_buffer << (unsigned int)size;
             send_buffer.seek(size); // < Jump back to previous end
 
+            socket->setBlocking(true);
             socket->send(send_buffer.getPtr(), size);
+            socket->setBlocking(false);
 
             std::cout << "[NETWORK CLIENT] Client " << ip << " has been disconnected." << std::endl << "\t\tREASON: " << reason << std::endl;
             connection_state = DISCONNECTED;

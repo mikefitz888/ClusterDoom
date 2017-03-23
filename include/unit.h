@@ -18,6 +18,8 @@ namespace unit {
         tower_ptr getNearestTower() const;
         Point<float> velocity = Point<float>(0, 0);
         float health = 1000;
+		float maxHealth = 1000;
+		float unitSpeed = 1.0f;
         size_t cooldown = 0;
 
         void deliverWealth(size_t amt);

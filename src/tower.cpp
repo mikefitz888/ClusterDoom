@@ -6,6 +6,7 @@
 #include "../include/tower.h"
 #include "../include/VertexBuffer.h"
 #include "../include/ResourceManager.h"
+#include "../include/RenderUtils.h"
 
 namespace tower {
     using namespace graphics;
@@ -17,7 +18,7 @@ namespace tower {
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
 
-        texture = manager->getResourceManager()->getTexture("basic_tower");
+        texture = manager->getResourceManager()->getTexture("blacktower");
         /*if(!texture->loadFromFile("src/Resources/Textures/chess_piece_rook.png")){
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/
@@ -44,7 +45,19 @@ namespace tower {
     }
 
     void Tower::render(){
-        render_manager->setActiveShader(shader);
+
+		float mod = (200.0f - delete_queue) / 200.0f;
+		int size = (int)(96.0f);
+		//setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) 
+		render_manager->setActiveColour(255, 255, 255, (char)(255.0 * mod));
+
+		if (health <= 0) {
+			render_manager->setActiveColour(255, 0, 0, (char)(255.0 * mod / 2));
+		}
+
+		RenderUtils::render_circular_health(getXr(), getYr(), (int)health, (int)max_health, RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), health / max_health));
+
+        /*render_manager->setActiveShader(shader);
         render_manager->setTexture(texture);
 
         render_manager->setActiveColour(Colour(0, 0, 255, 255));
@@ -58,7 +71,7 @@ namespace tower {
         transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY()-50, 0.0));
         transform = glm::scale(transform, glm::vec3(hp, 1.0f, 1.0f));
         render_manager->setWorldMatrix(transform);
-        hpbar_buff->render();
+        hpbar_buff->render();*/
 
     }
 
@@ -121,7 +134,7 @@ namespace tower {
     }
 
     void Tower::attack(unit_ptr unit)    {
-        unit->attacked(this->getSharedPtr());
+        unit->attacked(this->getSharedPtr(), damage);
     }
 
     void Tower::attacked(gameobject_ptr aggressor) {

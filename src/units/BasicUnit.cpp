@@ -16,10 +16,18 @@ namespace unit {
     }
 
     void BasicUnit::init(){
+
+		Unit::init();
+
 		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getAnimatedTexture("robot_unit");
         this->setDistanceThreshold(150);
+
+		health = 8000;
+		maxHealth = 8000;
+		unitSpeed = 0.25f;
+
        /* Path path;
         path.push_back(vec2(100, 100));
         path.push_back(vec2(500, 50));
@@ -89,14 +97,19 @@ namespace unit {
     }
 
     void BasicUnit::render() {
+
+		Unit::render();
+
         render_manager = manager->getRenderManager();
 
 
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
-        animation_progress = (animation_progress + 1) % 16;
+		float animationSpeed = 0.1f;
+        animation_progress = animation_progress + animationSpeed;
         int m = 1;
+		int frame[6] = { 0,1,2,3,2,1 };
         if (this->getAtDestination()) m = 0;
-        texture->render(m*animation_progress/8, getXr(), getYr(), 0.10f, 0.10f, rotation);
+        texture->render(m*frame[((int)animation_progress)%6], getXr(), getYr(), 0.10f, 0.10f, rotation);
 
         // ******************************************************************************************************//
         // DRAW PATH

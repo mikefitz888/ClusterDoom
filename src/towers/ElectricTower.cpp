@@ -63,7 +63,7 @@ namespace tower {
 
             elec->setForkParent(this->getSharedPtr());
             elec->setRange(max_range);
-            elec->setDamage((int)(requestEfficiency(cost_per_attack) * damage));
+            //elec->setDamage((int)(requestEfficiency(cost_per_attack) * damage));
             elec->setTargetObject(current_target);
 			//elec->setDamage(damage);
             timer = cooldown;

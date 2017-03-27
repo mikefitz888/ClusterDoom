@@ -61,7 +61,7 @@ namespace tower {
 			gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
 
 			auto dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first / 7.f) - obj->getPosition());
-			auto sdir = glm::vec2(-dir.y, dir.x) * 20.0f;
+			auto sdir = glm::vec2(-dir.y, dir.x) * 7.0f;
 			if (leftFire) {
 				obj->setPosition(getPosition() + sdir);
 				leftFire = false;
@@ -70,9 +70,8 @@ namespace tower {
 				obj->setPosition(getPosition() - sdir);
 				leftFire = true;
 			}
-			dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first / 7.f) - obj->getPosition());
+			//dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first / 7.f) - obj->getPosition());
 			obj->setVelocity(dir * 9.f);
-			//obj->setDamage(damage);
 			timer = cooldown;
         }
     }

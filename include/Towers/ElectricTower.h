@@ -13,7 +13,7 @@ namespace tower
         size_t timer = 0;
         size_t cost_per_attack = 10;
         size_t max_range = 200;
-        float damage = 20.0f;
+        //float damage = 20.0f;
         unit_ptr current_target = nullptr;
     public:
         ElectricTower(id_t key, Manager* m);

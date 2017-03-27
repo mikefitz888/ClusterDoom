@@ -68,8 +68,10 @@ namespace worldrenderer {
                 display_screen = SCREEN::NONE;
         }
 
+        textures[SCREEN::NONE]->render(0, 0);
         renderGUI();
         if(!display_screen) manager->renderAll();
+        
     }
 
     void WorldRenderer::renderGUI(){
@@ -78,6 +80,7 @@ namespace worldrenderer {
         float width = (float) render_manager->getWindowWidth();
         float height = (float) render_manager->getWindowHeight();
         render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
+        
 
         glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(width/2, height/2, 0.0));
         render_manager->setWorldMatrix(transform);

@@ -346,7 +346,9 @@ int current_calibration_point_id = 0;
 
     void CVInterface::step(std::vector<Square>& squares)
     {
-        
+        visited.clear();
+        blobs.clear();
+
         bool success = camera.read(frame);
         if (!success) {
             // std::cout << "Cannot read frame from video stream!" << std::endl;
@@ -355,11 +357,74 @@ int current_calibration_point_id = 0;
 
         resize(frame, frame, cv::Size(frame.cols * 2, frame.rows * 2), 0, 0, cv::INTER_NEAREST);
         if(current_calibration_point_id >= 4){
-            findSquares(frame, squares);
-           // std::cout << "There were " << squares.size() << " squares detected\n";
+            //findSquares(frame, squares);
+            // std::cout << "There were " << squares.size() << " squares detected\n";
+            //decodeSquares(frame, squares, markers);
 
-            decodeSquares(frame, squares, markers);
+            for (size_t i = 0; i < frame.rows; i++) {
+                for (size_t j = 0; j < frame.cols; j++) {
+                    uint32_t x = 0;
+                    uint32_t y = 0;
+                    uint32_t num_points = 0;
+                    flood.push(std::make_pair(i, j));
+                    while (!flood.empty()) {
+                        auto point = flood.front();
+                        flood.pop();
+                        if (frame.at<uint8_t>(point.first, point.second) > 0) {
+                            if (visited.find(point) == visited.end()) {
+                                visited.emplace(point);
+                                x += point.first;
+                                y += point.second;
+                                num_points++;
+                                bool right = point.first + 1 < frame.rows;
+                                bool left = point.first > 0;
+                                bool up = point.second + 1 < frame.cols;
+                                bool down = point.second > 0;
+                                if (right) {
+                                    flood.push(std::make_pair(point.first + 1, point.second));
+                                    if (up) flood.push(std::make_pair(point.first + 1, point.second + 1));
+                                    if (down) flood.push(std::make_pair(point.first + 1, point.second - 1));
+                                }
+                                if (left) {
+                                    flood.push(std::make_pair(point.first - 1, point.second));
+                                    if (up) flood.push(std::make_pair(point.first - 1, point.second + 1));
+                                    if (down) flood.push(std::make_pair(point.first - 1, point.second - 1));
+                                }
+                                if (up) flood.push(std::make_pair(point.first, point.second + 1));
+                                if (down) flood.push(std::make_pair(point.first, point.second - 1));
+                            }
+                        }
+                    }
 
+                    if (num_points > 0) blobs.push_back(std::make_pair(y / num_points, x / num_points));
+                }
+            }
+
+            const int MIN_DIST = 30;
+            markers.clear();
+            for (auto& blob : blobs) {
+                bool merged = false;
+                for (auto& marker : markers) {
+                    if (std::hypot(marker.x - (int)blob.first, marker.y - (int)blob.second) < MIN_DIST) {
+                        marker.x = (marker.x * marker.marker_type + blob.first) / (marker.marker_type + 1);
+                        marker.y = (marker.y * marker.marker_type + blob.second) / (marker.marker_type + 1);
+                        marker.marker_type++;
+                        merged = true;
+                        break;
+                    }
+                }
+                if (!merged) {
+                    markers.push_back(Marker(blob.first, blob.second, 1));
+                }
+                //std::cout << "(" << blob.first << ", " << blob.second << ")" << std::endl;
+                //cv::circle(frame, cv::Point(blob.first, blob.second), 10, cv::Scalar(128, 128, 128));
+            }
+
+            for (auto& marker : markers) {
+                std::cout << "(" << marker.x << ", " << marker.y << "): " << marker.marker_type << std::endl;
+                cv::circle(frame, cv::Point(marker.x, marker.y), 2, cv::Scalar(128, 128, 128), 2);
+            }
+            
             networkSendTowerPositions();
         }
 

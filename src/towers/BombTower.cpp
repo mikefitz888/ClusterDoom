@@ -62,12 +62,15 @@ namespace tower {
         //std::cout << "ELECTRICITY!!" << std::endl;
 
         if (current_target) {
+            float eff = requestEfficiency(1000, 100);
+            if (eff == 0.f) return;
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
             //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
             gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<int>(getX(), getY()));
             float m = target[0].first / max_range;
             obj->setVelocity(m*(current_target->getX()-getX())/10, m*(current_target->getY()-getY())/10 );
 			//obj->setDamage(damage);
+            smartpointers::static_pointer_cast<ProjectileBomb>(obj)->setExplosionDamage(3000 * eff);
             timer = cooldown;
             bomb_queue.push_back(obj);
             //bomb_queue[obj] = Point<float>(current_target->getX(), current_target->getY());

@@ -29,6 +29,10 @@ namespace cvinterface {
         double dHeight;
         IplImage* pFrame;
 
+        std::set<std::pair<uint32_t, uint32_t>> visited;
+        std::vector<std::pair<uint32_t, uint32_t>> blobs;
+        std::queue<std::pair<uint32_t, uint32_t>> flood;
+
         // Network stuff
         sf::TcpSocket *socket;
         Buffer send_buffer;

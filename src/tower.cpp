@@ -55,7 +55,13 @@ namespace tower {
 			render_manager->setActiveColour(255, 0, 0, (char)(255.0 * mod / 2));
 		}
 
-		RenderUtils::render_circular_health(getXr(), getYr(), (int)health, (int)max_health, RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), health / max_health));
+		RenderUtils::render_circular_health(getXr(), getYr(), (int)health, (int)max_health,
+            //RenderUtils::colour_blend(
+            //    Colour(55, 55, 55, 255),
+                RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), health / max_health)
+            //    1.0f-std::min((float)game_controller->availableWealth() / max_power, 1.0f)
+            //)
+        );
 
         /*render_manager->setActiveShader(shader);
         render_manager->setTexture(texture);
@@ -88,6 +94,7 @@ namespace tower {
 
     //Gameplay Methods
     void Tower::step() {
+        game_controller->requestWealth(idle_cost);
         if(health == 0) {
             manager->getAudioManager()->playSound("cannon");
         }
@@ -154,7 +161,8 @@ namespace tower {
         return game_controller->requestWealth(amt);
     }
 
-    float Tower::requestEfficiency(size_t amt) {
+    float Tower::requestEfficiency(size_t amt, size_t minimum) {
+        if (game_controller->availableWealth() < minimum) return 0.0f;
         return (float)requestMoney(amt) / (float)amt;
     }
 }

@@ -27,8 +27,10 @@ namespace tower {
 		int damage = 1;
         float max_health = 10000;
         float health=max_health;
+        float idle_cost = 10.0f;
+        float max_power = 1.0f;
         size_t requestMoney(size_t amt);
-        float requestEfficiency(size_t amt);
+        float requestEfficiency(size_t amt, size_t minimum=0);
         std::vector<unit_ptr> units;
     public:
         Tower(id_t id, TYPE tower_type, Manager* m);

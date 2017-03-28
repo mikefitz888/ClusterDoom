@@ -111,7 +111,7 @@ namespace unit {
         float n = std::fabs(channel_time - 100.f) / 100.f;
         if (!channeling) n = 1.f;
         //texture->render(m*animation_progress / 8, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation); currently no animation
-		texture->render(1, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation + ((1.0f-n)*M_PI));
+		texture->render(1, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation + ((1.0f-n)*10.0*M_PI));
 
         // ******************************************************************************************************//
         // DRAW PATH

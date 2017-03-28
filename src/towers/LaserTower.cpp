@@ -20,6 +20,7 @@ namespace tower {
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
         texture = manager->getResourceManager()->getTexture("redTower");
+        max_power = 100.0f;
     }
 
 	void LaserTower::render() {
@@ -55,6 +56,9 @@ namespace tower {
 
         //std::cout << "ELECTRICITY!!" << std::endl;
 
+        float power = requestEfficiency(30.f /*Maximum power*/, 10.f /*minimum power*/);
+        if (power == 0.0f) return;
+
         if (current_target) {
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
             //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
@@ -72,6 +76,7 @@ namespace tower {
 			}
 			//dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first / 7.f) - obj->getPosition());
 			obj->setVelocity(dir * 9.f);
+            smartpointers::static_pointer_cast<ProjectileLaser>(obj)->setDamage(power*150);
 			timer = cooldown;
         }
     }

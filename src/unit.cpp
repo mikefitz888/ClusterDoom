@@ -140,7 +140,7 @@ namespace unit {
         this->attacked(aggressor, 1);
     }
 
-    void Unit::attacked(gameobject_ptr aggressor, int damage) {
+    void Unit::attacked(gameobject_ptr aggressor, float damage) {
         health -= damage;
         if (health <= 0) {
             deliverWealth(20);

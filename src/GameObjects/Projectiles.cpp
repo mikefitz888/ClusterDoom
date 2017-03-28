@@ -77,8 +77,8 @@ void ProjectileBomb::explode() {
                     glm::vec2 dir = obj->getPosition() - this->position;
                     dir = glm::normalize(dir);
                     //obj->addVelocity(dir*0.25f);
-                    float knockback_force = force_factor*(float)this->knockback_force;
-                    obj->setPosition(obj->getX() + dir.x*knockback_force, obj->getY() + dir.y*knockback_force);
+                    float knockback_force = force_factor*(float)this->knockback_force * 0.6f;
+                    obj->setPositionSmooth(obj->getX() + dir.x*knockback_force, obj->getY() + dir.y*knockback_force);
                 }
             }
         }
@@ -173,7 +173,7 @@ void ProjectileLaser::onCollision(gameobject_ptr other) {
         else if (collision_type == gameobject::TYPE::TOWER) {
             tower::tower_ptr oth = smartpointers::static_pointer_cast<tower::Tower>(other);
             oth->attacked(this->getSharedPtr(), (float)(this->getDamage()));
-            std::cout << "tower attacked\n";
+            //std::cout << "tower attacked\n";
         }
         
         

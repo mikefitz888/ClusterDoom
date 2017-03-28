@@ -113,7 +113,7 @@ namespace unit {
 
         // ******************************************************************************************************//
         // DRAW PATH
-        graphics::Texture* _red = manager->getResourceManager()->getTexture("red");
+        /*graphics::Texture* _red = manager->getResourceManager()->getTexture("red");
         Path _path = this->getPath();
         if (this->getFollowingPath() && _path.size() > 0) {
             for (unsigned int n = 0; n < _path.size() - 1; n++) {
@@ -122,7 +122,7 @@ namespace unit {
                 graphics::RenderUtils::draw_line(n1.x, n1.y, n2.x, n2.y, 3, graphics::Colour(255,255,255,255));
                 _red->render(n2.x, n2.y, 0.10f, 0.10f, 0.0f);
             }
-        }
+        }*/
         // ******************************************************************************************************//
     }
 

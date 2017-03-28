@@ -46,9 +46,7 @@ namespace unit {
     }
     void Unit::render() {
 
-		if (health < maxHealth) {
-			red->render(getX() - 26, getY() - 30, 0.4f*health / maxHealth, 0.07f, 0.0f, 0.0f);
-		}
+		
         /*render_manager->setActiveShader(shader);
         render_manager->setTexture(texture);
 
@@ -64,7 +62,19 @@ namespace unit {
         render_manager->setWorldMatrix(transform);
         hpbar_buff->render();*/
     }
-    void Unit::renderGUI() {}
+    void Unit::renderGUI() {
+        if (health < maxHealth) {
+            //red->render(getXr() - 26, getYr() - 30, 0.4f*health / maxHealth, 0.07f, 0.0f, 0.0f);
+
+            // Base
+            int alpha = 255;
+            this->render_manager->setActiveColour(graphics::Colour(96, 96, 96, alpha));
+            red->render(getXr() - 16, getYr() - 30, (int)(32), (int)5);
+
+            this->render_manager->setActiveColour(graphics::Colour(255, 255, 255, alpha));
+            red->render(getXr() - 15, getYr() - 29, (int)(40.0f * (float)(health / maxHealth)), (int)3);
+        }
+    }
     void Unit::release() {}
 
     void Unit::step() {
@@ -75,8 +85,9 @@ namespace unit {
         * 
         *  There should be a cooldown between shots so the unit can "stutter-step"
         */
+        this->setSmoothingRate(0.15f);
         GameObject::step();
-        this->setSmoothingRate(.25f);
+        
 
         auto& target = game_controller->getBase();
 

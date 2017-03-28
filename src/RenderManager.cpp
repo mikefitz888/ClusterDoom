@@ -510,4 +510,6 @@ namespace graphics {
         return this->depth;
     }
 
+    void IRenderable::renderBegin() {}
+
 }

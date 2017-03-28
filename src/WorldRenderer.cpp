@@ -69,13 +69,32 @@ namespace worldrenderer {
         }
 
         textures[SCREEN::NONE]->render(0, 0);
-        renderGUI();
-        if(!display_screen) manager->renderAll();
+        //renderGUI();
+        if (!display_screen) {
+            manager->renderAll();
+        } else {
+            // Render splash
+           /* render_manager->setActiveShader(game_bg_shader);
+            render_manager->setTexture(textures[display_screen]);
+            float width = (float)render_manager->getWindowWidth();
+            float height = (float)render_manager->getWindowHeight();
+            render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
+
+
+            glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(width / 2, height / 2, 0.0));
+            render_manager->setWorldMatrix(transform);
+
+            vbuff->render();*/
+            render_manager->setActiveShader(game_bg_shader);
+            float width = (float)render_manager->getWindowWidth();
+            float height = (float)render_manager->getWindowHeight();
+            textures[display_screen]->render((int)width/2, (int)height/2, (int)width, (int)height);
+        }
         
     }
 
     void WorldRenderer::renderGUI(){
-        render_manager->setActiveShader(game_bg_shader);
+        /*render_manager->setActiveShader(game_bg_shader);
         render_manager->setTexture(textures[display_screen]);
         float width = (float) render_manager->getWindowWidth();
         float height = (float) render_manager->getWindowHeight();
@@ -85,7 +104,7 @@ namespace worldrenderer {
         glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(width/2, height/2, 0.0));
         render_manager->setWorldMatrix(transform);
 
-        vbuff->render();
+        vbuff->render();*/
 
 
         // Render debug explosion

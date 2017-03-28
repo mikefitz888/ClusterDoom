@@ -122,6 +122,8 @@ namespace gameobject {
     public:
         void setPosition(int x, int y);
         void setPosition(glm::vec2 position);
+        void setPositionSmooth(int x, int y);
+        void setPositionSmooth(glm::vec2 position);
         void setX(int x);
         void setY(int y);
         void setVelocity(float x, float y);
@@ -242,6 +244,7 @@ namespace gameobject {
         bool getNetworkSend(); // Returns whether this object is synced over the network or not.
 
         // EVENTS
+        virtual void renderBegin();
         virtual void render() override;
         virtual void init() override;
         virtual void renderGUI() override;

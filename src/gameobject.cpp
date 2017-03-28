@@ -46,6 +46,7 @@ namespace gameobject {
         return !this->dont_send;
     }
 
+    void GameObject::renderBegin() {}
 	void GameObject::render() {}
 	void GameObject::init() {}
 	void GameObject::renderGUI() {}
@@ -351,16 +352,21 @@ namespace gameobject {
     }
 
     void MotionComponent::setPosition(int x, int y) {
-        //printf("Motion Component recieved move to: %d %d\n", x, y);
-        //glm::vec2 tmp((float)x, (float)y);
         this->position = glm::ivec2(x, y);
-        //printf("Checking updated position reveals: %f %f\n", tmp.x, tmp.y);
         this->render_position = this->position;
     }
 
     void MotionComponent::setPosition(glm::vec2 position) {
-        this->position = position;
-        this->render_position = this->position;
+        this->setPosition(position.x, position.y);
+    }
+
+
+    void MotionComponent::setPositionSmooth(int x, int y) {
+        this->position = glm::ivec2(x, y);
+    }
+
+    void MotionComponent::setPositionSmooth(glm::vec2 position) {
+        this->setPositionSmooth(position.x, position.y);
     }
 
     void MotionComponent::setX(int x) {

@@ -310,7 +310,6 @@ namespace manager {
                                 (a.second->getSuperType() < b.second->getSuperType())) :
                             (a.first > b.first);
                   });
-
         // RENDER
         for (auto obj : depth_object_pairs) {
             obj.second->render();
@@ -318,7 +317,7 @@ namespace manager {
 
         // RENDER GUI
         for (auto obj : depth_object_pairs) {
-            //obj.second->renderGUI();
+            obj.second->renderGUI();
         }
 
         

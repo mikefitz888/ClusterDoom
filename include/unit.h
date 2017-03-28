@@ -11,14 +11,17 @@ namespace unit {
         graphics::Texture* texture;
         graphics::Texture* red;
         sf::Shader* shader;
-        graphics::VertexBuffer* vbuff;
-        graphics::VertexBuffer* hpbar_buff;
+        //graphics::VertexBuffer* vbuff;
+        //graphics::VertexBuffer* hpbar_buff;
 
     protected:
         tower_ptr getNearestTower() const;
         Point<float> velocity = Point<float>(0, 0);
         float health = 1000;
 		float maxHealth = 1000;
+        float health_timer = 0;
+        float health_alpha = 0;
+        float health_visual = maxHealth;
 		float unitSpeed = 1.0f;
         size_t cooldown = 0;
 

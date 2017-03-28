@@ -22,12 +22,13 @@ namespace graphics {
         rm->textureLoad("base_image", "src/Resources/Textures/base.png")->setOriginCentre();
 
         //Backgrounds
-        rm->textureLoad("background", "src/Resources/Textures/grass/grass_template.jpg");
+        rm->textureLoad("background", "src/Resources/Textures/grass/grass_template2.jpg");
 
         //Units
         rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
         rm->animatedTextureLoad("robot_unit", "src/Resources/Textures/robotAnimation.png", true, 2, 2, -1)->setOriginCentre();
         rm->animatedTextureLoad("wizard_unit", "src/Resources/Textures/wizardAnimation.png", false, 1, 1, -1)->setOriginCentre();
+        rm->textureLoad("unit_shadow", "src/Resources/Textures/unitShadow.png")->setOriginCentre();
 
         
         //UI Elements

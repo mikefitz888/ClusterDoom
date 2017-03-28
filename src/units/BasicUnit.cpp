@@ -109,6 +109,8 @@ namespace unit {
         int m = 1;
 		int frame[6] = { 0,1,2,3,2,1 };
         if (this->getAtDestination()) m = 0;
+
+       
         texture->render(m*frame[((int)animation_progress)%6], getXr(), getYr(), 0.10f, 0.10f, rotation);
 
         // ******************************************************************************************************//

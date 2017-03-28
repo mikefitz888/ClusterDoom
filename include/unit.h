@@ -13,6 +13,7 @@ namespace unit {
         sf::Shader* shader;
         //graphics::VertexBuffer* vbuff;
         //graphics::VertexBuffer* hpbar_buff;
+        
 
     protected:
         tower_ptr getNearestTower() const;
@@ -26,6 +27,7 @@ namespace unit {
         size_t cooldown = 0;
 
         void deliverWealth(size_t amt);
+        graphics::Texture* unit_shadow;
 
     public:
         Unit(id_t id, TYPE unit_type, Manager* m);
@@ -35,6 +37,7 @@ namespace unit {
         virtual void render() override;
         virtual void renderGUI() override;
         virtual void release() override;
+        virtual void renderBegin() override;
 
         //Gameplay methods
         virtual void step();

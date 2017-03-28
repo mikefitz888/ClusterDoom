@@ -310,6 +310,12 @@ namespace manager {
                                 (a.second->getSuperType() < b.second->getSuperType())) :
                             (a.first > b.first);
                   });
+
+        // RENDER BEGIN
+        for (auto obj : depth_object_pairs) {
+            obj.second->renderBegin();
+        }
+
         // RENDER
         for (auto obj : depth_object_pairs) {
             obj.second->render();

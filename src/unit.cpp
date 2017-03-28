@@ -34,6 +34,8 @@ namespace unit {
         }*/
         shader = manager->getResourceManager()->getShader("default");
 
+        unit_shadow = manager->getResourceManager()->getTexture("unit_shadow");
+
        // vbuff = new graphics::VertexBuffer();
        // hpbar_buff = new graphics::VertexBuffer();
 
@@ -43,6 +45,10 @@ namespace unit {
       //  vbuff->freeze();
       //  hpbar_buff->freeze();
         
+    }
+
+    void Unit::renderBegin() {
+        unit_shadow->render(getXr(), getYr());
     }
     void Unit::render() {
 

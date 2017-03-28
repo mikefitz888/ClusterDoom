@@ -34,14 +34,14 @@ namespace unit {
         }*/
         shader = manager->getResourceManager()->getShader("default");
 
-        vbuff = new graphics::VertexBuffer();
-        hpbar_buff = new graphics::VertexBuffer();
+       // vbuff = new graphics::VertexBuffer();
+       // hpbar_buff = new graphics::VertexBuffer();
 
-        vbuff->addQuad(-100.0f, -56.2f, 100.0f, 56.2f);
-        hpbar_buff->addQuadRGBA(-32.0f, -2.0f, 32.0f, 2.0f, 1.0f, 0.0f, 0.0f, 1.0f);
+      //  vbuff->addQuad(-100.0f, -56.2f, 100.0f, 56.2f);
+      //  hpbar_buff->addQuadRGBA(-32.0f, -2.0f, 32.0f, 2.0f, 1.0f, 0.0f, 0.0f, 1.0f);
 
-        vbuff->freeze();
-        hpbar_buff->freeze();
+      //  vbuff->freeze();
+      //  hpbar_buff->freeze();
         
     }
     void Unit::render() {
@@ -63,16 +63,20 @@ namespace unit {
         hpbar_buff->render();*/
     }
     void Unit::renderGUI() {
-        if (health < maxHealth) {
+        if (this->health_alpha > 0.0f) {
             //red->render(getXr() - 26, getYr() - 30, 0.4f*health / maxHealth, 0.07f, 0.0f, 0.0f);
 
             // Base
-            int alpha = 255;
+            int alpha = (int)(this->health_alpha*255.0f);
             this->render_manager->setActiveColour(graphics::Colour(96, 96, 96, alpha));
             red->render(getXr() - 16, getYr() - 30, (int)(32), (int)5);
+            if (health > 0) {
+                this->render_manager->setActiveColour(graphics::Colour(255, 255, 255, alpha));
+                red->render(getXr() - 15, getYr() - 29, (int)(32.0f * (float)(health_visual / maxHealth)), (int)3);
+            }
 
-            this->render_manager->setActiveColour(graphics::Colour(255, 255, 255, alpha));
-            red->render(getXr() - 15, getYr() - 29, (int)(40.0f * (float)(health / maxHealth)), (int)3);
+            // Reset rendering colour
+            this->render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
         }
     }
     void Unit::release() {}
@@ -87,7 +91,23 @@ namespace unit {
         */
         this->setSmoothingRate(0.15f);
         GameObject::step();
-        
+
+        // Health clamp
+        this->health = glm::clamp(this->health, 0.0f, this->maxHealth);
+        this->health_visual = glm::clamp(this->health_visual, 0.0f, this->maxHealth);
+        this->health_visual += (this->health - this->health_visual)*0.05f;
+
+        // Health display timer
+        health_timer --;
+        if (health_timer > 0.0f) {
+            if (health_alpha < 1.0f) {
+                health_alpha += 0.10f;
+            }
+        } else {
+            if (health_alpha > 0.0f) {
+                health_alpha -= 0.03f;
+            }
+        }
 
         auto& target = game_controller->getBase();
 
@@ -142,6 +162,10 @@ namespace unit {
 
     void Unit::attacked(gameobject_ptr aggressor, float damage) {
         health -= damage;
+        if (damage > 0) {
+            this->health_timer = 140;
+            this->health_alpha = 1.0f;
+        }
         if (health <= 0) {
             deliverWealth(20);
             destroySelf();

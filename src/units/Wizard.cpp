@@ -30,9 +30,9 @@ namespace unit {
         adjust.push_back(glm::linearRand(-adjust_max, adjust_max));
         this->setDistanceThreshold(50);
 
-		health = 2500;
-		maxHealth = 2500;
-		unitSpeed = 0.6f;
+		health = 4500;
+		maxHealth = 4500;
+		unitSpeed = 0.3f;
        /* Path path;
         path.push_back(vec2(100, 100));
         path.push_back(vec2(500, 50));
@@ -49,17 +49,17 @@ namespace unit {
         //If tower near, teleport closer to base (channelled w/ cd)
         auto& base = game_controller->getBase();
         setFrozen(false);
-        if (channeling) {
+        if (channeling && health < maxHealth) {
             setFrozen(true);
             if (channel_time-- == 100) {
                 glm::vec2 dir = glm::normalize(base->getPosition() - getPosition());
                 float dist = distanceTo(base->getPosition());
-                setPosition(getPosition() + dir * std::fmin(dist - 80, 200.f));
+                setPosition(getPosition() + dir * std::fmin(dist - 80, 180.f));
                 
             }
             else if (channel_time-- == 0) {
                 channeling = false;
-                channel_cooldown = 150;
+                channel_cooldown = 350;
             }
             else return;
         }

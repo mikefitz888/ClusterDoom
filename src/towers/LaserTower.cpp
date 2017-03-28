@@ -56,7 +56,8 @@ namespace tower {
 
         //std::cout << "ELECTRICITY!!" << std::endl;
 
-        float power = requestEfficiency(30.f /*Maximum power*/, 10.f /*minimum power*/);
+        //float power = requestEfficiency(30.f /*Maximum power*/, 10.f /*minimum power*/);
+		float power = 1.0f;
         if (power == 0.0f) return;
 
         if (current_target) {

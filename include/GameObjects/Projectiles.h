@@ -21,7 +21,7 @@ private:
     graphics::AnimatedTexture* explosion_texture;
 
     int timer = 60;
-    int damage = 3000;
+    int damage = 1000;
     int blast_radius  = 80;
     int falloff_range = 25; // Damage is maximal up to 50 units off
     int knockback_force = 50;
@@ -64,7 +64,7 @@ Longer range laser fired from the wizard towers
 
 */
 class ProjectileLaser : public GameObject {
-    int damage = 150;
+    int damage = 50;
     gameobject::TYPE collision_type = gameobject::TYPE::UNIT;
 public:
     // Constructor
@@ -108,7 +108,7 @@ private:
     std::vector<std::pair<gameobject::unit_ptr, electricity_ptr>> forks;
 
     // Gameplay properties
-    int damage_per_frame = 8; // The amount of damage the electricity inflicts
+    int damage_per_frame = 3; // The amount of damage the electricity inflicts
     int fork_count = 2;       // The number of subsequent objects the electricity will fork to.
     int fork_depth = 2;       // Number of subsequent objects that can then themselves branch
     int range = 200;           // The range of the beam

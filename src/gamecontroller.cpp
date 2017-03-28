@@ -572,10 +572,10 @@ namespace gamecontroller {
                     for (auto& tower : delete_list)
                     {
                         tower->delete_queue++;
-                        if (tower->delete_queue > 200) {
+                        if (tower->delete_queue > /*200*/10) {
                             tower->demoDestroy();
                             // This seems dodgy
-                            break; //Have to break I think to prevent seg-fault
+                            //continue; //Have to break I think to prevent seg-fault
                         }
                     }
                     break;
@@ -607,11 +607,11 @@ namespace gamecontroller {
                 }
             }
         }
-        /*else
+        else
         {
             // To skip initial phase... rip
             return Matching();
-        }*/
+        }
         // Not necessary
         /*else {
             towers = std::vector<tower_ptr>();

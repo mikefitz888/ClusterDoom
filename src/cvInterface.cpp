@@ -354,13 +354,14 @@ int current_calibration_point_id = 0;
             // std::cout << "Cannot read frame from video stream!" << std::endl;
             return;
         }
-
-        resize(frame, frame, cv::Size(frame.cols * 2, frame.rows * 2), 0, 0, cv::INTER_NEAREST);
+        
+        //resize(frame, frame, cv::Size(frame.cols * 2, frame.rows * 2), 0, 0, cv::INTER_NEAREST);
         if(current_calibration_point_id >= 4){
             //findSquares(frame, squares);
             // std::cout << "There were " << squares.size() << " squares detected\n";
             //decodeSquares(frame, squares, markers);
-
+            cvtColor(frame, frame, CV_BGR2GRAY);
+            cv::threshold(frame, frame, 5, 255, 0);
             for (size_t i = 0; i < frame.rows; i++) {
                 for (size_t j = 0; j < frame.cols; j++) {
                     uint32_t x = 0;
@@ -581,10 +582,17 @@ std::vector<Square> squares;
     void CVInterface::networkSendTowerPositions() {
         //std::cout << "[CV] Sending towers to control thread: Count: " << tower_locations.size() << std::endl;
 
+        int marker_count = markers.size();
+        if (marker_count > 5) { marker_count = 5; }
+
         // Write data to buffer
         send_buffer.seek(0);
-        send_buffer << (int)markers.size();
-        for (auto& marker : markers) {
+        send_buffer << marker_count;
+
+        //for (auto& marker : markers) {
+        for( int cc=0; cc < marker_count; cc++ ){
+            auto marker = markers[cc];
+
             cv::Point i,j;
 
             // Translate
@@ -618,7 +626,20 @@ std::vector<Square> squares;
             //width = frame.cols
             //height = frame.rows
 
-            send_buffer << marker;
+            // Marker type shielding
+            if (marker.marker_type > 3 || marker.marker_type < 1) {
+                marker.marker_type = 1;
+            }
+
+            //send_buffer << marker;
+            send_buffer << (int)marker.x;
+            send_buffer << (int)marker.y;
+            send_buffer << (int)marker.marker_type;
+
+            
+
+
+            std::cout << "MARKER TYPE: " << marker.marker_type << std::endl;
             cv::circle(frame, cv::Point(marker.x, marker.y), 6, cv::Scalar(0, 128, 0), 5);
         }
 

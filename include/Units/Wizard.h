@@ -16,10 +16,10 @@ namespace unit
 
         bool channeling = false;
         int channel_time = 200;
-        int channel_cooldown = 150;
+        int channel_cooldown = 150; //150
 
         bool pressed = false; //TEMP;
-        size_t animation_progress = 0;
+        float animation_progress = 0.0f;
 
         glm::vec2 adjust_max = glm::vec2(10.f, 10.f);
         std::vector<glm::vec2> adjust;

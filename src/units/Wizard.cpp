@@ -30,8 +30,8 @@ namespace unit {
         adjust.push_back(glm::linearRand(-adjust_max, adjust_max));
         this->setDistanceThreshold(50);
 
-		health = 4500;
-		maxHealth = 4500;
+		health = 4500; //4500
+		maxHealth = 4500; //4500
 		unitSpeed = 0.3f;
        /* Path path;
         path.push_back(vec2(100, 100));
@@ -103,15 +103,27 @@ namespace unit {
         //render_manager = manager->getRenderManager();
 		Unit::render();
 
-        float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
         //texture->render(getXr(), getYr(), 0.40f, 0.40f, rotation);
-        animation_progress = (animation_progress + 1) % 16;
+        /*animation_progress = (animation_progress + 1) % 16;
         int m = 1;
         if (this->getAtDestination()) m = 0;
         float n = std::fabs(channel_time - 100.f) / 100.f;
         if (!channeling) n = 1.f;
         //texture->render(m*animation_progress / 8, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation); currently no animation
-		texture->render(1, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation + ((1.0f-n)*10.0*M_PI));
+		texture->render(1, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation + ((1.0f-n)*10.0*M_PI));*/
+
+		float n = std::fabs(channel_time - 100.f) / 100.f;
+		if (!channeling) n = 1.f;
+
+		float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2) + ((1.0f - n)*10.0*M_PI);
+
+		float animationSpeed = 0.13f;
+		animation_progress = animation_progress + animationSpeed;
+		int m = 1;
+		if (this->getAtDestination()) m = 0;
+
+
+		texture->render( m* (((int)animation_progress) % 12), getXr(), getYr(), 0.18f*n, 0.18f*n, rotation);
 
         // ******************************************************************************************************//
         // DRAW PATH

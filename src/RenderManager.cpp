@@ -27,7 +27,7 @@ namespace graphics {
         //Units
         rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
         rm->animatedTextureLoad("robot_unit", "src/Resources/Textures/robotAnimation.png", true, 2, 2, -1)->setOriginCentre();
-        rm->animatedTextureLoad("wizard_unit", "src/Resources/Textures/wizardAnimation.png", false, 1, 1, -1)->setOriginCentre();
+        rm->animatedTextureLoad("wizard_unit", "src/Resources/Textures/wizardAnimation.png", true, 4, 3, 12)->setOriginCentre();
         rm->textureLoad("unit_shadow", "src/Resources/Textures/unitShadow.png")->setOriginCentre();
 
         

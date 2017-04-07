@@ -71,16 +71,16 @@ namespace gameobject {
     Point<int> GameObject::getPosition() const { return position; }*/
 
     int GameObject::distanceTo(smartpointers::slave_ptr<GameObject> other) const {
-        return glm::distance(other->getPosition(), position);
+        return (int) glm::distance(other->getPosition(), position);
         
     }
 
     int GameObject::distanceTo(Point<int> point) const {
-        return glm::distance(vec2(point.x, point.y), position);
+        return (int) glm::distance(vec2(point.x, point.y), position);
 	}
 
     int GameObject::distanceTo(glm::vec2 point) const {
-        return glm::distance(point, position);
+        return (int) glm::distance(point, position);
     }
 
     void GameObject::setNetworkSync(bool sync) {
@@ -356,8 +356,9 @@ namespace gameobject {
         this->render_position = this->position;
     }
 
+    // Shouldn't this just be ivec2????
     void MotionComponent::setPosition(glm::vec2 position) {
-        this->setPosition(position.x, position.y);
+        this->setPosition((int) position.x, (int) position.y);
     }
 
 
@@ -366,15 +367,15 @@ namespace gameobject {
     }
 
     void MotionComponent::setPositionSmooth(glm::vec2 position) {
-        this->setPositionSmooth(position.x, position.y);
+        this->setPositionSmooth((int) position.x, (int) position.y);
     }
 
     void MotionComponent::setX(int x) {
-        this->position.x = x;
+        this->position.x = (float) x;
     }
 
     void MotionComponent::setY(int y) {
-        this->position.y = y;
+        this->position.y = (float) y;
     }
 
     void MotionComponent::setVelocity(float x, float y) {
@@ -402,19 +403,19 @@ namespace gameobject {
     }
 
     int MotionComponent::getX() const {
-        return this->position.x;
+        return (int) this->position.x;
     }
 
     int MotionComponent::getY() const {
-        return this->position.y;
+        return (int) this->position.y;
     }
 
     int MotionComponent::getXr() const {
-        return this->render_position.x;
+        return (int) this->render_position.x;
     }
 
     int MotionComponent::getYr() const {
-        return this->render_position.y;
+        return (int) this->render_position.y;
     }
 
     vec2 MotionComponent::getPosition() const {
@@ -453,7 +454,7 @@ namespace gameobject {
             if (this->getAtDestination()) {
 
                 // Check if there are more nodes:
-                if (current_target_node_id < path.size() - 1) {
+                if ((unsigned) current_target_node_id < path.size() - 1) {
                     current_target_node_id++;
                     this->setDestination(path[current_target_node_id], this->speed);
                     this->path_complete = false;

@@ -53,7 +53,7 @@ namespace unit {
             setFrozen(true);
             if (channel_time-- == 100) {
                 glm::vec2 dir = glm::normalize(base->getPosition() - getPosition());
-                float dist = distanceTo(base->getPosition());
+                float dist = (float) distanceTo(base->getPosition());
                 setPosition(getPosition() + dir * std::fmin(dist - 80, 180.f));
                 
             }
@@ -115,7 +115,7 @@ namespace unit {
 		float n = std::fabs(channel_time - 100.f) / 100.f;
 		if (!channeling) n = 1.f;
 
-		float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2) + ((1.0f - n)*10.0*M_PI);
+		float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2) + ((1.0f - n)*10.0f*(float) M_PI);
 
 		float animationSpeed = 0.13f;
 		animation_progress = animation_progress + animationSpeed;

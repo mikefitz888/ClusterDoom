@@ -45,7 +45,7 @@ namespace tower {
             //exuhporoshun[(unit::TYPE) aggressor->getSubType()]->render()
             if ( exuhporoshun[aggressor->getSuperType()].find(aggressor->getSubType()) != exuhporoshun[aggressor->getSuperType()].end() ) {
                 auto r = glm::linearRand(-glm::vec2(20), glm::vec2(20));
-                auto pair = std::make_pair<float, Point<int>>(0.f, Point<int>(getX() + r.x, getY() + r.y));
+                auto pair = std::make_pair<float, Point<int>>(0.f, Point<int>(getX() + (int) r.x, getY() + (int) r.y));
                 auto pair2 = std::make_pair(exuhporoshun[aggressor->getSuperType()][aggressor->getSubType()], pair);
                 animations.push_back(pair2);
             }

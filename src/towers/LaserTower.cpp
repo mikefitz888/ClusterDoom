@@ -77,7 +77,7 @@ namespace tower {
 			}
 			//dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first / 7.f) - obj->getPosition());
 			obj->setVelocity(dir * 9.f);
-            smartpointers::static_pointer_cast<ProjectileLaser>(obj)->setDamage(power*150);
+            smartpointers::static_pointer_cast<ProjectileLaser>(obj)->setDamage((int) (power*150));
 			timer = cooldown;
         }
     }

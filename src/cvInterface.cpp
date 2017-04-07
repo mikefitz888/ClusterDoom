@@ -237,8 +237,8 @@ int current_calibration_point_id = 0;
             {
                 int x = point.x - (minx + cxb);
                 int y = point.y - (miny + cyb);
-                point.x = x*std::cos(-rot) - y*std::sin(-rot) + cxb;
-                point.y = x*std::sin(-rot) + y*std::cos(-rot) + cyb;
+                point.x = (int) (x*std::cos(-rot) - y*std::sin(-rot) + cxb);
+                point.y = (int) (x*std::sin(-rot) + y*std::cos(-rot) + cyb);
             }
 
             // compute the new minimum point
@@ -253,8 +253,8 @@ int current_calibration_point_id = 0;
             imshow("Marker", bounding_box);
 
             // Determine characteristics of marker
-            int border_offset = l * 0.125;
-            int blob_size = l * 0.25;
+            int border_offset = (int) (l * 0.125);
+            int blob_size = (int) (l * 0.25);
 
             // Decode
 //#define STATIC_THRESHOLD
@@ -362,8 +362,8 @@ int current_calibration_point_id = 0;
             //decodeSquares(frame, squares, markers);
             cvtColor(frame, frame, CV_BGR2GRAY);
             cv::threshold(frame, frame, 5, 255, 0);
-            for (size_t i = 0; i < frame.rows; i++) {
-                for (size_t j = 0; j < frame.cols; j++) {
+            for (size_t i = 0; i < (unsigned) frame.rows; i++) {
+                for (size_t j = 0; j < (unsigned) frame.cols; j++) {
                     uint32_t x = 0;
                     uint32_t y = 0;
                     uint32_t num_points = 0;
@@ -377,9 +377,9 @@ int current_calibration_point_id = 0;
                                 x += point.first;
                                 y += point.second;
                                 num_points++;
-                                bool right = point.first + 1 < frame.rows;
+                                bool right = point.first + 1 < (unsigned) frame.rows;
                                 bool left = point.first > 0;
-                                bool up = point.second + 1 < frame.cols;
+                                bool up = point.second + 1 < (unsigned) frame.cols;
                                 bool down = point.second > 0;
                                 if (right) {
                                     flood.push(std::make_pair(point.first + 1, point.second));
@@ -603,8 +603,10 @@ std::vector<Square> squares;
             i =(calibration_points[1] - calibration_points[0]);
             j = (calibration_points[3] - calibration_points[0]);
 
-            float magA = sqrt(i.x*i.x + i.y*i.y);
-            float magB = sqrt(j.x*j.x + j.y*j.y);
+            //float magA = sqrt((float) (i.x*i.x + i.y*i.y));
+            //float magB = sqrt((float) (j.x*j.x + j.y*j.y));
+            float magA = std::hypot((float) i.x, (float) i.y);
+            float magB = std::hypot((float) j.x, (float) j.y);
             // normalize
             float ifx = (float)i.x/magA;
             float ify = (float)i.y/magA;
@@ -621,7 +623,7 @@ std::vector<Square> squares;
             float newx = (1280.0f/magA)*(xfactor);
             float newy = (720.0f/magB)*(yfactor);
 
-            marker.x = 1280.0-(int)newx;
+            marker.x = 1280-(int)newx;
             marker.y = (int)newy;
             //width = frame.cols
             //height = frame.rows

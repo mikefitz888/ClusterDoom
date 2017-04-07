@@ -76,7 +76,7 @@ namespace gamecontroller {
 
         int wave = 0;
         int scenario = -1;
-        size_t wealth = 0;
+        unsigned int wealth = 0;
 
         std::vector<smartpointers::slave_ptr<Spawn>> spawn_points = std::vector<smartpointers::slave_ptr<Spawn>>();
         // TEMP
@@ -128,10 +128,10 @@ namespace gamecontroller {
         int getScreenWidth();
         int getScreenHeight();
 
-        void increaseWealth(size_t amt);
-        int requestWealth(size_t amt); //returns the min(amt, wealth)
+        void increaseWealth(unsigned int amt);
+        int requestWealth(unsigned int amt); //returns the min(amt, wealth)
 
-        size_t availableWealth();
+        unsigned int availableWealth();
         sf::Time timeUntilNextWave();
         std::vector<std::string> getWarnings();
         float getBaseHealth();

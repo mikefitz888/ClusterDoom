@@ -94,7 +94,7 @@ namespace tower {
 
     //Gameplay Methods
     void Tower::step() {
-        game_controller->requestWealth(idle_cost);
+        game_controller->requestWealth((unsigned int) idle_cost);
         if(health == 0) {
             manager->getAudioManager()->playSound("cannon");
         }
@@ -141,7 +141,7 @@ namespace tower {
     }
 
     void Tower::attack(unit_ptr unit)    {
-        unit->attacked(this->getSharedPtr(), damage);
+        unit->attacked(this->getSharedPtr(), (float) damage);
     }
 
     void Tower::attacked(gameobject_ptr aggressor) {

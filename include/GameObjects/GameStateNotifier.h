@@ -32,7 +32,7 @@ class GameStateNotifier : public GameObject {
     int send_wave_timer_max = 300; // Send the wave timer update every 5 seconds (we can force send by setting timer to 0).
 
     // Warnings timer
-    int last_warnings_list_length = 0; // Set this to the warnings list length so we know when new warnings have come in
+    size_t last_warnings_list_length = 0; // Set this to the warnings list length so we know when new warnings have come in
     std::string last_warning = "";
 
     // Available wealth

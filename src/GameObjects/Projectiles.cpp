@@ -34,7 +34,7 @@ void ProjectileBomb::step() {
     GameObject::step();
 
     // Animate
-    animation_rate += 0.005;
+    animation_rate += 0.005f;
     animation_progress += animation_rate;
 
     // If not exploded
@@ -68,9 +68,9 @@ void ProjectileBomb::explode() {
             // Adjust damage based on distance
             int dist  = obj->distanceTo(this->position);
             float force_factor = glm::clamp(1.0f - ((dist - this->falloff_range) / this->blast_radius), 0.0f, 1.0f);
-            int damage = force_factor*this->damage;
+            int damage = (int) (force_factor*this->damage);
             if (damage > 0) {
-                obj->attacked(this->getSharedPtr(), this->damage);
+                obj->attacked(this->getSharedPtr(), (float) this->damage);
 
                 // If still alive, apply knockback
                 if (obj) {
@@ -78,7 +78,7 @@ void ProjectileBomb::explode() {
                     dir = glm::normalize(dir);
                     //obj->addVelocity(dir*0.25f);
                     float knockback_force = force_factor*(float)this->knockback_force * 0.6f;
-                    obj->setPositionSmooth(obj->getX() + dir.x*knockback_force, obj->getY() + dir.y*knockback_force);
+                    obj->setPositionSmooth((int) (obj->getX() + dir.x*knockback_force), (int) (obj->getY() + dir.y*knockback_force));
                 }
             }
         }
@@ -93,12 +93,12 @@ void ProjectileBomb::explode() {
 void ProjectileBomb::render() {
     if (!this->exploded) {
         this->bomb_texture->render(this->getX(), this->getY());
-        int anim_alpha = (int)255.0f*glm::clamp(glm::sin(animation_progress), 0.0f, 1.0f);
+        int anim_alpha = (int)(255.0f*glm::clamp(glm::sin(animation_progress), 0.0f, 1.0f));
         this->manager->getRenderManager()->setActiveColour(255, 255, 255, anim_alpha);
         this->bomb_white_texture->render(this->getX(), this->getY());
         this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
     } else {
-        this->explosion_texture->render(glm::floor(animation_progress), this->getX(), this->getY());
+        this->explosion_texture->render((int) glm::floor(animation_progress), this->getX(), this->getY());
     }
 }
 
@@ -168,7 +168,7 @@ void ProjectileLaser::onCollision(gameobject_ptr other) {
     if (other->getSuperType() == collision_type) {
         if (collision_type == gameobject::TYPE::UNIT) {
             unit_ptr oth = smartpointers::static_pointer_cast<unit::Unit>(other);
-            oth->attacked(this->getSharedPtr(), this->getDamage());
+            oth->attacked(this->getSharedPtr(), (float) this->getDamage());
         }
         else if (collision_type == gameobject::TYPE::TOWER) {
             tower::tower_ptr oth = smartpointers::static_pointer_cast<tower::Tower>(other);
@@ -228,7 +228,7 @@ void ProjectileElectricity::step() {
     // Perform damage and timer
     fork_alive_timer--;
     if (fork_alive_timer > 0) {
-        target_object->attacked(this->getSharedPtr(), this->damage_per_frame);
+        target_object->attacked(this->getSharedPtr(), (float) this->damage_per_frame);
         if (!target_object) {
             destroySelf();
         }
@@ -324,14 +324,14 @@ void ProjectileElectricity::step() {
 void ProjectileElectricity::render() {
     if (target_object) {
         glm::vec2 midpoint = (source_position + glm::vec2(target_object->getXr(),target_object->getYr()) )*0.5f;
-        int dist = glm::distance(source_position, glm::vec2(target_object->getXr(), target_object->getYr()));
+        int dist = (int) glm::distance(source_position, glm::vec2(target_object->getXr(), target_object->getYr()));
 
         if (dist <= range) {
             float angle = point_direction(source_position, target_object->getPosition());
             float alpha_fac = glm::clamp(((float)fork_alive_timer / (float)fork_alive_timer_max), 0.0f, 1.0f);
 
-            this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255.0f*alpha_fac);
-            this->electricity_texture->render(midpoint.x, midpoint.y, dist + 2, this->electricity_texture->getSize().y, angle, 1.0f);
+            this->manager->getRenderManager()->setActiveColour(255, 255, 255, (unsigned char) (255.0f*alpha_fac));
+            this->electricity_texture->render((int) midpoint.x, (int) midpoint.y, dist + 2, this->electricity_texture->getSize().y, angle, 1.0f);
             this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
         }
     }

@@ -47,7 +47,7 @@ namespace tower {
         }
         
         //getUnits(1);
-        if (!current_target || current_target->distanceTo(position) > max_range) {
+        if (!current_target || (unsigned) current_target->distanceTo(position) > max_range) {
             auto units_nearby = this->manager->getGameController()->getNNearestUnits(this->position, 1, max_range);
             if (units_nearby.size()) current_target = units_nearby[0].second;
             else current_target = nullptr;

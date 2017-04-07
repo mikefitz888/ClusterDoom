@@ -155,7 +155,7 @@ namespace gamecontroller {
     bool GameController::step() {
 
         frame_clock++;
-        increaseWealth(std::log10(frame_clock));
+        increaseWealth((unsigned int) std::log10(frame_clock));
         if (frame_clock % 100 == 0) {
             std::cout << wealth << "\n";
         }
@@ -222,7 +222,11 @@ namespace gamecontroller {
                 spawned = true;
             }
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) || sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) 
+              || sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) 
+              || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) 
+              || sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) 
+              || sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
             if (!spawned) {
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                 if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
@@ -230,8 +234,9 @@ namespace gamecontroller {
 
                     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BASIC);
                     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::ELECTRIC);
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BOMB);
-					if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::LASER);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BOMB);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::LASER);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::SPECIAL);
                 }
 
                 spawned = true;
@@ -721,11 +726,11 @@ namespace gamecontroller {
         return sf::VideoMode::getDesktopMode().height;
     }
 
-    void GameController::increaseWealth(size_t amt) {
+    void GameController::increaseWealth(unsigned int amt) {
         wealth += amt;
     }
     
-    int GameController::requestWealth(size_t amt){
+    int GameController::requestWealth(unsigned int amt){
         int ret = std::min(amt, wealth);
         wealth -= ret;
         return ret;
@@ -771,7 +776,8 @@ namespace gamecontroller {
 
     float TileNode::distanceTo(AStarNode* node) const 
     {
-        int distance = (node->getX() - this->getX())*(node->getX() - this->getX()) + (node->getY() - this->getY())*(node->getY() - this->getY());
+        //int distance = (node->getX() - this->getX())*(node->getX() - this->getX()) + (node->getY() - this->getY())*(node->getY() - this->getY());
+        float distance = std::hypotf((float) (node->getX() - this->getX()), (float) (node->getY() - this->getY()));
         return distance;
     }
     
@@ -796,7 +802,7 @@ namespace gamecontroller {
         //const float time_per_scenario = 20.f;
         //const int waves_per_scenario = 3;
         int t = (int)getElapsedTime() % (int)(time_per_scenario / waves_per_scenario);
-        return sf::Time(sf::seconds(t));
+        return sf::Time(sf::seconds((float) t));
     }
 
     std::vector<std::string> GameController::getWarnings() {

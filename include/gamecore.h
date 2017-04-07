@@ -140,11 +140,14 @@ namespace paths
 
 namespace tower {
     class Base;
-    class BasicTower;
     class Tower;
+    class BasicTower;
+    class BombTower;
+    class ElecticTower;
+    class SpecialTower;
 
     //enum TYPE : unsigned int;
-    enum TYPE : unsigned int { BASE = 0, BASIC, ELECTRIC, BOMB, LASER, num_types };
+    enum TYPE : unsigned int { BASE = 0, BASIC, ELECTRIC, BOMB, LASER, SPECIAL, num_types };
 }
 
 namespace towerlogic {

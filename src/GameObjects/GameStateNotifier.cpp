@@ -38,7 +38,7 @@ void GameStateNotifier::step() {
 
     // Send Wave timer
     sf::Time current_time = this->game_controller->timeUntilNextWave();
-    wave_timer = current_time.asSeconds() * 60;
+    wave_timer = (unsigned int) current_time.asSeconds() * 60;
 
     this->send_wave_timer--;
     if (this->send_wave_timer <= 0 || wave_timer > last_send_time) {

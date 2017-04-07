@@ -20,7 +20,7 @@ int main(int argc, char* argv[]){
     smartpointers::slave_ptr<int> ptr = nullptr;
 
     if (ptr) {
-        std::cout << "NPT IS VLAID" << std::endl;
+        std::cout << "NPT IS VALID" << std::endl;
     }
     else {
         std::cout << "NPT IS NOT VALID" << std::endl;

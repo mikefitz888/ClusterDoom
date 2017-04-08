@@ -158,6 +158,16 @@ namespace unit {
 		}
 	}
 
+    Point<float> BasicUnit::getMagneticVelocity()
+    {
+        return magneticVelocity;
+    }
+
+    void BasicUnit::setMagneticVelocity(const Point<float> v)
+    {
+        magneticVelocity = v;
+    }
+
 	// NETWORKING
 	void BasicUnit::writeNetworkUpdate(int event_id, Buffer &buffer) {
 		switch (event_id) {

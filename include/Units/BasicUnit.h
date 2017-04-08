@@ -16,6 +16,7 @@ namespace unit
 
         bool pressed = false; //TEMP;
         float animation_progress = 0;
+        Point<float> magneticVelocity = Point<float>(0, 0);
 
     public:
         BasicUnit(id_t key, Manager* m);
@@ -24,6 +25,8 @@ namespace unit
         void onCollision(gameobject_ptr other) override;
         void step() override;
 
+        Point<float> getMagneticVelocity();
+        void setMagneticVelocity(const Point<float> v);
 
 		// Networking
 		/*

@@ -18,7 +18,7 @@ namespace tower {
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
 
-        texture = manager->getResourceManager()->getTexture("blacktower");
+        texture = manager->getResourceManager()->getTexture("blackTower");
         /*if(!texture->loadFromFile("src/Resources/Textures/chess_piece_rook.png")){
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/

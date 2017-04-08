@@ -146,8 +146,8 @@ namespace tower {
     class ElecticTower;
     class SpecialTower;
 
-    //enum TYPE : unsigned int;
     enum TYPE : unsigned int { BASE = 0, BASIC, ELECTRIC, BOMB, LASER, SPECIAL, num_types };
+    enum SPECIAL_TYPE : unsigned int;
 }
 
 namespace towerlogic {
@@ -159,6 +159,7 @@ namespace towerlogic {
 namespace unit {
     class BasicUnit;
     class Unit;
+    class Wizard;
     
     enum TYPE : unsigned int;
 }
@@ -173,7 +174,10 @@ namespace gameobject {
         inline Point(T x_, T y_) : x(x_), y(y_) {}
         T x;
         T y;
-        inline T distanceTo(Point target) const {return (T) sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); };
+        inline T distanceTo(Point target) const {return (T) sqrt((target.x-x)*(target.x-x)+(target.y-y)*(target.y-y)); }
+        inline T distanceSqTo(Point<T> target) const { return (T) std::abs((target.x - x)*(target.x - x) + (target.y - y)*(target.y - y)); }
+        inline bool operator==(Point<T>& other) const { return other.x == x && other.y == y; }
+        inline bool operator!=(Point<T>& other) const { return !(operator==(other)); }
     };
 
     enum CollisionType : unsigned int;

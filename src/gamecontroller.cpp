@@ -5,6 +5,7 @@
 #include "../include/GameObjects/Spawn.h"
 #include "../include/GameObjects/Projectiles.h"
 #include "../include/Towers/Base.h"
+#include "../include/Towers/SpecialTower.h"
 
 namespace gamecontroller {
 
@@ -227,13 +228,42 @@ namespace gamecontroller {
               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) 
               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) 
               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
-            if (!spawned) {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+            {
+                for (auto tower : manager->getTowers())
+                {
+                    if (tower->getSubType() == tower::TYPE::SPECIAL)
+                    {
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+                        {
+                            smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::NOEFFECT);
+                            std::cout << "Special towers set to NOEFFECT" << std::endl;
+                        }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+                        {
+                            smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::MAGNETIC);
+                            std::cout << "Special towers set to MAGNETIC" << std::endl;
+                        }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+                        {
+                            smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::GLACIAL);
+                            std::cout << "Special towers set to GLACIAL" << std::endl;
+                        }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
+                        {
+                            smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::WINDY);
+                            std::cout << "Special towers set to WINDY" << std::endl;
+                        }
+                    }
+                }
+            }
+            else if (!spawned) {
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                 if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                     mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
 
-                    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BASIC);
-                    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::ELECTRIC);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BASIC);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::ELECTRIC);
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BOMB);
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::LASER);
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::SPECIAL);

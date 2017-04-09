@@ -158,7 +158,7 @@ void ProjectileLaser::step() {
 
 void ProjectileLaser::render() {
     float angle = point_direction(glm::vec2(0.0f, 0.0f), this->getVelocity());
-    this->manager->getResourceManager()->getTexture("bullet")->render(this->getX(), this->getY(), angle);
+    this->manager->getResourceManager()->getTexture("bullet")->render(this->getX(), this->getY(), 0.9f, 0.9f, angle);
 };
 void ProjectileLaser::renderGUI() {};
 void ProjectileLaser::release() {};

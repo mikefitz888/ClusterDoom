@@ -5,7 +5,7 @@
 #include "gameobject.h"
 
 namespace unit {
-    enum TYPE : unsigned int {BASE=0, BASIC, WIZARD};
+    enum TYPE : unsigned int {BASE=0, BASIC, WIZARD, PIRATE};
 
     class Unit : public GameObject {
         graphics::Texture* texture;

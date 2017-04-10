@@ -54,38 +54,38 @@ namespace gamecontroller {
         return 0;
     }
 
-    unit_ptr GameController::spawnUnitAt(int x, int y, unit::TYPE type) const {
+    unit_ptr GameController::spawnUnitAt(float x, float y, unit::TYPE type) const {
         auto unit = manager->createUnit(type);
         unit->setPosition(x, y);
         return unit;
     }
 
-    unit_ptr GameController::spawnUnitAt(Point<int> position, unit::TYPE type) const {
+    unit_ptr GameController::spawnUnitAt(Point<float> position, unit::TYPE type) const {
         return spawnUnitAt(position.x, position.y, type);
     }
 
 
-    tower_ptr GameController::spawnTowerAt(int x, int y, tower::TYPE type) const {
+    tower_ptr GameController::spawnTowerAt(float x, float y, tower::TYPE type) const {
         auto tower = manager->createTower(type);
         //printf("Tower spawned at: %d %d\n", x, y);
         tower->setPosition(x, y);
         return tower;
     }
 
-    tower_ptr GameController::spawnTowerAt(Point<int> position, tower::TYPE type) const {
-        tower_ptr tower = spawnTowerAt( (int) (round(((float)position.x)/64.0f)*64.0f), (int) (round(((float)position.y)/64.0f)*64.0f), type );
-        tower->setJitter(position.x - tower->getX(), position.y - tower->getY());
+    tower_ptr GameController::spawnTowerAt(Point<float> position, tower::TYPE type) const {
+        tower_ptr tower = spawnTowerAt(round((position.x)/64.0f)*64.0f, round((position.y)/64.0f)*64.0f, type );
+        tower->setJitter((int) (position.x - tower->getX()), (int) (position.y - tower->getY()));
         return tower;
     }
 
-    gameobject_ptr GameController::spawnObjectAt(gameobject::OBJECT_TYPE type, int x, int y) const {
+    gameobject_ptr GameController::spawnObjectAt(gameobject::OBJECT_TYPE type, float x, float y) const {
         // TODO: Make spawn
         gameobject_ptr game_object = manager->createObject(type);
         game_object->setPosition(x, y);
         return game_object;
     }
 
-    gameobject_ptr GameController::spawnObjectAt(gameobject::OBJECT_TYPE type, Point<int> position) const {
+    gameobject_ptr GameController::spawnObjectAt(gameobject::OBJECT_TYPE type, Point<float> position) const {
         return spawnObjectAt(type, position.x, position.y);
     }
 
@@ -98,7 +98,7 @@ namespace gamecontroller {
         }
     }
 
-    void GameController::spawnTowers(std::vector<std::pair<Point<int>, int>> tower_list) const {
+    void GameController::spawnTowers(std::vector<std::pair<Point<float>, int>> tower_list) const {
         for (auto location : tower_list) {
             switch(location.second)
             {
@@ -116,10 +116,10 @@ namespace gamecontroller {
         }
     }
 
-    void GameController::moveTower(tower_ptr tower, Point<int> point) const {
+    void GameController::moveTower(tower_ptr tower, Point<float> point) const {
         Point<int> jitter = tower->getJitter();
-        int x = point.x - jitter.x;
-        int y = point.y - jitter.y;
+        float x = point.x - jitter.x;
+        float y = point.y - jitter.y;
         tower->setPosition(x, y);
     }
 
@@ -171,7 +171,7 @@ namespace gamecontroller {
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                 if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                     mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                    spawnUnitAt(mouse_pos.x, mouse_pos.y, unit::TYPE::BASIC);
+                    spawnUnitAt((float) mouse_pos.x, (float) mouse_pos.y, unit::TYPE::BASIC);
                 }
                // spawned = true;
             }
@@ -181,7 +181,7 @@ namespace gamecontroller {
             sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
             if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                 mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<int>(mouse_pos.x, mouse_pos.y));
+                spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<float>((float) mouse_pos.x, (float) mouse_pos.y));
             }
 
             spawned = true;
@@ -191,7 +191,7 @@ namespace gamecontroller {
             sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
             if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                 mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                auto obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(mouse_pos.x, mouse_pos.y));
+                auto obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>((float) mouse_pos.x, (float) mouse_pos.y));
 
                 // Find nearest object
                 auto objs = this->manager->getGameController()->getNNearestUnits(obj->getPosition(), 1, 1000);
@@ -213,7 +213,7 @@ namespace gamecontroller {
                     auto units = getNNearestUnits(glm::vec2(mouse_pos.x, mouse_pos.y), 1000, 1000);
                     if (units.size() > 1) {
                        // std::cout << "ELECTRICITY!!" << std::endl;
-                        gameobject_ptr obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<int>(mouse_pos.x, mouse_pos.y));
+                        gameobject_ptr obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<float>((float) mouse_pos.x, (float) mouse_pos.y));
                         smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
                         elec->setForkParent(units[0].second->getSharedPtr());
                         elec->setTargetObject(units[1].second);
@@ -262,11 +262,24 @@ namespace gamecontroller {
                 if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                     mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
 
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BASIC);
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::ELECTRIC);
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::BOMB);
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::LASER);
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) spawnTowerAt(mouse_pos.x, mouse_pos.y, tower::TYPE::SPECIAL);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::BASIC);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::ELECTRIC);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::BOMB);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::LASER);
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
+                    {
+                        tower_ptr special = nullptr;
+                        for (auto tower : manager->getTowers())
+                        {
+                            if (tower && tower->getSubType() == tower::TYPE::SPECIAL)
+                            {
+                                special = tower;
+                                break;
+                            }
+                        }
+                        if (special == nullptr) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::SPECIAL);
+                        else special->setPosition(glm::vec2((float) mouse_pos.x, (float) mouse_pos.y));
+                    }
                 }
 
                 spawned = true;
@@ -383,7 +396,7 @@ namespace gamecontroller {
         }
     }
 
-    std::vector<tower_ptr> GameController::findNearestTowers(Point<int> point) {
+    std::vector<tower_ptr> GameController::findNearestTowers(Point<float> point) {
         //Clone tower list
         std::vector<tower_ptr> points(manager->getTowers());
         std::sort(begin(points), end(points), [point](const tower_ptr& lhs, const tower_ptr& rhs) { return lhs->distanceTo(point) < rhs->distanceTo(point); });
@@ -440,7 +453,7 @@ namespace gamecontroller {
         return manager->getTowers()[0];
     }
 
-    void GameController::parseCVList(std::vector<std::pair<Point<int>, int>> list) {
+    void GameController::parseCVList(std::vector<std::pair<Point<float>, int>> list) {
         // For Demo Only
         clearTowers();
         std::cout << "Towers cleared!" << std::endl;
@@ -528,7 +541,6 @@ namespace gamecontroller {
                     std::cout << "[CV NETWORK] Data received from CV interface. Size: " << message_size << " bytes!" << std::endl;
 
                     // Clear cv list
-                    //cvList.clear();
                     for (auto& vec : cvList)
                     {
                         vec.clear();
@@ -536,7 +548,6 @@ namespace gamecontroller {
 
                     // Read packet:
                     int number_of_positions;
-                    //Point<int> point(0,0);
                     int x, y, marker_type;
 
                     recv_buffer->seek(0);
@@ -545,27 +556,20 @@ namespace gamecontroller {
                         (*recv_buffer) >> x;
                         (*recv_buffer) >> y;
                         (*recv_buffer) >> marker_type;
-                        //cvList.push_back(std::pair<Point<int>, int>(Point<int>(x, y), marker_type));
-                        cvList[marker_type].push_back(Point<int>(x, y));
+                        cvList[marker_type].push_back(Point<float>(x, y));
                         std::cout << "\tReceived Point (" << x << "," << y << "): " << marker_type << std::endl;
                     }
 
                     // Separate cvList by marker_type, run stableMatching on each, merge matchings
-                    //std::map<tower_ptr, int> delete_tally; 
                     std::vector<tower_ptr> delete_list;
                     int ccc = create_count;
-                    //for (auto& marker_set : cvList) {
                     for (int type = 0; type < tower::TYPE::num_types; type++) {
                         //For move
-                        //std::cout << "Attempting to match" << std::endl;
                         Matching match = stableMatching((tower::TYPE) type, cvList[type]);
-                        //std::cout << "Matched" << std::endl;
                         for (auto& result : match.matches) {
-                            //std::cout << "For marker type " << type << " we have tower " << result.first->getID() << " moved" << std::endl;
                             result.first->setPosition((result.second).x, (result.second).y);
                             result.first->delete_queue = 0;
                         }
-                        //std::cout << "Moved towers" << std::endl;
 
                         //For creation:
                         //If tower to create:
@@ -579,13 +583,8 @@ namespace gamecontroller {
                         }
 
                         //Increase a tally for each tower, only delete a tower if it's in none of the sets
-                        /*for (auto tower : match.deleted_towers) {
-                            if (delete_tally.find(tower) == delete_tally.end()) { delete_tally[tower] = 1; }
-                            else { delete_tally[tower]++; }
-                        }*/
                         for (auto& tower : match.deleted_towers)
                         {
-                            //std::cout << "tower " << tower->getID() << " is schedualed for deletion" << std::endl;
                             delete_list.push_back(tower);
                         }
                     }
@@ -595,22 +594,11 @@ namespace gamecontroller {
                     //For deletion:
                     //Increase tower->delete_queue
                     //If > n then actually delete
-                    /*for (auto& dt : delete_tally) {
-                        if (dt.second == cvList.size()) {
-                            dt.first->delete_queue++;
-                            if (dt.first->delete_queue > 200) {
-                                dt.first->demoDestroy();
-                                break; //Have to break I think to prevent seg-fault
-                            }
-                        }
-                    }*/
                     for (auto& tower : delete_list)
                     {
                         tower->delete_queue++;
-                        if (tower->delete_queue > /*200*/10) {
+                        if (tower->delete_queue > 10) {
                             tower->demoDestroy();
-                            // This seems dodgy
-                            //continue; //Have to break I think to prevent seg-fault
                         }
                     }
                     break;
@@ -619,7 +607,7 @@ namespace gamecontroller {
         }
     }
 
-    Matching GameController::stableMatching(tower::TYPE type, std::vector<Point<int>>& detections)
+    Matching GameController::stableMatching(tower::TYPE type, std::vector<Point<float>>& detections)
     {
         std::vector<deque<int>> point_prefs;
         std::vector<std::vector<int>> tower_prefs;
@@ -695,7 +683,7 @@ namespace gamecontroller {
         delete [] dists;
 
         stack<int> free;
-        std::vector<Point<int>> news;
+        std::vector<Point<float>> news;
         std::vector<int> matches;
 
         for (size_t j = 0; j < detections.size(); j++) free.push(j);

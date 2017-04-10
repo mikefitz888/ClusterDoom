@@ -16,7 +16,7 @@ namespace unit
 
         bool pressed = false; //TEMP;
         float animation_progress = 0;
-        Point<float> magneticVelocity = Point<float>(0, 0);
+        Point<float> magneticVelocity = Point<float>(0.0f, 0.0f);
 
     public:
         BasicUnit(id_t key, Manager* m);

@@ -55,7 +55,7 @@ namespace tower {
 			render_manager->setActiveColour(255, 0, 0, (char)(255.0 * mod / 2));
 		}
 
-		RenderUtils::render_circular_health(getXr(), getYr(), (int)health, (int)max_health,
+		RenderUtils::render_circular_health((int) getXr(), (int) getYr(), (int)health, (int)max_health,
             //RenderUtils::colour_blend(
             //    Colour(55, 55, 55, 255),
                 RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), health / max_health)

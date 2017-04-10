@@ -35,9 +35,9 @@ namespace gamecontroller {
 
     struct Matching
     {
-        unordered_map<tower_ptr, Point<int>> matches;
+        unordered_map<tower_ptr, Point<float>> matches;
         std::vector<tower_ptr> deleted_towers;
-        std::vector<Point<int>> new_towers;
+        std::vector<Point<float>> new_towers;
     };
 
     class TileNode : public paths::AStarNode {
@@ -59,7 +59,7 @@ namespace gamecontroller {
         GameState current_state = GameState::START;
 
         //std::map<int, std::vector<Point<int>>> cvList;
-        std::vector<Point<int>> cvList[tower::TYPE::num_types];
+        std::vector<Point<float>> cvList[tower::TYPE::num_types];
 
         // CV Network
         int               port;
@@ -94,7 +94,7 @@ namespace gamecontroller {
         void init();
         bool step();
         void restart() const; //Not yet implemented, clears towers + units
-        Matching stableMatching(tower::TYPE type, std::vector<Point<int>>& detections);
+        Matching stableMatching(tower::TYPE type, std::vector<Point<float>>& detections);
         int getWeight(int x, int y);
 
         //GameState Modifiers
@@ -104,23 +104,23 @@ namespace gamecontroller {
         GameState winGame();
         GameState loseGame();
 
-        tower_ptr  spawnTowerAt(int x, int y, tower::TYPE type) const;
-        tower_ptr  spawnTowerAt(Point<int> position, tower::TYPE type) const;
-        unit_ptr   spawnUnitAt(int x, int y, unit::TYPE type) const;
-        unit_ptr   spawnUnitAt(Point<int> position, unit::TYPE type) const;
-        gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, int x, int y) const;
-        gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, Point<int> position) const;
-        void moveTower(tower_ptr tower, Point<int> point) const;
+        tower_ptr  spawnTowerAt(float x, float y, tower::TYPE type) const;
+        tower_ptr  spawnTowerAt(Point<float> position, tower::TYPE type) const;
+        unit_ptr   spawnUnitAt(float x, float y, unit::TYPE type) const;
+        unit_ptr   spawnUnitAt(Point<float> position, unit::TYPE type) const;
+        gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, float x, float y) const;
+        gameobject_ptr spawnObjectAt(gameobject::OBJECT_TYPE type, Point<float> position) const;
+        void moveTower(tower_ptr tower, Point<float> point) const;
 
         void runScenario(int scenario);
 
         void clearTowers() const;
-        void spawnTowers(std::vector<std::pair<Point<int>, int>> tower_list) const;
-        std::vector<tower_ptr> findNearestTowers(Point<int> point);
+        void spawnTowers(std::vector<std::pair<Point<float>, int>> tower_list) const;
+        std::vector<tower_ptr> findNearestTowers(Point<float> point);
         std::vector<unit_ptr> getUnitsInRange(glm::vec2 position, int radius);
         std::vector<std::pair<float, unit_ptr>> getNNearestUnits(glm::vec2 position, int N, int maxrange);
         tower_ptr& getBase();
-        void parseCVList(std::vector<std::pair<Point<int>, int>> list);
+        void parseCVList(std::vector<std::pair<Point<float>, int>> list);
         
 
         bool getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path);

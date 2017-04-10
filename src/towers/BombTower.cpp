@@ -25,7 +25,7 @@ namespace tower {
 	void BombTower::render() {
 
 		Tower::render();
-		texture->render(getXr(), getYr(), 96, 96);
+		texture->render((int) getXr(), (int) getYr(), 96, 96);
 
 		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);
@@ -67,7 +67,7 @@ namespace tower {
             if (eff == 0.f) return;
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
             //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
-            gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<int>(getX(), getY()));
+            gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<float>(getX(), getY()));
             float m = target[0].first / max_range;
             obj->setVelocity(m*(current_target->getX()-getX())/10, m*(current_target->getY()-getY())/10 );
 			//obj->setDamage(damage);

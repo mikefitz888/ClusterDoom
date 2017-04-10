@@ -34,14 +34,12 @@ namespace tower
         // Timestep, or the multiplier of acceleration
         static const double dt;
         // Longest distance that the tower has effect at  
-        static const double max_range;
+        static const double MAX_RANGE;
         // GM/(max_range^2), used to ensure no positive force past range
         static const double GM_neut;
-
-
-        // We need to store a map of unit_ptrs to their
-        // current velocities
-        std::map<id_t, float> velocities;
+        // Damage caused by tower (inversely proportional to square of distance)
+        static const double PASSIVE_DAMAGE;
+        static double angle(double x, double y, double u, double v);
 
         // GLACIAL EFFECTS
         void glacial();

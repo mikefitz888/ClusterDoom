@@ -26,7 +26,7 @@ namespace tower {
 	void Base::render() {
 
 		int size = 100;
-		texture->render(getXr(), getYr(), size, size);
+		texture->render((int) getXr(), (int) getYr(), size, size);
         animations.erase(std::remove_if(animations.begin(), animations.end(), [this](std::pair<graphics::AnimatedTexture*, std::pair<float, Point<int>>>& a)->bool {
             if (a.second.first > a.first->getTotalFrames()) return true;
             a.second.first += 1.0f;
@@ -45,7 +45,7 @@ namespace tower {
             //exuhporoshun[(unit::TYPE) aggressor->getSubType()]->render()
             if ( exuhporoshun[aggressor->getSuperType()].find(aggressor->getSubType()) != exuhporoshun[aggressor->getSuperType()].end() ) {
                 auto r = glm::linearRand(-glm::vec2(20), glm::vec2(20));
-                auto pair = std::make_pair<float, Point<int>>(0.f, Point<int>(getX() + (int) r.x, getY() + (int) r.y));
+                auto pair = std::make_pair<float, Point<int>>(0.f, Point<int>((int) getX() + (int) r.x, (int) getY() + (int) r.y));
                 auto pair2 = std::make_pair(exuhporoshun[aggressor->getSuperType()][aggressor->getSubType()], pair);
                 animations.push_back(pair2);
             }

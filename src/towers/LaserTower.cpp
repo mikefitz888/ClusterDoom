@@ -26,7 +26,7 @@ namespace tower {
 	void LaserTower::render() {
 
 		Tower::render();
-		texture->render(getXr(), getYr(), 96, 96);
+		texture->render((int) getXr(), (int) getYr(), 96, 96);
 
 		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);
@@ -63,7 +63,7 @@ namespace tower {
         if (current_target) {
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
             //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
-			gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
+			gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY()));
 
 			auto dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first / 7.f) - obj->getPosition());
 			auto sdir = glm::vec2(-dir.y, dir.x) * 7.0f;

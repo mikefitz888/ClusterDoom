@@ -25,7 +25,7 @@ namespace tower {
 	void ElectricTower::render() {
 
 		Tower::render();
-		texture->render(getXr(), getYr(), 96, 96);
+		texture->render((int) getXr(), (int) getYr(), 96, 96);
 
 		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);
@@ -61,7 +61,7 @@ namespace tower {
             if (eff == 0.f) return;
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
             //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
-            gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<int>(getX(), getY()));
+            gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<float>(getX(), getY()));
             smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
 
             elec->setForkParent(this->getSharedPtr());

@@ -49,6 +49,8 @@ namespace graphics {
         rm->textureLoad("beam_segment", "src/Resources/Textures/beam_segment_small.png")->setOriginCentre();
         rm->textureLoad("bullet", "src/Resources/Textures/bullet.png")->setOriginCentre();
         rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
+        rm->textureLoad("resource_mine", "src/Resources/Textures/Resource_Mine_Vein.png")->setOriginCentre();
+        rm->textureLoad("sparkle", "src/Resources/Textures/sparkle_particle.png")->setOriginCentre();
 
 
         /// Load Animated Textures

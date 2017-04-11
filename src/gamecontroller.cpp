@@ -171,9 +171,20 @@ namespace gamecontroller {
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                 if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                     mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                    spawnUnitAt((float) mouse_pos.x, (float) mouse_pos.y, unit::TYPE::BASIC);
+                     spawnUnitAt((float) mouse_pos.x, (float) mouse_pos.y, unit::TYPE::BASIC);
                 }
-               // spawned = true;
+                //spawned = true;
+            }
+        } else
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+            if (!spawned) {
+
+                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                    spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, mouse_pos.x, mouse_pos.y);
+                }
+                spawned = true;
             }
         } else 
         // TEMP: Spawn bomb

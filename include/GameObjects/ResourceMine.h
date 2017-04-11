@@ -8,9 +8,21 @@
 class ResourceMine : public GameObject {
 
 private:
-    graphics::Texture* mine_texture, *sparkle_texture, *mining_effect_texture;
+    graphics::Texture* mine_texture, *sparkle_texture, *mining_effect_texture, *mining_effect_section_end;
     std::vector<ResourceMineSparkle*> sparkles;
     bool sparkles_created = false;
+
+    // Properties
+    const int max_tower_mine_range = 105;
+    const int tower_gather_rate = 1;
+    std::vector<gameobject::tower_ptr> tower_gather;
+
+    // Wealth
+    const int max_available_resource = 600;
+    const int min_available_resource = 250;
+
+    int starting_resource;
+    int current_resource;
 
 public:
     // Constructor

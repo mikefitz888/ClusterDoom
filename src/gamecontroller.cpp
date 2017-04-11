@@ -426,6 +426,18 @@ namespace gamecontroller {
         return units_in_range;
     }
 
+    // Returns a list of the towers within range
+    std::vector<tower_ptr> GameController::getTowersInRange(glm::vec2 position, int radius) {
+        std::vector<tower_ptr> towers_in_range;
+        towers_in_range.clear();
+        for (tower_ptr tower : manager->getTowers()) {
+            if (tower && glm::distance(tower->getPosition(), position) <= radius) {
+                towers_in_range.push_back(tower);
+            }
+        }
+        return towers_in_range;
+    }
+
     // Returns a list of distance-unit pairs for the N nearest objects
     //  - If there are less than N objects within that range, it ignores them.
     //  - List returned is distance ordered

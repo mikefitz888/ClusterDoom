@@ -48,6 +48,7 @@ namespace graphics {
         rm->textureLoad("bomb_texture_white", "src/Resources/Textures/bomb_white.png")->setOrigin(30, 36);
         rm->textureLoad("beam_segment", "src/Resources/Textures/beam_segment_small.png")->setOriginCentre();
         rm->textureLoad("bullet", "src/Resources/Textures/bullet.png")->setOriginCentre();
+		rm->textureLoad("bullet2", "src/Resources/Textures/bullet2.png")->setOriginCentre();
         rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
 
 

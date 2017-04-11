@@ -101,7 +101,8 @@ namespace unit {
 
 		Unit::render();
 
-        render_manager = manager->getRenderManager();
+		renderAnimation(texture, 0.22f, 0.3f, 12, 1.0f, 0.0f);
+        /*render_manager = manager->getRenderManager();
 
 
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
@@ -111,7 +112,7 @@ namespace unit {
         if (this->getAtDestination()) m = 0;
 
        
-        texture->render(m*((int)animation_progress) % 12, (int) getXr(), (int) getYr(), 0.22f, 0.22f, rotation);
+        texture->render(m*((int)animation_progress) % 12, (int) getXr(), (int) getYr(), 0.22f, 0.22f, rotation);*/
 
         // ******************************************************************************************************//
         // DRAW PATH

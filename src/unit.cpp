@@ -1,10 +1,17 @@
 #include "../include/unit.h"
 #include "../include/tower.h"
 #include "../include/ResourceManager.h"
+#include "../include/gameobject.h"
 #include "../include/VertexBuffer.h"
 #include "../include/manager.h"
 #include "../include/gamecontroller.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "../include/RenderUtils.h"
+#include "../include/AnimatedTexture.h"
+
 #include <stdexcept>
+
 
 namespace unit {
     Unit::Unit(id_t id, TYPE unit_type, Manager* m) :
@@ -17,7 +24,7 @@ namespace unit {
         if (!texture->loadFromFile("src/Resources/Textures/pawn.png")) {
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/
-        texture = manager->getResourceManager()->getTexture("basic_unit");
+        texture = manager->getResourceManager()->getAnimatedTexture("robotUnit");
 
         /*red = new sf::Texture();
         if (!red->loadFromFile("src/Resources/Textures/red.png")) {
@@ -181,6 +188,15 @@ namespace unit {
     void Unit::deliverWealth(size_t amt) {
         manager->getGameController()->increaseWealth(amt);
     }
+
+	void Unit::renderAnimation(graphics::AnimatedTexture* texture, float size,  float animationSpeed, int numFrames, float sizeMod, float rotMod) {
+		float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2) + rotMod;
+		float finSize = size * sizeMod;
+		animationProgress = animationProgress + animationSpeed;
+		int m = 1;
+		if (this->getAtDestination()) m = 0;
+		texture->render(m* (((int)animationProgress) % numFrames), (int)getXr(), (int)getYr(), finSize, finSize, rotation);
+	}
 
 	/*void Unit::getPath(Point<int> target) {
 		Point<int> start = this->position;

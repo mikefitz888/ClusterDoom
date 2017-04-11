@@ -8,12 +8,13 @@ namespace unit {
     enum TYPE : unsigned int {BASE=0, BASIC, WIZARD, PIRATE};
 
     class Unit : public GameObject {
-        graphics::Texture* texture;
+		graphics::AnimatedTexture* texture = nullptr;
+		float textureSize = 1.0f;
+		float animationProgress = 0.0f;
         graphics::Texture* red;
         sf::Shader* shader;
         //graphics::VertexBuffer* vbuff;
         //graphics::VertexBuffer* hpbar_buff;
-        
 
     protected:
         tower_ptr getNearestTower() const;
@@ -31,6 +32,8 @@ namespace unit {
 
     public:
         Unit(id_t id, TYPE unit_type, Manager* m);
+
+		void renderAnimation(graphics::AnimatedTexture* texture, float size, float animationSpeed, int numFrames, float sizeMod, float rotMod);
 
         //IRenderable methods
         virtual void init() override;

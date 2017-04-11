@@ -115,16 +115,16 @@ namespace unit {
 
 		float n = std::fabs(channel_time - 100.f) / 100.f;
 		if (!channeling) n = 1.f;
+		float rotMod = ((1.0f - n)*10.0f*(float) M_PI);
 
-		float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2) + ((1.0f - n)*10.0f*(float) M_PI);
-
-		float animationSpeed = 0.13f;
+		renderAnimation(texture, 0.18f, 0.13f, 12, n, rotMod);
+		/*float animationSpeed = 0.13f;
 		animation_progress = animation_progress + animationSpeed;
 		int m = 1;
 		if (this->getAtDestination()) m = 0;
 
 
-		texture->render( m* (((int)animation_progress) % 12), (int) getXr(), (int) getYr(), 0.18f*n, 0.18f*n, rotation);
+		texture->render( m* (((int)animation_progress) % 12), (int) getXr(), (int) getYr(), 0.18f*n, 0.18f*n, rotation);*/
 
         // ******************************************************************************************************//
         // DRAW PATH

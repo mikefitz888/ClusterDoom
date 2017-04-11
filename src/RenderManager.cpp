@@ -47,12 +47,15 @@ namespace graphics {
         rm->textureLoad("bomb_texture", "src/Resources/Textures/bomb.png")->setOrigin(30, 36);
         rm->textureLoad("bomb_texture_white", "src/Resources/Textures/bomb_white.png")->setOrigin(30, 36);
         rm->textureLoad("beam_segment", "src/Resources/Textures/beam_segment_small.png")->setOriginCentre();
-        rm->textureLoad("bullet", "src/Resources/Textures/bullet.png")->setOriginCentre();
         rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
         rm->textureLoad("resource_mine", "src/Resources/Textures/Resource_Mine_Vein.png")->setOriginCentre();
         rm->textureLoad("sparkle", "src/Resources/Textures/sparkle_particle.png")->setOriginCentre();
         rm->textureLoad("mining_beam_segment", "src/Resources/Textures/mining_beam.png")->setOriginCentre();
         rm->textureLoad("mining_beam_ball", "src/Resources/Textures/mining_beam_end.png")->setOriginCentre();
+		rm->textureLoad("redLaser", "src/Resources/Textures/redLaser.png")->setOriginCentre();
+		rm->textureLoad("blueLaser", "src/Resources/Textures/blueLaser.png")->setOriginCentre();
+		rm->textureLoad("musketShot", "src/Resources/Textures/musketShot.png")->setOriginCentre();
+
 
         /// Load Animated Textures
         //  Explosions

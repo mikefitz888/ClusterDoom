@@ -82,7 +82,8 @@ namespace unit {
             //gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
             //smartpointers::static_pointer_cast<unit::Unit>(other);
             smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY())));
-            obj1->setCollisionType(gameobject::TYPE::TOWER);
+			obj1->textureName = "musketShot";
+			obj1->setCollisionType(gameobject::TYPE::TOWER);
             //std::cout << "unit fired\n";
             auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
             obj1->setVelocity(dir * 7.f);

@@ -73,8 +73,9 @@ namespace unit {
         if (distanceTo(base->getPosition()) < 160 && cooldown-- == 0) {
             //gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
             //smartpointers::static_pointer_cast<unit::Unit>(other);
-            smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY())));
-            obj1->setCollisionType(gameobject::TYPE::TOWER);
+            smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY())));
+			obj1->textureName = "redLaser";
+			obj1->setCollisionType(gameobject::TYPE::TOWER);
             //std::cout << "unit fired\n";
             auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
             obj1->setVelocity(dir * 7.f);
@@ -123,7 +124,7 @@ namespace unit {
 		if (this->getAtDestination()) m = 0;
 
 
-		texture->render( m* (((int)animation_progress) % 12), getXr(), getYr(), 0.18f*n, 0.18f*n, rotation);
+		texture->render( m* (((int)animation_progress) % 12), (int) getXr(), (int) getYr(), 0.18f*n, 0.18f*n, rotation);
 
         // ******************************************************************************************************//
         // DRAW PATH
@@ -146,9 +147,10 @@ namespace unit {
 		switch (other->getSuperType()) {
 			// COLLISION WITH OTHER INSTANCES
 			case gameobject::TYPE::UNIT: {
+                // TODO: Should this be a float?
 				int x, y;
-				x = getX();
-				y = getY();
+				x = (int) getX();
+				y = (int) getY();
 
 				glm::vec2 direction = glm::vec2(other->getPosition().x - x,
 					other->getPosition().y - y);
@@ -156,8 +158,8 @@ namespace unit {
 
 				x -= (int) (direction.x * 5);
 				y -= (int) (direction.y * 5);
-				setX(x);
-				setY(y);
+				setX((float) x);
+                setY((float) y);
 			} break;
 			// COLLISION WITH TOWERS
 			case gameobject::TYPE::TOWER: {

@@ -164,8 +164,8 @@ namespace manager {
         // Network update
         network_manager->sendInstanceCreate(id, game_object->getSuperType(),
                                             game_object->getSubType(),
-                                            game_object->getX(),
-                                            game_object->getY());
+                                            (int) game_object->getX(),
+                                            (int) game_object->getY());
     }
 
     // Destroys the master_ptr
@@ -192,8 +192,8 @@ namespace manager {
                 int id         = object->getID();
                 int super_type = object->getSuperType();
 				int sub_type   = object->getSubType();
-				int x          = object->getX();
-				int y		   = object->getY();
+				int x          = (int) object->getX();
+				int y		   = (int) object->getY();
                 network_manager->sendInstanceCreate(network_client, id, super_type, sub_type, x, y);
             }
         }
@@ -502,8 +502,8 @@ namespace manager {
 
 		gameobject::BoundingBox bounding_box = object->getCollision()->getBoundingBox();
 		glm::vec2 min_cell_pos, max_cell_pos;
-		min_cell_pos = this->convertRealWorldPositionToCell(object->getX()+ bounding_box.bbox_left, object->getY() + bounding_box.bbox_up);
-		max_cell_pos = this->convertRealWorldPositionToCell(object->getX()+bounding_box.bbox_right, object->getY() + bounding_box.bbox_down);
+		min_cell_pos = this->convertRealWorldPositionToCell((int) object->getX()+ bounding_box.bbox_left, (int) object->getY() + bounding_box.bbox_up);
+		max_cell_pos = this->convertRealWorldPositionToCell((int) object->getX()+bounding_box.bbox_right, (int) object->getY() + bounding_box.bbox_down);
 		//std::cout << "BBOX : " << min_cell_pos.x << " : " << max_cell_pos.x << std::endl;
 		// Mark all intersecting cells
 		for (int i = (int) min_cell_pos.x; i <= (int) max_cell_pos.x; i++) {

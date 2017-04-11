@@ -68,7 +68,7 @@ class ProjectileLaser : public GameObject {
     gameobject::TYPE collision_type = gameobject::TYPE::UNIT;
 public:
 
-	sf::String textureName = "bullet";
+	sf::String textureName = "redLaser";
 
     // Constructor
     ProjectileLaser(id_t id, manager::Manager* m);

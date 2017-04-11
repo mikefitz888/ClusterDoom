@@ -92,13 +92,13 @@ void ProjectileBomb::explode() {
 
 void ProjectileBomb::render() {
     if (!this->exploded) {
-        this->bomb_texture->render(this->getX(), this->getY());
+        this->bomb_texture->render((int) getX(), (int) getY());
         int anim_alpha = (int)(255.0f*glm::clamp(glm::sin(animation_progress), 0.0f, 1.0f));
         this->manager->getRenderManager()->setActiveColour(255, 255, 255, anim_alpha);
-        this->bomb_white_texture->render(this->getX(), this->getY());
+        this->bomb_white_texture->render((int) getX(), (int) getY());
         this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
     } else {
-        this->explosion_texture->render((int) glm::floor(animation_progress), this->getX(), this->getY());
+        this->explosion_texture->render((int) glm::floor(animation_progress), (int) getX(), (int) getY());
     }
 }
 

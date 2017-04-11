@@ -65,6 +65,8 @@ class String;
 class ProjectileBomb;
 class ProjectileElectricity;
 class GameStateNotifier;
+class ResourceMine;
+class ResourceMineSparkle;
 
 typedef unsigned char byte;
 #ifdef _WIN32

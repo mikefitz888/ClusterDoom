@@ -48,7 +48,7 @@ namespace unit {
     }
 
     void Unit::renderBegin() {
-        unit_shadow->render(getXr(), getYr());
+        unit_shadow->render((int) getXr(), (int) getYr());
     }
     void Unit::render() {
 
@@ -75,10 +75,10 @@ namespace unit {
             // Base
             int alpha = (int)(this->health_alpha*255.0f);
             this->render_manager->setActiveColour(graphics::Colour(96, 96, 96, alpha));
-            red->render(getXr() - 16, getYr() - 30, (int)(32), (int)5);
+            red->render((int) getXr() - 16, (int) getYr() - 30, 32, 5);
             if (health > 0) {
                 this->render_manager->setActiveColour(graphics::Colour(255, 255, 255, alpha));
-                red->render(getXr() - 15, getYr() - 29, (int)(32.0f * (float)(health_visual / maxHealth)), (int)3);
+                red->render((int) getXr() - 15, (int) getYr() - 29, (int)(32.0f * (float)(health_visual / maxHealth)), (int)3);
             }
 
             // Reset rendering colour

@@ -24,7 +24,7 @@ namespace unit {
         if (!texture->loadFromFile("src/Resources/Textures/pawn.png")) {
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/
-        texture = manager->getResourceManager()->getAnimatedTexture("robotUnit");
+        texture = manager->getResourceManager()->getAnimatedTexture("robot_unit");
 
         /*red = new sf::Texture();
         if (!red->loadFromFile("src/Resources/Textures/red.png")) {

@@ -8,9 +8,11 @@ namespace tower {
     const double SpecialTower::GM = 5000;
     const double SpecialTower::km = 0.1;
     const double SpecialTower::dt = 1;
-    const double SpecialTower::MAX_RANGE = 225;
-    const double SpecialTower::GM_neut = GM / (SpecialTower::MAX_RANGE*SpecialTower::MAX_RANGE);
+    const double SpecialTower::MAX_RANGE_MAGNETIC = 225;
+    const double SpecialTower::GM_neut = GM / (SpecialTower::MAX_RANGE_MAGNETIC*SpecialTower::MAX_RANGE_MAGNETIC);
     const double SpecialTower::PASSIVE_DAMAGE = 3;
+    const double SpecialTower::MAX_RANGE_GLACIAL = 225;
+    const bool SpecialTower::AFFECTS_ROBOTS_GLACIAL = false;
 
     SpecialTower::SpecialTower(id_t key, Manager* m) : Tower(key, TYPE::SPECIAL, m) {
         effect = &SpecialTower::noeffect;
@@ -68,7 +70,7 @@ namespace tower {
             double dx = unit->getPosition().x - getPosition().x;
             double dy = unit->getPosition().y - getPosition().y;
             double d = std::hypot(dx, dy);
-            if (unit->getSubType() == unit::TYPE::BASIC && d < MAX_RANGE)
+            if (unit->getSubType() == unit::TYPE::BASIC && d < MAX_RANGE_MAGNETIC)
             {
                 num_robots++;
                 sum_dist += d;
@@ -87,7 +89,7 @@ namespace tower {
                 double dy = y - getY();
                 double d = std::hypot(dx, dy);
                 Point<float> v = robot->getMagneticVelocity();
-                if (d < MAX_RANGE)
+                if (d < MAX_RANGE_MAGNETIC)
                 {
                     // This robot must be accelerated towards us!
                     double v_mag = std::hypot(v.x, v.y);
@@ -135,7 +137,7 @@ namespace tower {
                 }
                 else if (v != Point<float>(0.0f, 0.0f))
                 {
-                    // Just half movement immediately
+                    // Just halt movement immediately
                     robot->setMagneticVelocity(Point<float>(0.0f, 0.0f));
                     /*
                     //std::cout << "SLOWDOWN for (" << v.x << ", " << v.y << ")" << std::endl;
@@ -169,7 +171,13 @@ namespace tower {
     
     void SpecialTower::glacial() 
     {
-
+        for (auto unit : manager->getUnits())
+        {
+            if (!unit) continue;
+            if (!AFFECTS_ROBOTS_GLACIAL && unit->getSubType() == unit::TYPE::BASIC) continue;
+            double d = std::hypot(unit->getX() - getX(), unit->getY() - getY());
+            unit->setUnderGlacialEffect(d <= MAX_RANGE_GLACIAL);
+        }
     }
     
     void SpecialTower::windy() 

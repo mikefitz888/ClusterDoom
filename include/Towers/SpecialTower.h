@@ -34,7 +34,7 @@ namespace tower
         // Timestep, or the multiplier of acceleration
         static const double dt;
         // Longest distance that the tower has effect at  
-        static const double MAX_RANGE;
+        static const double MAX_RANGE_MAGNETIC;
         // GM/(max_range^2), used to ensure no positive force past range
         static const double GM_neut;
         // Damage caused by tower (inversely proportional to square of distance)
@@ -43,6 +43,9 @@ namespace tower
 
         // GLACIAL EFFECTS
         void glacial();
+        // Radius of effect
+        static const double MAX_RANGE_GLACIAL;
+        static const bool AFFECTS_ROBOTS_GLACIAL;
 
         // WINDY EFFECTS
         void windy();

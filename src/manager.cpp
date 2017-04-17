@@ -101,6 +101,17 @@ namespace manager {
         return unit_logic->getUnits();
     }
 
+    std::vector<slave_ptr<GameObject>> Manager::getObjects() const {
+        std::vector<slave_ptr<GameObject>> objs;
+        for (auto map_elem = game_object_pool.begin(); map_elem != game_object_pool.end(); map_elem++) {
+            gameobject_ptr obj = *(map_elem->second);
+            if (obj) {
+                objs.push_back(obj);
+            }
+        }
+        return objs;
+    }
+
     //Game Controller Methods
     /*slave_ptr<GameObject> Manager::createObject(){
         auto obj = game_controller->createObject( getFreePoolKey() );

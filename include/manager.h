@@ -60,6 +60,7 @@ namespace manager {
         void destroyUnit(slave_ptr<Unit>& unit);
         std::vector<slave_ptr<Unit>> getUnits() const;
         std::vector<slave_ptr<Unit>> getUnits2() const;
+        std::vector<slave_ptr<GameObject>> getObjects() const;
 
         //Game Controller Methods (World Logic)
         //slave_ptr<GameObject> createObject(gameobject::OBJECT_TYPE type);

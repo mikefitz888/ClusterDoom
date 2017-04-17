@@ -163,6 +163,27 @@ namespace gamecontroller {
         //In general, step() should be frame-based.
         
 
+        // Resource spawning
+        resource_spawn_timer--;
+        if (resource_spawn_timer <= 0) {
+            resource_spawn_timer = glm::linearRand(resource_spawn_timer_min, resource_spawn_timer_max);
+        
+            // Spawn a bit of resource
+            glm::vec2 rand_pos = glm::linearRand(glm::vec2(100.0f, 100.0f), glm::vec2(this->getScreenWidth() - 100.0f, this->getScreenHeight() - 100.0f));
+            
+            // Query number of mines
+            int count = 0;
+            auto objects = manager->getObjects();
+            for (auto obj : objects) {
+                if (obj && obj->getSuperType() == gameobject::TYPE::OBJECT && obj->getSubType() == gameobject::OBJECT_TYPE::RESOURCE_MINE) {
+                    count++;
+                }
+            }
+            if (count < max_resource_on_map) {
+                spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, rand_pos.x, rand_pos.y);
+            }
+        }
+
 
         // Perform 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {

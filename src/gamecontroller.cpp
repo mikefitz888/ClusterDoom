@@ -55,8 +55,8 @@ namespace gamecontroller {
     }
 
     unit_ptr GameController::spawnUnitAt(float x, float y, unit::TYPE type) const {
-        auto unit = manager->createUnit(type);
-        unit->setPosition(x, y);
+        auto unit = manager->createUnit(type, x, y);
+        //unit->setPosition(x, y);
         return unit;
     }
 
@@ -66,9 +66,9 @@ namespace gamecontroller {
 
 
     tower_ptr GameController::spawnTowerAt(float x, float y, tower::TYPE type) const {
-        auto tower = manager->createTower(type);
+        auto tower = manager->createTower(type, x, y);
         //printf("Tower spawned at: %d %d\n", x, y);
-        tower->setPosition(x, y);
+        //tower->setPosition(x, y);
         return tower;
     }
 
@@ -80,8 +80,7 @@ namespace gamecontroller {
 
     gameobject_ptr GameController::spawnObjectAt(gameobject::OBJECT_TYPE type, float x, float y) const {
         // TODO: Make spawn
-        gameobject_ptr game_object = manager->createObject(type);
-        game_object->setPosition(x, y);
+        gameobject_ptr game_object = manager->createObject(type, x, y);
         return game_object;
     }
 

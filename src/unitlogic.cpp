@@ -20,8 +20,8 @@ namespace unitlogic
         }), units.end());
     }
 
-    unit_ptr UnitLogic::createUnit(unit::TYPE type) const {
-        return manager->createUnit(type);
+    unit_ptr UnitLogic::createUnit(unit::TYPE type, float x, float y) const {
+        return manager->createUnit(type, x, y);
     }
 
     Unit* UnitLogic::createUnit(id_t key, unit::TYPE type) const {

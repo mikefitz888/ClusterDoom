@@ -11,8 +11,8 @@ namespace towerlogic {
     TowerLogic::TowerLogic(Manager* m) :
         manager(m) {}
 
-    tower_ptr TowerLogic::createTower(tower::TYPE type) const {
-        return manager->createTower(type);
+    tower_ptr TowerLogic::createTower(tower::TYPE type, float x, float y) const {
+        return manager->createTower(type, x, y);
     }
 
     //Tower factory

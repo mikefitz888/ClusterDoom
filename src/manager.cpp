@@ -23,8 +23,9 @@ namespace manager {
     }
 
     // Object Methods
-    slave_ptr<GameObject> Manager::createObject(gameobject::OBJECT_TYPE type) {
+    slave_ptr<GameObject> Manager::createObject(gameobject::OBJECT_TYPE type, float x, float y) {
         auto obj = object_logic->createObject(getFreePoolKey(), type);
+        obj->setPosition(x, y);
         addToPool(obj);
         obj->init();
         auto passback = slave_ptr<GameObject>(static_pointer_cast<GameObject>(/*game_object_pool[obj->getID()]*/obj->getSharedPtr()));
@@ -48,8 +49,9 @@ namespace manager {
     }
 
     //Tower Methods
-    slave_ptr<Tower> Manager::createTower(tower::TYPE type){
+    slave_ptr<Tower> Manager::createTower(tower::TYPE type, float x, float y){
         auto obj = tower_logic->createTower(getFreePoolKey(), type );
+        obj->setPosition(x, y);
         addToPool(obj);
         obj->init();
         auto passback = slave_ptr<Tower>( static_pointer_cast<Tower>(obj->getSharedPtr() /* game_object_pool[obj->getID()]    game_object_pool.find(obj->getID())*/ ));
@@ -84,8 +86,9 @@ namespace manager {
     }
 
     //Unit Methods
-    slave_ptr<Unit> Manager::createUnit(unit::TYPE type){
+    slave_ptr<Unit> Manager::createUnit(unit::TYPE type, float x, float y){
         auto obj = unit_logic->createUnit( getFreePoolKey(), type );
+        obj->setPosition(x, y);
         addToPool(obj);
         obj->init();
         auto passback = slave_ptr<Unit>( static_pointer_cast<Unit>(/*game_object_pool[obj->getID()]*/obj->getSharedPtr()) );

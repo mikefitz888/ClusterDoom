@@ -10,7 +10,7 @@ class ObjectLogic {
 public:
     ObjectLogic(manager::Manager* m);
     GameObject* createObject(id_t key, gameobject::OBJECT_TYPE type);
-    gameobject_ptr createObject(gameobject::OBJECT_TYPE type);
+    gameobject_ptr createObject(gameobject::OBJECT_TYPE type, float x, float y);
     void           removeObject(gameobject_ptr obj);
 };
 

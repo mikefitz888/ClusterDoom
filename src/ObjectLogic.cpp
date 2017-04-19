@@ -41,8 +41,8 @@ GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
 ObjectLogic::ObjectLogic(manager::Manager* m) :
     manager(m) {}
 
-gameobject_ptr ObjectLogic::createObject(gameobject::OBJECT_TYPE type) {
-    return manager->createObject(type);
+gameobject_ptr ObjectLogic::createObject(gameobject::OBJECT_TYPE type, float x, float y) {
+    return manager->createObject(type, x, y);
 }
 
 void ObjectLogic::removeObject(gameobject_ptr obj) {

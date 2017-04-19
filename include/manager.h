@@ -49,14 +49,14 @@ namespace manager {
         Manager();
         GameController* getGameController() const;
         //Tower Methods
-        slave_ptr<Tower> createTower(tower::TYPE type);
-        slave_ptr<GameObject> createObject(gameobject::OBJECT_TYPE type);
+        slave_ptr<Tower> createTower(tower::TYPE type, float x, float y);
+        slave_ptr<GameObject> createObject(gameobject::OBJECT_TYPE type, float x, float y);
         void destroyTower(slave_ptr<Tower> tower);
         void clearTowers();
         std::vector<slave_ptr<Tower>>& getTowers() const;
 
         //Unit Methods
-        slave_ptr<Unit> createUnit(unit::TYPE type);
+        slave_ptr<Unit> createUnit(unit::TYPE type, float x, float y);
         void destroyUnit(slave_ptr<Unit>& unit);
         std::vector<slave_ptr<Unit>> getUnits() const;
         std::vector<slave_ptr<Unit>> getUnits2() const;

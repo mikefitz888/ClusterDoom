@@ -18,7 +18,7 @@ namespace towerlogic {
 
         void clean();
         Tower* createTower (id_t key, tower::TYPE type) const;
-        tower_ptr createTower(tower::TYPE type) const;
+        tower_ptr createTower(tower::TYPE type, float x, float y) const;
         void removeTower(int x, int y);
         void removeTower(tower_ptr tower);
 

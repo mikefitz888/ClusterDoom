@@ -11,8 +11,7 @@
 
 namespace unit {
     BasicUnit::BasicUnit(id_t key, Manager* m) : Unit(key, TYPE::BASIC, m) {
-        //position.x = 200.0f;
-        //position.y = 400.0f;
+
     }
 
     void BasicUnit::init() {

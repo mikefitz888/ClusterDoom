@@ -11,8 +11,6 @@
 
 namespace unit {
     Wizard::Wizard(id_t key, Manager* m) : Unit(key, TYPE::WIZARD, m)  {
-        position.x = 200;
-        position.y = 400;
     }
 
     void Wizard::init(){

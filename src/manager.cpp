@@ -88,9 +88,11 @@ namespace manager {
     //Unit Methods
     slave_ptr<Unit> Manager::createUnit(unit::TYPE type, float x, float y){
         auto obj = unit_logic->createUnit( getFreePoolKey(), type );
+        
         obj->setPosition(x, y);
         addToPool(obj);
         obj->init();
+
         auto passback = slave_ptr<Unit>( static_pointer_cast<Unit>(/*game_object_pool[obj->getID()]*/obj->getSharedPtr()) );
         unit_logic->giveSlavePtr(passback);
         return passback;

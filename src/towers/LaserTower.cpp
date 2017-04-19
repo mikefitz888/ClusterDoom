@@ -8,8 +8,6 @@ using graphics::Colour;
 
 namespace tower {
     LaserTower::LaserTower(id_t key, Manager* m) : Tower(key, TYPE::LASER, m) {
-        position.x = 700;
-        position.y = 400;
         this->setDepth(-5);
     }
 

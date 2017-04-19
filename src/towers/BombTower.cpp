@@ -8,8 +8,6 @@ using graphics::Colour;
 
 namespace tower {
     BombTower::BombTower(id_t key, Manager* m) : Tower(key, TYPE::BOMB, m) {
-        position.x = 700;
-        position.y = 400;
         this->setDepth(-5);
     }
 

@@ -11,8 +11,7 @@
 
 namespace unit {
     Pirate::Pirate(id_t key, Manager* m) : Unit(key, TYPE::PIRATE, m)  {
-        position.x = 200;
-        position.y = 400;
+
     }
 
     void Pirate::init(){

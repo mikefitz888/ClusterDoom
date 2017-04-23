@@ -124,10 +124,21 @@ namespace unit {
 
         auto& target = game_controller->getBase();
 
-        if (!target) {
+        if (!target && !mineIsTarget) {
             return; //NO TARGET
         }
-        this->setDestination(target->getPosition(), unitSpeed);
+
+        if (mineIsTarget && mine) { 
+            this->setDestination(mine->getPosition(), unitSpeed);
+            /*
+                MINING FUNCTIONALITY
+            */
+            if (distanceTo(mine->getPosition()) < 100) {
+                mine->takeResource();
+            }
+        } else {
+            this->setDestination(target->getPosition(), unitSpeed);
+        }
 
         render_facing = getDestination();//target->getPosition();
 
@@ -197,6 +208,11 @@ namespace unit {
 		if (this->getAtDestination()) m = 0;
 		texture->render(m* (((int)animationProgress) % numFrames), (int)getXr(), (int)getYr(), finSize, finSize, rotation);
 	}
+
+    void Unit::targetMine(smartpointers::slave_ptr<ResourceMine> t_mine) {
+        mine = t_mine;
+        mineIsTarget = true;
+    }
 
 	/*void Unit::getPath(Point<int> target) {
 		Point<int> start = this->position;

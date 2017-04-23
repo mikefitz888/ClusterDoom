@@ -3,6 +3,7 @@
 
 #include "gamecore.h"
 #include "gameobject.h"
+#include "GameObjects\ResourceMine.h"
 
 namespace unit {
     enum TYPE : unsigned int {BASE=0, BASIC, WIZARD, PIRATE};
@@ -13,6 +14,9 @@ namespace unit {
 		float animationProgress = 0.0f;
         graphics::Texture* red;
         sf::Shader* shader;
+
+        smartpointers::slave_ptr<ResourceMine> mine = nullptr;
+        bool mineIsTarget = false;
         //graphics::VertexBuffer* vbuff;
         //graphics::VertexBuffer* hpbar_buff;
 
@@ -47,6 +51,8 @@ namespace unit {
         virtual void attack(tower_ptr tower);
         virtual void attacked(gameobject_ptr aggressor);
         virtual void attacked(gameobject_ptr aggressor, float damage);
+
+        virtual void targetMine(smartpointers::slave_ptr<ResourceMine> t_mine);
     };
 }
 

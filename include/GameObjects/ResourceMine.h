@@ -34,6 +34,8 @@ public:
     virtual void renderGUI() override;
     virtual void release() override;
     virtual void step() override;
+
+    int takeResource(int amt = 1);
 };
 
 class ResourceMineSparkle {

@@ -143,6 +143,8 @@ namespace gamecontroller {
         std::vector<std::string> getWarnings();
         float getBaseHealth();
         float getBaseMaxHealth();
+
+        void unitTargetMine(id_t unit_id, id_t mine_id);
     };
 }
 

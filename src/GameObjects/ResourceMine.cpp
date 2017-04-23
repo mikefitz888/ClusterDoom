@@ -113,6 +113,12 @@ void ResourceMine::release() {
     }
 }
 
+int ResourceMine::takeResource(int amt) {
+    int removed = std::min(current_resource, amt);
+    current_resource -= removed;
+    return removed;
+}
+
 // Resource mine particle effect
 ResourceMineSparkle::ResourceMineSparkle(glm::vec2 source_pos, gameobject_ptr parent) {
     this->source_position = source_pos;

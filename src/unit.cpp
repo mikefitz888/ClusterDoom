@@ -59,7 +59,10 @@ namespace unit {
     }
     void Unit::render() {
 
-		
+        if (isUnderGlacialEffect())
+        {
+            render_manager->setActiveColour(graphics::Colour(77, 166, 255, 255));
+        }
         /*render_manager->setActiveShader(shader);
         render_manager->setTexture(texture);
 

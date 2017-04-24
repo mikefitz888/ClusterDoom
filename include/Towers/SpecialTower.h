@@ -6,8 +6,6 @@
 
 namespace tower
 {
-    enum SPECIAL_TYPE : unsigned int { NOEFFECT = 0, MAGNETIC, GLACIAL, WINDY};
-
     class SpecialTower : public Tower {
         graphics::Texture* texture = nullptr;
        
@@ -25,9 +23,12 @@ namespace tower
         void (SpecialTower::*effect)(bool);
         void noeffect(bool cancel);
         unsigned int ticks;
+        SPECIAL_TYPE effectType;
 
         // The number of frames a power is active for after it is acquired
         static const unsigned int POWER_TIME;
+
+        SPECIAL_TYPE getEffectType();
 
         // MAGNETIC EFFECTS
         void magnetic(bool cancel);

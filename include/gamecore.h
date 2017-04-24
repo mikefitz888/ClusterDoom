@@ -149,7 +149,7 @@ namespace tower {
     class SpecialTower;
 
     enum TYPE : unsigned int { BASE = 0, BASIC, ELECTRIC, BOMB, LASER, SPECIAL, num_types };
-    enum SPECIAL_TYPE : unsigned int;
+    enum SPECIAL_TYPE : unsigned int { NOEFFECT = 0, MAGNETIC, GLACIAL, WINDY };
 }
 
 namespace towerlogic {

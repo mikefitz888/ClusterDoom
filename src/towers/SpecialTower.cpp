@@ -20,6 +20,7 @@ namespace tower {
     SpecialTower::SpecialTower(id_t key, Manager* m) : Tower(key, TYPE::SPECIAL, m) {
         effect = &SpecialTower::noeffect;
         ticks = 0;
+        effectType = NOEFFECT;
     }
 
     void SpecialTower::init() {
@@ -46,6 +47,7 @@ namespace tower {
 
     void SpecialTower::changeEffect(SPECIAL_TYPE newtype)
     {
+        effectType = newtype;
         // Call the cancel version of the current effect before changing
         switch (newtype)
         {
@@ -69,6 +71,10 @@ namespace tower {
             ticks = POWER_TIME;
             break;
         }
+    }
+
+    SPECIAL_TYPE SpecialTower::getEffectType() {
+        return effectType;
     }
 
     void SpecialTower::noeffect(bool cancel) {}
@@ -210,6 +216,6 @@ namespace tower {
     
     void SpecialTower::windy(bool cancel)
     {
-
+        /*snip*/
     }
 }

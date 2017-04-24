@@ -117,7 +117,7 @@ namespace gameobject {
         vec2 position = vec2(0.0f, 0.0f), render_position = vec2(0.0f, 0.0f), velocity, friction = vec2(1.0f, 1.0f);
         float smoothing_rate = 1.0;
         bool frozen = false;
-        bool underGlacialEffect = false;
+        double glacialEffectModifier = 1.0;
 
         void motionStep();
     public:
@@ -147,7 +147,7 @@ namespace gameobject {
         vec2 getFriction() const;
 
         bool isUnderGlacialEffect() const;
-        void setUnderGlacialEffect(bool b);
+        void setUnderGlacialEffect(double mod);
     };
     // ****************************************************************************** //
 

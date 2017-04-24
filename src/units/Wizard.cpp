@@ -139,6 +139,11 @@ namespace unit {
             }
         }*/
         // ******************************************************************************************************//
+
+        if (isUnderGlacialEffect())
+        {
+            render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
+        }
     }
 
 	void Wizard::onCollision(gameobject_ptr other) {

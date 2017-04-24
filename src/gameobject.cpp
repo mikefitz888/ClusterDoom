@@ -345,7 +345,7 @@ namespace gameobject {
     // GameObject motion component
     void MotionComponent::motionStep() {
         if (frozen) return;
-        position += underGlacialEffect ? velocity / 2.0f : velocity;
+        position += velocity * vec2(glacialEffectModifier, glacialEffectModifier);
         velocity *= friction;
 
         render_position += (position - render_position)*smoothing_rate;
@@ -442,11 +442,11 @@ namespace gameobject {
     }
 
     bool MotionComponent::isUnderGlacialEffect() const {
-        return this->underGlacialEffect;
+        return this->glacialEffectModifier != 1.0;
     }
 
-    void MotionComponent::setUnderGlacialEffect(bool b) {
-        this->underGlacialEffect = b;
+    void MotionComponent::setUnderGlacialEffect(double mod) {
+        this->glacialEffectModifier = mod;
     }
 
     // ****************************************************************************** //

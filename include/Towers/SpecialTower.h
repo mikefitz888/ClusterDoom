@@ -22,11 +22,15 @@ namespace tower
         / around the state for all the different      \
         / effects, resetting them on a state change.  \
         /*********************************************/
-        void (SpecialTower::*effect)();
-        void noeffect();
+        void (SpecialTower::*effect)(bool);
+        void noeffect(bool cancel);
+        unsigned int ticks;
+
+        // The number of frames a power is active for after it is acquired
+        static const unsigned int POWER_TIME;
 
         // MAGNETIC EFFECTS
-        void magnetic();
+        void magnetic(bool cancel);
         // Mass of tower times Magnetic Constant (technically gravitation)
         static const double GM;
         // Constant of air resistance over mass of robot
@@ -42,13 +46,15 @@ namespace tower
         static double angle(double x, double y, double u, double v);
 
         // GLACIAL EFFECTS
-        void glacial();
+        void glacial(bool cancel);
         // Radius of effect
         static const double MAX_RANGE_GLACIAL;
-        static const bool AFFECTS_ROBOTS_GLACIAL;
+        static const double ROBOT_MODIFIER;
+        static const double WIZARD_MODIFIER;
+        static const double PIRATE_MODIFIER;
 
         // WINDY EFFECTS
-        void windy();
+        void windy(bool cancel);
 
     public:
         SpecialTower(id_t key, Manager* m);

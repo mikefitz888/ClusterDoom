@@ -12,10 +12,14 @@ namespace tower {
     const double SpecialTower::GM_neut = GM / (SpecialTower::MAX_RANGE_MAGNETIC*SpecialTower::MAX_RANGE_MAGNETIC);
     const double SpecialTower::PASSIVE_DAMAGE = 3;
     const double SpecialTower::MAX_RANGE_GLACIAL = 225;
-    const bool SpecialTower::AFFECTS_ROBOTS_GLACIAL = false;
+    const double SpecialTower::ROBOT_MODIFIER = 0.85;
+    const double SpecialTower::WIZARD_MODIFIER = 0.5;
+    const double SpecialTower::PIRATE_MODIFIER = 0.5;
+    const unsigned int SpecialTower::POWER_TIME = 1750;
 
     SpecialTower::SpecialTower(id_t key, Manager* m) : Tower(key, TYPE::SPECIAL, m) {
         effect = &SpecialTower::noeffect;
+        ticks = 0;
     }
 
     void SpecialTower::init() {
@@ -33,33 +37,45 @@ namespace tower {
     }
 
     void SpecialTower::step() {
-        (this->*effect)();
+        if (ticks > 0)
+        {
+            if (--ticks == 0) changeEffect(NOEFFECT);
+            else (this->*effect)(false);
+        }
     }
 
     void SpecialTower::changeEffect(SPECIAL_TYPE newtype)
     {
+        // Call the cancel version of the current effect before changing
         switch (newtype)
         {
         case SPECIAL_TYPE::NOEFFECT:
+            (this->*effect)(true);
             effect = &SpecialTower::noeffect;
             break;
         case SPECIAL_TYPE::MAGNETIC:
+            (this->*effect)(true);
             effect = &SpecialTower::magnetic;
+            ticks = POWER_TIME;
             break;
         case SPECIAL_TYPE::GLACIAL:
+            (this->*effect)(true);
             effect = &SpecialTower::glacial;
+            ticks = POWER_TIME;
             break;
         case SPECIAL_TYPE::WINDY:
+            (this->*effect)(true);
             effect = &SpecialTower::windy;
+            ticks = POWER_TIME;
             break;
         }
     }
 
-    void SpecialTower::noeffect() {}
+    void SpecialTower::noeffect(bool cancel) {}
     
     //TODO: Adjust strength based on number of robots stuck to us...
     // The number of robots attached is the number of robots whose velocity is 0 but are within the distance?
-    void SpecialTower::magnetic() 
+    void SpecialTower::magnetic(bool cancel)
     {
         // d(v, s)/dt = (GM/(s^2) - GM_neut - km*v^2)*dt
         int num_robots = 0;
@@ -89,7 +105,7 @@ namespace tower {
                 double dy = y - getY();
                 double d = std::hypot(dx, dy);
                 Point<float> v = robot->getMagneticVelocity();
-                if (d < MAX_RANGE_MAGNETIC)
+                if (d < MAX_RANGE_MAGNETIC && !cancel)
                 {
                     // This robot must be accelerated towards us!
                     double v_mag = std::hypot(v.x, v.y);
@@ -169,18 +185,30 @@ namespace tower {
         return std::acos((x*u + y*v)/(std::hypot(x, y)*std::hypot(u, v)));
     }
     
-    void SpecialTower::glacial() 
+    void SpecialTower::glacial(bool cancel)
     {
         for (auto unit : manager->getUnits())
         {
             if (!unit) continue;
-            if (!AFFECTS_ROBOTS_GLACIAL && unit->getSubType() == unit::TYPE::BASIC) continue;
+            double modifier = 1.0;
+            switch (unit->getSubType())
+            {
+            case unit::TYPE::BASIC:
+                modifier = ROBOT_MODIFIER;
+                break;
+            case unit::TYPE::WIZARD:
+                modifier = WIZARD_MODIFIER;
+                break;
+            case unit::TYPE::PIRATE:
+                modifier = PIRATE_MODIFIER;
+                break;
+            }
             double d = std::hypot(unit->getX() - getX(), unit->getY() - getY());
-            unit->setUnderGlacialEffect(d <= MAX_RANGE_GLACIAL);
+            unit->setUnderGlacialEffect(d <= MAX_RANGE_GLACIAL && !cancel ? modifier : 1.0);
         }
     }
     
-    void SpecialTower::windy() 
+    void SpecialTower::windy(bool cancel)
     {
 
     }

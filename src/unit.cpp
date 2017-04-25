@@ -26,6 +26,7 @@ namespace unit {
         }*/
         texture = manager->getResourceManager()->getAnimatedTexture("robot_unit");
 
+
         /*red = new sf::Texture();
         if (!red->loadFromFile("src/Resources/Textures/red.png")) {
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
@@ -42,7 +43,7 @@ namespace unit {
         shader = manager->getResourceManager()->getShader("default");
 
         unit_shadow = manager->getResourceManager()->getTexture("unit_shadow");
-
+        unit_ice = manager->getResourceManager()->getTexture("ice_effect_frozen");
        // vbuff = new graphics::VertexBuffer();
        // hpbar_buff = new graphics::VertexBuffer();
 
@@ -63,6 +64,7 @@ namespace unit {
         {
             render_manager->setActiveColour(graphics::Colour(77, 166, 255, 255));
         }
+        glacial_effect_vis += (this->glacialEffectModifier - glacial_effect_vis)*0.035f;
         /*render_manager->setActiveShader(shader);
         render_manager->setTexture(texture);
 

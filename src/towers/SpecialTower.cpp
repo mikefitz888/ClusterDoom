@@ -12,9 +12,9 @@ namespace tower {
     const double SpecialTower::GM_neut = GM / (SpecialTower::MAX_RANGE_MAGNETIC*SpecialTower::MAX_RANGE_MAGNETIC);
     const double SpecialTower::PASSIVE_DAMAGE = 3;
     const double SpecialTower::MAX_RANGE_GLACIAL = 225;
-    const double SpecialTower::ROBOT_MODIFIER = 0.65;//0.85;
-    const double SpecialTower::WIZARD_MODIFIER = 0.02;//0.5;
-    const double SpecialTower::PIRATE_MODIFIER = 0.10;//0.5;
+    const double SpecialTower::ROBOT_MODIFIER = 0.85;
+    const double SpecialTower::WIZARD_MODIFIER = 0.0;//0.5;
+    const double SpecialTower::PIRATE_MODIFIER = 0.15;//0.5;
     const unsigned int SpecialTower::POWER_TIME = 1750;
 
     SpecialTower::SpecialTower(id_t key, Manager* m) : Tower(key, TYPE::SPECIAL, m) {

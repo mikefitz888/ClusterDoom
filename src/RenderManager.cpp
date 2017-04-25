@@ -59,7 +59,8 @@ namespace graphics {
         // Special Tower effects
         rm->textureLoad("ice_effect_sweep", "src/Resources/Textures/ice_effect_sweep.png")->setOrigin(313, 168);
         rm->textureLoad("ice_effect_base", "src/Resources/Textures/ice_effect_base.png")->setOriginCentre();
-
+        rm->textureLoad("ice_effect_frozen", "src/Resources/Textures/frozen_overlay.png")->setOriginCentre();
+        
         /// Load Animated Textures
         //  Explosions
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();

@@ -100,7 +100,7 @@ namespace unit {
 
 		Unit::render();
 
-		renderAnimation(texture, 0.22f, 0.3f, 12, 1.0f, 0.0f);
+		renderAnimation(texture, 0.22f, 0.3f*this->glacial_effect_vis, 12, 1.0f, 0.0f);
         /*render_manager = manager->getRenderManager();
 
 
@@ -127,8 +127,10 @@ namespace unit {
         }*/
         // ******************************************************************************************************//
 
-        if (isUnderGlacialEffect())
-        {
+        if (this->glacial_effect_vis > 0.0f) {
+            float factor = (1.0f - this->glacial_effect_vis);
+            render_manager->setActiveColour(graphics::Colour(255, 255, 255, 200 * factor));
+            unit_ice->render(getXr(), getYr(), 0.35f*factor, 0.35f*factor, 0.0f);
             render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
         }
     }

@@ -29,10 +29,11 @@ namespace unit {
         float health_alpha = 0;
         float health_visual = maxHealth;
 		float unitSpeed = 1.0f;
+        float glacial_effect_vis = 0.0f;
         size_t cooldown = 0;
 
         void deliverWealth(size_t amt);
-        graphics::Texture* unit_shadow;
+        graphics::Texture* unit_shadow, *unit_ice;
 
     public:
         Unit(id_t id, TYPE unit_type, Manager* m);

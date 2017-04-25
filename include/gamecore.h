@@ -149,6 +149,7 @@ namespace tower {
     class BombTower;
     class ElecticTower;
     class SpecialTower;
+    class SpecialTowerMagnetEffect;
 
     enum TYPE : unsigned int { BASE = 0, BASIC, ELECTRIC, BOMB, LASER, SPECIAL, num_types };
     enum SPECIAL_TYPE : unsigned int { NOEFFECT = 0, MAGNETIC, GLACIAL, WINDY };

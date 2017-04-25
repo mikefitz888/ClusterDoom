@@ -64,6 +64,9 @@ namespace graphics {
         rm->textureLoad("ice_effect_base", "src/Resources/Textures/ice_effect_base.png")->setOriginCentre();
         rm->textureLoad("ice_effect_frozen", "src/Resources/Textures/frozen_overlay.png")->setOriginCentre();
         
+        // Magnet tower effects
+        rm->textureLoad("magnet_ring_effect", "src/Resources/Textures/magnet_ring_effect.png")->setOriginCentre();
+
         /// Load Animated Textures
         //  Explosions
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();

@@ -6,6 +6,23 @@
 
 namespace tower
 {
+
+    class SpecialTowerMagnetEffect {
+
+        // Visual variables
+        const float min_scale_threshold = 0.25f;
+        const float min_reset_scale = -1.0f;
+        float scale = 1.0f;
+        float alpha = 0.0f;
+
+    public:
+        SpecialTowerMagnetEffect();
+        void step();
+        void setScale(float scale);
+        float getScale();
+        float getAlpha();
+    };
+
     class SpecialTower : public Tower {
         graphics::Texture* texture = nullptr;
 
@@ -20,7 +37,12 @@ namespace tower
         float ef_ice_alpha = 0.0f;
         // ----------------------
 
-       
+        // Magnet effect --------
+        static const int num_magnet_rings = 4;
+        SpecialTowerMagnetEffect magnet_rings[num_magnet_rings];
+
+        graphics::Texture* tx_magnet_ring = nullptr;
+        // ----------------------
         /*********************************************\
         /****************** EFFECTS ******************\
         /*********************************************\

@@ -36,9 +36,25 @@ namespace tower {
         // Get ice effect 
         tx_ice_sweep = manager->getResourceManager()->getTexture("ice_effect_sweep");
         tx_ice_base  = manager->getResourceManager()->getTexture("ice_effect_base");
+
+        // Get magnet effect
+        tx_magnet_ring = manager->getResourceManager()->getTexture("magnet_ring_effect");
+        for (int i = 0; i < num_magnet_rings; i++) {
+            magnet_rings[i].setScale((float)i / (float)num_magnet_rings);
+        }
     }
 
     void SpecialTower::render() {
+
+        // ----------------- MAGNET EFFECT -----------------
+        if (this->getEffectType() == SPECIAL_TYPE::MAGNETIC) {
+            for (int i = 0; i < num_magnet_rings; i++) {
+                magnet_rings[i].step();
+                render_manager->setActiveColour(255, 255, 255, (int)(255 * magnet_rings[i].getAlpha()));
+                tx_magnet_ring->render((int)getXr(), (int)getYr(), magnet_rings[i].getScale(), magnet_rings[i].getScale(), 0.0f);
+            }
+            render_manager->setActiveColour(255, 255, 255, 255);
+        }
 
         // -------------- GALCIAL EFFECT -------------------------------
         if (this->getEffectType() == SPECIAL_TYPE::GLACIAL) {
@@ -309,5 +325,46 @@ namespace tower {
                 }
             }
         }
+    }
+
+
+    // SPECIAL TOWER MAGNET EFFECT
+    SpecialTowerMagnetEffect::SpecialTowerMagnetEffect() {
+    }
+
+    void SpecialTowerMagnetEffect::step() {
+        /*
+            Start with alpha 0, scale 1.
+            fade in if alpha less than 1.
+            When scale goes below threshold, fade out again
+            when scale goes below reset threshold, reset. 
+        */
+        scale -= 0.02f;
+        if (scale >= min_scale_threshold) {
+            if (alpha < 1.0f) {
+                alpha += 0.05f;
+            }
+        } else {
+            if (alpha > 0.0f) {
+                alpha -= 0.05f;
+            }
+
+            // If scale goes past reset point, 
+            if (scale < min_reset_scale) {
+                scale = 1.0f;
+            }
+        }
+    }
+
+    void SpecialTowerMagnetEffect::setScale(float scale) {
+        this->scale = scale;
+    }
+
+    float SpecialTowerMagnetEffect::getScale() {
+        return this->scale;
+    }
+
+    float SpecialTowerMagnetEffect::getAlpha() {
+        return this->alpha;
     }
 }

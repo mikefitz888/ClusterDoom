@@ -30,8 +30,7 @@ namespace tower {
         float health=max_health;
         float idle_cost = 10.0f;
         float max_power = 1.0f;
-        size_t requestMoney(size_t amt);
-        float requestEfficiency(size_t amt, size_t minimum=0);
+        float requestEfficiency();
 
 		float lastX;
 		float lastY;

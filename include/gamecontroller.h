@@ -76,7 +76,7 @@ namespace gamecontroller {
 
         int wave = 0;
         int scenario = -1;
-        unsigned int wealth = 0;
+        float tower_efficiency = 0;
 
         // Resource spawning
         const int resource_spawn_timer_max = 1500;
@@ -138,10 +138,10 @@ namespace gamecontroller {
         int getScreenWidth();
         int getScreenHeight();
 
-        void increaseWealth(unsigned int amt);
-        int requestWealth(unsigned int amt); //returns the min(amt, wealth)
+        void addEfficiency(unsigned int amt = 1);
+        float towerEfficiency();
+        void diminishEfficiency();
 
-        unsigned int availableWealth();
         sf::Time timeUntilNextWave();
         std::vector<std::string> getWarnings();
         float getBaseHealth();

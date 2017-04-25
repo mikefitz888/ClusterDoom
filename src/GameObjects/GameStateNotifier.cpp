@@ -82,7 +82,7 @@ void GameStateNotifier::writeNetworkUpdate(int event_id, Buffer &buffer) {
 
         // WEALTH
         case GameStateNotifierUpdateEvents::SEND_WEALTH:
-            buffer << this->game_controller->availableWealth();
+            buffer << this->game_controller->towerEfficiency();
             break;
 
         // WARNINGS

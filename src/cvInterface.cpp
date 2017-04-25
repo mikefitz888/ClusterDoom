@@ -641,7 +641,7 @@ std::vector<Square> squares;
             
 
 
-            std::cout << "MARKER TYPE: " << marker.marker_type << std::endl;
+            //std::cout << "MARKER TYPE: " << marker.marker_type << std::endl;
             cv::circle(frame, cv::Point(marker.x, marker.y), 6, cv::Scalar(0, 128, 0), 5);
         }
 

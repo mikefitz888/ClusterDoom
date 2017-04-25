@@ -14,7 +14,7 @@
 #define TILE_H 20
 
 namespace gamecontroller {
-    const float time_per_scenario = 20.f;
+    const float time_per_scenario = 60.f;
     const int waves_per_scenario = 3;
 
     using gameobject::GameObject;

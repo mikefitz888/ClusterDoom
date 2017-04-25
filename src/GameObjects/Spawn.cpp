@@ -62,21 +62,21 @@ void Spawn::beginWave() {
         //spawn_queue.emplace_back((number_of_enemies+focus) % 2 ? unit::TYPE::WIZARD : unit::TYPE::BASIC, delay);
 		if ((number_of_enemies + focus) % 9 < 3) {
 			spawn_queue.emplace_back(unit::TYPE::BASIC, delay);
-			spawn_queue.emplace_back(unit::TYPE::BASIC, delay);
+			spawn_queue.emplace_back(unit::TYPE::BASIC, delay+300);
 		}
 		else if ((number_of_enemies + focus) % 9 < 6) {
 			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
-			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
-			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
-			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
-			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
-			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
+			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay+300);
+			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay+600);
+			//spawn_queue.emplace_back(unit::TYPE::PIRATE, delay+900);
+			//spawn_queue.emplace_back(unit::TYPE::PIRATE, delay+1200);
+			//spawn_queue.emplace_back(unit::TYPE::PIRATE, delay+1500);
 		}
 		else {
 			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay);
-			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay);
-			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay);
-			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay);
+			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay+300);
+			//spawn_queue.emplace_back(unit::TYPE::WIZARD, delay+600);
+			//spawn_queue.emplace_back(unit::TYPE::WIZARD, delay+900);
 		}
         delay += spawn_rate;
     }

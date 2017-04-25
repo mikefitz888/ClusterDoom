@@ -17,6 +17,7 @@ namespace tower {
     //enum TYPE : unsigned int { BASE = 0, BASIC, ELECTRIC, BOMB, LASER, num_types };
 
     class Tower : public GameObject {
+		graphics::Texture* rangeTexture;
         graphics::Texture* texture;
         graphics::Texture* red;
         sf::Shader* shader;
@@ -31,6 +32,10 @@ namespace tower {
         float max_power = 1.0f;
         size_t requestMoney(size_t amt);
         float requestEfficiency(size_t amt, size_t minimum=0);
+
+		float lastX;
+		float lastY;
+
         std::vector<unit_ptr> units;
     public:
         Tower(id_t id, TYPE tower_type, Manager* m);
@@ -39,6 +44,8 @@ namespace tower {
         virtual void renderGUI() override;
         virtual void release() override;
         virtual void step() override;
+		
+		bool isMoving();
 
         //Gameplay methods
         float getHealth() const;

@@ -21,7 +21,7 @@ namespace unit {
         collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture = manager->getResourceManager()->getAnimatedTexture("robot_unit");
-        this->setDistanceThreshold(150);
+        this->setDistanceThreshold(95);
 
         health = 8000;
         maxHealth = 8000;
@@ -78,28 +78,31 @@ namespace unit {
         }*/
 
         auto& base = game_controller->getBase();
-        if (distanceTo(base->getPosition()) < 160 && cooldown-- == 0) {
+        if (distanceTo(base->getPosition()) < 100 && cooldown-- == 0) {
             //gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
             //smartpointers::static_pointer_cast<unit::Unit>(other);
             smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY())));
-            obj1->textureName = "redLaser";
+            obj1->textureName = "meleeEffect";
             obj1->setCollisionType(gameobject::TYPE::TOWER);
             //std::cout << "unit fired\n";
             auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
-            obj1->setVelocity(dir * 7.f);
+            obj1->setVelocity(dir * 1.f);
             //auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
             //obj1->setPosition(getPosition() + sdir);
             //obj2->setPosition(getPosition() - sdir);
 
 
             //attack(base);
-            cooldown = 40;
+            cooldown = 80;
         }
     }
 
     void BasicUnit::render() {
 
         Unit::render();
+
+		//cannot use as animation doesn't happen in linear order (frame[] variable)
+		//renderAnimation(texture, 0.13f, 0.1f*this->glacial_effect_vis, 12, 1.0f, 0.0f);
 
         render_manager = manager->getRenderManager();
 

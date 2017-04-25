@@ -61,10 +61,10 @@ void Spawn::beginWave() {
         //auto k = 0 < 4 ? unit::TYPE::WIZARD : unit::TYPE::BASIC;
         //spawn_queue.emplace_back((number_of_enemies+focus) % 2 ? unit::TYPE::WIZARD : unit::TYPE::BASIC, delay);
 		if ((number_of_enemies + focus) % 3 == 0) {
-			spawn_queue.emplace_back(unit::TYPE::BASIC, delay);
+			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
 		}
 		else if ((number_of_enemies + focus) % 3 == 1) {
-			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
+			spawn_queue.emplace_back(unit::TYPE::BASIC, delay);
 		}
 		else {
 			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay);

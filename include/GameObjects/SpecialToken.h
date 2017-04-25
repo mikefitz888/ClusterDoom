@@ -3,14 +3,16 @@
 
 #include "../gamecore.h"
 #include "../../include/gameobject.h"
-#include "../../include/smartpointers.h"
 
 class SpecialToken : public GameObject {
-    tower::SPECIAL_TYPE type;
+    gameobject::OBJECT_TYPE type;
+    graphics::Texture* tokenTexture;
+
+    static const int MAX_PICKUP_RANGE;
 
 public:
     // Constructor
-    SpecialToken(id_t id, manager::Manager* m, tower::SPECIAL_TYPE type);
+    SpecialToken(id_t id, manager::Manager* m, gameobject::OBJECT_TYPE type);
 
     // Virtual overloads
     virtual void init() override;

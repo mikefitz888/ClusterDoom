@@ -55,6 +55,9 @@ namespace graphics {
 		rm->textureLoad("redLaser", "src/Resources/Textures/redLaser.png")->setOriginCentre();
 		rm->textureLoad("blueLaser", "src/Resources/Textures/blueLaser.png")->setOriginCentre();
 		rm->textureLoad("musketShot", "src/Resources/Textures/musketShot.png")->setOriginCentre();
+        rm->textureLoad("token_windy", "src/Resources/Textures/WindyToken.png")->setOriginCentre();
+        rm->textureLoad("token_glacial", "src/Resources/Textures/GlacialToken.png")->setOriginCentre();
+        rm->textureLoad("tokne_magnetic", "src/Resources/Textures/MagnetToken.png")->setOriginCentre();
 
         // Special Tower effects
         rm->textureLoad("ice_effect_sweep", "src/Resources/Textures/ice_effect_sweep.png")->setOrigin(313, 168);

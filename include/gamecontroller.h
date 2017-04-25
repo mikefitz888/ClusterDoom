@@ -79,8 +79,8 @@ namespace gamecontroller {
         unsigned int wealth = 0;
 
         // Resource spawning
-        const int resource_spawn_timer_max = 150;//1500;
-        const int resource_spawn_timer_min = 60;//600;
+        const int resource_spawn_timer_max = 1500;
+        const int resource_spawn_timer_min = 600;
         const int token_timer_max = 200;
         const int token_timer_min = 50;
         const int max_resource_on_map = 3;

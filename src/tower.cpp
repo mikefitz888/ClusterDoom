@@ -170,7 +170,14 @@ namespace tower {
     }
 
 	bool Tower::isMoving() {
-		if (lastX != getX() || lastY != getY()) {
+		float newX = getX();
+		if (lastX != newX) {
+			lastX = newX;
+			return true;
+		}
+		float newY = getY();
+		if (lastY != newY) {
+			lastY = newY;
 			return true;
 		}
 		return false;

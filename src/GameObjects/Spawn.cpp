@@ -53,20 +53,29 @@ void Spawn::beginWave() {
     int delay = time;
     std::cout << scenario << "\n";
     spawn_queue.clear();
-    int focus = (wave + 3 * scenario) % 4;
-    if (focus != spawn_id) return;
-    for (int number_of_enemies = 1 + scenario*scenario; number_of_enemies > 0; number_of_enemies--) {
+    int focus = (wave + 3 * scenario) % 10;
+    //if (focus != spawn_id) return;
+    for (int number_of_enemies = 1 + scenario/3; number_of_enemies > 0; number_of_enemies--) {
         std::cout << number_of_enemies << "\n";
 		// auto k didn't seem to do anything, changed one-line if to allow more units
         //auto k = 0 < 4 ? unit::TYPE::WIZARD : unit::TYPE::BASIC;
         //spawn_queue.emplace_back((number_of_enemies+focus) % 2 ? unit::TYPE::WIZARD : unit::TYPE::BASIC, delay);
-		if ((number_of_enemies + focus) % 3 == 0) {
-			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
-		}
-		else if ((number_of_enemies + focus) % 3 == 1) {
+		if ((number_of_enemies + focus) % 9 < 3) {
+			spawn_queue.emplace_back(unit::TYPE::BASIC, delay);
 			spawn_queue.emplace_back(unit::TYPE::BASIC, delay);
 		}
+		else if ((number_of_enemies + focus) % 9 < 6) {
+			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
+			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
+			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
+			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
+			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
+			spawn_queue.emplace_back(unit::TYPE::PIRATE, delay);
+		}
 		else {
+			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay);
+			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay);
+			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay);
 			spawn_queue.emplace_back(unit::TYPE::WIZARD, delay);
 		}
         delay += spawn_rate;

@@ -10,6 +10,11 @@ class SpecialToken : public GameObject {
 
     static const int MAX_PICKUP_RANGE;
 
+protected:
+
+	int maxCooldown = 1000;
+	size_t cooldown = 0;
+
 public:
     // Constructor
     SpecialToken(id_t id, manager::Manager* m, gameobject::OBJECT_TYPE type);

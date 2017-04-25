@@ -16,9 +16,6 @@ namespace tower {
     const double SpecialTower::ROBOT_MODIFIER = 0.85;
     const double SpecialTower::WIZARD_MODIFIER = 0.0;
     const double SpecialTower::PIRATE_MODIFIER = 0.15;
-    const double SpecialTower::ROBOT_MODIFIER = 0.65;//0.85;
-    const double SpecialTower::WIZARD_MODIFIER = 0.02;//0.5;
-    const double SpecialTower::PIRATE_MODIFIER = 0.10;//0.5;
     const double SpecialTower::MAX_RANGE_WINDY = 200;
     const unsigned int SpecialTower::POWER_TIME = 1750;
 

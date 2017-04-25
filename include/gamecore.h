@@ -67,7 +67,8 @@ class ProjectileElectricity;
 class ProjectileLaser;
 class GameStateNotifier;
 class ResourceMine;
-class ResourceMineSparkle;
+class ResourceMineSparkle; // <- That moment when you need a whole class just for a sparkle #Unecessary :p
+class SpecialToken;
 
 typedef unsigned char byte;
 #ifdef _WIN32

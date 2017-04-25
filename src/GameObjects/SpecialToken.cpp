@@ -59,10 +59,9 @@ void SpecialToken::step() {
     }
 }
 
-
-void SpecialToken::render() {
+void SpecialToken::renderGUI() {
     this->tokenTexture->render(this->getX(), this->getY()/*, scale, scale, 0.0f*/);
 }
 
-void SpecialToken::renderGUI() {}
+void SpecialToken::render() {}
 void SpecialToken::release() {}

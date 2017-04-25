@@ -6,7 +6,6 @@
 #include "../../include/tower.h"
 #include "../../include/util.h"
 #include "../../include/AnimatedTexture.h"
-#include "../../include/smartpointers.h"
 
 
 // Resource mine constructor

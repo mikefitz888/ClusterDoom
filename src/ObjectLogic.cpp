@@ -5,6 +5,7 @@
 #include "../include/manager.h"
 #include "../include/gameobject.h"
 #include "../include/GameObjects/GameStateNotifier.h"
+#include "../include/GameObjects/SpecialToken.h"
 
 GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
     switch (type) {
@@ -30,6 +31,18 @@ GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
 
     case gameobject::OBJECT_TYPE::RESOURCE_MINE:
         return new ResourceMine(key, manager);
+        break;
+
+    case gameobject::OBJECT_TYPE::TOKEN_MAGNETIC:
+        return new SpecialToken(key, manager, gameobject::OBJECT_TYPE::TOKEN_MAGNETIC);
+        break;
+
+    case gameobject::OBJECT_TYPE::TOKEN_GLACIAL:
+        return new SpecialToken(key, manager, gameobject::OBJECT_TYPE::TOKEN_GLACIAL);
+        break;
+
+    case gameobject::OBJECT_TYPE::TOKEN_WINDY:
+        return new SpecialToken(key, manager, gameobject::OBJECT_TYPE::TOKEN_WINDY);
         break;
 
     default:

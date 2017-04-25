@@ -97,7 +97,17 @@ namespace gameobject {
     using network::INetworkInstance;
 
     enum TYPE : unsigned int { TOWER = 0, UNIT, OBJECT };
-    enum OBJECT_TYPE : unsigned int { SPAWN = 0, PROJECTILE_BOMB = 1, PROJECTILE_LASER = 2, PROJECTILE_ELECTRICITY = 3, GAME_STATE_NOTIFIER = 4, RESOURCE_MINE = 5 };
+    enum OBJECT_TYPE : unsigned int {
+        SPAWN = 0,
+        PROJECTILE_BOMB = 1,
+        PROJECTILE_LASER = 2,
+        PROJECTILE_ELECTRICITY = 3,
+        GAME_STATE_NOTIFIER = 4,
+        RESOURCE_MINE = 5,
+        TOKEN_MAGNETIC = 6,
+        TOKEN_GLACIAL = 7,
+        TOKEN_WINDY = 8
+    };
 
 
     // ****************************************************************************** //

@@ -286,7 +286,7 @@ namespace tower {
         // We will change the targets of any projectiles in range
         for (auto obj : manager->getObjects())
         {
-            if (obj->getSuperType() == gameobject::TYPE::OBJECT)
+            if (obj && obj->getSuperType() == gameobject::TYPE::OBJECT)
             {
                 double d = std::hypot(obj->getX() - getX(), obj->getY() - getY());
                 if (d > MAX_RANGE_WINDY) continue;

@@ -81,8 +81,11 @@ namespace gamecontroller {
         // Resource spawning
         const int resource_spawn_timer_max = 1500;
         const int resource_spawn_timer_min = 600;
+        const int token_timer_max = 200;
+        const int token_timer_min = 50;
         const int max_resource_on_map = 3;
         int resource_spawn_timer = resource_spawn_timer_min;
+        int token_timer = token_timer_min;
 
         std::vector<smartpointers::slave_ptr<Spawn>> spawn_points = std::vector<smartpointers::slave_ptr<Spawn>>();
         // TEMP

@@ -60,6 +60,9 @@ namespace graphics {
 		rm->textureLoad("meleeEffect", "src/Resources/Textures/meleeEffect.png")->setOriginCentre();
 
 		rm->textureLoad("rangeCircle", "src/Resources/Textures/rangeCircle.png")->setOriginCentre();
+        rm->textureLoad("token_windy", "src/Resources/Textures/WindyToken.png")->setOriginCentre();
+        rm->textureLoad("token_glacial", "src/Resources/Textures/GlacialToken.png")->setOriginCentre();
+        rm->textureLoad("token_magnetic", "src/Resources/Textures/MagnetToken.png")->setOriginCentre();
 
         // Special Tower effects
         rm->textureLoad("ice_effect_sweep", "src/Resources/Textures/ice_effect_sweep.png")->setOrigin(313, 168);

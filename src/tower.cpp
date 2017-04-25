@@ -28,7 +28,7 @@ namespace tower {
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/
 
-		//rangeTexture = manager->getResourceManager()->getTexture("rangeCircle");
+		rangeTexture = manager->getResourceManager()->getTexture("rangeCircle");
 
         shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
         if(shader == nullptr){
@@ -176,7 +176,14 @@ namespace tower {
     }
 
 	bool Tower::isMoving() {
-		if (lastX != getX() || lastY != getY()) {
+		float newX = getX();
+		if (lastX != newX) {
+			lastX = newX;
+			return true;
+		}
+		float newY = getY();
+		if (lastY != newY) {
+			lastY = newY;
 			return true;
 		}
 		return false;

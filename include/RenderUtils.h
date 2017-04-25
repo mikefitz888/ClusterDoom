@@ -17,7 +17,7 @@ namespace graphics {
 		static void init(Manager *manager);
 
 	public:
-		static void render_circular_health(int x, int y, int health, int health_max, Colour colour);
+		static void render_circular_health(int x, int y, int health, int health_max, Colour colour, float scale=1.0f);
 		static Colour colour_blend(Colour a, Colour b, float factor);
         static void draw_line(int x1, int y1, int x2, int y2, int thickness, Colour colour);
 	};

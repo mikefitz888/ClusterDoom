@@ -30,7 +30,7 @@ void RenderUtils::init(manager::Manager *manager) {
     RenderUtils::single_px_buffer->freeze();
 }
 
-void RenderUtils::render_circular_health(int x, int y, int health, int health_max, Colour colour) {
+void RenderUtils::render_circular_health(int x, int y, int health, int health_max, Colour colour, float scale) {
 	RenderManager *rm = manager->getRenderManager();
 
 	// Using a custom shader for the health bar to mask it based on the progress
@@ -48,7 +48,7 @@ void RenderUtils::render_circular_health(int x, int y, int health, int health_ma
 
 	// Draw mask
 	rm->setActiveColour(colour);
-	RenderUtils::health_bar_diffuse_mask->render(x, y);
+	RenderUtils::health_bar_diffuse_mask->render(x, y, scale, scale, 0.0f, 0.0f);
     rm->setActiveColour(255,255,255,255);
 	rm->resetActiveShader();
 }

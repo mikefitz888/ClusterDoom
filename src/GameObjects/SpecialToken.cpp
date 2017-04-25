@@ -5,8 +5,11 @@
 #include "../../include/tower.h"
 #include "../../include/towers/SpecialTower.h"
 #include "../../include/smartpointers.h"
+#include "../../include/RenderUtils.h"
 
 const int SpecialToken::MAX_PICKUP_RANGE = 50;
+
+using namespace graphics;
 
 SpecialToken::SpecialToken(id_t id, manager::Manager* m, gameobject::OBJECT_TYPE type)
     : GameObject(id, gameobject::TYPE::OBJECT, type, m) {
@@ -16,6 +19,8 @@ SpecialToken::SpecialToken(id_t id, manager::Manager* m, gameobject::OBJECT_TYPE
 }
 
 void SpecialToken::init() {
+
+	cooldown = maxCooldown;
     sf::String texture;
     switch (type)
     {
@@ -34,6 +39,11 @@ void SpecialToken::init() {
 }
 
 void SpecialToken::step() {
+
+	cooldown--;
+	if (cooldown <= 0) {
+		destroySelf();
+	}
     // Find nearby special towers
     auto towers = this->manager->getGameController()->getTowersInRange(this->position, MAX_PICKUP_RANGE);
     for (auto tower : towers)
@@ -61,6 +71,14 @@ void SpecialToken::step() {
 
 void SpecialToken::renderGUI() {
     this->tokenTexture->render(this->getX(), this->getY()/*, scale, scale, 0.0f*/);
+
+	RenderUtils::render_circular_health((int)getXr(), (int)getYr(), (int)cooldown, (int)maxCooldown,
+		//RenderUtils::colour_blend(
+		//    Colour(55, 55, 55, 255),
+		RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), (float)cooldown / maxCooldown),0.5f
+		//    1.0f-std::min((float)game_controller->availableWealth() / max_power, 1.0f)
+		//)
+	);
 }
 
 void SpecialToken::render() {}

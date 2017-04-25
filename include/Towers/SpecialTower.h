@@ -56,6 +56,7 @@ namespace tower
 
         // WINDY EFFECTS
         void windy(bool cancel);
+        static const double MAX_RANGE_WINDY;
 
     public:
         SpecialTower(id_t key, Manager* m);

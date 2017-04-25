@@ -3,6 +3,7 @@
 #include "../../include/RenderUtils.h"
 #include "../../include/ResourceManager.h"
 #include "../../include/manager.h"
+#include "../../include/GameObjects/Projectiles.h"
 
 namespace tower {
     const double SpecialTower::GM = 5000;
@@ -15,6 +16,7 @@ namespace tower {
     const double SpecialTower::ROBOT_MODIFIER = 0.85;
     const double SpecialTower::WIZARD_MODIFIER = 0.5;
     const double SpecialTower::PIRATE_MODIFIER = 0.5;
+    const double SpecialTower::MAX_RANGE_WINDY = 200;
     const unsigned int SpecialTower::POWER_TIME = 1750;
 
     SpecialTower::SpecialTower(id_t key, Manager* m) : Tower(key, TYPE::SPECIAL, m) {
@@ -216,6 +218,32 @@ namespace tower {
     
     void SpecialTower::windy(bool cancel)
     {
-        /*snip*/
+        srand(time(NULL));
+        // We will change the targets of any projectiles in range
+        for (auto obj : manager->getObjects())
+        {
+            if (obj->getSuperType() == gameobject::TYPE::OBJECT)
+            {
+                double d = std::hypot(obj->getX() - getX(), obj->getY() - getY());
+                if (d > MAX_RANGE_WINDY) continue;
+                // In future we might want to have a different velocity changes and direction delta for each
+                // So that we get this done quickly we are just going to randomise the direction
+                if (obj->getSubType() == gameobject::OBJECT_TYPE::PROJECTILE_BOMB)
+                {
+                    auto bomb = smartpointers::static_pointer_cast<ProjectileBomb>(obj);
+                    auto v = std::hypot(bomb->getVelocityX(), bomb->getVelocityY());
+                    double angle = (rand() % 360) * 3.14159/180.0;
+                    bomb->setVelocity(vec2(v * cos(angle), v * sin(angle)));
+                }
+                else if (obj->getSubType() == gameobject::OBJECT_TYPE::PROJECTILE_LASER)
+                {
+                    auto laser = smartpointers::static_pointer_cast<ProjectileLaser>(obj);
+                    laser->setCollisionType(gameobject::TYPE::UNIT);
+                    auto v = std::hypot(laser->getVelocityX(), laser->getVelocityY());
+                    double angle = (rand() % 360) * 3.14159 / 180.0;
+                    laser->setVelocity(vec2(v * cos(angle), v * sin(angle)));
+                }
+            }
+        }
     }
 }

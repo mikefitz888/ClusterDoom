@@ -64,6 +64,7 @@ class Spawn;
 class String;
 class ProjectileBomb;
 class ProjectileElectricity;
+class ProjectileLaser;
 class GameStateNotifier;
 class ResourceMine;
 class ResourceMineSparkle;

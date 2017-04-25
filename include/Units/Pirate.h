@@ -25,6 +25,9 @@ namespace unit
         void onCollision(gameobject_ptr other) override;
         void step() override;
 
+	protected:
+		size_t cooldownGun = 0;
+
 		// Networking
 		/*
 			The BasicUnit will have a number of simple network events.

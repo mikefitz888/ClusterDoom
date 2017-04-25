@@ -28,6 +28,8 @@ namespace tower {
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/
 
+		//rangeTexture = manager->getResourceManager()->getTexture("rangeCircle");
+
         shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
         if(shader == nullptr){
             std::cout << "[ERROR] FAILED TO LOAD SHADER (Tower)" << std::endl;
@@ -42,6 +44,9 @@ namespace tower {
 
         vbuff->freeze();
         hpbar_buff->freeze();
+
+		lastX = getX();
+		lastY = getY();
     }
 
     void Tower::render(){
@@ -62,6 +67,10 @@ namespace tower {
             //    1.0f-std::min((float)game_controller->availableWealth() / max_power, 1.0f)
             //)
         );
+
+		if (isMoving()) {
+			rangeTexture->render((int)getXr(), (int)getYr(), 0.5f, 0.5f, 0.0f, 0.0f); //2*maxRange(200)/textureWidth(800) = 0.5f
+		}
 
         /*render_manager->setActiveShader(shader);
         render_manager->setTexture(texture);
@@ -165,4 +174,11 @@ namespace tower {
         if (game_controller->availableWealth() < minimum) return 0.0f;
         return (float)requestMoney(amt) / (float)amt;
     }
+
+	bool Tower::isMoving() {
+		if (lastX != getX() || lastY != getY()) {
+			return true;
+		}
+		return false;
+	}
 }

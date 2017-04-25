@@ -48,13 +48,18 @@ namespace graphics {
         rm->textureLoad("bomb_texture_white", "src/Resources/Textures/bomb_white.png")->setOrigin(30, 36);
         rm->textureLoad("beam_segment", "src/Resources/Textures/beam_segment_small.png")->setOriginCentre();
         rm->textureLoad("spawn", "src/Resources/Textures/Spawn.png");
+
         rm->textureLoad("resource_mine", "src/Resources/Textures/Resource_Mine_Vein.png")->setOriginCentre();
         rm->textureLoad("sparkle", "src/Resources/Textures/sparkle_particle.png")->setOriginCentre();
         rm->textureLoad("mining_beam_segment", "src/Resources/Textures/mining_beam.png")->setOriginCentre();
         rm->textureLoad("mining_beam_ball", "src/Resources/Textures/mining_beam_end.png")->setOriginCentre();
+
 		rm->textureLoad("redLaser", "src/Resources/Textures/redLaser.png")->setOriginCentre();
 		rm->textureLoad("blueLaser", "src/Resources/Textures/blueLaser.png")->setOriginCentre();
 		rm->textureLoad("musketShot", "src/Resources/Textures/musketShot.png")->setOriginCentre();
+		rm->textureLoad("meleeEffect", "src/Resources/Textures/meleeEffect.png")->setOriginCentre();
+
+		rm->textureLoad("rangeCircle", "src/Resources/Textures/rangeCircle.png")->setOriginCentre();
         rm->textureLoad("token_windy", "src/Resources/Textures/WindyToken.png")->setOriginCentre();
         rm->textureLoad("token_glacial", "src/Resources/Textures/GlacialToken.png")->setOriginCentre();
         rm->textureLoad("token_magnetic", "src/Resources/Textures/MagnetToken.png")->setOriginCentre();

@@ -168,7 +168,7 @@ namespace gamecontroller {
             resource_spawn_timer = glm::linearRand(resource_spawn_timer_min, resource_spawn_timer_max);
         
             // Spawn a bit of resource
-            glm::vec2 rand_pos = glm::linearRand(glm::vec2(100.0f, 100.0f), glm::vec2(this->getScreenWidth() - 100.0f, this->getScreenHeight() - 100.0f));
+            glm::vec2 rand_pos = glm::linearRand(glm::vec2(50.0f, 50.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 50.0f, manager->getRenderManager()->getWindowHeight() - 50.0f));
             
             // Query number of mines
             int count = 0;
@@ -188,9 +188,9 @@ namespace gamecontroller {
         if (token_timer <= 0) {
             token_timer = glm::linearRand(token_timer_min, token_timer_max);
 
-            glm::vec2 rand_pos = glm::linearRand(glm::vec2(100.0f, 100.0f), glm::vec2(this->getScreenWidth() - 100.0f, this->getScreenHeight() - 100.0f));
+            glm::vec2 rand_pos = glm::linearRand(glm::vec2(50.0f, 50.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 50.0f, manager->getRenderManager()->getWindowHeight() - 50.0f));
 
-            bool nospawn = true;
+            bool canspawn = true;
             for (auto obj : manager->getObjects())
             {
                 if (obj && obj->getSuperType() == gameobject::TYPE::OBJECT)
@@ -198,13 +198,13 @@ namespace gamecontroller {
                     if (obj->getSubType() == gameobject::OBJECT_TYPE::TOKEN_GLACIAL
                      || obj->getSubType() == gameobject::OBJECT_TYPE::TOKEN_MAGNETIC
                      || obj->getSubType() == gameobject::OBJECT_TYPE::TOKEN_WINDY) {
-                        nospawn = false;
+                        canspawn = false;
                         break;
                     }
                 }
             }
 
-            if (nospawn)
+            if (canspawn)
             {
                 gameobject::OBJECT_TYPE type = (gameobject::OBJECT_TYPE) glm::linearRand<int>(gameobject::OBJECT_TYPE::TOKEN_MAGNETIC, gameobject::OBJECT_TYPE::TOKEN_WINDY);
                 spawnObjectAt(type, rand_pos.x, rand_pos.y);

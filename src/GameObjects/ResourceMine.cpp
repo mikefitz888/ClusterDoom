@@ -50,7 +50,7 @@ void ResourceMine::step() {
             int max_gather = glm::min(this->current_resource, tower_gather_rate);
             if (max_gather > 0) {
                 this->current_resource -= max_gather;
-                this->manager->getGameController()->increaseWealth(max_gather);
+                this->manager->getGameController()->addEfficiency(max_gather);
                 tower_gather.push_back(t);
             }
         }

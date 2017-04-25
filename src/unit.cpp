@@ -202,7 +202,7 @@ namespace unit {
     }
 
     void Unit::deliverWealth(size_t amt) {
-        manager->getGameController()->increaseWealth(amt);
+        manager->getGameController()->addEfficiency(amt);
     }
 
 	void Unit::renderAnimation(graphics::AnimatedTexture* texture, float size,  float animationSpeed, int numFrames, float sizeMod, float rotMod) {

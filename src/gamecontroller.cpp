@@ -140,7 +140,7 @@ namespace gamecontroller {
         frame_clock = 0;
         wave = 0;
         scenario = -1;
-        wealth = 0;
+        tower_efficiency = 1;
         return current_state = GameState::RUNNING; 
     }
     GameState GameController::stopGame() { return current_state = GameState::START; }
@@ -155,9 +155,9 @@ namespace gamecontroller {
     bool GameController::step() {
         srand(time(NULL));
         frame_clock++;
-        increaseWealth((unsigned int) std::log10(frame_clock));
+        diminishEfficiency();
         if (frame_clock % 100 == 0) {
-            std::cout << wealth << "\n";
+            std::cout << tower_efficiency << "\n";
         }
         //In general, step() should be frame-based.
         
@@ -381,11 +381,11 @@ namespace gamecontroller {
                 }
                 
                 tower_ptr t = spawnTowerAt(getScreenWidth()/2, getScreenHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
-                spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
+                //spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
                 //JAMIE
                 //spawnTowerAt(800, 300, tower::TYPE::ELECTRIC);
-                spawnTowerAt(500, 200, tower::TYPE::BOMB);
-                spawnTowerAt(500, 500, tower::TYPE::LASER);
+                //spawnTowerAt(500, 200, tower::TYPE::BOMB);
+                //spawnTowerAt(500, 500, tower::TYPE::LASER);
 
                 //Adding Spawn Points
                 spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
@@ -609,7 +609,7 @@ namespace gamecontroller {
                 case sf::TcpSocket::Done:
                 {
                     // Data received
-                    std::cout << "[CV NETWORK] Data received from CV interface. Size: " << message_size << " bytes!" << std::endl;
+                    //std::cout << "[CV NETWORK] Data received from CV interface. Size: " << message_size << " bytes!" << std::endl;
 
                     // Clear cv list
                     for (auto& vec : cvList)
@@ -628,7 +628,7 @@ namespace gamecontroller {
                         (*recv_buffer) >> y;
                         (*recv_buffer) >> marker_type;
                         cvList[marker_type].push_back(Point<float>(x, y));
-                        std::cout << "\tReceived Point (" << x << "," << y << "): " << marker_type << std::endl;
+                        //std::cout << "\tReceived Point (" << x << "," << y << "): " << marker_type << std::endl;
                     }
 
                     // Separate cvList by marker_type, run stableMatching on each, merge matchings
@@ -815,14 +815,23 @@ namespace gamecontroller {
         return sf::VideoMode::getDesktopMode().height;
     }
 
-    void GameController::increaseWealth(unsigned int amt) {
-        wealth += amt;
+    void GameController::addEfficiency(unsigned int amt) {
+        const float efficiency_factor = 1.f;
+        tower_efficiency += amt * efficiency_factor;
+    }
+
+    void GameController::diminishEfficiency() {
+        //Tower efficiency will drop towards 0.5
+        const float diminishing_factor = 0.1;
+        size_t tower_count = manager->getTowers().size();
+        tower_efficiency -= 1.0f * diminishing_factor * tower_count;
+        if (tower_efficiency < 0.f) tower_efficiency = 0.f;
     }
     
-    int GameController::requestWealth(unsigned int amt){
-        int ret = std::min(amt, wealth);
-        wealth -= ret;
-        return ret;
+    float GameController::towerEfficiency(){
+        const float eff_thresh = 0.f;
+        const float eff_factor = 50.f;
+        return 0.5f + std::fmin(tower_efficiency / eff_factor, 0.5f);
     }
 
     bool GameController::getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path) {
@@ -883,9 +892,6 @@ namespace gamecontroller {
 
 
     ///Display Methods
-    size_t GameController::availableWealth() {
-        return wealth;
-    }
 
     sf::Time GameController::timeUntilNextWave() {
         //const float time_per_scenario = 20.f;

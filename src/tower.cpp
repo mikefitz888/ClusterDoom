@@ -28,7 +28,7 @@ namespace tower {
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/
 
-		//rangeTexture = manager->getResourceManager()->getTexture("rangeCircle");
+		rangeTexture = manager->getResourceManager()->getTexture("rangeCircle");
 
         shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
         if(shader == nullptr){
@@ -103,7 +103,6 @@ namespace tower {
 
     //Gameplay Methods
     void Tower::step() {
-        game_controller->requestWealth((unsigned int) idle_cost);
         if(health == 0) {
             manager->getAudioManager()->playSound("cannon");
         }
@@ -166,13 +165,8 @@ namespace tower {
 
     void Tower::attacked(gameobject_ptr aggressor, float damage){}
 
-    size_t Tower::requestMoney(size_t amt) {
-        return game_controller->requestWealth(amt);
-    }
-
-    float Tower::requestEfficiency(size_t amt, size_t minimum) {
-        if (game_controller->availableWealth() < minimum) return 0.0f;
-        return (float)requestMoney(amt) / (float)amt;
+    float Tower::requestEfficiency() {
+        return game_controller->towerEfficiency();
     }
 
 	bool Tower::isMoving() {

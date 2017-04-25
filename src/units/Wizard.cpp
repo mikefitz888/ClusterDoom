@@ -117,7 +117,7 @@ namespace unit {
 		if (!channeling) n = 1.f;
 		float rotMod = ((1.0f - n)*10.0f*(float) M_PI);
 
-		renderAnimation(texture, 0.18f, 0.13f, 12, n, rotMod);
+		renderAnimation(texture, 0.18f, 0.13f*this->glacial_effect_vis, 12, n, rotMod);
 		/*float animationSpeed = 0.13f;
 		animation_progress = animation_progress + animationSpeed;
 		int m = 1;
@@ -140,8 +140,10 @@ namespace unit {
         }*/
         // ******************************************************************************************************//
 
-        if (isUnderGlacialEffect())
-        {
+        if (this->glacial_effect_vis > 0.0f){
+            float factor = (1.0f - this->glacial_effect_vis);
+            render_manager->setActiveColour(graphics::Colour(255, 255, 255, 200*factor));
+            unit_ice->render(getXr(), getYr(), 0.35f*factor, 0.35f*factor, 0.0f);
             render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
         }
     }

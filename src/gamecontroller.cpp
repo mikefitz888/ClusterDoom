@@ -896,8 +896,8 @@ namespace gamecontroller {
     sf::Time GameController::timeUntilNextWave() {
         //const float time_per_scenario = 20.f;
         //const int waves_per_scenario = 3;
-        int t = (int)getElapsedTime() % (int)(time_per_scenario / waves_per_scenario);
-        return sf::Time(sf::seconds((float) t));
+        //int t = (int)getElapsedTime() % (int)(time_per_scenario / waves_per_scenario);
+        return sf::Time(sf::seconds(0));
     }
 
     std::vector<std::string> GameController::getWarnings() {

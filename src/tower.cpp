@@ -63,7 +63,7 @@ namespace tower {
 		RenderUtils::render_circular_health((int) getXr(), (int) getYr(), (int)health, (int)max_health,
             //RenderUtils::colour_blend(
             //    Colour(55, 55, 55, 255),
-                RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), health / max_health)
+                RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), game_controller->towerEfficiency())
             //    1.0f-std::min((float)game_controller->availableWealth() / max_power, 1.0f)
             //)
         );

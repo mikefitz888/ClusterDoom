@@ -16,6 +16,9 @@ namespace tower {
     const double SpecialTower::ROBOT_MODIFIER = 0.85;
     const double SpecialTower::WIZARD_MODIFIER = 0.5;
     const double SpecialTower::PIRATE_MODIFIER = 0.5;
+    const double SpecialTower::ROBOT_MODIFIER = 0.65;//0.85;
+    const double SpecialTower::WIZARD_MODIFIER = 0.02;//0.5;
+    const double SpecialTower::PIRATE_MODIFIER = 0.10;//0.5;
     const double SpecialTower::MAX_RANGE_WINDY = 200;
     const unsigned int SpecialTower::POWER_TIME = 1750;
 
@@ -32,11 +35,75 @@ namespace tower {
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
         texture = manager->getResourceManager()->getTexture("yellowTower");
+
+        // Get ice effect 
+        tx_ice_sweep = manager->getResourceManager()->getTexture("ice_effect_sweep");
+        tx_ice_base  = manager->getResourceManager()->getTexture("ice_effect_base");
     }
 
     void SpecialTower::render() {
+
+        // -------------- GALCIAL EFFECT -------------------------------
+        if (this->getEffectType() == SPECIAL_TYPE::GLACIAL) {
+            if (ef_ice_alpha < 1.0f) {
+                ef_ice_alpha += 0.02f;
+            }
+        } else {
+            if (ef_ice_alpha > 0.0f) {
+                ef_ice_alpha -= 0.02f;
+            }
+        }
+        ef_ice_alpha = glm::clamp(ef_ice_alpha, 0.0f, 1.0f);
+
+        if (ef_ice_alpha > 0.0f) {
+            // Simulate effect
+            ef_ice_sweep_angle += 0.045f;
+            if (ef_pulse_alpha >= -2.0f) {
+                ef_pulse_alpha -= 0.015f;
+            } else {
+                ef_pulse_alpha = 1.0f;
+            }
+
+            // Render effect
+            int pulse_alpha = (int)(glm::clamp(ef_pulse_alpha, 0.0f, 1.0f)*255.0f*ef_ice_alpha);
+            float pulse_scale = 1.0f + (1.0f - ef_pulse_alpha)*0.40f;
+            render_manager->setActiveColour(255, 255, 255, pulse_alpha / 2);
+            tx_ice_base->render((int)getXr(), (int)getYr(), ice_scale*pulse_scale, ice_scale*pulse_scale, 0.0f);
+
+            render_manager->setActiveColour(255, 255, 255, (int)(128*ef_ice_alpha));
+            tx_ice_base->render((int)getXr(), (int)getYr(), ice_scale, ice_scale, 0.0f);
+
+            int alp = (int)(glm::clamp(sin(ef_ice_sweep_angle*1.0f) + 1.0f, 0.0f, 2.0f)*64.0f);
+            //render_manager->setActiveColour(255, 255, 255, (int)(128 - alp*ef_ice_alpha));
+            /*render_manager->setActiveColour(255, 255, 255, (int)(alp*ef_ice_alpha));
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), ice_scale, ice_scale, -ef_ice_sweep_angle);
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), ice_scale, ice_scale, -ef_ice_sweep_angle + glm::pi<float>());
+
+            render_manager->setActiveColour(255, 255, 255, (int)(alp*ef_ice_alpha));
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), ice_scale, ice_scale, -ef_ice_sweep_angle - glm::pi<float>() / 2);
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), ice_scale, ice_scale, -ef_ice_sweep_angle + glm::pi<float>() / 2);*/
+
+            float sweep_scale = ice_scale*0.90f;
+            render_manager->setActiveColour(255, 255, 255, (int)((128-alp + 128)*ef_ice_alpha*0.35f));
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), sweep_scale, sweep_scale, -ef_ice_sweep_angle);
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), sweep_scale, sweep_scale, -ef_ice_sweep_angle + glm::pi<float>());
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), sweep_scale, sweep_scale, -ef_ice_sweep_angle - glm::pi<float>() / 2);
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), sweep_scale, sweep_scale, -ef_ice_sweep_angle + glm::pi<float>() / 2);
+
+            render_manager->setActiveColour(255, 255, 255, (int)((alp+128)*ef_ice_alpha*0.35f));
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), -sweep_scale, sweep_scale, ef_ice_sweep_angle);
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), -sweep_scale, sweep_scale, ef_ice_sweep_angle + glm::pi<float>());
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), -sweep_scale, sweep_scale, ef_ice_sweep_angle - glm::pi<float>() / 2);
+            tx_ice_sweep->render((int)getXr(), (int)getYr(), -sweep_scale, sweep_scale, ef_ice_sweep_angle + glm::pi<float>() / 2);
+
+            render_manager->setActiveColour(255, 255, 255, 255);
+            
+        }
+        // --------------------------------------------
+
+        // Render tower
         Tower::render();
-        texture->render((int) getXr(), (int) getYr(), 96, 96);
+        texture->render((int)getXr(), (int)getYr(), 96, 96);
     }
 
     void SpecialTower::step() {

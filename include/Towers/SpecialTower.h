@@ -8,6 +8,18 @@ namespace tower
 {
     class SpecialTower : public Tower {
         graphics::Texture* texture = nullptr;
+
+        // Effect textures
+
+        // Ice effect ---------
+        graphics::Texture* tx_ice_sweep = nullptr;
+        graphics::Texture* tx_ice_base = nullptr;
+        float ef_ice_sweep_angle = 0.0f;
+        float ef_pulse_alpha = 1.0f;
+        float ice_scale = 0.75f;
+        float ef_ice_alpha = 0.0f;
+        // ----------------------
+
        
         /*********************************************\
         /****************** EFFECTS ******************\

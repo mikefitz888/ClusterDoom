@@ -56,6 +56,9 @@ namespace graphics {
 		rm->textureLoad("blueLaser", "src/Resources/Textures/blueLaser.png")->setOriginCentre();
 		rm->textureLoad("musketShot", "src/Resources/Textures/musketShot.png")->setOriginCentre();
 
+        // Special Tower effects
+        rm->textureLoad("ice_effect_sweep", "src/Resources/Textures/ice_effect_sweep.png")->setOrigin(313, 168);
+        rm->textureLoad("ice_effect_base", "src/Resources/Textures/ice_effect_base.png")->setOriginCentre();
 
         /// Load Animated Textures
         //  Explosions

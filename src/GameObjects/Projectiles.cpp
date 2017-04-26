@@ -148,6 +148,8 @@ ProjectileLaser::ProjectileLaser(id_t id, manager::Manager* m) : GameObject(id, 
 }
 void ProjectileLaser::init() {
     this->getCollision()->setTypeCircle(10);
+
+    
 }
 
 void ProjectileLaser::step() {

@@ -2,6 +2,7 @@
 #include "../../include/RenderUtils.h"
 #include "../../include/ResourceManager.h"
 #include "../../include/manager.h"
+#include "../../include/AudioManager.h"
 
 using graphics::RenderUtils;
 using graphics::Colour;
@@ -55,7 +56,7 @@ namespace tower {
         //std::cout << "ELECTRICITY!!" << std::endl;
 
         //float power = requestEfficiency(30.f /*Maximum power*/, 10.f /*minimum power*/);
-		float power = game_controller->towerEfficiency();
+		float power = game_controller->towerEfficiency()*2.0f;
 
         if (current_target) {
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
@@ -67,6 +68,9 @@ namespace tower {
 			if (leftFire) {
 				obj->setPosition(getPosition() + sdir);
 				leftFire = false;
+
+                
+                this->manager->getAudioManager()->playSound("laser");
 			}
 			else {
 				obj->setPosition(getPosition() - sdir);

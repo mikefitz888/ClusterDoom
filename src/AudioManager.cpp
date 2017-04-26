@@ -20,9 +20,11 @@ void AudioManager::loadSoundAssets() {
     resource_manager->soundBufferLoad("pirate_death_1", "src/Resources/SoundEffects/snd_pirate_death.ogg");
     resource_manager->soundBufferLoad("pirate_death_2", "src/Resources/SoundEffects/snd_pirate_death_2.wav");
     resource_manager->soundBufferLoad("wizard_death", "src/Resources/SoundEffects/snd_wizard_death.wav");
+    resource_manager->soundBufferLoad("laser", "src/Resources/SoundEffects/snd_laser.ogg");
 
+        
     // Load Music assets
-    sf::Music* music = resource_manager->musicLoad("main_music", "src/Resources/Music/music.ogg");
+    sf::Music* music = resource_manager->musicLoad("main_music", "src/Resources/Music/music_3.ogg");
     music->play();
     music->setLoop(true);
 }

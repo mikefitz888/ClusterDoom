@@ -97,7 +97,7 @@ void ResourceMine::renderGUI(){
     for (auto p : sparkles) {
         float alpha = p->alpha;
         if (alpha > 0.0f) {
-            this->manager->getRenderManager()->setActiveColour(graphics::Colour(0xFFFFFF, (int)(255.0f*alpha)));
+            this->manager->getRenderManager()->setActiveColour(graphics::Colour(0xAAAAAA, (int)(110.0f*alpha)));
             this->sparkle_texture->render(p->draw_position.x, p->draw_position.y, p->target_scale, p->target_scale, p->angle);
         }
     }

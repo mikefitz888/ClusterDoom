@@ -101,7 +101,7 @@ void ProjectileBomb::render() {
     if (!this->exploded) {
         this->bomb_texture->render((int) getX(), (int) getY());
         int anim_alpha = (int)(255.0f*glm::clamp(glm::sin(animation_progress), 0.0f, 1.0f));
-        this->manager->getRenderManager()->setActiveColour(255, 255, 255, anim_alpha);
+        this->manager->getRenderManager()->setActiveColour(255, 128, 128, anim_alpha*0.7f);
         this->bomb_white_texture->render((int) getX(), (int) getY());
         this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
     } else {

@@ -8,10 +8,20 @@
 #include <math.h>
 #include "../../include/RenderUtils.h"
 #include "../../include/AnimatedTexture.h"
+#include "../../include/AudioManager.h"
 
 namespace unit {
     Pirate::Pirate(id_t key, Manager* m) : Unit(key, TYPE::PIRATE, m)  {
 
+    }
+
+    Pirate::~Pirate() {
+        int rand_res = rand() % 2;
+        if (rand_res == 0) {
+            this->manager->getAudioManager()->playSound("pirate_death_1");
+        } else if (rand_res == 1) {
+            this->manager->getAudioManager()->playSound("pirate_death_2");
+        }
     }
 
     void Pirate::init(){
@@ -25,7 +35,7 @@ namespace unit {
 
 		health = 3000;
 		maxHealth = 3000;
-		unitSpeed = 0.4f;
+		unitSpeed = 0.4f+glm::linearRand(0.0f, 0.35f);
 
        /* Path path;
         path.push_back(vec2(100, 100));
@@ -77,40 +87,42 @@ namespace unit {
         }*/
         
         auto& base = game_controller->getBase();
-        if (distanceTo(base->getPosition()) < 180 && cooldownGun-- == 0) {
-            //gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
-            //smartpointers::static_pointer_cast<unit::Unit>(other);
-            smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY())));
-			obj1->textureName = "musketShot";
-			obj1->setCollisionType(gameobject::TYPE::TOWER);
-            //std::cout << "unit fired\n";
-            auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
-            obj1->setVelocity(dir * 7.f);
-            //auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
-            //obj1->setPosition(getPosition() + sdir);
-            //obj2->setPosition(getPosition() - sdir);
+        if (!this->isUnderGlacialEffect()) {
+            if (distanceTo(base->getPosition()) < 180 && cooldownGun-- == 0) {
+                //gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
+                //smartpointers::static_pointer_cast<unit::Unit>(other);
+                smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY())));
+                obj1->textureName = "musketShot";
+                obj1->setCollisionType(gameobject::TYPE::TOWER);
+                //std::cout << "unit fired\n";
+                auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
+                obj1->setVelocity(dir * 7.f);
+                //auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
+                //obj1->setPosition(getPosition() + sdir);
+                //obj2->setPosition(getPosition() - sdir);
 
-            
-            //attack(base);
-            cooldownGun = 420;
+
+                //attack(base);
+                cooldownGun = 420;
+            }
+            if (distanceTo(base->getPosition()) < 100 && cooldown-- == 0) {
+                //gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
+                //smartpointers::static_pointer_cast<unit::Unit>(other);
+                smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY())));
+                obj1->textureName = "meleeEffect";
+                obj1->setCollisionType(gameobject::TYPE::TOWER);
+                //std::cout << "unit fired\n";
+                auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
+                obj1->setVelocity(dir * 1.f);
+                //auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
+                //obj1->setPosition(getPosition() + sdir);
+                //obj2->setPosition(getPosition() - sdir);
+
+
+                //attack(base);
+                cooldown = 80;
+            }
         }
-		if (distanceTo(base->getPosition()) < 100 && cooldown-- == 0) {
-			//gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
-			//smartpointers::static_pointer_cast<unit::Unit>(other);
-			smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY())));
-			obj1->textureName = "meleeEffect";
-			obj1->setCollisionType(gameobject::TYPE::TOWER);
-			//std::cout << "unit fired\n";
-			auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
-			obj1->setVelocity(dir * 1.f);
-			//auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
-			//obj1->setPosition(getPosition() + sdir);
-			//obj2->setPosition(getPosition() - sdir);
-
-
-			//attack(base);
-			cooldown = 80;
-		}
     }
 
     void Pirate::render() {

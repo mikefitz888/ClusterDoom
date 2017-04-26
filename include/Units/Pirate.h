@@ -20,6 +20,7 @@ namespace unit
 
     public:
         Pirate(id_t key, Manager* m);
+        ~Pirate();
         void init() override;
         void render() override;
         void onCollision(gameobject_ptr other) override;

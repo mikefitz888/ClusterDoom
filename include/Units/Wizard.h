@@ -26,6 +26,7 @@ namespace unit
 
     public:
         Wizard(id_t key, Manager* m);
+        ~Wizard();
         void init() override;
         void render() override;
         void onCollision(gameobject_ptr other) override;

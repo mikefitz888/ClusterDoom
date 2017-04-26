@@ -7,6 +7,7 @@
 #include "../../include/util.h"
 #include "../../include/AnimatedTexture.h"
 #include "../../include/smartpointers.h"
+#include "../../include/AudioManager.h"
 
 using gameobject::unit_ptr;
 
@@ -59,6 +60,12 @@ void ProjectileBomb::step() {
 
 void ProjectileBomb::explode() {
     
+    // Play explosion sound
+    if (!exploded) {
+        this->manager->getAudioManager()->playSound("bomb");
+    }
+
+    // Do damage
     std::vector<gameobject::unit_ptr> objects_in_range = this->manager->getGameController()->getUnitsInRange(this->position, this->blast_radius);
     for (gameobject::unit_ptr obj : objects_in_range) {
 

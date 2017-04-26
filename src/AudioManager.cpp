@@ -16,11 +16,13 @@ void AudioManager::loadSoundAssets() {
     ResourceManager *resource_manager = manager->getResourceManager();
 
     // Load Sound assets
-    resource_manager->soundBufferLoad("cannon", "src/Resources/SoundEffects/CannonSND.wav");
-
+    resource_manager->soundBufferLoad("bomb", "src/Resources/SoundEffects/bomb_explode.ogg");
+    resource_manager->soundBufferLoad("pirate_death_1", "src/Resources/SoundEffects/snd_pirate_death.ogg");
+    resource_manager->soundBufferLoad("pirate_death_2", "src/Resources/SoundEffects/snd_pirate_death_2.wav");
+    resource_manager->soundBufferLoad("wizard_death", "src/Resources/SoundEffects/snd_wizard_death.wav");
 
     // Load Music assets
-    sf::Music* music = resource_manager->musicLoad("main_music", "src/Resources/Music/sndMusic.ogg");
+    sf::Music* music = resource_manager->musicLoad("main_music", "src/Resources/Music/music.ogg");
     music->play();
     music->setLoop(true);
 }

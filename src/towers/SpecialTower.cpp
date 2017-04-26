@@ -91,7 +91,7 @@ namespace tower {
 
         // -------------- GALCIAL EFFECT -------------------------------
         if (this->getEffectType() == SPECIAL_TYPE::GLACIAL) {
-            if (ef_ice_alpha < 1.0f) {
+            if (ef_ice_alpha < 2.0f) {
                 ef_ice_alpha += 0.02f;
             }
         } else {

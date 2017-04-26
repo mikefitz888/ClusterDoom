@@ -77,12 +77,12 @@ void GameStateNotifier::writeNetworkUpdate(int event_id, Buffer &buffer) {
 
         // SPAWN TIMER 
         case GameStateNotifierUpdateEvents::SEND_WAVE_TIMER:
-            buffer << (unsigned int)wave_timer; // sends the wave timer as a number of frames
+            buffer << (unsigned int)this->game_controller->getElapsedTime(); // sends the wave timer as a number of frames
             break;
 
         // WEALTH
         case GameStateNotifierUpdateEvents::SEND_WEALTH:
-            buffer << this->game_controller->towerEfficiency();
+            buffer << (float)this->game_controller->towerEfficiency();
             break;
 
         // WARNINGS

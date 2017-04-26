@@ -69,7 +69,7 @@ void Spawn::beginWave() {
     spawn_queue.clear();
     int focus = (wave + 3 * scenario) % 10;
     //if (focus != spawn_id) return;
-    for (int number_of_enemies = 1 + scenario/3; number_of_enemies > 0; number_of_enemies--) {
+    for (int number_of_enemies = 2 + scenario/3; number_of_enemies > 0; number_of_enemies--) {
         std::cout << number_of_enemies << "\n";
 		// auto k didn't seem to do anything, changed one-line if to allow more units
         //auto k = 0 < 4 ? unit::TYPE::WIZARD : unit::TYPE::BASIC;

@@ -29,7 +29,7 @@ namespace unit {
         float health_alpha = 0;
         float health_visual = maxHealth;
 		float unitSpeed = 1.0f;
-        float glacial_effect_vis = 0.0f;
+        float glacial_effect_vis = 1.0f;
         size_t cooldown = 0;
 
         void deliverWealth(size_t amt);

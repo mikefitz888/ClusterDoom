@@ -380,7 +380,7 @@ namespace gamecontroller {
                     std::cout << "ERROR! There should not be any towers existing at this point, before base has spawned." << std::endl;
                 }
                 
-                tower_ptr t = spawnTowerAt(getScreenWidth()/2, getScreenHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
+                tower_ptr t = spawnTowerAt(manager->getRenderManager()->getWindowWidth()/2, manager->getRenderManager()->getWindowHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
                 //spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
                 //JAMIE
                 //spawnTowerAt(800, 300, tower::TYPE::ELECTRIC);

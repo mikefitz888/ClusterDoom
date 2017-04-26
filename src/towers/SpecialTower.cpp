@@ -48,10 +48,23 @@ namespace tower {
 
         // ----------------- MAGNET EFFECT -----------------
         if (this->getEffectType() == SPECIAL_TYPE::MAGNETIC) {
+            if (ef_magnet_alpha < 1.0f) {
+                ef_magnet_alpha += 0.05f;
+            }
+        } else {
+            if (ef_magnet_alpha > 0.0f) {
+                ef_magnet_alpha -= 0.05f;
+            }
+        }
+        for (int i = 0; i < num_magnet_rings; i++) {
+            magnet_rings[i].step();
+        }
+        if (ef_magnet_alpha > 0.0f) {
             for (int i = 0; i < num_magnet_rings; i++) {
-                magnet_rings[i].step();
-                render_manager->setActiveColour(255, 255, 255, (int)(255 * magnet_rings[i].getAlpha()));
-                tx_magnet_ring->render((int)getXr(), (int)getYr(), magnet_rings[i].getScale(), magnet_rings[i].getScale(), 0.0f);
+                if (magnet_rings[i].getScale()>0.0f) {
+                    render_manager->setActiveColour(255, 255, 255, (int)(glm::clamp(255 * ef_magnet_alpha * magnet_rings[i].getAlpha(), 0.0f, 255.0f)));
+                    tx_magnet_ring->render((int)getXr(), (int)getYr(), magnet_rings[i].getScale(), magnet_rings[i].getScale(), 0.0f);
+                }
             }
             render_manager->setActiveColour(255, 255, 255, 255);
         }
@@ -342,7 +355,7 @@ namespace tower {
         scale -= 0.02f;
         if (scale >= min_scale_threshold) {
             if (alpha < 1.0f) {
-                alpha += 0.05f;
+                alpha += 0.025f;
             }
         } else {
             if (alpha > 0.0f) {
@@ -352,6 +365,7 @@ namespace tower {
             // If scale goes past reset point, 
             if (scale < min_reset_scale) {
                 scale = 1.0f;
+                alpha = 0.0f;
             }
         }
     }

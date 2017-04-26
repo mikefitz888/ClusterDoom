@@ -11,7 +11,7 @@ namespace tower
 
         // Visual variables
         const float min_scale_threshold = 0.25f;
-        const float min_reset_scale = -1.0f;
+        const float min_reset_scale = -0.6f;
         float scale = 1.0f;
         float alpha = 0.0f;
 
@@ -40,6 +40,7 @@ namespace tower
         // Magnet effect --------
         static const int num_magnet_rings = 4;
         SpecialTowerMagnetEffect magnet_rings[num_magnet_rings];
+        float ef_magnet_alpha = 0.0f;
 
         graphics::Texture* tx_magnet_ring = nullptr;
         // ----------------------

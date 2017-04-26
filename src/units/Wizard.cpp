@@ -81,7 +81,7 @@ namespace unit {
                 obj1->setCollisionType(gameobject::TYPE::TOWER);
                 //std::cout << "unit fired\n";
                 auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
-                obj1->setVelocity(dir * 7.f);
+                obj1->setVelocity(dir * 5.f);
                 //auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
                 //obj1->setPosition(getPosition() + sdir);
                 //obj2->setPosition(getPosition() - sdir);

@@ -147,8 +147,9 @@ ProjectileLaser::ProjectileLaser(id_t id, manager::Manager* m) : GameObject(id, 
     this->setNetworkSync(false);
 }
 void ProjectileLaser::init() {
-    this->getCollision()->setTypeCircle(10);
-
+    this->collision_profile.setCollidable(true);
+    this->getCollision()->setTypeCircle(20);
+   
     
 }
 

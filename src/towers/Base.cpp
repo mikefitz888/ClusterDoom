@@ -19,7 +19,7 @@ namespace tower {
         exuhporoshun[gameobject::TYPE::OBJECT][gameobject::OBJECT_TYPE::PROJECTILE_LASER] = manager->getResourceManager()->getAnimatedTexture("explosion4");
         //exuhporoshun[unit::TYPE::WIZARD] = manager->getResourceManager()->getAnimatedTexture("explosion2");
 		//Get Screen dims and position in center
-        this->collision_profile.setTypeCircle(50);
+        this->collision_profile.setTypeCircle(180);
 
 	}
 
@@ -36,7 +36,8 @@ namespace tower {
 	}
 
     void Base::step() {
-        
+        this->collision_profile.setTypeSquare(-75, 75, -75, 75);
+        this->collision_profile.setCollidable(true);
     }
 
     void Base::attacked(gameobject_ptr aggressor) {

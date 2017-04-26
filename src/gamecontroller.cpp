@@ -824,7 +824,7 @@ namespace gamecontroller {
 
     void GameController::diminishEfficiency() {
         //Tower efficiency will drop towards 0.5
-        const float diminishing_factor = 0.1;
+        const float diminishing_factor = 0.10;
         size_t tower_count = manager->getTowers().size();
         tower_efficiency -= 1.0f * diminishing_factor * tower_count;
         if (tower_efficiency < 0.f) tower_efficiency = 0.f;

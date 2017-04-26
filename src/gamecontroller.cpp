@@ -416,7 +416,9 @@ namespace gamecontroller {
             runScenario(scenario);
         }
         else { //Ending sequence
-            winGame();
+            if (!manager->getUnits().size()) {
+                winGame();
+            }
         }
         return true;
     }

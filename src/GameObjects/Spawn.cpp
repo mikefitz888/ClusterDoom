@@ -50,12 +50,12 @@ void Spawn::startWave(int wave_number) {
 
 void Spawn::beginWave() {
     size_t offset = 0;
-    for (size_t number_of_spawn_attempts = 1 + scenario; number_of_spawn_attempts > 0; number_of_spawn_attempts--) {
+    for (size_t number_of_spawn_attempts = 1 + scenario * scenario; number_of_spawn_attempts > 0; number_of_spawn_attempts--) {
         if (number_of_spawn_attempts > 2 && noSpawn(rng)) {
             continue;
         }
         unsigned int unit_type_id = random_unit(rng);
-        for (int i = cluster_size[unit_type_id](rng); i > 0; i--) {
+        for (int i = cluster_size[unit_type_id-1](rng); i > 0; i--) {
             spawn_queue.emplace_back(static_cast<unit::TYPE>(unit_type_id), time + offset);
             offset += 200;
         }

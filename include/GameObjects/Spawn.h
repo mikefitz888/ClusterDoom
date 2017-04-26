@@ -1,6 +1,7 @@
 #ifndef _SPAWN_H
 #define _SPAWN_H
 
+#include <random>
 #include "../gamecore.h"
 #include "../../include/unit.h"
 #include "../../include/gameobject.h"
@@ -20,6 +21,13 @@ protected:
         unit_spawn(unit::TYPE type, int t = 0);
     };
     std::vector<unit_spawn> spawn_queue;
+
+    std::mt19937 rng;
+    std::uniform_int_distribution<uint32_t> random_unit = std::uniform_int_distribution<uint32_t>(1, 3);
+    std::uniform_int_distribution<uint32_t> random_spawn = std::uniform_int_distribution<uint32_t>(0, 3);
+    std::uniform_int_distribution<uint32_t> cluster_size[3] = { std::uniform_int_distribution<uint32_t>(1, 2), std::uniform_int_distribution<uint32_t>(1, 3), std::uniform_int_distribution<uint32_t>(1, 4)};
+    std::uniform_int_distribution<uint32_t> noSpawn = std::uniform_int_distribution<uint32_t>(0, 1);
+    std::uniform_int_distribution<uint32_t> spawn_jitter = std::uniform_int_distribution<uint32_t>(0, 50);
 public:
 	Spawn(id_t id, manager::Manager* m);
 

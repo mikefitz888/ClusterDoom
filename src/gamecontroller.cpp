@@ -157,7 +157,7 @@ namespace gamecontroller {
         frame_clock++;
         diminishEfficiency();
         if (frame_clock % 100 == 0) {
-            std::cout << tower_efficiency << "\n";
+            std::cout << "Efficiency = " << tower_efficiency << "\n";
         }
         //In general, step() should be frame-based.
         

@@ -9,6 +9,7 @@ Spawn::Spawn(id_t id, manager::Manager* m) : GameObject(id, gameobject::TYPE::OB
 
 }
 void Spawn::init() {
+    rng.seed(std::random_device()());
 	//manager->getGameController()->spawnUnitAt(getX(), getY());
 }
 void Spawn::step() {
@@ -18,7 +19,7 @@ void Spawn::step() {
         spawn_queue.erase(
             std::remove_if(spawn_queue.begin(), spawn_queue.end(), [this](const unit_spawn s) -> bool { 
                 if (time > s.delay) {
-                    manager->getGameController()->spawnUnitAt(getX(), getY(), s.unit_type);
+                    manager->getGameController()->spawnUnitAt(getX()+spawn_jitter(rng), getY()+spawn_jitter(rng), s.unit_type);
                     return true;
                 }
                 return false;
@@ -48,6 +49,19 @@ void Spawn::startWave(int wave_number) {
 }
 
 void Spawn::beginWave() {
+    size_t offset = 0;
+    for (size_t number_of_spawn_attempts = 1 + scenario; number_of_spawn_attempts > 0; number_of_spawn_attempts--) {
+        if (number_of_spawn_attempts > 2 && noSpawn(rng)) {
+            continue;
+        }
+        unsigned int unit_type_id = random_unit(rng);
+        for (int i = cluster_size[unit_type_id](rng); i > 0; i--) {
+            spawn_queue.emplace_back(static_cast<unit::TYPE>(unit_type_id), time + offset);
+            offset += 200;
+        }
+    }
+
+    return;
     //Adjust parameters for the next wave based on this->wave and this->scenario here
     int spawn_rate = 15 - scenario;
     int delay = time;

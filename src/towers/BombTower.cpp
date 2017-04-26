@@ -41,7 +41,7 @@ namespace tower {
     void BombTower::step() {
         bomb_queue.erase(std::remove_if(bomb_queue.begin(), bomb_queue.end(), [this](const gameobject_ptr& bomb) -> bool {
             if (!bomb) return true;
-            bomb->addVelocity(glm::vec2(-bomb->getVelocityX() / 20.f, -bomb->getVelocityY() / 20.f));
+            bomb->addVelocity(glm::vec2(-bomb->getVelocityX() / 15.f, -bomb->getVelocityY() / 15.f));
             return false;
         }), bomb_queue.end());
 
@@ -61,7 +61,7 @@ namespace tower {
 
         if (current_target) {
             //float eff = requestEfficiency(1000, 100);
-			float eff = 1.0f;
+			float eff = game_controller->towerEfficiency();
             if (eff == 0.f) return;
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
             //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());

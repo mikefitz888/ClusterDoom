@@ -13,6 +13,8 @@ namespace tower
         size_t timer = 0;
         size_t cost_per_attack = 10;
         size_t max_range = 200;
+        int sound_cooldown = 0;
+
         //float damage = 20.0f;
         unit_ptr current_target = nullptr;
     public:

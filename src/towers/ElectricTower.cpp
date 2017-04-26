@@ -2,6 +2,7 @@
 #include "../../include/RenderUtils.h"
 #include "../../include/ResourceManager.h"
 #include "../../include/manager.h"
+#include "../../include/AudioManager.h"
 
 using graphics::RenderUtils;
 using graphics::Colour;
@@ -39,6 +40,13 @@ namespace tower {
 	}
 
     void ElectricTower::step() {
+
+        // Play electricity sound when attacking
+        if (current_target && sound_cooldown <= 0) {
+            this->manager->getAudioManager()->playSound("robot_death");
+            sound_cooldown = 10;
+        }
+
         if (timer) {
             timer--; 
             return;
@@ -52,7 +60,7 @@ namespace tower {
         }
 
         //std::cout << "ELECTRICITY!!" << std::endl;
-
+        sound_cooldown--;
         if (current_target) {
             //float eff = requestEfficiency(cost_per_attack, 2.f);
 			float eff = game_controller->towerEfficiency();
@@ -67,6 +75,9 @@ namespace tower {
             elec->setTargetObject(current_target);
 			//elec->setDamage(damage);
             timer = cooldown;
+            
         }
+
+
     }
 }

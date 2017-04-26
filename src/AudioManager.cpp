@@ -21,6 +21,7 @@ void AudioManager::loadSoundAssets() {
     resource_manager->soundBufferLoad("pirate_death_2", "src/Resources/SoundEffects/snd_pirate_death_2.wav");
     resource_manager->soundBufferLoad("wizard_death", "src/Resources/SoundEffects/snd_wizard_death.wav");
     resource_manager->soundBufferLoad("laser", "src/Resources/SoundEffects/snd_laser.ogg");
+    resource_manager->soundBufferLoad("robot_death", "src/Resources/SoundEffects/snd_robot_death.ogg");
 
         
     // Load Music assets

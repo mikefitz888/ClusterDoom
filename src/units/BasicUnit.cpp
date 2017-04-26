@@ -8,10 +8,15 @@
 #include <math.h>
 #include "../../include/RenderUtils.h"
 #include "../../include/AnimatedTexture.h"
+#include "../../include/AudioManager.h"
 
 namespace unit {
     BasicUnit::BasicUnit(id_t key, Manager* m) : Unit(key, TYPE::BASIC, m) {
 
+    }
+
+    BasicUnit::~BasicUnit() {
+        this->manager->getAudioManager()->playSound("robot_death");
     }
 
     void BasicUnit::init() {

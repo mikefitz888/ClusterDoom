@@ -20,6 +20,7 @@ namespace unit
 
     public:
         BasicUnit(id_t key, Manager* m);
+        ~BasicUnit();
         void init() override;
         void render() override;
         void onCollision(gameobject_ptr other) override;

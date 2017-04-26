@@ -361,7 +361,7 @@ int current_calibration_point_id = 0;
             // std::cout << "There were " << squares.size() << " squares detected\n";
             //decodeSquares(frame, squares, markers);
             cvtColor(frame, frame, CV_BGR2GRAY);
-            cv::threshold(frame, frame, 5, 255, 0);
+            cv::threshold(frame, frame, 15, 255, 0); //was 5
             for (size_t i = 0; i < (unsigned) frame.rows; i++) {
                 for (size_t j = 0; j < (unsigned) frame.cols; j++) {
                     uint32_t x = 0;
@@ -628,9 +628,11 @@ std::vector<Square> squares;
             //width = frame.cols
             //height = frame.rows
 
+            marker.marker_type++;
+
             // Marker type shielding
-            if (marker.marker_type > 3 || marker.marker_type < 1) {
-                marker.marker_type = 1;
+            if (marker.marker_type > 5 || marker.marker_type < 2) {
+                marker.marker_type = 2;
             }
 
             //send_buffer << marker;

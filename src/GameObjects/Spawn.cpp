@@ -106,9 +106,13 @@ void Spawn::recvNetworkInteraction(int event_id, Buffer &buffer) {
     switch (event_id) {
         case NetworkInteractionEvent::SPAWN_UNIT:
             unsigned int unit_type = 0;
+            int target = -1;
             buffer >> unit_type;
+            buffer >> target;
             std::cout << "SPAWN RECEIVED";
-            manager->getGameController()->spawnUnitAt(getX(), getY(), (unit::TYPE)unit_type);
+            smartpointers::slave_ptr<unit::Unit> unit =  smartpointers::static_pointer_cast<unit::Unit>(manager->getGameController()->spawnUnitAt(getX(), getY(), (unit::TYPE)unit_type));
+            if(target != -1) game_controller->unitTargetMine(unit->getID(), target);
+            
             break;
     }
 }

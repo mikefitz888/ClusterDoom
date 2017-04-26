@@ -42,10 +42,30 @@ namespace tower {
         for (int i = 0; i < num_magnet_rings; i++) {
             magnet_rings[i].setScale((float)i / (float)num_magnet_rings);
         }
+
+        // Wind effect
+        tx_wind_effect = manager->getResourceManager()->getTexture("wind_effect");
     }
 
     void SpecialTower::render() {
 
+
+        // ----------------- WIND EFFECT -----------------
+        if (this->getEffectType() == SPECIAL_TYPE::WINDY) {
+            if (ef_wind_alpha < 1.0f) {
+                ef_wind_alpha += 0.05f;
+            }
+        } else {
+            if (ef_wind_alpha > 0.0f) {
+                ef_wind_alpha -= 0.05f;
+            }
+        }
+        if (ef_wind_alpha > 0.0f) {
+            ef_wind_rotation -= 0.08f;
+            render_manager->setActiveColour(255, 255, 255, (int)(128.0f*ef_wind_alpha));
+            tx_wind_effect->render(getXr(), getYr(), 0.50f, 0.50f, ef_wind_rotation);
+            render_manager->setActiveColour(255, 255, 255, 255);
+        }
         // ----------------- MAGNET EFFECT -----------------
         if (this->getEffectType() == SPECIAL_TYPE::MAGNETIC) {
             if (ef_magnet_alpha < 1.0f) {
@@ -335,6 +355,7 @@ namespace tower {
                     auto v = std::hypot(laser->getVelocityX(), laser->getVelocityY());
                     double angle = (rand() % 360) * 3.14159 / 180.0;
                     laser->setVelocity(vec2(v * cos(angle), v * sin(angle)));
+                    laser->setDamage(laser->getDamage()*2.0f);
                 }
             }
         }

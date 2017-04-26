@@ -72,6 +72,9 @@ namespace graphics {
         // Magnet tower effects
         rm->textureLoad("magnet_ring_effect", "src/Resources/Textures/magnet_ring_effect.png")->setOriginCentre();
 
+        // Wind tower effect
+        rm->textureLoad("wind_effect", "src/Resources/Textures/wind_effect.png")->setOriginCentre();
+
         /// Load Animated Textures
         //  Explosions
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();

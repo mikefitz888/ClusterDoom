@@ -44,6 +44,12 @@ namespace tower
 
         graphics::Texture* tx_magnet_ring = nullptr;
         // ----------------------
+
+        // Wind effect ------
+        graphics::Texture* tx_wind_effect = nullptr;
+        float ef_wind_alpha = 0.0f;
+        float ef_wind_rotation = 0.0f;
+        // ----------------------
         /*********************************************\
         /****************** EFFECTS ******************\
         /*********************************************\

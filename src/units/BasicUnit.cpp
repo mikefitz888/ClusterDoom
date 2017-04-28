@@ -106,10 +106,12 @@ namespace unit {
 
         Unit::render();
 
+		renderAnimation(texture, 0.18f, 0.09f, 12, 1.0f, 0.0f);
+
 		//cannot use as animation doesn't happen in linear order (frame[] variable)
 		//renderAnimation(texture, 0.13f, 0.1f*this->glacial_effect_vis, 12, 1.0f, 0.0f);
 
-        render_manager = manager->getRenderManager();
+        /*render_manager = manager->getRenderManager();
 
 
         float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
@@ -120,7 +122,7 @@ namespace unit {
         if (this->getAtDestination()) m = 0;
 
 
-        texture->render(m*frame[((int)animation_progress) % 6], (int) getXr(), (int) getYr(), 0.13f, 0.13f, rotation);
+        texture->render(m*frame[((int)animation_progress) % 6], (int) getXr(), (int) getYr(), 0.13f, 0.13f, rotation);*/
 
         // ******************************************************************************************************//
         // DRAW PATH

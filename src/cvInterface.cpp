@@ -1,5 +1,7 @@
 #include "../include/cvInterface.h"
 
+#define EXPERIMENTAL
+
 namespace cvinterface {
     int CVInterface::RED_THRESHOLD = 105;
     int CVInterface::NON_RED_THRESHOLD = 70;
@@ -354,6 +356,12 @@ int current_calibration_point_id = 0;
             // std::cout << "Cannot read frame from video stream!" << std::endl;
             return;
         }
+
+#ifdef EXPERIMENTAL
+        const int MIN_BLOB = 4;
+        const int MAX_BLOB = 30;
+#endif
+
         
         //resize(frame, frame, cv::Size(frame.cols * 2, frame.rows * 2), 0, 0, cv::INTER_NEAREST);
         if(current_calibration_point_id >= 4){
@@ -396,8 +404,14 @@ int current_calibration_point_id = 0;
                             }
                         }
                     }
-
-                    if (num_points > 0) blobs.push_back(std::make_pair(y / num_points, x / num_points));
+#ifndef EXPERIMENTAL
+                    if (num_points > 0) 
+#else
+                    if (num_points > MIN_BLOB && num_points < MAX_BLOB)
+#endif
+                    {
+                        blobs.push_back(std::make_pair(y / num_points, x / num_points));
+                    }
                 }
             }
 
@@ -631,9 +645,16 @@ std::vector<Square> squares;
             marker.marker_type++;
 
             // Marker type shielding
+
             if (marker.marker_type > 5 || marker.marker_type < 2) {
+#ifndef EXPERIMENTAL
                 marker.marker_type = 2;
+#else
+                // Don't even send if the clusters aren't qualified
+                continue; 
+#endif
             }
+
 
             //send_buffer << marker;
             send_buffer << (int)marker.x;

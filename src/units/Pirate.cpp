@@ -46,6 +46,11 @@ namespace unit {
     }
 
     void Pirate::step() {
+
+		if (dead) {
+			destroySelf();
+		}
+
         // Perform parent step
         Unit::step();
 

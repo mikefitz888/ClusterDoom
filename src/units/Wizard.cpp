@@ -45,6 +45,11 @@ namespace unit {
     }
 
     void Wizard::step() {
+
+		if (dead) {
+			destroySelf();
+		}
+
         // Perform parent step
         Unit::step();
 

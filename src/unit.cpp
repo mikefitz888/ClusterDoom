@@ -25,6 +25,7 @@ namespace unit {
             std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
         }*/
         texture = manager->getResourceManager()->getAnimatedTexture("robot_unit");
+		deathTexture = manager->getResourceManager()->getAnimatedTexture("robot_death");
 
 
         /*red = new sf::Texture();
@@ -100,6 +101,11 @@ namespace unit {
     void Unit::release() {}
 
     void Unit::step() {
+
+		if (dead) {
+			return;
+		}
+
         /*
         *  Description of Unit activity: 
         *  Move towards Base.
@@ -196,8 +202,12 @@ namespace unit {
             this->health_alpha = 1.0f;
         }
         if (health <= 0) {
-            deliverWealth(20);
-            destroySelf();
+			if (!dead) {
+				deliverWealth(20);
+				dead = true;
+				animationProgress = 0.0f;
+			}
+
         }
     }
 
@@ -212,6 +222,10 @@ namespace unit {
 		int m = 1;
 		if (this->getAtDestination()) m = 0;
 		texture->render(m* (((int)animationProgress) % numFrames), (int)getXr(), (int)getYr(), finSize, finSize, rotation);
+	}
+
+	bool Unit::isDead() {
+		return dead;
 	}
 
     void Unit::targetMine(smartpointers::slave_ptr<ResourceMine> t_mine) {

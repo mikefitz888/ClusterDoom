@@ -139,8 +139,8 @@ namespace tower {
         if (amt == 0) return units;
 
         for (auto& unit : manager->getUnits()) {
-            units.emplace_back(unit);
-            if (--amt == 0) return units;
+			units.emplace_back(unit);
+			if (--amt == 0) return units;
         }
     }
 

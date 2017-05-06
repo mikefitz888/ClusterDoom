@@ -469,7 +469,7 @@ namespace gamecontroller {
         std::vector<unit_ptr> units_in_range;
         units_in_range.clear();
         for (unit_ptr unit : manager->getUnits()) {
-            if (unit && glm::distance(unit->getPosition(), position) <= radius) {
+            if (unit && glm::distance(unit->getPosition(), position) <= radius && !unit->isDead()) {
                 units_in_range.push_back(unit);
             }
         }
@@ -495,11 +495,11 @@ namespace gamecontroller {
         std::vector<std::pair<float, unit_ptr>> distance_unit_pairs;
 
         for (unit_ptr unit : manager->getUnits()) {
-            if (unit) {
-                float distance = glm::distance(unit->getPosition(), position);
-                if (distance <= maxrange) {
-                    distance_unit_pairs.push_back(std::pair<float, unit_ptr>(distance, unit));
-                }
+            if (unit && !unit->isDead()) {
+				float distance = glm::distance(unit->getPosition(), position);
+				if (distance <= maxrange) {
+					distance_unit_pairs.push_back(std::pair<float, unit_ptr>(distance, unit));
+				}
             }
         }
 

@@ -313,6 +313,10 @@ namespace gamecontroller {
                             smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::WINDY);
                             std::cout << "Special towers set to WINDY" << std::endl;
                         }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
+                        {
+                            tower->demoDestroy();
+                        }
                     }
                 }
             }

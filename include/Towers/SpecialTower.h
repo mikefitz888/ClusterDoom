@@ -26,6 +26,8 @@ namespace tower
     class SpecialTower : public Tower {
         graphics::Texture* texture = nullptr;
 
+        typedef void (SpecialTower::*Effect)(bool);
+
         // Effect textures
 
         // Ice effect ---------
@@ -61,10 +63,10 @@ namespace tower
         / around the state for all the different      \
         / effects, resetting them on a state change.  \
         /*********************************************/
-        void (SpecialTower::*effect)(bool);
+        static Effect effect;
         void noeffect(bool cancel);
-        unsigned int ticks;
-        SPECIAL_TYPE effectType;
+        static unsigned int ticks;
+        static SPECIAL_TYPE effectType;
 
         // The number of frames a power is active for after it is acquired
         static const unsigned int POWER_TIME;
@@ -101,6 +103,7 @@ namespace tower
 
     public:
         SpecialTower(id_t key, Manager* m);
+        ~SpecialTower();
         void init() override;
         void render() override;
         void step() override;

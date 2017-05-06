@@ -19,10 +19,14 @@ namespace tower {
     const double SpecialTower::MAX_RANGE_WINDY = 200;
     const unsigned int SpecialTower::POWER_TIME = 1750;
 
+    SpecialTower::Effect SpecialTower::effect = &SpecialTower::noeffect;
+    SPECIAL_TYPE SpecialTower::effectType = SPECIAL_TYPE::NOEFFECT;
+    unsigned int SpecialTower::ticks = 0;
+
     SpecialTower::SpecialTower(id_t key, Manager* m) : Tower(key, TYPE::SPECIAL, m) {
-        effect = &SpecialTower::noeffect;
-        ticks = 0;
-        effectType = NOEFFECT;
+        //effect = &SpecialTower::noeffect;
+        //ticks = 0;
+        //effectType = NOEFFECT;
     }
 
     void SpecialTower::init() {
@@ -359,6 +363,12 @@ namespace tower {
                 }
             }
         }
+    }
+
+    // This is to disable perma-frost
+    SpecialTower::~SpecialTower()
+    {
+        (this->*effect)(true);
     }
 
 

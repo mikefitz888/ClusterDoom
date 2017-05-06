@@ -73,6 +73,7 @@ namespace gamecontroller {
 
         int create_count = 0;
         int frame_clock = 0;
+        bool initial_spawns_occurred = false;
 
         int wave = 0;
         int scenario = -1;

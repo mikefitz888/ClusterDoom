@@ -159,11 +159,7 @@ namespace gamecontroller {
 
     bool GameController::step() {
         srand(time(NULL));
-        frame_clock++;
-        diminishEfficiency();
-        if (frame_clock % 100 == 0) {
-            std::cout << "Efficiency = " << tower_efficiency << "\n";
-        }
+       
         //In general, step() should be frame-based.
 
         switch (getGameState()) {
@@ -204,8 +200,6 @@ namespace gamecontroller {
 
                         // Add notifier
                         spawnObjectAt(gameobject::OBJECT_TYPE::GAME_STATE_NOTIFIER, 0, 0);
-
-                        std::cout << "AWDAWD" << std::endl;
                     }
 
                     frame_clock = 0;
@@ -221,21 +215,27 @@ namespace gamecontroller {
             /*
                 RUNNING STATE
                 -----------------------------------
-
-                This is the game state for when the game is running. All gameobject simulation, processing and rendering should be done when this state is live.
-
-            
-            
+                This is the game state for when the game is running. 
+                All gameobject simulation, processing and rendering should be done when this state is live.
             */
             case GameState::RUNNING:
             {
+                // Perform clock:
+                frame_clock++;
+
+                // Efficiency management
+                diminishEfficiency();
+                if (frame_clock % 100 == 0) {
+                    std::cout << "Efficiency = " << tower_efficiency << "\n";
+                }
+
                 // Resource spawning
                 resource_spawn_timer--;
                 if (resource_spawn_timer <= 0) {
                     resource_spawn_timer = glm::linearRand(resource_spawn_timer_min, resource_spawn_timer_max);
 
                     // Spawn a bit of resource
-                    glm::vec2 rand_pos = glm::linearRand(glm::vec2(50.0f, 50.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 50.0f, manager->getRenderManager()->getWindowHeight() - 50.0f));
+                    glm::vec2 rand_pos = glm::linearRand(glm::vec2(100.0f, 100.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 100.0f, manager->getRenderManager()->getWindowHeight() - 100.0f));
 
                     // Query number of mines
                     int count = 0;
@@ -255,7 +255,7 @@ namespace gamecontroller {
                 if (token_timer <= 0) {
                     token_timer = glm::linearRand(token_timer_min, token_timer_max);
 
-                    glm::vec2 rand_pos = glm::linearRand(glm::vec2(50.0f, 50.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 50.0f, manager->getRenderManager()->getWindowHeight() - 50.0f));
+                    glm::vec2 rand_pos = glm::linearRand(glm::vec2(75.0f, 75.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 75.0f, manager->getRenderManager()->getWindowHeight() - 75.0f));
 
                     bool canspawn = true;
                     for (auto obj : manager->getObjects()) {
@@ -276,7 +276,8 @@ namespace gamecontroller {
 
                 }
 
-                // Perform 
+                // ------------------------------------------------------------------------------------ //
+                // DEBUG CONTROLS
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
                     if (!spawned) {
 
@@ -409,11 +410,60 @@ namespace gamecontroller {
                 /////////////////////////////////////////////////////////////////////////
                 // PERFORM MANAGER STEP AND COLLISIONS
                 manager->stepAll();
+                manager->stepAll();
                 manager->collisionAll();
             }
+            break;
+
+
+            /*
+                Menu State
+                -----------------------------------
+                The main menu state is simply used for visiting other menu screens.
+            */
+            case GameState::MAIN_MENU:
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+
+                    // GOTO Single player lobby
+                    this->current_state = GameState::MENU_LOBBY_SP;
+
+                } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+
+                    // GOTO Multiplayer lobby
+                    this->current_state = GameState::MENU_LOBBY_MP;
+                }
+            break;
+
+            /*
+                Single-player lobby
+                -----------------------------------
+                Single player lobby. Nothing much needs to happen here. This will configure the game for
+                single-player mode. The game will not be start-able until the CV interface is connected.
+            */
+            case GameState::MENU_LOBBY_SP:
+
+                
+                if (cvConnectionEstablished) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                        // Move into start state:
+                        this->current_state = GameState::START;
+                    }
+                }
+            break;
+
+            /*
+                Multi-player lobby
+                -----------------------------------
+                Multiplayer lobby. Will display other connected players.
+            */
+            case GameState::MENU_LOBBY_MP:
+
+            break;
+
+
         }
 
-
+        // ---------------- CODE FOR ALL STATES ----------------------
         //Assumes 60 frames = 1000ms roughly... it's not but we'll work with that timing
         float delta = getElapsedTime();
 
@@ -431,6 +481,10 @@ namespace gamecontroller {
                 return false;
             }
             restart();
+
+            // Return to menu
+            current_state = GameState::MAIN_MENU;
+
             return true;
         }
 
@@ -586,6 +640,7 @@ namespace gamecontroller {
 
         // Create buffer
         this->recv_buffer = new Buffer();
+        this->send_buffer = new Buffer();
     }
 
     void GameController::cvNetworkStep() {
@@ -599,10 +654,31 @@ namespace gamecontroller {
                 std::cout << "FAILED TO ESTABLISH CONNECTION WITH CV INTERFACE " << st << std::endl;
                 delete listener;
                 delete this->recv_buffer;
+                delete this->send_buffer;
                 startCVServer();
 
             }
         } else {
+
+            // Ping CV Interface (to check if still connected)
+            ping_timer--;
+            if (ping_timer <= 0) {
+                ping_timer = 20;
+
+                send_buffer->seek(0);
+                (*send_buffer) << (int)0;
+
+                size_t data;
+                sf::Socket::Status status = client->send((void*)send_buffer->getPtr(), (std::size_t)send_buffer->tell(), data);
+                if (status == sf::Socket::Disconnected || status == sf::Socket::Error) {
+
+                    // Disconnect client
+                    client->disconnect();
+                    delete client;
+                    client = new sf::TcpSocket();
+                    cvConnectionEstablished = false;
+                }
+            }
             // Listen for messages from cv interface
             /*
                 In this process, the gamecontroller checks the incoming buffer for any messages
@@ -908,5 +984,9 @@ namespace gamecontroller {
         if (unit && mine) {
             unit->targetMine(mine);
         }
+    }
+
+    bool GameController::getCVReady() {
+        return this->cvConnectionEstablished;
     }
 }

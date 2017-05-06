@@ -19,11 +19,11 @@ namespace worldrenderer {
         graphics::Texture* game_begin_texture = nullptr;
         graphics::Texture* game_win_texture = nullptr;
         graphics::Texture* game_lose_texture = nullptr;
-
+        graphics::Texture* main_menu_bg = nullptr;
+        graphics::Texture* menu_ui_bars = nullptr;
 
 
         sf::Shader* game_bg_shader = nullptr;
-        graphics::VertexBuffer* vbuff = nullptr;
         sf::Text* text = nullptr;
 
         /// TEMP
@@ -31,7 +31,7 @@ namespace worldrenderer {
         float index = 0;
         
         // Game Screens
-        enum SCREEN : unsigned int {NONE = 0, GAME_START, GAME_LOSE, GAME_WIN};
+        enum SCREEN : unsigned int {NONE = 0, GAME_START, GAME_LOSE, GAME_WIN, MAIN_MENU};
         SCREEN display_screen = SCREEN::NONE;
         std::map<SCREEN, graphics::Texture*> textures;
 

@@ -24,6 +24,8 @@ namespace network {
         Buffer          send_buffer, recv_buffer;
         int             security_token, security_hash;
         int             timeout = 0;
+        int             ping_packet_timer = ping_packet_timer_max;
+        int             ping_packet_timer_max = 30;
         NetworkManager* network_manager;
 
         // Private functions
@@ -72,6 +74,9 @@ namespace network {
         void sendInstanceDestroy(int instance_id);
         void sendAllInstancesToClient(NetworkClient *network_client);
 
+        // Getting information
+        int getNumConnections();
+
 
         /*
             This is the range of packet IDs that the server can send to the
@@ -87,7 +92,8 @@ namespace network {
             SendInstanceCreate = 0x03,
             SendInstanceUpdate = 0x04,
             SendInstanceDestroy = 0x05,
-            SendPlayerInstanceID = 0x06
+            SendPlayerInstanceID = 0x06,
+            SendPing = 0x07
         };
 
 

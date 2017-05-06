@@ -272,6 +272,11 @@ namespace manager {
         return audio_manager;
     }
 
+    // Get Network manager
+    NetworkManager* Manager::getNetworkManager() const {
+        return network_manager;
+    }
+
     void Manager::release() {
         render_manager->release();
         render_manager = nullptr;

@@ -79,6 +79,17 @@ namespace graphics {
         // Wind tower effect
         rm->textureLoad("wind_effect", "src/Resources/Textures/wind_effect.png")->setOriginCentre();
 
+        // Main menu
+        rm->textureLoad("main_menu_bg", "src/Resources/Textures/Menu/clusterdoom_mainmenu_bg.png")->setOriginCentre();
+        rm->textureLoad("main_menu_bars", "src/Resources/Textures/Menu/bars.png")->setOriginCentre();
+        rm->textureLoad("menu_attackers_v_defenders", "src/Resources/Textures/Menu/attackers_v_defenders.png");
+        rm->textureLoad("camera_connected", "src/Resources/Textures/Menu/camera_connected.png");
+        rm->textureLoad("camera_disconnected", "src/Resources/Textures/Menu/camera_disconnected.png");
+        rm->textureLoad("ai_logo", "src/Resources/Textures/Menu/ai_logo.png");
+        rm->textureLoad("twitch_logo", "src/Resources/Textures/Menu/twitch_logo.png");
+        rm->textureLoad("defenders_vs_ai", "src/Resources/Textures/Menu/defenders_vs_ai.png");
+        rm->textureLoad("phone_logo", "src/Resources/Textures/Menu/phone_logo.png");
+
         /// Load Animated Textures
         //  Explosions
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();

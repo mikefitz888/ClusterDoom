@@ -31,7 +31,13 @@ namespace gamecontroller {
     using std::unordered_map;
     using std::tuple;
 
-    enum GameState : unsigned int { START = 0, RUNNING, WIN, LOSE };
+    enum GameState : unsigned int { START = 0, 
+                                    RUNNING, 
+                                    WIN, 
+                                    LOSE,
+                                    MAIN_MENU,
+                                    MENU_LOBBY_SP,
+                                    MENU_LOBBY_MP};
 
     struct Matching
     {
@@ -56,7 +62,7 @@ namespace gamecontroller {
         TileNode nodes[TILE_W * TILE_H];
 
         
-        GameState current_state = GameState::START;
+        GameState current_state = GameState::MAIN_MENU;
 
         //std::map<int, std::vector<Point<int>>> cvList;
         std::vector<Point<float>> cvList[tower::TYPE::num_types];
@@ -65,6 +71,7 @@ namespace gamecontroller {
         int               port;
         sf::TcpListener*  listener;
         Buffer*           recv_buffer;
+        Buffer*           send_buffer;
         sf::TcpSocket*    client;
         bool              cvConnectionEstablished;
 
@@ -73,6 +80,7 @@ namespace gamecontroller {
 
         int create_count = 0;
         int frame_clock = 0;
+        int ping_timer = 0;
         bool initial_spawns_occurred = false;
 
         int wave = 0;
@@ -113,6 +121,9 @@ namespace gamecontroller {
         GameState startGame();
         GameState winGame();
         GameState loseGame();
+
+        // Logic
+        bool getCVReady();
 
         tower_ptr  spawnTowerAt(float x, float y, tower::TYPE type) const;
         tower_ptr  spawnTowerAt(Point<float> position, tower::TYPE type) const;

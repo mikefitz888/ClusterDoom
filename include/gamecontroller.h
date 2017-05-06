@@ -103,7 +103,7 @@ namespace gamecontroller {
         void resetClock();
         void init();
         bool step();
-        void restart() const; //Not yet implemented, clears towers + units
+        void restart(); //Not yet implemented, clears towers + units
         Matching stableMatching(tower::TYPE type, std::vector<Point<float>>& detections);
         int getWeight(int x, int y);
 

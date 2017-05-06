@@ -92,7 +92,7 @@ namespace manager {
 
 
         bool step();
-        void restart();
+        void reset();
     };
 
 

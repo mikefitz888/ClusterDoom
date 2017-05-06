@@ -96,6 +96,8 @@ namespace tower
         static const double ROBOT_MODIFIER;
         static const double WIZARD_MODIFIER;
         static const double PIRATE_MODIFIER;
+        // Time before natural that
+        static const unsigned int GLACIAL_TICKS;
 
         // WINDY EFFECTS
         void windy(bool cancel);

@@ -349,6 +349,15 @@ namespace gameobject {
         velocity *= friction;
 
         render_position += (position - render_position)*smoothing_rate;
+
+        if (isUnderGlacialEffect())
+        {
+            glacialEffectTicks--;
+            if (!isUnderGlacialEffect())
+            {
+                glacialEffectModifier = 1.0f;
+            }
+        }
     }
 
     void MotionComponent::setPosition(float x, float y) {
@@ -442,11 +451,12 @@ namespace gameobject {
     }
 
     bool MotionComponent::isUnderGlacialEffect() const {
-        return this->glacialEffectModifier != 1.0;
+        return this->glacialEffectTicks > 0;
     }
 
-    void MotionComponent::setUnderGlacialEffect(double mod) {
+    void MotionComponent::setUnderGlacialEffect(unsigned int ticks, double mod) {
         this->glacialEffectModifier = mod;
+        this->glacialEffectTicks = ticks;
     }
 
     // ****************************************************************************** //

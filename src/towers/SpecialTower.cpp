@@ -16,6 +16,7 @@ namespace tower {
     const double SpecialTower::ROBOT_MODIFIER = 0.85;
     const double SpecialTower::WIZARD_MODIFIER = 0.0;
     const double SpecialTower::PIRATE_MODIFIER = 0.15;
+    const unsigned int SpecialTower::GLACIAL_TICKS = 35;
     const double SpecialTower::MAX_RANGE_WINDY = 200;
     const unsigned int SpecialTower::POWER_TIME = 1750;
 
@@ -329,7 +330,8 @@ namespace tower {
                 break;
             }
             double d = std::hypot(unit->getX() - getX(), unit->getY() - getY());
-            unit->setUnderGlacialEffect(d <= MAX_RANGE_GLACIAL && !cancel ? modifier : 1.0);
+            //unit->setUnderGlacialEffect(d <= MAX_RANGE_GLACIAL && !cancel ? modifier : 1.0);
+            if (d <= MAX_RANGE_GLACIAL && !cancel) unit->setUnderGlacialEffect(GLACIAL_TICKS, modifier);
         }
     }
     

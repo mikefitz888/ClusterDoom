@@ -917,6 +917,8 @@ namespace gamecontroller {
     void GameController::unitTargetMine(id_t unit_id, id_t mine_id) {
         auto unit = smartpointers::static_pointer_cast<unit::Unit>(manager->getObjectById(unit_id));
         auto mine = smartpointers::static_pointer_cast<ResourceMine>(manager->getObjectById(mine_id));
-        unit->targetMine(mine);
+        if (unit && mine) {
+            unit->targetMine(mine);
+        }
     }
 }

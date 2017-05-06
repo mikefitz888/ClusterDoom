@@ -89,11 +89,8 @@ namespace gamecontroller {
     }
 
     void GameController::restart() const {
-        for(auto obj : manager->getTowers()){
-            //destroy
-        }
-        for(auto obj : manager->getUnits()){
-            //destroy
+        for(auto& obj : manager->getUnits()){
+            obj->demoDestroy();
         }
     }
 
@@ -313,6 +310,10 @@ namespace gamecontroller {
                             smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::WINDY);
                             std::cout << "Special towers set to WINDY" << std::endl;
                         }
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
+                        {
+                            tower->demoDestroy();
+                        }
                     }
                 }
             }
@@ -376,29 +377,28 @@ namespace gamecontroller {
         if (getGameState() == GameState::START) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
                 startGame();
-                if (manager->getTowers().size()) {
-                    std::cout << "ERROR! There should not be any towers existing at this point, before base has spawned." << std::endl;
-                }
                 
-                tower_ptr t = spawnTowerAt(manager->getRenderManager()->getWindowWidth()/2, manager->getRenderManager()->getWindowHeight()/2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
-                //spawnTowerAt(200, 200, tower::TYPE::ELECTRIC);
-                //JAMIE
-                //spawnTowerAt(800, 300, tower::TYPE::ELECTRIC);
-                //spawnTowerAt(500, 200, tower::TYPE::BOMB);
-                //spawnTowerAt(500, 500, tower::TYPE::LASER);
+                if (!initial_spawns_occurred) {
+                    initial_spawns_occurred = true;
+                    if (manager->getTowers().size()) {
+                        std::cout << "ERROR! There should not be any towers existing at this point, before base has spawned." << std::endl;
+                    }
 
-                //Adding Spawn Points
-                spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
-                spawn_points.back()->setSpawnID(0);
-                spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0)));
-                spawn_points.back()->setSpawnID(1);
-                spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672)));
-                spawn_points.back()->setSpawnID(2);
-                spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672)));
-                spawn_points.back()->setSpawnID(3);
+                    tower_ptr t = spawnTowerAt(manager->getRenderManager()->getWindowWidth() / 2, manager->getRenderManager()->getWindowHeight() / 2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
 
-                // Add notifier
-                spawnObjectAt(gameobject::OBJECT_TYPE::GAME_STATE_NOTIFIER, 0, 0);
+                    //Adding Spawn Points
+                    spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
+                    spawn_points.back()->setSpawnID(0);
+                    spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0)));
+                    spawn_points.back()->setSpawnID(1);
+                    spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672)));
+                    spawn_points.back()->setSpawnID(2);
+                    spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672)));
+                    spawn_points.back()->setSpawnID(3);
+
+                    // Add notifier
+                    spawnObjectAt(gameobject::OBJECT_TYPE::GAME_STATE_NOTIFIER, 0, 0);
+                }
 
                 frame_clock = 0;
             }

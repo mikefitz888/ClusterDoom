@@ -16,13 +16,18 @@ namespace tower {
     const double SpecialTower::ROBOT_MODIFIER = 0.85;
     const double SpecialTower::WIZARD_MODIFIER = 0.0;
     const double SpecialTower::PIRATE_MODIFIER = 0.15;
+    const unsigned int SpecialTower::GLACIAL_TICKS = 35;
     const double SpecialTower::MAX_RANGE_WINDY = 200;
     const unsigned int SpecialTower::POWER_TIME = 1750;
 
+    SpecialTower::Effect SpecialTower::effect = &SpecialTower::noeffect;
+    SPECIAL_TYPE SpecialTower::effectType = SPECIAL_TYPE::NOEFFECT;
+    unsigned int SpecialTower::ticks = 0;
+
     SpecialTower::SpecialTower(id_t key, Manager* m) : Tower(key, TYPE::SPECIAL, m) {
-        effect = &SpecialTower::noeffect;
-        ticks = 0;
-        effectType = NOEFFECT;
+        //effect = &SpecialTower::noeffect;
+        //ticks = 0;
+        //effectType = NOEFFECT;
     }
 
     void SpecialTower::init() {
@@ -325,7 +330,8 @@ namespace tower {
                 break;
             }
             double d = std::hypot(unit->getX() - getX(), unit->getY() - getY());
-            unit->setUnderGlacialEffect(d <= MAX_RANGE_GLACIAL && !cancel ? modifier : 1.0);
+            //unit->setUnderGlacialEffect(d <= MAX_RANGE_GLACIAL && !cancel ? modifier : 1.0);
+            if (d <= MAX_RANGE_GLACIAL && !cancel) unit->setUnderGlacialEffect(GLACIAL_TICKS, modifier);
         }
     }
     
@@ -359,6 +365,12 @@ namespace tower {
                 }
             }
         }
+    }
+
+    // This is to disable perma-frost
+    SpecialTower::~SpecialTower()
+    {
+        (this->*effect)(true);
     }
 
 

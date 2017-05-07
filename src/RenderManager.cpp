@@ -31,8 +31,11 @@ namespace graphics {
 		rm->animatedTextureLoad("robot_death", "src/Resources/Textures/robotDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
 		//wizard
         rm->animatedTextureLoad("wizard_unit", "src/Resources/Textures/wizardAnimation.png", true, 4, 3, 12)->setOriginCentre();
+		rm->animatedTextureLoad("wizard_death", "src/Resources/Textures/wizardDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
 		//pirate
 		rm->animatedTextureLoad("pirate_unit", "src/Resources/Textures/pirateAnimation.png", true, 4, 3, 12)->setOriginCentre();
+		rm->animatedTextureLoad("pirate_death", "src/Resources/Textures/pirateDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
+
         rm->textureLoad("unit_shadow", "src/Resources/Textures/unitShadow.png")->setOriginCentre();
 
         

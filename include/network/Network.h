@@ -27,6 +27,7 @@ namespace network {
         int             ping_packet_timer = ping_packet_timer_max;
         int             ping_packet_timer_max = 30;
         NetworkManager* network_manager;
+        smartpointers::slave_ptr<PlayerInstance> player_instance = nullptr;
 
         // Private functions
         void setID(int connection_id);                        // Used to set the unique connection identifier
@@ -76,6 +77,7 @@ namespace network {
 
         // Getting information
         int getNumConnections();
+        bool getPlayerExists(int player_id);
 
 
         /*

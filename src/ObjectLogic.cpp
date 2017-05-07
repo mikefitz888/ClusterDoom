@@ -6,6 +6,7 @@
 #include "../include/gameobject.h"
 #include "../include/GameObjects/GameStateNotifier.h"
 #include "../include/GameObjects/SpecialToken.h"
+#include "../include/GameObjects/PlayerInstance.h"
 
 GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
     switch (type) {
@@ -43,6 +44,10 @@ GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
 
     case gameobject::OBJECT_TYPE::TOKEN_WINDY:
         return new SpecialToken(key, manager, gameobject::OBJECT_TYPE::TOKEN_WINDY);
+        break;
+
+    case gameobject::OBJECT_TYPE::PLAYER_INSTANCE:
+        return new PlayerInstance(key, manager);
         break;
 
     default:

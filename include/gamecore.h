@@ -69,6 +69,7 @@ class GameStateNotifier;
 class ResourceMine;
 class ResourceMineSparkle; // <- That moment when you need a whole class just for a sparkle #Unecessary :p
 class SpecialToken;
+class PlayerInstance;
 
 typedef unsigned char byte;
 #ifdef _WIN32

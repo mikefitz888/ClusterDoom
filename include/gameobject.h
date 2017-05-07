@@ -106,7 +106,8 @@ namespace gameobject {
         RESOURCE_MINE = 5,
         TOKEN_MAGNETIC = 6,
         TOKEN_GLACIAL = 7,
-        TOKEN_WINDY = 8
+        TOKEN_WINDY = 8,
+        PLAYER_INSTANCE = 9
     };
 
 

@@ -2,6 +2,7 @@
 #include "../include/manager.h"
 #include "../include/gamecontroller.h"
 #include "../include/gameobject.h"
+#include "../include/GameObjects/PlayerInstance.h"
 
 namespace network {
     
@@ -126,6 +127,15 @@ namespace network {
         return this->clients.size();
     }
 
+    bool NetworkManager::getPlayerExists(int player_id) {
+        for (auto& c : this->clients) {
+            if (c->connection_id == player_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     //// -------------------------------------------------------------------------------- //////
     // NETWORK CLIENT
@@ -204,7 +214,6 @@ namespace network {
             std::cout << "[NETWORK CLIENT] Client successfully verified!" << std::endl;
 
             // Send verify packet
-
 			send_buffer.seek(4);
 			send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendConfirmConnect;
 
@@ -290,6 +299,24 @@ namespace network {
         Otherwise, we can handle the data that has been received.
     */
     void NetworkClient::listenForData(Manager *manager) {
+
+        // Check for existence of PlayerIntsance
+        if (this->connection_state == ConnectionState::VERIFIED) {
+            if (manager->getGameController()->getGameState() == gamecontroller::GameState::RUNNING) {
+                if (this->player_instance == nullptr || !player_instance) {
+                    // Create object
+                    gameobject_ptr obj = manager->getGameController()->spawnObjectAt(gameobject::OBJECT_TYPE::PLAYER_INSTANCE, 0.0f, 0.0f);
+                    if (obj) {
+                        this->player_instance = smartpointers::static_pointer_cast<PlayerInstance>(obj);
+                        this->player_instance->setNetworkInstanceID(this, this->connection_id);
+                    }
+                
+                }
+            }
+        }
+
+
+        // Listen for data
         std::size_t message_size;
         sf::TcpSocket::Status st = socket->receive((void*)recv_buffer.getPtr(), (std::size_t)recv_buffer.maxSize(), message_size);
         switch (st) {

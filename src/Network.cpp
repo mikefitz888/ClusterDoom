@@ -122,6 +122,10 @@ namespace network {
         listener->close();
     }
 
+    int NetworkManager::getNumConnections() {
+        return this->clients.size();
+    }
+
 
     //// -------------------------------------------------------------------------------- //////
     // NETWORK CLIENT
@@ -348,6 +352,27 @@ namespace network {
     }
 
     void NetworkClient::processConnection(Manager *manager) {
+        // Send ping
+        ping_packet_timer--;
+        if (ping_packet_timer <= 0) {
+            ping_packet_timer = ping_packet_timer_max;
+
+            // Send ping packet
+            send_buffer.seek(4);
+            send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendPing;
+
+            // Write size
+            unsigned int size = send_buffer.tell();
+            send_buffer.seek(0);
+            send_buffer << (unsigned int)size;
+            send_buffer.seek(size); // < Jump back to previous end
+
+            // Send
+            socket->setBlocking(true);
+            socket->send(send_buffer.getPtr(), size);
+            socket->setBlocking(false);
+        }
+
         // Listen for incoming data
         listenForData(manager);
     }

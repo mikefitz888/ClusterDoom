@@ -43,6 +43,9 @@ namespace unit {
 
     void BasicUnit::step() {
 
+        // Perform parent step
+        Unit::step();
+
 		if (dead) {
 			if (animationProgress >= 15.0f) {
 				destroySelf();
@@ -52,8 +55,7 @@ namespace unit {
 			}
 		}
 
-        // Perform parent step
-        Unit::step();
+
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
             if (!pressed) {

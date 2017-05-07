@@ -153,8 +153,13 @@ namespace tower {
         // --------------------------------------------
 
         // Render tower
-        Tower::render();
-        texture->render((int)getXr(), (int)getYr(), 96, 96);
+        //
+        if (ticks) {
+            graphics::RenderUtils::render_circular_health((int)getXr(), (int)getYr(), (float)ticks, (float)POWER_TIME,
+                graphics::Colour(0, 0, 255, 255)/*graphics::RenderUtils::colour_blend(graphics::Colour(0, 255, 0, 255), graphics::Colour(255, 0, 0, 255), (float)ticks / POWER_TIME)*/
+            );
+        } else Tower::render();
+        //texture->render((int)getXr(), (int)getYr(), 96, 96);
     }
 
     void SpecialTower::step() {

@@ -85,6 +85,7 @@ namespace manager {
         RenderManager*   getRenderManager() const;
         ResourceManager* getResourceManager() const;
         AudioManager*    getAudioManager() const;
+        NetworkManager*  getNetworkManager() const;
         void release();
         void renderAll();
         void stepAll();
@@ -92,7 +93,7 @@ namespace manager {
 
 
         bool step();
-        void restart();
+        void reset();
     };
 
 

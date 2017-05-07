@@ -426,12 +426,36 @@ namespace gamecontroller {
             case GameState::MAIN_MENU:
 
                 if (this->manager->getRenderManager()->getWindow()->hasFocus()) {
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+
+                    // Get mouse
+                    float width = (float)this->manager->getRenderManager()->getWindowWidth();
+                    float height = (float)this->manager->getRenderManager()->getWindowHeight();
+                    float sf = width / 1920.0f;
+                    sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                    mouse_pos.x = width - mouse_pos.x;
+
+                    // Btn presses
+                    bool hoverbtn1 = false;
+                    bool hoverbtn2 = false;
+                    if (mouse_pos.x >= 244.0f * sf && mouse_pos.x <= 644.0f * sf && mouse_pos.y >= 577.0f * sf && mouse_pos.y <= 977.0f * sf) {
+                        hoverbtn1 = true;
+                    }
+                    if (mouse_pos.x >= 1164.0f * sf && mouse_pos.x <= 1564.0f * sf && mouse_pos.y >= 577.0f * sf && mouse_pos.y <= 977.0f * sf) {
+                        hoverbtn2 = true;
+                    }
+
+                    // Mouse press
+                    bool mouse_pressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+                    if (hoverbtn1) {
+                        std::cout << "O:" << std::endl;
+                    }
+                    // Hotkeys
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || (hoverbtn1 && mouse_pressed)) {
 
                         // GOTO Single player lobby
                         this->current_state = GameState::MENU_LOBBY_SP;
 
-                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || (hoverbtn2 && mouse_pressed)) {
 
                         // GOTO Multiplayer lobby
                         this->current_state = GameState::MENU_LOBBY_MP;

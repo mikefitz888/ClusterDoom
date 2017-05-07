@@ -92,6 +92,8 @@ namespace graphics {
         rm->textureLoad("twitch_logo", "src/Resources/Textures/Menu/twitch_logo.png");
         rm->textureLoad("defenders_vs_ai", "src/Resources/Textures/Menu/defenders_vs_ai.png");
         rm->textureLoad("phone_logo", "src/Resources/Textures/Menu/phone_logo.png");
+        rm->textureLoad("btn_defenders_vs_ai", "src/Resources/Textures/Menu/btn_def_vs_ai.png");
+        rm->textureLoad("btn_defenders_vs_att", "src/Resources/Textures/Menu/btn_def_vs_att.png");
 
         /// Load Animated Textures
         //  Explosions

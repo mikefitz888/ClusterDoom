@@ -72,6 +72,7 @@ namespace worldrenderer {
         }
 
         // Menu renders:
+        manager->getRenderManager()->setRenderFlipped(true);
         switch (game_state) {
 
             case gamecontroller::GameState::MAIN_MENU:
@@ -116,7 +117,7 @@ namespace worldrenderer {
                 manager->getResourceManager()->getTexture("camera_disconnected")->render(1215.0f*sf, 784.0f*sf, sf, sf, 0.0f);
             }
         }
-
+        manager->getRenderManager()->setRenderFlipped(false);
     }
 
     void WorldRenderer::renderGUI(){

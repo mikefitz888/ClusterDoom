@@ -278,122 +278,124 @@ namespace gamecontroller {
 
                 // ------------------------------------------------------------------------------------ //
                 // DEBUG CONTROLS
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
-                    if (!spawned) {
+                if (this->manager->getRenderManager()->getWindow()->hasFocus()) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
+                        if (!spawned) {
 
+                            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                                spawnUnitAt((float)mouse_pos.x, (float)mouse_pos.y, unit::TYPE::BASIC);
+                            }
+                            //spawned = true;
+                        }
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+                        if (!spawned) {
+
+                            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                                spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, mouse_pos.x, mouse_pos.y);
+                            }
+                            spawned = true;
+                        }
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) {
                         sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                         if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                             mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                            spawnUnitAt((float)mouse_pos.x, (float)mouse_pos.y, unit::TYPE::BASIC);
+                            spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
                         }
-                        //spawned = true;
-                    }
-                } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-                    if (!spawned) {
 
-                        sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                        if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                            mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                            spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, mouse_pos.x, mouse_pos.y);
-                        }
                         spawned = true;
-                    }
-                } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) {
-                    sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                    if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                        mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                        spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
-                    }
-
-                    spawned = true;
-                } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
-                    sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                    if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                        mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                        auto obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
-
-                        // Find nearest object
-                        auto objs = this->manager->getGameController()->getNNearestUnits(obj->getPosition(), 1, 1000);
-                        if (objs.size() > 0) {
-                            glm::vec2 dir = glm::normalize(objs[0].second->getPosition() - obj->getPosition());
-                            obj->setVelocity(dir*7.0f);
-                        }
-                    }
-
-                    spawned = true;
-                } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
-                    if (!spawned) {
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
                         sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                         if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                             mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                            auto obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
 
-                            auto units = getNNearestUnits(glm::vec2(mouse_pos.x, mouse_pos.y), 1000, 1000);
-                            if (units.size() > 1) {
-                                // std::cout << "ELECTRICITY!!" << std::endl;
-                                gameobject_ptr obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
-                                smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
-                                elec->setForkParent(units[0].second->getSharedPtr());
-                                elec->setTargetObject(units[1].second);
+                            // Find nearest object
+                            auto objs = this->manager->getGameController()->getNNearestUnits(obj->getPosition(), 1, 1000);
+                            if (objs.size() > 0) {
+                                glm::vec2 dir = glm::normalize(objs[0].second->getPosition() - obj->getPosition());
+                                obj->setVelocity(dir*7.0f);
                             }
                         }
 
                         spawned = true;
-                    }
-                } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)
-                           || sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)
-                           || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)
-                           || sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)
-                           || sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-                        for (auto tower : manager->getTowers()) {
-                            if (tower->getSubType() == tower::TYPE::SPECIAL) {
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
-                                    smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::NOEFFECT);
-                                    std::cout << "Special towers set to NOEFFECT" << std::endl;
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
-                                    smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::MAGNETIC);
-                                    std::cout << "Special towers set to MAGNETIC" << std::endl;
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
-                                    smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::GLACIAL);
-                                    std::cout << "Special towers set to GLACIAL" << std::endl;
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
-                                    smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::WINDY);
-                                    std::cout << "Special towers set to WINDY" << std::endl;
-                                }
-                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
-                                    tower->demoDestroy();
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+                        if (!spawned) {
+                            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+
+                                auto units = getNNearestUnits(glm::vec2(mouse_pos.x, mouse_pos.y), 1000, 1000);
+                                if (units.size() > 1) {
+                                    // std::cout << "ELECTRICITY!!" << std::endl;
+                                    gameobject_ptr obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
+                                    smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
+                                    elec->setForkParent(units[0].second->getSharedPtr());
+                                    elec->setTargetObject(units[1].second);
                                 }
                             }
-                        }
-                    } else if (!spawned) {
-                        sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                        if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                            mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
 
-                            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::BASIC);
-                            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::ELECTRIC);
-                            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::BOMB);
-                            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::LASER);
-                            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
-                                tower_ptr special = nullptr;
-                                for (auto tower : manager->getTowers()) {
-                                    if (tower && tower->getSubType() == tower::TYPE::SPECIAL) {
-                                        special = tower;
-                                        break;
+                            spawned = true;
+                        }
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)
+                               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)
+                               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)
+                               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)
+                               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+                            for (auto tower : manager->getTowers()) {
+                                if (tower->getSubType() == tower::TYPE::SPECIAL) {
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+                                        smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::NOEFFECT);
+                                        std::cout << "Special towers set to NOEFFECT" << std::endl;
+                                    }
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+                                        smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::MAGNETIC);
+                                        std::cout << "Special towers set to MAGNETIC" << std::endl;
+                                    }
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+                                        smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::GLACIAL);
+                                        std::cout << "Special towers set to GLACIAL" << std::endl;
+                                    }
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
+                                        smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::WINDY);
+                                        std::cout << "Special towers set to WINDY" << std::endl;
+                                    }
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
+                                        tower->demoDestroy();
                                     }
                                 }
-                                if (special == nullptr) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::SPECIAL);
-                                else special->setPosition(glm::vec2((float)mouse_pos.x, (float)mouse_pos.y));
                             }
-                        }
+                        } else if (!spawned) {
+                            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
 
-                        spawned = true;
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::BASIC);
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::ELECTRIC);
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::BOMB);
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::LASER);
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
+                                    tower_ptr special = nullptr;
+                                    for (auto tower : manager->getTowers()) {
+                                        if (tower && tower->getSubType() == tower::TYPE::SPECIAL) {
+                                            special = tower;
+                                            break;
+                                        }
+                                    }
+                                    if (special == nullptr) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::SPECIAL);
+                                    else special->setPosition(glm::vec2((float)mouse_pos.x, (float)mouse_pos.y));
+                                }
+                            }
+
+                            spawned = true;
+                        }
+                    } else {
+                        spawned = false;
                     }
-                } else {
-                    spawned = false;
                 }
 
                 /////////////////////////////////////////////////////////////////////////
@@ -422,15 +424,18 @@ namespace gamecontroller {
                 The main menu state is simply used for visiting other menu screens.
             */
             case GameState::MAIN_MENU:
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
 
-                    // GOTO Single player lobby
-                    this->current_state = GameState::MENU_LOBBY_SP;
+                if (this->manager->getRenderManager()->getWindow()->hasFocus()) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
 
-                } else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+                        // GOTO Single player lobby
+                        this->current_state = GameState::MENU_LOBBY_SP;
 
-                    // GOTO Multiplayer lobby
-                    this->current_state = GameState::MENU_LOBBY_MP;
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+
+                        // GOTO Multiplayer lobby
+                        this->current_state = GameState::MENU_LOBBY_MP;
+                    }
                 }
             break;
 
@@ -444,7 +449,8 @@ namespace gamecontroller {
 
                 
                 if (cvConnectionEstablished) {
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                    if (this->manager->getRenderManager()->getWindow()->hasFocus() &&
+                        sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 
                         // Set gamemode to single player
                         current_gamemode = GameMode::SINGLE_PLAYER;
@@ -465,7 +471,8 @@ namespace gamecontroller {
 
 
                 if (cvConnectionEstablished) {
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                    if (this->manager->getRenderManager()->getWindow()->hasFocus() && 
+                        sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
 
                         // Set gamemode to multiplayer
                         current_gamemode = GameMode::MULTI_PLAYER;
@@ -484,7 +491,8 @@ namespace gamecontroller {
         float delta = getElapsedTime();
 
         // Check for restart
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+        if (this->manager->getRenderManager()->getWindow()->hasFocus() &&  
+            sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             //Restart Game
             stopGame();
             wave = 0;

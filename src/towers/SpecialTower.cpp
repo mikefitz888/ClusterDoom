@@ -154,7 +154,7 @@ namespace tower {
 
         // Render tower
         Tower::render();
-        texture->render((int)getXr(), (int)getYr(), 96, 96);
+        //texture->render((int)getXr(), (int)getYr(), 96, 96);
     }
 
     void SpecialTower::step() {

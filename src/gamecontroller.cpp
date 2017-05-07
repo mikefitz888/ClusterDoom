@@ -445,8 +445,13 @@ namespace gamecontroller {
                 
                 if (cvConnectionEstablished) {
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+
+                        // Set gamemode to single player
+                        current_gamemode = GameMode::SINGLE_PLAYER;
+
                         // Move into start state:
                         this->current_state = GameState::START;
+
                     }
                 }
             break;
@@ -458,6 +463,17 @@ namespace gamecontroller {
             */
             case GameState::MENU_LOBBY_MP:
 
+
+                if (cvConnectionEstablished) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+
+                        // Set gamemode to multiplayer
+                        current_gamemode = GameMode::MULTI_PLAYER;
+
+                        // Move into start state:
+                        this->current_state = GameState::START;
+                    }
+                }
             break;
 
 
@@ -988,5 +1004,9 @@ namespace gamecontroller {
 
     bool GameController::getCVReady() {
         return this->cvConnectionEstablished;
+    }
+
+    GameMode GameController::getCurrentGameMode() {
+        return this->current_gamemode;
     }
 }

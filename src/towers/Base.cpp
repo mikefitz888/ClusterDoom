@@ -26,7 +26,7 @@ namespace tower {
 	void Base::render() {
 
 		int size = 100;
-		texture->render((int) getXr(), (int) getYr(), size, size);
+		//texture->render((int) getXr(), (int) getYr(), size, size);
         animations.erase(std::remove_if(animations.begin(), animations.end(), [this](std::pair<graphics::AnimatedTexture*, std::pair<float, Point<int>>>& a)->bool {
             if (a.second.first > a.first->getTotalFrames()) return true;
             a.second.first += 1.0f;

@@ -39,6 +39,8 @@ namespace gamecontroller {
                                     MENU_LOBBY_SP,
                                     MENU_LOBBY_MP};
 
+    enum GameMode : unsigned int { SINGLE_PLAYER = 0, MULTI_PLAYER = 1};
+
     struct Matching
     {
         unordered_map<tower_ptr, Point<float>> matches;
@@ -63,6 +65,7 @@ namespace gamecontroller {
 
         
         GameState current_state = GameState::MAIN_MENU;
+        GameMode  current_gamemode = GameMode::SINGLE_PLAYER;
 
         //std::map<int, std::vector<Point<int>>> cvList;
         std::vector<Point<float>> cvList[tower::TYPE::num_types];
@@ -121,6 +124,9 @@ namespace gamecontroller {
         GameState startGame();
         GameState winGame();
         GameState loseGame();
+
+        // Get Gamemode
+        GameMode getCurrentGameMode();
 
         // Logic
         bool getCVReady();

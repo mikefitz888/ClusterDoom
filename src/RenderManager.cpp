@@ -82,7 +82,7 @@ namespace graphics {
         // Main menu
         rm->textureLoad("main_menu_bg", "src/Resources/Textures/Menu/clusterdoom_mainmenu_bg.png")->setOriginCentre();
         rm->textureLoad("main_menu_bars", "src/Resources/Textures/Menu/bars.png")->setOriginCentre();
-        rm->textureLoad("menu_attackers_v_defenders", "src/Resources/Textures/Menu/attackers_v_defenders.png");
+        rm->textureLoad("menu_attackers_v_defenders", "src/Resources/Textures/Menu/attackers_vs_defenders.png");
         rm->textureLoad("camera_connected", "src/Resources/Textures/Menu/camera_connected.png");
         rm->textureLoad("camera_disconnected", "src/Resources/Textures/Menu/camera_disconnected.png");
         rm->textureLoad("ai_logo", "src/Resources/Textures/Menu/ai_logo.png");

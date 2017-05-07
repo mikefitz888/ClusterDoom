@@ -90,6 +90,7 @@ namespace worldrenderer {
 
                 // Render Multiplayer lobby
                 menu_ui_bars->render((int)width / 2, (int)height / 2, (int)width, (int)height);
+                manager->getResourceManager()->getTexture("menu_attackers_v_defenders")->render((613.0f / 1920.0f)*width, (513.0f / 1080.0f)*height, sf, sf, 0.0f);
                 int num_players = manager->getNetworkManager()->getNumConnections();
                 float yy = 668.0f;
                 float xx = 91.0f;

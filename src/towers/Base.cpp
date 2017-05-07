@@ -2,6 +2,7 @@
 #include "../../include/ResourceManager.h"
 #include "../../include/manager.h"
 #include "../../include/AnimatedTexture.h"
+#include "../../include/RenderUtils.h"
 
 namespace tower {
 	Base::Base(id_t key, Manager* m) : Tower(key, TYPE::BASE, m) {
@@ -33,6 +34,9 @@ namespace tower {
             a.first->render((int)a.second.first, a.second.second.x, a.second.second.y, 0.5f, 0.5f);
             return false;
         }), animations.end());
+        graphics::RenderUtils::render_circular_health((int)getXr(), (int)getYr(), (int)health, (int)max_health,
+            graphics::RenderUtils::colour_blend(graphics::Colour(0, 255, 0, 255), graphics::Colour(255, 0, 0, 255), health / max_health)
+        );
 	}
 
     void Base::step() {

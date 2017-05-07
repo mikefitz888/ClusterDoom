@@ -6,6 +6,7 @@
 #include "../include/GameObjects/Projectiles.h"
 #include "../include/Towers/Base.h"
 #include "../include/Towers/SpecialTower.h"
+#include "../include/AttackerEffects.h"
 
 namespace gamecontroller {
 
@@ -46,6 +47,7 @@ namespace gamecontroller {
 
 
     GameController::GameController(Manager* m) : manager(m) {
+        efficiencyModifier = 1.0;
         preparePathfindingGrid();
     }
 
@@ -274,6 +276,20 @@ namespace gamecontroller {
                         elec->setForkParent(units[0].second->getSharedPtr());
                         elec->setTargetObject(units[1].second);
                     }
+                }
+
+                spawned = true;
+            }
+        }
+        // Attacker Effects
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        {
+            if (!spawned) {
+                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                    spawnObjectAt(gameobject::OBJECT_TYPE::EFFECT_DISRUPTION, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
+                    
                 }
 
                 spawned = true;
@@ -829,11 +845,32 @@ namespace gamecontroller {
         tower_efficiency -= 1.0f * diminishing_factor * tower_count;
         if (tower_efficiency < 0.f) tower_efficiency = 0.f;
     }
-    
-    float GameController::towerEfficiency(){
+
+    float GameController::towerEfficiency() {
         const float eff_thresh = 0.f;
         const float eff_factor = 50.f;
-        return 0.5f + std::fmin(tower_efficiency / eff_factor, 0.5f);
+        return (0.5f + std::fmin(tower_efficiency / eff_factor, 0.5f)) * efficiencyModifier;
+    }
+    
+    float GameController::towerEfficiency(glm::vec2 position){
+        const float eff_thresh = 0.f;
+        const float eff_factor = 50.f;
+        for (auto obj : manager->getObjects())
+        {
+            if (obj && obj->getSuperType() == gameobject::TYPE::OBJECT && obj->getSubType() == gameobject::OBJECT_TYPE::EFFECT_EMP)
+            {
+                if (obj->distanceTo(position) < EMPEffect::MAX_RANGE)
+                {
+                    return 0.0f;
+                }
+            }
+        }
+        return (0.5f + std::fmin(tower_efficiency / eff_factor, 0.5f)) * efficiencyModifier;
+    }
+
+    void GameController::setEfficiencyModifier(float mod)
+    {
+        efficiencyModifier = mod;
     }
 
     bool GameController::getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path) {

@@ -309,6 +309,22 @@ namespace network {
                     if (obj) {
                         this->player_instance = smartpointers::static_pointer_cast<PlayerInstance>(obj);
                         this->player_instance->setNetworkInstanceID(this, this->connection_id);
+
+                        // SEND PLAYER ID & GAMEOBJECT ID TO CLIENT
+                        send_buffer.seek(4);
+                        send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendPlayerInstanceID;
+                        send_buffer << (unsigned int)this->player_instance->getID();
+                        send_buffer << (unsigned int)this->connection_id;
+
+                        // Write size
+                        unsigned int size = send_buffer.tell();
+                        send_buffer.seek(0);
+                        send_buffer << (unsigned int)size;
+                        send_buffer.seek(size); // < Jump back to previous end
+
+                        socket->setBlocking(true);
+                        socket->send(send_buffer.getPtr(), size);
+                        socket->setBlocking(false);
                     }
                 
                 }

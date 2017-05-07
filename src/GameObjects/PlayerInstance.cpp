@@ -28,6 +28,20 @@ void PlayerInstance::step() {
     if (destroy) {
         destroySelf();
     }
+
+    // Reward currency
+    currency_reward_timer--;
+    if (currency_reward_timer <= 0) {
+        currency_reward_timer = currency_reward_timer_max;
+        giveCurrency(1);
+    }
+
+    // Update currency
+    send_currency_timer--;
+    if (send_currency_timer <= 0) {
+        send_currency_timer = send_currency_timer_max;
+        sendNetworkUpdate(PlayerNetworkEvents::SEND_CURRENCY);
+    }
 }
 
 
@@ -65,4 +79,14 @@ void PlayerInstance::giveCurrency(int amount) {
 void PlayerInstance::setNetworkInstanceID(NetworkClient* client, int network_player_id) {
     this->network_client_instance = client;
     this->network_player_id = network_player_id;
+}
+
+// Networking
+void PlayerInstance::writeNetworkUpdate(int event_id, Buffer &buffer) {
+    switch (event_id) {
+        case SEND_CURRENCY:
+            buffer << (unsigned int)currency;
+            buffer << (unsigned int)max_currency;
+            break;
+    }
 }

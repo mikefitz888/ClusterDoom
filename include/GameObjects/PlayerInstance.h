@@ -24,10 +24,23 @@ using network::NetworkClient;
 class PlayerInstance : public GameObject {
 
 private:
+
+    // Currency
     int currency = 0;
+    int max_currency = 0;
+
+    // Network instance handling
     NetworkClient* network_client_instance = nullptr;
     int network_player_id = -1;
     bool destroy = false;
+
+    // Networking and events
+    int send_currency_timer_max = 15;
+    int send_currency_timer = send_currency_timer_max;
+
+    // Currency rewarding
+    int currency_reward_timer_max = 10;
+    int currency_reward_timer = currency_reward_timer_max;
 
 public:
     // Constructor
@@ -47,6 +60,13 @@ public:
 
     // Control and setting
     void setNetworkInstanceID(NetworkClient* client, int network_player_id);
+
+    // Networking
+    void writeNetworkUpdate(int event_id, Buffer &buffer) override;
+
+    enum PlayerNetworkEvents : unsigned int{
+        SEND_CURRENCY=0x00
+    };
 };
 
 

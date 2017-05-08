@@ -272,6 +272,11 @@ namespace manager {
         return audio_manager;
     }
 
+    // Get Network manager
+    NetworkManager* Manager::getNetworkManager() const {
+        return network_manager;
+    }
+
     void Manager::release() {
         render_manager->release();
         render_manager = nullptr;
@@ -364,8 +369,6 @@ namespace manager {
         }
     }
 
-
-    void Manager::restart() {}
 
     /*
         Performs collisions between all the given objects and fires off events
@@ -616,6 +619,27 @@ namespace manager {
 		//std::cout << "COLLISION TESTS: " << collision_tests << std::endl;
 
 	}
+
+
+
+    void Manager::reset() {
+        // Reset core global variables
+        this->stepc = 0;
+        
+        // Reset sub-managers
+        this->audio_manager->stopAllSound();
+
+        // Reset game pool
+        for (auto map_elem = game_object_pool.begin(); map_elem != game_object_pool.end(); map_elem++) {
+            slave_ptr<GameObject> obj = *map_elem->second;
+            if (obj) {
+                obj->demoDestroy();
+            }
+        }
+        this->game_object_pool.clear();
+        this->game_object_max_id = 0;
+
+    }
 
 
 }

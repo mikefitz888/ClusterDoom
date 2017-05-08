@@ -2,6 +2,7 @@
 #include "../../include/ResourceManager.h"
 #include "../../include/manager.h"
 #include "../../include/AnimatedTexture.h"
+#include "../../include/RenderUtils.h"
 
 namespace tower {
 	Base::Base(id_t key, Manager* m) : Tower(key, TYPE::BASE, m) {
@@ -26,13 +27,16 @@ namespace tower {
 	void Base::render() {
 
 		int size = 100;
-		texture->render((int) getXr(), (int) getYr(), size, size);
+		//texture->render((int) getXr(), (int) getYr(), size, size);
         animations.erase(std::remove_if(animations.begin(), animations.end(), [this](std::pair<graphics::AnimatedTexture*, std::pair<float, Point<int>>>& a)->bool {
             if (a.second.first > a.first->getTotalFrames()) return true;
             a.second.first += 1.0f;
             a.first->render((int)a.second.first, a.second.second.x, a.second.second.y, 0.5f, 0.5f);
             return false;
         }), animations.end());
+        graphics::RenderUtils::render_circular_health((int)getXr(), (int)getYr(), (int)health, (int)max_health,
+            graphics::RenderUtils::colour_blend(graphics::Colour(0, 255, 0, 255), graphics::Colour(255, 0, 0, 255), health / max_health)
+        );
 	}
 
     void Base::step() {

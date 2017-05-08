@@ -178,7 +178,9 @@ void ProjectileLaser::onCollision(gameobject_ptr other) {
     if (other->getSuperType() == collision_type) {
         if (collision_type == gameobject::TYPE::UNIT) {
             unit_ptr oth = smartpointers::static_pointer_cast<unit::Unit>(other);
-            oth->attacked(this->getSharedPtr(), (float) this->getDamage());
+			if (!oth->isDead()) {
+				oth->attacked(this->getSharedPtr(), (float) this->getDamage());
+			}
         }
         else if (collision_type == gameobject::TYPE::TOWER) {
             tower::tower_ptr oth = smartpointers::static_pointer_cast<tower::Tower>(other);

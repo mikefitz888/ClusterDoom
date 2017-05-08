@@ -26,11 +26,12 @@ namespace unit {
         collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture = manager->getResourceManager()->getAnimatedTexture("robot_unit");
+		deathTexture = manager->getResourceManager()->getAnimatedTexture("robot_death");
         this->setDistanceThreshold(95);
 
         health = 8000;
         maxHealth = 8000;
-        unitSpeed = 0.1f;
+        unitSpeed = 0.5f;
 
         /* Path path;
         path.push_back(vec2(100, 100));
@@ -41,8 +42,20 @@ namespace unit {
     }
 
     void BasicUnit::step() {
+
         // Perform parent step
         Unit::step();
+
+		if (dead) {
+			if (animationProgress >= 15.0f) {
+				destroySelf();
+			}
+			else {
+				return;
+			}
+		}
+
+
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
             if (!pressed) {
@@ -106,9 +119,13 @@ namespace unit {
 
         Unit::render();
 
-		renderAnimation(texture, 0.18f, 0.09f, 12, 1.0f, 0.0f);
+		if (!dead) {
+			renderAnimation(texture, 0.18f, 0.09f, 12, 1.0f, 0.0f);
+		}
+		else {
+			renderAnimation(deathTexture, 0.18f, 0.36f, 16, 1.0f, 0.0f);
+		}
 
-		//cannot use as animation doesn't happen in linear order (frame[] variable)
 		//renderAnimation(texture, 0.13f, 0.1f*this->glacial_effect_vis, 12, 1.0f, 0.0f);
 
         /*render_manager = manager->getRenderManager();

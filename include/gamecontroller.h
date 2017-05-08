@@ -31,7 +31,15 @@ namespace gamecontroller {
     using std::unordered_map;
     using std::tuple;
 
-    enum GameState : unsigned int { START = 0, RUNNING, WIN, LOSE };
+    enum GameState : unsigned int { START = 0, 
+                                    RUNNING, 
+                                    WIN, 
+                                    LOSE,
+                                    MAIN_MENU,
+                                    MENU_LOBBY_SP,
+                                    MENU_LOBBY_MP};
+
+    enum GameMode : unsigned int { SINGLE_PLAYER = 0, MULTI_PLAYER = 1};
 
     struct Matching
     {
@@ -56,7 +64,8 @@ namespace gamecontroller {
         TileNode nodes[TILE_W * TILE_H];
 
         
-        GameState current_state = GameState::START;
+        GameState current_state = GameState::MAIN_MENU;
+        GameMode  current_gamemode = GameMode::SINGLE_PLAYER;
 
         //std::map<int, std::vector<Point<int>>> cvList;
         std::vector<Point<float>> cvList[tower::TYPE::num_types];
@@ -65,6 +74,7 @@ namespace gamecontroller {
         int               port;
         sf::TcpListener*  listener;
         Buffer*           recv_buffer;
+        Buffer*           send_buffer;
         sf::TcpSocket*    client;
         bool              cvConnectionEstablished;
 
@@ -73,6 +83,7 @@ namespace gamecontroller {
 
         int create_count = 0;
         int frame_clock = 0;
+        int ping_timer = 0;
         bool initial_spawns_occurred = false;
 
         int wave = 0;
@@ -105,7 +116,7 @@ namespace gamecontroller {
         void resetClock();
         void init();
         bool step();
-        void restart() const; //Not yet implemented, clears towers + units
+        void restart(); //Not yet implemented, clears towers + units
         Matching stableMatching(tower::TYPE type, std::vector<Point<float>>& detections);
         int getWeight(int x, int y);
 
@@ -115,6 +126,12 @@ namespace gamecontroller {
         GameState startGame();
         GameState winGame();
         GameState loseGame();
+
+        // Get Gamemode
+        GameMode getCurrentGameMode();
+
+        // Logic
+        bool getCVReady();
 
         tower_ptr  spawnTowerAt(float x, float y, tower::TYPE type) const;
         tower_ptr  spawnTowerAt(Point<float> position, tower::TYPE type) const;

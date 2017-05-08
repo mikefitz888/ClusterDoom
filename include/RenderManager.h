@@ -103,6 +103,9 @@ namespace graphics {
         void setBlendModeAdditive();
         void setBlendModeNormal();
 
+        bool getRenderFlipped();
+        void setRenderFlipped(bool flipped);
+
         sf::Window* getWindow();
 
 
@@ -123,6 +126,8 @@ namespace graphics {
 
         // Transformation + Rendering
         glm::mat4 world_matrix;            /* Matrix used to represent the current transformation state */
+        bool flipped = false;
+        bool prev_flipped = false;
 
         // Methods:
         void createWindow();

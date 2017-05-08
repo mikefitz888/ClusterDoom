@@ -10,8 +10,8 @@ namespace unit {
 
     class Unit : public GameObject {
 		graphics::AnimatedTexture* texture = nullptr;
+		graphics::AnimatedTexture* deathTexture = nullptr;
 		float textureSize = 1.0f;
-		float animationProgress = 0.0f;
         graphics::Texture* red;
         sf::Shader* shader;
 
@@ -32,13 +32,19 @@ namespace unit {
         float glacial_effect_vis = 1.0f;
         size_t cooldown = 0;
 
+		float animationProgress = 0.0f;
+
         void deliverWealth(size_t amt);
         graphics::Texture* unit_shadow, *unit_ice;
+
+		bool dead = false;
 
     public:
         Unit(id_t id, TYPE unit_type, Manager* m);
 
 		void renderAnimation(graphics::AnimatedTexture* texture, float size, float animationSpeed, int numFrames, float sizeMod, float rotMod);
+
+		bool isDead();
 
         //IRenderable methods
         virtual void init() override;

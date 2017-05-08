@@ -2,6 +2,7 @@
 #include "../include/manager.h"
 #include "../include/gamecontroller.h"
 #include "../include/gameobject.h"
+#include "../include/GameObjects/PlayerInstance.h"
 
 namespace network {
     
@@ -122,6 +123,19 @@ namespace network {
         listener->close();
     }
 
+    int NetworkManager::getNumConnections() {
+        return this->clients.size();
+    }
+
+    bool NetworkManager::getPlayerExists(int player_id) {
+        for (auto& c : this->clients) {
+            if (c->connection_id == player_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     //// -------------------------------------------------------------------------------- //////
     // NETWORK CLIENT
@@ -200,7 +214,6 @@ namespace network {
             std::cout << "[NETWORK CLIENT] Client successfully verified!" << std::endl;
 
             // Send verify packet
-
 			send_buffer.seek(4);
 			send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendConfirmConnect;
 
@@ -286,6 +299,40 @@ namespace network {
         Otherwise, we can handle the data that has been received.
     */
     void NetworkClient::listenForData(Manager *manager) {
+
+        // Check for existence of PlayerIntsance
+        if (this->connection_state == ConnectionState::VERIFIED) {
+            if (manager->getGameController()->getGameState() == gamecontroller::GameState::RUNNING) {
+                if (this->player_instance == nullptr || !player_instance) {
+                    // Create object
+                    gameobject_ptr obj = manager->getGameController()->spawnObjectAt(gameobject::OBJECT_TYPE::PLAYER_INSTANCE, 0.0f, 0.0f);
+                    if (obj) {
+                        this->player_instance = smartpointers::static_pointer_cast<PlayerInstance>(obj);
+                        this->player_instance->setNetworkInstanceID(this, this->connection_id);
+
+                        // SEND PLAYER ID & GAMEOBJECT ID TO CLIENT
+                        send_buffer.seek(4);
+                        send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendPlayerInstanceID;
+                        send_buffer << (unsigned int)this->player_instance->getID();
+                        send_buffer << (unsigned int)this->connection_id;
+
+                        // Write size
+                        unsigned int size = send_buffer.tell();
+                        send_buffer.seek(0);
+                        send_buffer << (unsigned int)size;
+                        send_buffer.seek(size); // < Jump back to previous end
+
+                        socket->setBlocking(true);
+                        socket->send(send_buffer.getPtr(), size);
+                        socket->setBlocking(false);
+                    }
+                
+                }
+            }
+        }
+
+
+        // Listen for data
         std::size_t message_size;
         sf::TcpSocket::Status st = socket->receive((void*)recv_buffer.getPtr(), (std::size_t)recv_buffer.maxSize(), message_size);
         switch (st) {
@@ -348,6 +395,27 @@ namespace network {
     }
 
     void NetworkClient::processConnection(Manager *manager) {
+        // Send ping
+        ping_packet_timer--;
+        if (ping_packet_timer <= 0) {
+            ping_packet_timer = ping_packet_timer_max;
+
+            // Send ping packet
+            send_buffer.seek(4);
+            send_buffer << NetworkManager::SERVER_PACKET_TYPE::SendPing;
+
+            // Write size
+            unsigned int size = send_buffer.tell();
+            send_buffer.seek(0);
+            send_buffer << (unsigned int)size;
+            send_buffer.seek(size); // < Jump back to previous end
+
+            // Send
+            socket->setBlocking(true);
+            socket->send(send_buffer.getPtr(), size);
+            socket->setBlocking(false);
+        }
+
         // Listen for incoming data
         listenForData(manager);
     }

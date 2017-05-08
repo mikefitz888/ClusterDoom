@@ -13,19 +13,24 @@ void Spawn::init() {
 	//manager->getGameController()->spawnUnitAt(getX(), getY());
 }
 void Spawn::step() {
-	//Potential to get accurate game_time from game_controller
-    int t = time;
-	if(running && manager->getTowers().size() >= 0 && manager->getUnits().size() < 1000){
-        spawn_queue.erase(
-            std::remove_if(spawn_queue.begin(), spawn_queue.end(), [this](const unit_spawn s) -> bool { 
+
+    // If singleplayer mode, spawn units
+    if (this->manager->getGameController()->getCurrentGameMode() == gamecontroller::GameMode::SINGLE_PLAYER) {
+
+        //Potential to get accurate game_time from game_controller
+        int t = time;
+        if (running && manager->getTowers().size() >= 0 && manager->getUnits().size() < 1000) {
+            spawn_queue.erase(
+                std::remove_if(spawn_queue.begin(), spawn_queue.end(), [this](const unit_spawn s) -> bool {
                 if (time > s.delay) {
-                    manager->getGameController()->spawnUnitAt(getX()+spawn_jitter(rng), getY()+spawn_jitter(rng), s.unit_type);
+                    manager->getGameController()->spawnUnitAt(getX() + spawn_jitter(rng), getY() + spawn_jitter(rng), s.unit_type);
                     return true;
                 }
                 return false;
             }), spawn_queue.end());
-        time++;
-	}
+            time++;
+        }
+    }
 }
 void Spawn::render() {
 	graphics::Texture *tex = this->manager->getResourceManager()->getTexture("spawn");
@@ -110,9 +115,12 @@ void Spawn::recvNetworkInteraction(int event_id, Buffer &buffer) {
             buffer >> unit_type;
             buffer >> target;
             std::cout << "SPAWN RECEIVED";
-            smartpointers::slave_ptr<unit::Unit> unit =  smartpointers::static_pointer_cast<unit::Unit>(manager->getGameController()->spawnUnitAt(getX(), getY(), (unit::TYPE)unit_type));
-            if(target != -1) game_controller->unitTargetMine(unit->getID(), target);
-            
+
+            // If multiplayer mode, spawn units
+            if (this->manager->getGameController()->getCurrentGameMode() == gamecontroller::GameMode::MULTI_PLAYER) {
+                smartpointers::slave_ptr<unit::Unit> unit = smartpointers::static_pointer_cast<unit::Unit>(manager->getGameController()->spawnUnitAt(getX(), getY(), (unit::TYPE)unit_type));
+                if (target != -1) game_controller->unitTargetMine(unit->getID(), target);
+            }
             break;
     }
 }

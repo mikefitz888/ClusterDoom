@@ -23,7 +23,7 @@ namespace tower {
 	void BombTower::render() {
 
 		Tower::render();
-		texture->render((int) getXr(), (int) getYr(), 96, 96);
+	//	texture->render((int) getXr(), (int) getYr(), 96, 96);
 
 		/*float mod = (200.0f - delete_queue) / 200.0f;
 		int size = (int)(96.0f);

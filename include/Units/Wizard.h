@@ -10,6 +10,7 @@ namespace unit
 {
     class Wizard : public Unit {
         graphics::AnimatedTexture* texture = nullptr;
+		graphics::AnimatedTexture* deathTexture = nullptr;
 
         int network_update_position_timer_max = 300;
         int network_update_position_timer = network_update_position_timer_max;

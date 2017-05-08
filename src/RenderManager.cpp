@@ -26,9 +26,16 @@ namespace graphics {
 
         //Units
         rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
+		//robot
         rm->animatedTextureLoad("robot_unit", "src/Resources/Textures/robotAnimation.png", true, 4, 3, 12)->setOriginCentre();
+		rm->animatedTextureLoad("robot_death", "src/Resources/Textures/robotDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
+		//wizard
         rm->animatedTextureLoad("wizard_unit", "src/Resources/Textures/wizardAnimation.png", true, 4, 3, 12)->setOriginCentre();
+		rm->animatedTextureLoad("wizard_death", "src/Resources/Textures/wizardDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
+		//pirate
 		rm->animatedTextureLoad("pirate_unit", "src/Resources/Textures/pirateAnimation.png", true, 4, 3, 12)->setOriginCentre();
+		rm->animatedTextureLoad("pirate_death", "src/Resources/Textures/pirateDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
+
         rm->textureLoad("unit_shadow", "src/Resources/Textures/unitShadow.png")->setOriginCentre();
 
         
@@ -74,6 +81,19 @@ namespace graphics {
 
         // Wind tower effect
         rm->textureLoad("wind_effect", "src/Resources/Textures/wind_effect.png")->setOriginCentre();
+
+        // Main menu
+        rm->textureLoad("main_menu_bg", "src/Resources/Textures/Menu/clusterdoom_mainmenu_bg.png")->setOriginCentre();
+        rm->textureLoad("main_menu_bars", "src/Resources/Textures/Menu/bars.png")->setOriginCentre();
+        rm->textureLoad("menu_attackers_v_defenders", "src/Resources/Textures/Menu/attackers_vs_defenders.png");
+        rm->textureLoad("camera_connected", "src/Resources/Textures/Menu/camera_connected.png");
+        rm->textureLoad("camera_disconnected", "src/Resources/Textures/Menu/camera_disconnected.png");
+        rm->textureLoad("ai_logo", "src/Resources/Textures/Menu/ai_logo.png");
+        rm->textureLoad("twitch_logo", "src/Resources/Textures/Menu/twitch_logo.png");
+        rm->textureLoad("defenders_vs_ai", "src/Resources/Textures/Menu/defenders_vs_ai.png");
+        rm->textureLoad("phone_logo", "src/Resources/Textures/Menu/phone_logo.png");
+        rm->textureLoad("btn_defenders_vs_ai", "src/Resources/Textures/Menu/btn_def_vs_ai.png");
+        rm->textureLoad("btn_defenders_vs_att", "src/Resources/Textures/Menu/btn_def_vs_att.png");
 
         /// Load Animated Textures
         //  Explosions
@@ -385,6 +405,18 @@ namespace graphics {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
+    // Flipping
+    bool RenderManager::getRenderFlipped() {
+        return this->flipped;
+    }
+    void RenderManager::setRenderFlipped(bool flipped) {
+        this->flipped = flipped;
+        if (this->flipped != this->prev_flipped) {
+            this->camera->renderCamera();
+            this->prev_flipped = this->flipped;
+        }
+    }
+
     /// ------------------ CAMERA FUNCTIONS -------------------- //
     void GCamera::setCameraPosition(float x, float y, float z) {
         this->camera_position.x = x;
@@ -416,7 +448,13 @@ namespace graphics {
     }
 
     void GCameraOrtho::renderCamera() {
-        this->projection_matrix = glm::ortho(0.0f, (float)width, (float)height, 0.0f, -1000.0f, 1000.0f); //glm::ortho<float>(0.0f, 0.0f, (float)width, (float)height, -0.1f, 100);
+
+        if (!this->render_manager->getRenderFlipped()) {
+            this->projection_matrix = glm::ortho(0.0f, (float)width, (float)height, 0.0f, -1000.0f, 1000.0f); //glm::ortho<float>(0.0f, 0.0f, (float)width, (float)height, -0.1f, 100);
+        } else {
+            this->projection_matrix = glm::ortho((float)width, 0.0f, (float)height, 0.0f, -1000.0f, 1000.0f);
+        }
+        
         this->view_matrix = glm::translate(glm::mat4(), -camera_position);
         this->vp_matrix = this->projection_matrix * this->view_matrix;
         //this->vp_matrix = this->projection_matrix;//glm::mat4();

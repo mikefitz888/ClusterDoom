@@ -10,12 +10,12 @@ namespace unit
 {
     class BasicUnit : public Unit {
         graphics::AnimatedTexture* texture = nullptr;
+		graphics::AnimatedTexture* deathTexture = nullptr;
 
         int network_update_position_timer_max = 300;
         int network_update_position_timer = network_update_position_timer_max;
 
         bool pressed = false; //TEMP;
-        float animation_progress = 0;
         Point<float> magneticVelocity = Point<float>(0.0f, 0.0f);
 
     public:

@@ -31,6 +31,7 @@ namespace unit {
 		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getAnimatedTexture("pirate_unit");
+		deathTexture = manager->getResourceManager()->getAnimatedTexture("pirate_death");
         this->setDistanceThreshold(95);
 
 		health = 3000;
@@ -46,6 +47,16 @@ namespace unit {
     }
 
     void Pirate::step() {
+
+		if (dead) {
+			if (animationProgress >= 15.0f) {
+				destroySelf();
+			}
+			else {
+				return;
+			}
+		}
+
         // Perform parent step
         Unit::step();
 
@@ -129,7 +140,13 @@ namespace unit {
 
 		Unit::render();
 
-		renderAnimation(texture, 0.22f, 0.3f*this->glacial_effect_vis, 12, 1.0f, 0.0f);
+		if (!dead) {
+			renderAnimation(texture, 0.22f, 0.3f*this->glacial_effect_vis, 12, 1.0f, 0.0f);
+		}
+		else {
+			renderAnimation(deathTexture, 0.15f, 0.36f, 16, 1.0f, 0.0f);
+		}
+
         /*render_manager = manager->getRenderManager();
 
 

@@ -7,6 +7,7 @@
 #include "../include/GameObjects/GameStateNotifier.h"
 #include "../include/GameObjects/SpecialToken.h"
 #include "../include/AttackerEffects.h"
+#include "../include/GameObjects/PlayerInstance.h"
 
 GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
     switch (type) {
@@ -45,6 +46,9 @@ GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
 
     case gameobject::OBJECT_TYPE::EFFECT_HEAL:
         return new UnitHealEffect(key, manager);
+
+    case gameobject::OBJECT_TYPE::PLAYER_INSTANCE:
+        return new PlayerInstance(key, manager);
 
     default:
         std::cout << "FATAL ERROR! INCORRECT OBJECT INSTANCE, nullptr RETURNED" << std::endl;

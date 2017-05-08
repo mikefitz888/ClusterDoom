@@ -9,7 +9,7 @@ const unsigned int DisruptionEffect::DURATION = 1000;
 const double EMPEffect::MAX_RANGE = 120;
 const double DisruptionEffect::EFFICIENCY_MODIFIER = 0.75;
 const double UnitHealEffect::MAX_RANGE = 120;
-const int UnitHealEffect::HEAL_STRENGTH = 250;
+const int UnitHealEffect::HEAL_STRENGTH = 500;
 
 EMPEffect::EMPEffect(id_t id, manager::Manager* manager) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::EFFECT_EMP, manager)
 {

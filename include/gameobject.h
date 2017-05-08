@@ -109,7 +109,8 @@ namespace gameobject {
         TOKEN_WINDY = 8,
         EFFECT_EMP = 9,
         EFFECT_DISRUPTION = 10,
-        EFFECT_HEAL = 11
+        EFFECT_HEAL = 11,
+        PLAYER_INSTANCE = 12
     };
 
 

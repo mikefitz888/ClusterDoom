@@ -21,6 +21,8 @@ namespace unit {
 		collision_profile.setTypeCircle(14);
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getAnimatedTexture("wizard_unit");
+		deathTexture	= manager->getResourceManager()->getAnimatedTexture("wizard_death");
+
 
 
         adjust.push_back(glm::linearRand(-adjust_max, adjust_max));
@@ -45,6 +47,16 @@ namespace unit {
     }
 
     void Wizard::step() {
+
+		if (dead) {
+			if (animationProgress >= 15.0f) {
+				destroySelf();
+			}
+			else {
+				return;
+			}
+		}
+
         // Perform parent step
         Unit::step();
 
@@ -116,11 +128,15 @@ namespace unit {
         //texture->render(m*animation_progress / 8, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation); currently no animation
 		texture->render(1, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation + ((1.0f-n)*10.0*M_PI));*/
 
-		float n = std::fabs(channel_time - 100.f) / 100.f;
-		if (!channeling) n = 1.f;
-		float rotMod = ((1.0f - n)*10.0f*(float) M_PI);
-
-		renderAnimation(texture, 0.18f, 0.13f*this->glacial_effect_vis, 12, n, rotMod);
+		if (!dead) {
+			float n = std::fabs(channel_time - 100.f) / 100.f;
+			if (!channeling) n = 1.f;
+			float rotMod = ((1.0f - n)*10.0f*(float)M_PI);
+			renderAnimation(texture, 0.18f, 0.13f, 12, n, rotMod);
+		}
+		else {
+			renderAnimation(deathTexture, 0.18f, 0.36f, 16, 1.0f, 0.0f);
+		}
 		/*float animationSpeed = 0.13f;
 		animation_progress = animation_progress + animationSpeed;
 		int m = 1;

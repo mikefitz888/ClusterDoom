@@ -12,14 +12,14 @@ namespace gamecontroller {
 
     /*
         Generate grid linkage
-    
+
     */
     void GameController::preparePathfindingGrid() {
         for (int i = 0; i < TILE_W * TILE_H; i++) {
 
             // Clear node links:
             nodes[i].clearNodes();
-            
+
 
             int x = i % TILE_W;
             int y = (i) / TILE_W;
@@ -51,7 +51,7 @@ namespace gamecontroller {
         preparePathfindingGrid();
     }
 
-    int GameController::getWeight(int x, int y){
+    int GameController::getWeight(int x, int y) {
         //Return negative for an obstacle
         return 0;
     }
@@ -75,8 +75,8 @@ namespace gamecontroller {
     }
 
     tower_ptr GameController::spawnTowerAt(Point<float> position, tower::TYPE type) const {
-        tower_ptr tower = spawnTowerAt(round((position.x)/64.0f)*64.0f, round((position.y)/64.0f)*64.0f, type );
-        tower->setJitter((int) (position.x - tower->getX()), (int) (position.y - tower->getY()));
+        tower_ptr tower = spawnTowerAt(round((position.x) / 64.0f)*64.0f, round((position.y) / 64.0f)*64.0f, type);
+        tower->setJitter((int)(position.x - tower->getX()), (int)(position.y - tower->getY()));
         return tower;
     }
 
@@ -90,16 +90,24 @@ namespace gamecontroller {
         return spawnObjectAt(type, position.x, position.y);
     }
 
-    void GameController::restart() const {
-        for(auto& obj : manager->getUnits()){
+    void GameController::restart()  {
+
+        // Destroy all game objects
+        for (auto& obj : manager->getObjects()) {
             obj->demoDestroy();
         }
+
+        // Clean manager
+        manager->reset();
+
+
+        // Reset spawn flags to trigger respawn
+        initial_spawns_occurred = false;
     }
 
     void GameController::spawnTowers(std::vector<std::pair<Point<float>, int>> tower_list) const {
         for (auto location : tower_list) {
-            switch(location.second)
-            {
+            switch (location.second) {
                 case 0:
                 case 1:
                     spawnTowerAt(location.first, tower::TYPE::BASIC);
@@ -140,7 +148,7 @@ namespace gamecontroller {
         wave = 0;
         scenario = -1;
         tower_efficiency = 1;
-        return current_state = GameState::RUNNING; 
+        return current_state = GameState::RUNNING;
     }
     GameState GameController::stopGame() { return current_state = GameState::START; }
     GameState GameController::winGame() { return current_state = GameState::WIN; }
@@ -153,228 +161,376 @@ namespace gamecontroller {
 
     bool GameController::step() {
         srand(time(NULL));
-        frame_clock++;
-        diminishEfficiency();
-        if (frame_clock % 100 == 0) {
-            std::cout << "Efficiency = " << tower_efficiency << "\n";
-        }
+       
         //In general, step() should be frame-based.
-        
 
-        // Resource spawning
-        resource_spawn_timer--;
-        if (resource_spawn_timer <= 0) {
-            resource_spawn_timer = glm::linearRand(resource_spawn_timer_min, resource_spawn_timer_max);
-        
-            // Spawn a bit of resource
-            glm::vec2 rand_pos = glm::linearRand(glm::vec2(50.0f, 50.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 50.0f, manager->getRenderManager()->getWindowHeight() - 50.0f));
+        switch (getGameState()) {
+#
+
+            /*
+                START game state
+                -------------------
+                This is the gamestate just before the game starts.
+                Pressing enter will start the game
             
-            // Query number of mines
-            int count = 0;
-            auto objects = manager->getObjects();
-            for (auto obj : objects) {
-                if (obj && obj->getSuperType() == gameobject::TYPE::OBJECT && obj->getSubType() == gameobject::OBJECT_TYPE::RESOURCE_MINE) {
-                    count++;
-                }
-            }
-            if (count < max_resource_on_map) {
-                spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, rand_pos.x, rand_pos.y);
-            }
-        }
-
-        // Token Spawning
-        token_timer--;
-        if (token_timer <= 0) {
-            token_timer = glm::linearRand(token_timer_min, token_timer_max);
-
-            glm::vec2 rand_pos = glm::linearRand(glm::vec2(50.0f, 50.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 50.0f, manager->getRenderManager()->getWindowHeight() - 50.0f));
-
-            bool canspawn = true;
-            for (auto obj : manager->getObjects())
+            */
+            case GameState::START:
             {
-                if (obj && obj->getSuperType() == gameobject::TYPE::OBJECT)
-                {
-                    if (obj->getSubType() == gameobject::OBJECT_TYPE::TOKEN_GLACIAL
-                     || obj->getSubType() == gameobject::OBJECT_TYPE::TOKEN_MAGNETIC
-                     || obj->getSubType() == gameobject::OBJECT_TYPE::TOKEN_WINDY) {
-                        canspawn = false;
-                        break;
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                    startGame();
+
+                    if (!initial_spawns_occurred) {
+                        initial_spawns_occurred = true;
+                        if (manager->getTowers().size()) {
+                            std::cout << "ERROR! There should not be any towers existing at this point, before base has spawned." << std::endl;
+                        }
+
+                        tower_ptr t = spawnTowerAt(manager->getRenderManager()->getWindowWidth() / 2, manager->getRenderManager()->getWindowHeight() / 2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
+
+                        // Ensure spawn list is clear
+                        spawn_points.clear();
+
+                        // Create spawns                                                                                                                                     //Adding Spawn Points
+                        spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
+                        spawn_points.back()->setSpawnID(0);
+                        spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0)));
+                        spawn_points.back()->setSpawnID(1);
+                        spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672)));
+                        spawn_points.back()->setSpawnID(2);
+                        spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672)));
+                        spawn_points.back()->setSpawnID(3);
+
+                        // Add notifier
+                        spawnObjectAt(gameobject::OBJECT_TYPE::GAME_STATE_NOTIFIER, 0, 0);
                     }
+
+                    frame_clock = 0;
+                } else {
+                    return true;
                 }
             }
 
-            if (canspawn)
+            /*
+                RUNNING STATE
+                -----------------------------------
+                This is the game state for when the game is running. 
+                All gameobject simulation, processing and rendering should be done when this state is live.
+            */
+            case GameState::RUNNING:
             {
-                gameobject::OBJECT_TYPE type = (gameobject::OBJECT_TYPE) glm::linearRand<int>(gameobject::OBJECT_TYPE::TOKEN_MAGNETIC, gameobject::OBJECT_TYPE::TOKEN_WINDY);
-                spawnObjectAt(type, rand_pos.x, rand_pos.y);
-            }
+                // Perform clock:
+                frame_clock++;
 
-        }
-
-        // Perform 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
-            if (!spawned) {
-
-                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                     spawnUnitAt((float) mouse_pos.x, (float) mouse_pos.y, unit::TYPE::BASIC);
+                // Efficiency management
+                diminishEfficiency();
+                if (frame_clock % 100 == 0) {
+                    std::cout << "Efficiency = " << tower_efficiency << "\n";
                 }
-                //spawned = true;
-            }
-        } else
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-            if (!spawned) {
 
-                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                    spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, mouse_pos.x, mouse_pos.y);
-                }
-                spawned = true;
-            }
-        } else 
-        // TEMP: Spawn bomb
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) {
-            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<float>((float) mouse_pos.x, (float) mouse_pos.y));
-            }
+                // Resource spawning
+                resource_spawn_timer--;
+                if (resource_spawn_timer <= 0) {
+                    resource_spawn_timer = glm::linearRand(resource_spawn_timer_min, resource_spawn_timer_max);
 
-            spawned = true;
-        } else
-        // TEMP: Spawn bullet
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
-            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                auto obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>((float) mouse_pos.x, (float) mouse_pos.y));
+                    // Spawn a bit of resource
+                    glm::vec2 rand_pos = glm::linearRand(glm::vec2(100.0f, 100.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 100.0f, manager->getRenderManager()->getWindowHeight() - 100.0f));
 
-                // Find nearest object
-                auto objs = this->manager->getGameController()->getNNearestUnits(obj->getPosition(), 1, 1000);
-                if (objs.size() > 0) {
-                    glm::vec2 dir = glm::normalize(objs[0].second->getPosition() - obj->getPosition());
-                    obj->setVelocity(dir*7.0f);
-                }
-            }
-
-            spawned = true;
-        } else
-        // TEMP: TESTING SPAWNING OF ELECTRICITY
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
-            if (!spawned) {
-                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-
-                    auto units = getNNearestUnits(glm::vec2(mouse_pos.x, mouse_pos.y), 1000, 1000);
-                    if (units.size() > 1) {
-                       // std::cout << "ELECTRICITY!!" << std::endl;
-                        gameobject_ptr obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<float>((float) mouse_pos.x, (float) mouse_pos.y));
-                        smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
-                        elec->setForkParent(units[0].second->getSharedPtr());
-                        elec->setTargetObject(units[1].second);
+                    // Query number of mines
+                    int count = 0;
+                    auto objects = manager->getObjects();
+                    for (auto obj : objects) {
+                        if (obj && obj->getSuperType() == gameobject::TYPE::OBJECT && obj->getSubType() == gameobject::OBJECT_TYPE::RESOURCE_MINE) {
+                            count++;
+                        }
+                    }
+                    if (count < max_resource_on_map) {
+                        spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, rand_pos.x, rand_pos.y);
                     }
                 }
 
-                spawned = true;
-            }
-        }
-        // Attacker Effects
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-        {
-            if (!spawned) {
-                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                    spawnObjectAt(gameobject::OBJECT_TYPE::EFFECT_DISRUPTION, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
-                    
-                }
+                // Token Spawning
+                token_timer--;
+                if (token_timer <= 0) {
+                    token_timer = glm::linearRand(token_timer_min, token_timer_max);
 
-                spawned = true;
-            }
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) 
-              || sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) 
-              || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) 
-              || sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) 
-              || sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
-            {
-                for (auto tower : manager->getTowers())
-                {
-                    if (tower->getSubType() == tower::TYPE::SPECIAL)
-                    {
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
-                        {
-                            smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::NOEFFECT);
-                            std::cout << "Special towers set to NOEFFECT" << std::endl;
-                        }
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
-                        {
-                            smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::MAGNETIC);
-                            std::cout << "Special towers set to MAGNETIC" << std::endl;
-                        }
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
-                        {
-                            smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::GLACIAL);
-                            std::cout << "Special towers set to GLACIAL" << std::endl;
-                        }
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4))
-                        {
-                            smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::WINDY);
-                            std::cout << "Special towers set to WINDY" << std::endl;
-                        }
-                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
-                        {
-                            tower->demoDestroy();
-                        }
-                    }
-                }
-            }
-            else if (!spawned) {
-                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
-                    mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                    glm::vec2 rand_pos = glm::linearRand(glm::vec2(75.0f, 75.0f), glm::vec2(manager->getRenderManager()->getWindowWidth() - 75.0f, manager->getRenderManager()->getWindowHeight() - 75.0f));
 
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::BASIC);
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::ELECTRIC);
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::BOMB);
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::LASER);
-                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5))
-                    {
-                        tower_ptr special = nullptr;
-                        for (auto tower : manager->getTowers())
-                        {
-                            if (tower && tower->getSubType() == tower::TYPE::SPECIAL)
-                            {
-                                special = tower;
+                    bool canspawn = true;
+                    for (auto obj : manager->getObjects()) {
+                        if (obj && obj->getSuperType() == gameobject::TYPE::OBJECT) {
+                            if (obj->getSubType() == gameobject::OBJECT_TYPE::TOKEN_GLACIAL
+                                || obj->getSubType() == gameobject::OBJECT_TYPE::TOKEN_MAGNETIC
+                                || obj->getSubType() == gameobject::OBJECT_TYPE::TOKEN_WINDY) {
+                                canspawn = false;
                                 break;
                             }
                         }
-                        if (special == nullptr) spawnTowerAt((float) mouse_pos.x, (float) mouse_pos.y, tower::TYPE::SPECIAL);
-                        else special->setPosition(glm::vec2((float) mouse_pos.x, (float) mouse_pos.y));
+                    }
+
+                    if (canspawn) {
+                        gameobject::OBJECT_TYPE type = (gameobject::OBJECT_TYPE) glm::linearRand<int>(gameobject::OBJECT_TYPE::TOKEN_MAGNETIC, gameobject::OBJECT_TYPE::TOKEN_WINDY);
+                        spawnObjectAt(type, rand_pos.x, rand_pos.y);
+                    }
+
+                }
+
+                // ------------------------------------------------------------------------------------ //
+                // DEBUG CONTROLS
+                if (this->manager->getRenderManager()->getWindow()->hasFocus()) {
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::U)) {
+                        if (!spawned) {
+
+                            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                                spawnUnitAt((float)mouse_pos.x, (float)mouse_pos.y, unit::TYPE::BASIC);
+                            }
+                            //spawned = true;
+                        }
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+                        if (!spawned) {
+
+                            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                                spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, mouse_pos.x, mouse_pos.y);
+                            }
+                            spawned = true;
+                        }
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::B)) {
+                        sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                        if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                            mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                            spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
+                        }
+
+                        spawned = true;
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::X)) {
+                        sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                        if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                            mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                            auto obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
+
+                            // Find nearest object
+                            auto objs = this->manager->getGameController()->getNNearestUnits(obj->getPosition(), 1, 1000);
+                            if (objs.size() > 0) {
+                                glm::vec2 dir = glm::normalize(objs[0].second->getPosition() - obj->getPosition());
+                                obj->setVelocity(dir*7.0f);
+                            }
+                        }
+
+                        spawned = true;
+                    }
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::E)) {
+                        if (!spawned) {
+                            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+
+                                auto units = getNNearestUnits(glm::vec2(mouse_pos.x, mouse_pos.y), 1000, 1000);
+                                if (units.size() > 1) {
+                                    // std::cout << "ELECTRICITY!!" << std::endl;
+                                    gameobject_ptr obj = spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
+                                    smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
+                                    elec->setForkParent(units[0].second->getSharedPtr());
+                                    elec->setTargetObject(units[1].second);
+                                }
+                            }
+
+                            spawned = true;
+                        }
+                    }
+                    // Attacker Effects
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+                    {
+                        if (!spawned) {
+                            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+                                spawnObjectAt(gameobject::OBJECT_TYPE::EFFECT_HEAL, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
+
+                            }
+
+                            spawned = true;
+                        }
+                    }
+                    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)
+                               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)
+                               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)
+                               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)
+                               || sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
+                        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+                            for (auto tower : manager->getTowers()) {
+                                if (tower->getSubType() == tower::TYPE::SPECIAL) {
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) {
+                                        smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::NOEFFECT);
+                                        std::cout << "Special towers set to NOEFFECT" << std::endl;
+                                    }
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) {
+                                        smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::MAGNETIC);
+                                        std::cout << "Special towers set to MAGNETIC" << std::endl;
+                                    }
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) {
+                                        smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::GLACIAL);
+                                        std::cout << "Special towers set to GLACIAL" << std::endl;
+                                    }
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) {
+                                        smartpointers::static_pointer_cast<tower::SpecialTower>(tower)->changeEffect(tower::SPECIAL_TYPE::WINDY);
+                                        std::cout << "Special towers set to WINDY" << std::endl;
+                                    }
+                                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
+                                        tower->demoDestroy();
+                                    }
+                                }
+                            }
+                        } else if (!spawned) {
+                            sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                            if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
+                                mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
+
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::BASIC);
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::ELECTRIC);
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::BOMB);
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4)) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::LASER);
+                                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
+                                    tower_ptr special = nullptr;
+                                    for (auto tower : manager->getTowers()) {
+                                        if (tower && tower->getSubType() == tower::TYPE::SPECIAL) {
+                                            special = tower;
+                                            break;
+                                        }
+                                    }
+                                    if (special == nullptr) spawnTowerAt((float)mouse_pos.x, (float)mouse_pos.y, tower::TYPE::SPECIAL);
+                                    else special->setPosition(glm::vec2((float)mouse_pos.x, (float)mouse_pos.y));
+                                }
+                            }
+
+                            spawned = true;
+                        }
+                    } else {
+                        spawned = false;
                     }
                 }
 
-                spawned = true;
+                /////////////////////////////////////////////////////////////////////////
+                //Run scenarios for 5 minutes
+                if (getElapsedTime() < 60 * 5) {
+                    int scenario = (int)(getElapsedTime() / (float)time_per_scenario);
+                    runScenario(scenario);
+                } else { //Ending sequence
+                    if (!manager->getUnits().size()) {
+                        winGame();
+                    }
+                }
+
+                /////////////////////////////////////////////////////////////////////////
+                // PERFORM MANAGER STEP AND COLLISIONS
+                manager->stepAll();
+                manager->stepAll();
+                manager->collisionAll();
             }
-        } else {
-            spawned = false;
+            break;
+
+
+            /*
+                Menu State
+                -----------------------------------
+                The main menu state is simply used for visiting other menu screens.
+            */
+            case GameState::MAIN_MENU:
+
+                if (this->manager->getRenderManager()->getWindow()->hasFocus()) {
+
+                    // Get mouse
+                    float width = (float)this->manager->getRenderManager()->getWindowWidth();
+                    float height = (float)this->manager->getRenderManager()->getWindowHeight();
+                    float sf = width / 1920.0f;
+                    sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                    mouse_pos.x = width - mouse_pos.x;
+
+                    // Btn presses
+                    bool hoverbtn1 = false;
+                    bool hoverbtn2 = false;
+                    if (mouse_pos.x >= 244.0f * sf && mouse_pos.x <= 644.0f * sf && mouse_pos.y >= 577.0f * sf && mouse_pos.y <= 977.0f * sf) {
+                        hoverbtn1 = true;
+                    }
+                    if (mouse_pos.x >= 1164.0f * sf && mouse_pos.x <= 1564.0f * sf && mouse_pos.y >= 577.0f * sf && mouse_pos.y <= 977.0f * sf) {
+                        hoverbtn2 = true;
+                    }
+
+                    // Mouse press
+                    bool mouse_pressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+                    if (hoverbtn1) {
+                        std::cout << "O:" << std::endl;
+                    }
+                    // Hotkeys
+                    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || (hoverbtn1 && mouse_pressed)) {
+
+                        // GOTO Single player lobby
+                        this->current_state = GameState::MENU_LOBBY_SP;
+
+                    } else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) || (hoverbtn2 && mouse_pressed)) {
+
+                        // GOTO Multiplayer lobby
+                        this->current_state = GameState::MENU_LOBBY_MP;
+                    }
+                }
+            break;
+
+            /*
+                Single-player lobby
+                -----------------------------------
+                Single player lobby. Nothing much needs to happen here. This will configure the game for
+                single-player mode. The game will not be start-able until the CV interface is connected.
+            */
+            case GameState::MENU_LOBBY_SP:
+
+                
+                if (cvConnectionEstablished) {
+                    if (this->manager->getRenderManager()->getWindow()->hasFocus() &&
+                        sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+
+                        // Set gamemode to single player
+                        current_gamemode = GameMode::SINGLE_PLAYER;
+
+                        // Move into start state:
+                        this->current_state = GameState::START;
+
+                    }
+                }
+            break;
+
+            /*
+                Multi-player lobby
+                -----------------------------------
+                Multiplayer lobby. Will display other connected players.
+            */
+            case GameState::MENU_LOBBY_MP:
+
+
+                if (cvConnectionEstablished) {
+                    if (this->manager->getRenderManager()->getWindow()->hasFocus() && 
+                        sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+
+                        // Set gamemode to multiplayer
+                        current_gamemode = GameMode::MULTI_PLAYER;
+
+                        // Move into start state:
+                        this->current_state = GameState::START;
+                    }
+                }
+            break;
+
+
         }
 
-        //In general, step() should be frame-based.
-        cvNetworkStep();
-        manager->stepAll();
-        manager->collisionAll();
-
+        // ---------------- CODE FOR ALL STATES ----------------------
         //Assumes 60 frames = 1000ms roughly... it's not but we'll work with that timing
         float delta = getElapsedTime();
 
-        //Scenario: 10 stages, 3 waves per stage. 1 minute per stage
-        //TODO: implement Stage class
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+        // Check for restart
+        if (this->manager->getRenderManager()->getWindow()->hasFocus() &&  
+            sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
             //Restart Game
             stopGame();
             wave = 0;
@@ -387,55 +543,18 @@ namespace gamecontroller {
                 return false;
             }
             restart();
+
+            // Return to menu
+            current_state = GameState::MAIN_MENU;
+
             return true;
         }
 
-        if (getGameState() == GameState::START) {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
-                startGame();
-                
-                if (!initial_spawns_occurred) {
-                    initial_spawns_occurred = true;
-                    if (manager->getTowers().size()) {
-                        std::cout << "ERROR! There should not be any towers existing at this point, before base has spawned." << std::endl;
-                    }
 
-                    tower_ptr t = spawnTowerAt(manager->getRenderManager()->getWindowWidth() / 2, manager->getRenderManager()->getWindowHeight() / 2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
-
-                    //Adding Spawn Points
-                    spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 0)));
-                    spawn_points.back()->setSpawnID(0);
-                    spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 0)));
-                    spawn_points.back()->setSpawnID(1);
-                    spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 0, 672)));
-                    spawn_points.back()->setSpawnID(2);
-                    spawn_points.push_back(smartpointers::static_pointer_cast<Spawn>(spawnObjectAt(gameobject::OBJECT_TYPE::SPAWN, 1232, 672)));
-                    spawn_points.back()->setSpawnID(3);
-
-                    // Add notifier
-                    spawnObjectAt(gameobject::OBJECT_TYPE::GAME_STATE_NOTIFIER, 0, 0);
-                }
-
-                frame_clock = 0;
-            }
-            else {
-                return true;
-            }
-        }
-
+        // ---------------- PROCESS CONNECTION TO CV INTERFACE ----------------------
         cvNetworkStep();
-        manager->stepAll();
 
-        //Run scenarios for 5 minutes
-        if (getElapsedTime() < 60*5) {
-            int scenario = (int) (getElapsedTime()/(float)time_per_scenario);
-            runScenario(scenario);
-        }
-        else { //Ending sequence
-            if (!manager->getUnits().size()) {
-                winGame();
-            }
-        }
+
         return true;
     }
 
@@ -451,8 +570,7 @@ namespace gamecontroller {
             for (auto spawn : spawn_points) {
                 spawn->startScenario(scenario);
             }
-        }
-        else {
+        } else {
             //Continue current scenario
             int wave = (int)(getElapsedTime() * waves_per_scenario / time_per_scenario) % waves_per_scenario;
             if (wave > this->wave) {
@@ -463,8 +581,7 @@ namespace gamecontroller {
                 for (auto spawn : spawn_points) {
                     spawn->startWave(wave);
                 }
-            }
-            else {
+            } else {
                 //Continue wave
                 //for (auto spawn : spawn_points) {
 
@@ -485,7 +602,7 @@ namespace gamecontroller {
         std::vector<unit_ptr> units_in_range;
         units_in_range.clear();
         for (unit_ptr unit : manager->getUnits()) {
-            if (unit && glm::distance(unit->getPosition(), position) <= radius) {
+            if (unit && glm::distance(unit->getPosition(), position) <= radius && !unit->isDead()) {
                 units_in_range.push_back(unit);
             }
         }
@@ -511,7 +628,7 @@ namespace gamecontroller {
         std::vector<std::pair<float, unit_ptr>> distance_unit_pairs;
 
         for (unit_ptr unit : manager->getUnits()) {
-            if (unit) {
+            if (unit && !unit->isDead()) {
                 float distance = glm::distance(unit->getPosition(), position);
                 if (distance <= maxrange) {
                     distance_unit_pairs.push_back(std::pair<float, unit_ptr>(distance, unit));
@@ -520,10 +637,10 @@ namespace gamecontroller {
         }
 
         // Sort based on distance (closest first)
-        std::sort(distance_unit_pairs.begin(), distance_unit_pairs.end(), 
+        std::sort(distance_unit_pairs.begin(), distance_unit_pairs.end(),
                   [](const std::pair<float, unit_ptr> & a, const std::pair<float, unit_ptr> & b) -> bool {
-                        return a.first < b.first;
-                  });
+            return a.first < b.first;
+        });
 
         // Trim so only keep first N
         std::vector<std::pair<float, unit_ptr>> keep;
@@ -568,14 +685,13 @@ namespace gamecontroller {
     // CV Server logic
     void GameController::startCVServer() {
         listener = new sf::TcpListener();
-        port     = 31654;
+        port = 31654;
 
         sf::Socket::Status st = listener->listen(port);
         if (st != sf::Socket::Done) {
             std::cout << "FAILED TO INITIALISE CV INTERFACE SERVER ON" << port << std::endl;
             delete listener;
-        }
-        else {
+        } else {
 
             // Success!
             listener->setBlocking(false);
@@ -586,6 +702,7 @@ namespace gamecontroller {
 
         // Create buffer
         this->recv_buffer = new Buffer();
+        this->send_buffer = new Buffer();
     }
 
     void GameController::cvNetworkStep() {
@@ -599,10 +716,31 @@ namespace gamecontroller {
                 std::cout << "FAILED TO ESTABLISH CONNECTION WITH CV INTERFACE " << st << std::endl;
                 delete listener;
                 delete this->recv_buffer;
+                delete this->send_buffer;
                 startCVServer();
 
             }
         } else {
+
+            // Ping CV Interface (to check if still connected)
+            ping_timer--;
+            if (ping_timer <= 0) {
+                ping_timer = 20;
+
+                send_buffer->seek(0);
+                (*send_buffer) << (int)0;
+
+                size_t data;
+                sf::Socket::Status status = client->send((void*)send_buffer->getPtr(), (std::size_t)send_buffer->tell(), data);
+                if (status == sf::Socket::Disconnected || status == sf::Socket::Error) {
+
+                    // Disconnect client
+                    client->disconnect();
+                    delete client;
+                    client = new sf::TcpSocket();
+                    cvConnectionEstablished = false;
+                }
+            }
             // Listen for messages from cv interface
             /*
                 In this process, the gamecontroller checks the incoming buffer for any messages
@@ -630,8 +768,7 @@ namespace gamecontroller {
                     //std::cout << "[CV NETWORK] Data received from CV interface. Size: " << message_size << " bytes!" << std::endl;
 
                     // Clear cv list
-                    for (auto& vec : cvList)
-                    {
+                    for (auto& vec : cvList) {
                         vec.clear();
                     }
 
@@ -672,8 +809,7 @@ namespace gamecontroller {
                         }
 
                         //Increase a tally for each tower, only delete a tower if it's in none of the sets
-                        for (auto& tower : match.deleted_towers)
-                        {
+                        for (auto& tower : match.deleted_towers) {
                             delete_list.push_back(tower);
                         }
                     }
@@ -683,8 +819,7 @@ namespace gamecontroller {
                     //For deletion:
                     //Increase tower->delete_queue
                     //If > n then actually delete
-                    for (auto& tower : delete_list)
-                    {
+                    for (auto& tower : delete_list) {
                         tower->delete_queue++;
                         if (tower->delete_queue > 10) {
                             tower->demoDestroy();
@@ -696,8 +831,7 @@ namespace gamecontroller {
         }
     }
 
-    Matching GameController::stableMatching(tower::TYPE type, std::vector<Point<float>>& detections)
-    {
+    Matching GameController::stableMatching(tower::TYPE type, std::vector<Point<float>>& detections) {
         std::vector<deque<int>> point_prefs;
         std::vector<std::vector<int>> tower_prefs;
         auto& _towers = manager->getTowers();
@@ -711,16 +845,12 @@ namespace gamecontroller {
             // Just because
             auto last = _towers.end();//_towers.begin() + _towers.size();
             towers = std::vector<tower_ptr>(begin+1, last); //skip first tower without needing to change Jamie's algorithm*/
-            for (size_t i = 1; i < _towers.size(); i++)
-            {
-                if (_towers[i]->getSubType() == type)
-                {
+            for (size_t i = 1; i < _towers.size(); i++) {
+                if (_towers[i]->getSubType() == type) {
                     towers.push_back(_towers[i]);
                 }
             }
-        }
-        else
-        {
+        } else {
             // To skip initial phase... rip
             return Matching();
         }
@@ -731,45 +861,37 @@ namespace gamecontroller {
 
         size_t tower_count = towers.size(); //base exists and is NOT first in tower, it was explicitly removed
         int** dists = new int*[tower_count];
-        for (size_t i = 0; i < tower_count; i++)
-        {
+        for (size_t i = 0; i < tower_count; i++) {
             dists[i] = new int[detections.size()];
-            for (size_t j = 0; j < detections.size(); j++)
-            {
-                dists[i][j] = (int) towers[i]->distanceTo(detections[j]);
+            for (size_t j = 0; j < detections.size(); j++) {
+                dists[i][j] = (int)towers[i]->distanceTo(detections[j]);
             }
         }
 
-        for (size_t i = 0; i < tower_count; i++)
-        {
+        for (size_t i = 0; i < tower_count; i++) {
             tower_prefs.push_back({});
-            auto cmp = [&dists, i](int& pref, const int& point)
-            {
+            auto cmp = [&dists, i](int& pref, const int& point) {
                 return dists[i][pref] < dists[i][point];
             };
-            for (size_t j = 0; j < detections.size(); j++)
-            {
+            for (size_t j = 0; j < detections.size(); j++) {
                 auto pos = std::lower_bound(tower_prefs[i].begin(), tower_prefs[i].end(), j, cmp);
                 tower_prefs[i].insert(pos, j);
             }
         }
 
-        for (size_t j = 0; j < detections.size(); j++)
-        {
+        for (size_t j = 0; j < detections.size(); j++) {
             point_prefs.push_back({});
-            auto cmp = [&dists, j](int& pref, const int& tower)
-            {
+            auto cmp = [&dists, j](int& pref, const int& tower) {
                 return dists[pref][j] < dists[tower][j];
             };
-            for (size_t i = 0; i < tower_count; i++)
-            {
+            for (size_t i = 0; i < tower_count; i++) {
                 auto pos = std::lower_bound(point_prefs[j].begin(), point_prefs[j].end(), i, cmp);
                 point_prefs[j].insert(pos, i);
             }
         }
 
-        for (size_t i = 0; i < tower_count; i++) delete [] dists[i];
-        delete [] dists;
+        for (size_t i = 0; i < tower_count; i++) delete[] dists[i];
+        delete[] dists;
 
         stack<int> free;
         std::vector<Point<float>> news;
@@ -778,11 +900,9 @@ namespace gamecontroller {
         for (size_t j = 0; j < detections.size(); j++) free.push(j);
         for (size_t i = 0; i < tower_count; i++) matches.push_back(NO_MATCH);
 
-        while (!free.empty())
-        {
+        while (!free.empty()) {
             int p = free.top();
-            if (point_prefs[p].empty())
-            {
+            if (point_prefs[p].empty()) {
                 // Clearly, this is a new tower
                 news.push_back(detections[p]);
                 free.pop();
@@ -791,16 +911,12 @@ namespace gamecontroller {
             int t = point_prefs[p].front();
             point_prefs[p].pop_front();
             int p_ = matches[t];
-            if (p_ == NO_MATCH)
-            {
+            if (p_ == NO_MATCH) {
                 matches[t] = p;
                 free.pop();
-            }
-            else for (int x : tower_prefs[t])
-            {
+            } else for (int x : tower_prefs[t]) {
                 if (x == p_) break;
-                else if (x == p)
-                {
+                else if (x == p) {
                     free.pop();
                     free.push(p_);
                     matches[t] = p;
@@ -811,14 +927,10 @@ namespace gamecontroller {
 
         Matching match;
         match.new_towers = news;
-        for (size_t i = 0; i < matches.size(); i++)
-        {
-            if (matches[i] == NO_MATCH)
-            {
+        for (size_t i = 0; i < matches.size(); i++) {
+            if (matches[i] == NO_MATCH) {
                 match.deleted_towers.push_back(towers[i]);
-            }
-            else
-            {
+            } else {
                 match.matches.emplace(towers[i], detections[matches[i]]);
             }
         }
@@ -884,7 +996,7 @@ namespace gamecontroller {
         ret_path.clear();
         std::vector<TileNode*> path;
 
-        int tile_width  = manager->getRenderManager()->getWindowWidth() / TILE_W;
+        int tile_width = manager->getRenderManager()->getWindowWidth() / TILE_W;
         int tile_height = manager->getRenderManager()->getWindowHeight() / TILE_H;
 
         start /= vec2(tile_width, tile_height);
@@ -902,26 +1014,24 @@ namespace gamecontroller {
         path_finder.setGoal(node2);
         if (path_finder.findPath<paths::AStar>(path)) {
             for (auto node : path) {
-                std::cout << "      " <<node->getX() << " " << node->getY() << std::endl;
+                std::cout << "      " << node->getX() << " " << node->getY() << std::endl;
                 ret_path.emplace_back(node->getX()*tile_width, node->getY()*tile_height);
             }
             return true;
         }
-        
+
         return false;
     }
 
-    float TileNode::distanceTo(AStarNode* node) const 
-    {
+    float TileNode::distanceTo(AStarNode* node) const {
         //int distance = (node->getX() - this->getX())*(node->getX() - this->getX()) + (node->getY() - this->getY())*(node->getY() - this->getY());
-        float distance = std::hypotf((float) (node->getX() - this->getX()), (float) (node->getY() - this->getY()));
+        float distance = std::hypotf((float)(node->getX() - this->getX()), (float)(node->getY() - this->getY()));
         return distance;
     }
-    
+
     TileNode::TileNode() : AStarNode() {}
-        
-    void TileNode::addNode(TileNode* node) 
-    {
+
+    void TileNode::addNode(TileNode* node) {
         addChild(node, 1.0f);
     }
 
@@ -954,6 +1064,16 @@ namespace gamecontroller {
     void GameController::unitTargetMine(id_t unit_id, id_t mine_id) {
         auto unit = smartpointers::static_pointer_cast<unit::Unit>(manager->getObjectById(unit_id));
         auto mine = smartpointers::static_pointer_cast<ResourceMine>(manager->getObjectById(mine_id));
-        unit->targetMine(mine);
+        if (unit && mine) {
+            unit->targetMine(mine);
+        }
+    }
+
+    bool GameController::getCVReady() {
+        return this->cvConnectionEstablished;
+    }
+
+    GameMode GameController::getCurrentGameMode() {
+        return this->current_gamemode;
     }
 }

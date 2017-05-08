@@ -12,7 +12,7 @@ namespace tower
         std::vector<std::pair<graphics::AnimatedTexture*, std::pair<float, Point<int>>>> animations;
 	public:
 		Base(id_t key, Manager* m);
-        const float max_health = 20000;//1000000.f;
+        const float max_health = 30000;//1000000.f;
 		void init() override;
 		void render() override;
         void step() override;

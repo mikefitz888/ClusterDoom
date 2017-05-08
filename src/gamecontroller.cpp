@@ -425,9 +425,10 @@ namespace gamecontroller {
 
                 /////////////////////////////////////////////////////////////////////////
                 // PERFORM MANAGER STEP AND COLLISIONS
-                manager->stepAll();
+                cvNetworkStep();
                 manager->stepAll();
                 manager->collisionAll();
+                manager->stepAll();
             }
             break;
 

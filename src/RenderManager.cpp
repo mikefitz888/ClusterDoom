@@ -181,6 +181,14 @@ namespace graphics {
         ctx.majorVersion = 3;
         ctx.minorVersion = 1;
 #endif
+
+        fullscreen = false;
+        if (fullscreen) {
+            width = sf::VideoMode::getDesktopMode().width;
+            height = sf::VideoMode::getDesktopMode().height;
+        }
+
+
         ctx.attributeFlags = ctx.Core;
         window = new sf::Window(sf::VideoMode(width, height), "OpenGL", (fullscreen)? sf::Style::Fullscreen : sf::Style::Default, ctx);
         window->setVerticalSyncEnabled(false);

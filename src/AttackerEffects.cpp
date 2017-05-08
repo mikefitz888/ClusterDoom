@@ -3,13 +3,14 @@
 #include "../include/unit.h"
 #include "../include/tower.h"
 #include "../include/gamecontroller.h"
+#include "../include/ResourceManager.h"
 
 const unsigned int EMPEffect::DURATION = 1000;
 const unsigned int DisruptionEffect::DURATION = 1000;
 const double EMPEffect::MAX_RANGE = 120;
 const double DisruptionEffect::EFFICIENCY_MODIFIER = 0.75;
 const double UnitHealEffect::MAX_RANGE = 120;
-const int UnitHealEffect::HEAL_STRENGTH = 500;
+const int UnitHealEffect::HEAL_STRENGTH = 8000;
 
 EMPEffect::EMPEffect(id_t id, manager::Manager* manager) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::EFFECT_EMP, manager)
 {
@@ -53,19 +54,33 @@ void DisruptionEffect::step()
 
 UnitHealEffect::UnitHealEffect(id_t id, manager::Manager* manager) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::EFFECT_HEAL, manager)
 {
+    this->setDepth(20);
 }
 
 void UnitHealEffect::render()
 {
-
+    this->manager->getRenderManager()->setActiveColour(255, 255, 255, (int)glm::clamp(255.0f * fadeout*0.5f, 0.0f, 255.0f));
+    this->manager->getResourceManager()->getTexture("healing_aura")->render(getX(), getY());
+    this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
 }
 
 void UnitHealEffect::step()
 {
     // We'll keep a step function, just in case 
-    for (auto unit : manager->getGameController()->getUnitsInRange(getPosition(), MAX_RANGE))
-    {
-        unit->heal(HEAL_STRENGTH);
+    healing_timer--;
+    if (healing_timer > 0) {
+
+        if (fadeout < 1.0f) {
+            fadeout += 0.025f;
+        }
+        for (auto unit : manager->getGameController()->getUnitsInRange(getPosition(), MAX_RANGE)) {
+            unit->heal(ceil((float)HEAL_STRENGTH/(float)healing_timer_max));
+        }
+    } else {
+        if (fadeout >= 0) {
+            fadeout -= 0.025f;
+        } else {
+            destroySelf();
+        }
     }
-    destroySelf();
 }

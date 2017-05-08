@@ -36,7 +36,9 @@ class UnitHealEffect : public GameObject
 {
     const static double MAX_RANGE;
     const static int HEAL_STRENGTH;
-
+    const int healing_timer_max = 480;
+    int healing_timer = healing_timer_max;
+    float fadeout = 0.0f;
 public:
     UnitHealEffect(id_t id, manager::Manager* manager);
 

@@ -98,6 +98,9 @@ namespace graphics {
         rm->textureLoad("btn_defenders_vs_ai", "src/Resources/Textures/Menu/btn_def_vs_ai.png");
         rm->textureLoad("btn_defenders_vs_att", "src/Resources/Textures/Menu/btn_def_vs_att.png");
 
+        // Attacker effects
+        rm->textureLoad("healing_aura", "src/Resources/Textures/healing_aura.png")->setOriginCentre();
+
         /// Load Animated Textures
         //  Explosions
         rm->animatedTextureLoad("explosion", "src/Resources/Textures/explosion.png", true, 6, 6, -1)->setOriginCentre();

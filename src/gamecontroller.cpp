@@ -461,9 +461,6 @@ namespace gamecontroller {
 
                     // Mouse press
                     bool mouse_pressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-                    if (hoverbtn1) {
-                        std::cout << "O:" << std::endl;
-                    }
                     // Hotkeys
                     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) || (hoverbtn1 && mouse_pressed)) {
 

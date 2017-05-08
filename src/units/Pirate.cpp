@@ -32,6 +32,7 @@ namespace unit {
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getAnimatedTexture("pirate_unit");
 		deathTexture = manager->getResourceManager()->getAnimatedTexture("pirate_death");
+		attackTexture = manager->getResourceManager()->getAnimatedTexture("pirate_attack");
         this->setDistanceThreshold(95);
 
 		health = 3000;
@@ -141,7 +142,13 @@ namespace unit {
 		Unit::render();
 
 		if (!dead) {
-			renderAnimation(texture, 0.22f, 0.3f*this->glacial_effect_vis, 12, 1.0f, 0.0f);
+			auto& base = game_controller->getBase();
+			if (distanceTo(base->getPosition()) < 100) {
+				renderAnimation(attackTexture, 0.18f, 0.36f*this->glacial_effect_vis, 12, 1.0f, 0.0f);
+			}
+			else {
+				renderAnimation(texture, 0.22f, 0.3f*this->glacial_effect_vis, 12, 1.0f, 0.0f);
+			}
 		}
 		else {
 			renderAnimation(deathTexture, 0.15f, 0.36f, 16, 1.0f, 0.0f);

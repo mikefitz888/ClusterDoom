@@ -22,6 +22,7 @@ namespace unit {
         render_manager = manager->getRenderManager();
         texture        = manager->getResourceManager()->getAnimatedTexture("wizard_unit");
 		deathTexture	= manager->getResourceManager()->getAnimatedTexture("wizard_death");
+		attackTexture = manager->getResourceManager()->getAnimatedTexture("wizard_attack");
 
 
 
@@ -129,10 +130,16 @@ namespace unit {
 		texture->render(1, getXr(), getYr(), 0.10f*n, 0.10f*n, rotation + ((1.0f-n)*10.0*M_PI));*/
 
 		if (!dead) {
+			auto& base = game_controller->getBase();
 			float n = std::fabs(channel_time - 100.f) / 100.f;
 			if (!channeling) n = 1.f;
 			float rotMod = ((1.0f - n)*10.0f*(float)M_PI);
-			renderAnimation(texture, 0.18f, 0.13f, 12, n, rotMod);
+			if (distanceTo(base->getPosition()) < 160) {
+				renderAnimation(attackTexture, 0.25f, 0.18f*this->glacial_effect_vis, 16, 1.0f, 0.0f);
+			}
+			else {
+				renderAnimation(texture, 0.18f, 0.13f*this->glacial_effect_vis, 12, n, rotMod);
+			}
 		}
 		else {
 			renderAnimation(deathTexture, 0.18f, 0.36f, 16, 1.0f, 0.0f);

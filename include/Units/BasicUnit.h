@@ -11,6 +11,7 @@ namespace unit
     class BasicUnit : public Unit {
         graphics::AnimatedTexture* texture = nullptr;
 		graphics::AnimatedTexture* deathTexture = nullptr;
+		graphics::AnimatedTexture* attackTexture = nullptr;
 
         int network_update_position_timer_max = 300;
         int network_update_position_timer = network_update_position_timer_max;

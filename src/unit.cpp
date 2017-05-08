@@ -220,7 +220,7 @@ namespace unit {
 		float finSize = size * sizeMod;
 		animationProgress = animationProgress + animationSpeed;
 		int m = 1;
-		if (this->getAtDestination() && !dead) m = 0;
+		//if (this->getAtDestination() && !dead) m = 0;
 		texture->render(m* (((int)animationProgress) % numFrames), (int)getXr(), (int)getYr(), finSize, finSize, rotation);
 	}
 

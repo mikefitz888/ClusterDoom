@@ -27,6 +27,7 @@ namespace unit {
         render_manager = manager->getRenderManager();
         texture = manager->getResourceManager()->getAnimatedTexture("robot_unit");
 		deathTexture = manager->getResourceManager()->getAnimatedTexture("robot_death");
+		attackTexture = manager->getResourceManager()->getAnimatedTexture("robot_attack");
         this->setDistanceThreshold(95);
 
         health = 8000;
@@ -120,7 +121,13 @@ namespace unit {
         Unit::render();
 
 		if (!dead) {
-			renderAnimation(texture, 0.18f, 0.09f, 12, 1.0f, 0.0f);
+			auto& base = game_controller->getBase();
+			if (distanceTo(base->getPosition()) < 100) {
+				renderAnimation(attackTexture, 0.18f, 0.18f, 12, 1.0f, 0.0f);
+			}
+			else {
+				renderAnimation(texture, 0.18f, 0.09f, 12, 1.0f, 0.0f);
+			}
 		}
 		else {
 			renderAnimation(deathTexture, 0.18f, 0.36f, 16, 1.0f, 0.0f);

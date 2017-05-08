@@ -32,7 +32,7 @@ namespace unit {
 
         health = 8000;
         maxHealth = 8000;
-        unitSpeed = 0.1f;
+        unitSpeed = 0.25f;
 
         /* Path path;
         path.push_back(vec2(100, 100));

@@ -5,8 +5,8 @@
 #include "../../include/RenderUtils.h"
 
 namespace tower {
-	Base::Base(id_t key, Manager* m) : Tower(key, TYPE::BASE, m) {
-
+	Base::Base(id_t key, Manager* m) : Tower(key, TYPE::BASE, m), max_health(30000) {
+        
 	}
 
 	void Base::init() {

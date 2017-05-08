@@ -58,6 +58,7 @@ namespace unit {
         virtual void attack(tower_ptr tower);
         virtual void attacked(gameobject_ptr aggressor);
         virtual void attacked(gameobject_ptr aggressor, float damage);
+        void heal(float health_delta);
 
         virtual void targetMine(smartpointers::slave_ptr<ResourceMine> t_mine);
     };

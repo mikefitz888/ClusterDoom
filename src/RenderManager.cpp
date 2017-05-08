@@ -95,6 +95,8 @@ namespace graphics {
         rm->textureLoad("twitch_logo", "src/Resources/Textures/Menu/twitch_logo.png");
         rm->textureLoad("defenders_vs_ai", "src/Resources/Textures/Menu/defenders_vs_ai.png");
         rm->textureLoad("phone_logo", "src/Resources/Textures/Menu/phone_logo.png");
+        rm->textureLoad("btn_defenders_vs_ai", "src/Resources/Textures/Menu/btn_def_vs_ai.png");
+        rm->textureLoad("btn_defenders_vs_att", "src/Resources/Textures/Menu/btn_def_vs_att.png");
 
         /// Load Animated Textures
         //  Explosions
@@ -406,6 +408,18 @@ namespace graphics {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
+    // Flipping
+    bool RenderManager::getRenderFlipped() {
+        return this->flipped;
+    }
+    void RenderManager::setRenderFlipped(bool flipped) {
+        this->flipped = flipped;
+        if (this->flipped != this->prev_flipped) {
+            this->camera->renderCamera();
+            this->prev_flipped = this->flipped;
+        }
+    }
+
     /// ------------------ CAMERA FUNCTIONS -------------------- //
     void GCamera::setCameraPosition(float x, float y, float z) {
         this->camera_position.x = x;
@@ -437,7 +451,13 @@ namespace graphics {
     }
 
     void GCameraOrtho::renderCamera() {
-        this->projection_matrix = glm::ortho(0.0f, (float)width, (float)height, 0.0f, -1000.0f, 1000.0f); //glm::ortho<float>(0.0f, 0.0f, (float)width, (float)height, -0.1f, 100);
+
+        if (!this->render_manager->getRenderFlipped()) {
+            this->projection_matrix = glm::ortho(0.0f, (float)width, (float)height, 0.0f, -1000.0f, 1000.0f); //glm::ortho<float>(0.0f, 0.0f, (float)width, (float)height, -0.1f, 100);
+        } else {
+            this->projection_matrix = glm::ortho((float)width, 0.0f, (float)height, 0.0f, -1000.0f, 1000.0f);
+        }
+        
         this->view_matrix = glm::translate(glm::mat4(), -camera_position);
         this->vp_matrix = this->projection_matrix * this->view_matrix;
         //this->vp_matrix = this->projection_matrix;//glm::mat4();

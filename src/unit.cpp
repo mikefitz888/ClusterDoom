@@ -211,6 +211,16 @@ namespace unit {
         }
     }
 
+    void Unit::heal(float health_delta)
+    {
+        health += health_delta;
+        health = health > maxHealth ? maxHealth : health;
+        if (health < maxHealth) {
+            this->health_timer = 140;
+            this->health_alpha = 1.0f;
+        }
+    }
+
     void Unit::deliverWealth(size_t amt) {
         //manager->getGameController()->addEfficiency(amt);
     }

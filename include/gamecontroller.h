@@ -103,6 +103,8 @@ namespace gamecontroller {
         // TEMP
         bool spawned = false;
 
+        double efficiencyModifier;
+
         // Prepare pathfinding grid
         void preparePathfindingGrid();
 
@@ -158,6 +160,8 @@ namespace gamecontroller {
 
         void addEfficiency(unsigned int amt = 1);
         float towerEfficiency();
+        float towerEfficiency(glm::vec2 position);
+        void setEfficiencyModifier(float mod);
         void diminishEfficiency();
 
         sf::Time timeUntilNextWave();

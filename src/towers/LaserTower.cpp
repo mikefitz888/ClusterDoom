@@ -56,7 +56,7 @@ namespace tower {
         //std::cout << "ELECTRICITY!!" << std::endl;
 
         //float power = requestEfficiency(30.f /*Maximum power*/, 10.f /*minimum power*/);
-		float power = game_controller->towerEfficiency()*2.0f;
+		float power = game_controller->towerEfficiency(getPosition())*2.0f;
 
         if (current_target) {
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";

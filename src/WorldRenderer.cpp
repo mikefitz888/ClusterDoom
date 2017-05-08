@@ -72,11 +72,36 @@ namespace worldrenderer {
         }
 
         // Menu renders:
+        manager->getRenderManager()->setRenderFlipped(true);
         switch (game_state) {
 
-            case gamecontroller::GameState::MAIN_MENU:
+            case gamecontroller::GameState::MAIN_MENU: {
                 // Render mode buttons
-                break;
+                sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
+                mouse_pos.x = width - mouse_pos.x;
+
+                bool hoverbtn1 = false;
+                bool hoverbtn2 = false;
+                if (mouse_pos.x >= 244 * sf && mouse_pos.x <= 644 * sf && mouse_pos.y >= 577 * sf && mouse_pos.y <= 977 * sf) {
+                    hoverbtn1 = true;
+                }
+                if (mouse_pos.x >= 1164 * sf && mouse_pos.x <= 1564 * sf && mouse_pos.y >= 577 * sf && mouse_pos.y <= 977 * sf) {
+                    hoverbtn2 = true;
+                }
+
+                render_manager->setActiveColour(255, 255, 255, 255);
+                if (hoverbtn1) {
+                    render_manager->setActiveColour(255, 255, 255, 128);
+                }
+                manager->getResourceManager()->getTexture("btn_defenders_vs_ai")->render(244 * sf, 577 * sf, sf, sf, 0.0f);
+
+                render_manager->setActiveColour(255, 255, 255, 255);
+                if (hoverbtn2) {
+                    render_manager->setActiveColour(255, 255, 255, 128);
+                }
+                manager->getResourceManager()->getTexture("btn_defenders_vs_att")->render(1164 * sf, 577 * sf, sf, sf, 0.0f);
+                render_manager->setActiveColour(255, 255, 255, 255);
+            } break;
 
             case gamecontroller::GameState::MENU_LOBBY_SP:
 
@@ -116,7 +141,7 @@ namespace worldrenderer {
                 manager->getResourceManager()->getTexture("camera_disconnected")->render(1215.0f*sf, 784.0f*sf, sf, sf, 0.0f);
             }
         }
-
+        manager->getRenderManager()->setRenderFlipped(false);
     }
 
     void WorldRenderer::renderGUI(){

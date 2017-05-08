@@ -106,7 +106,11 @@ namespace gameobject {
         RESOURCE_MINE = 5,
         TOKEN_MAGNETIC = 6,
         TOKEN_GLACIAL = 7,
-        TOKEN_WINDY = 8
+        TOKEN_WINDY = 8,
+        EFFECT_EMP = 9,
+        EFFECT_DISRUPTION = 10,
+        EFFECT_HEAL = 11,
+        PLAYER_INSTANCE = 12
     };
 
 

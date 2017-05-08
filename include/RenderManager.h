@@ -113,7 +113,7 @@ namespace graphics {
 
         GCamera *camera;
         int width = 1280, height = 720;
-        bool fullscreen = false;
+		bool fullscreen = true;
         Colour active_colour = Colour(255, 255, 255, 255);
         sf::Window *window = nullptr;
         sf::Shader *active_shader = nullptr;        /* Whilst shaders can be changed, it needs to be done through the RenderManager

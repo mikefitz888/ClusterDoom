@@ -71,6 +71,7 @@ void ResourceMine::renderGUI(){
     // Draw links to mining progress
     this->manager->getRenderManager()->setBlendModeAdditive();
     for (auto t : this->tower_gather) {
+		if (!t) continue;
         glm::vec2 midpoint = (this->position + t->getPosition())*0.5f;
         int dist = (int)glm::distance(this->position, t->getPosition());
 

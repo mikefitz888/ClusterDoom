@@ -7,7 +7,7 @@
 
 const unsigned int EMPEffect::DURATION = 1000;
 const unsigned int DisruptionEffect::DURATION = 1000;
-const double EMPEffect::MAX_RANGE = 120;
+const double EMPEffect::MAX_RANGE = 150;
 const double DisruptionEffect::EFFICIENCY_MODIFIER = 0.75;
 const double UnitHealEffect::MAX_RANGE = 120;
 const int UnitHealEffect::HEAL_STRENGTH = 8000;
@@ -15,19 +15,37 @@ const int UnitHealEffect::HEAL_STRENGTH = 8000;
 EMPEffect::EMPEffect(id_t id, manager::Manager* manager) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::EFFECT_EMP, manager)
 {
     ticks = DURATION;
+    this->setDepth(20);
 }
 
 void EMPEffect::render()
 {
+    float scale = MAX_RANGE / 150.0f;
+    this->manager->getRenderManager()->setActiveColour(255, 255, 255, (int)glm::clamp(255.0f * fadeout*0.50f, 0.0f, 255.0f));
+    this->manager->getResourceManager()->getTexture("emp_outer")->render(getX(), getY(), scale, scale, 0.0f);
 
+    float rot = (float)ticks*0.01f;
+    this->manager->getResourceManager()->getTexture("emp_inner")->render(getX(), getY(), scale, scale, rot);
+    this->manager->getResourceManager()->getTexture("emp_inner")->render(getX(), getY(), scale, scale, -rot);
+   // this->manager->getResourceManager()->getTexture("emp_inner")->render(getX(), getY(), scale, scale, rot + glm::pi<float>()/2);
+   // this->manager->getResourceManager()->getTexture("emp_inner")->render(getX(), getY(), scale, scale, -rot + glm::pi<float>() / 2);
+    this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
 }
 
 void EMPEffect::step()
 {
     ticks--;
-    if (ticks <= 0)
+    if (ticks > 0)
     {
-        destroySelf();
+        if (fadeout < 1.0f) {
+            fadeout += 0.025f;
+        }
+    } else {
+        if (fadeout >= 0.0f) {
+            fadeout -= 0.025f;
+        } else {
+            destroySelf();
+        }
     }
 }
 
@@ -59,8 +77,9 @@ UnitHealEffect::UnitHealEffect(id_t id, manager::Manager* manager) : GameObject(
 
 void UnitHealEffect::render()
 {
+    float scale = MAX_RANGE / 120.0f;
     this->manager->getRenderManager()->setActiveColour(255, 255, 255, (int)glm::clamp(255.0f * fadeout*0.5f, 0.0f, 255.0f));
-    this->manager->getResourceManager()->getTexture("healing_aura")->render(getX(), getY());
+    this->manager->getResourceManager()->getTexture("healing_aura")->render(getX(), getY(), scale, scale, 0.0f);
     this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
 }
 

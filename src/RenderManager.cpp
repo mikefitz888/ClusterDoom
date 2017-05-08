@@ -100,6 +100,8 @@ namespace graphics {
 
         // Attacker effects
         rm->textureLoad("healing_aura", "src/Resources/Textures/healing_aura.png")->setOriginCentre();
+        rm->textureLoad("emp_inner", "src/Resources/Textures/EMP_InnerLayer.png")->setOriginCentre();
+        rm->textureLoad("emp_outer", "src/Resources/Textures/EMP_OuterLayer.png")->setOriginCentre();
 
         /// Load Animated Textures
         //  Explosions

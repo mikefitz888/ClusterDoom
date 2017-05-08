@@ -8,7 +8,8 @@ class EMPEffect : public GameObject
 {
     const static unsigned int DURATION;
 
-    unsigned int ticks;
+    int ticks;
+    float fadeout = 0.0f;
 
 public:
     const static double MAX_RANGE;

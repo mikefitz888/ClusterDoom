@@ -64,18 +64,19 @@ namespace tower {
         if (current_target) {
             //float eff = requestEfficiency(cost_per_attack, 2.f);
 			float eff = game_controller->towerEfficiency(getPosition());
-            //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
-            //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
-            gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<float>(getX(), getY()));
-            smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
+            if (eff > 0.0f) {
+                //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
+                //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
+                gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_ELECTRICITY, Point<float>(getX(), getY()));
+                smartpointers::slave_ptr<ProjectileElectricity> elec = smartpointers::static_pointer_cast<ProjectileElectricity>(obj);
 
-            elec->setForkParent(this->getSharedPtr());
-            elec->setRange(max_range);
-            elec->setDamage((int)(eff * 20.0f));
-            elec->setTargetObject(current_target);
-			//elec->setDamage(damage);
-            timer = cooldown;
-            
+                elec->setForkParent(this->getSharedPtr());
+                elec->setRange(max_range);
+                elec->setDamage((int)(eff * 20.0f));
+                elec->setTargetObject(current_target);
+                //elec->setDamage(damage);
+                timer = cooldown;
+            }
         }
 
 

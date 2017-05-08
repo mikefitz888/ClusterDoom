@@ -37,9 +37,6 @@ namespace gameobject {
     Collision provides a number of utility functions
     for testing collisions between itself and other collision
     instances.
-
-
-
     */
     struct BoundingBox {
         int bbox_left, bbox_up, bbox_down, bbox_right;
@@ -107,10 +104,11 @@ namespace gameobject {
         TOKEN_MAGNETIC = 6,
         TOKEN_GLACIAL = 7,
         TOKEN_WINDY = 8,
-        EFFECT_EMP = 9,
-        EFFECT_DISRUPTION = 10,
-        EFFECT_HEAL = 11,
-        PLAYER_INSTANCE = 12
+        PLAYER_INSTANCE = 9,
+        EFFECT_EMP = 10,
+        EFFECT_DISRUPTION = 11,
+        EFFECT_HEAL = 12,
+        
     };
 
 
@@ -274,7 +272,7 @@ namespace gameobject {
 
         // NETWORK EVENTS
         virtual void writeNetworkUpdate(int event_id, Buffer &buffer) override;
-        virtual void recvNetworkInteraction(int event_id, Buffer &buffer) override;
+        virtual void recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) override;
 
         // CONTORL & DATA
         int distanceTo(smartpointers::slave_ptr<GameObject> other) const;

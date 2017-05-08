@@ -45,7 +45,7 @@ public:
 
     // Network events
     enum NetworkInteractionEvent { SPAWN_UNIT = 0 };
-    void recvNetworkInteraction(int event_id, Buffer &buffer) override;
+    void recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) override;
 };
 
 #endif

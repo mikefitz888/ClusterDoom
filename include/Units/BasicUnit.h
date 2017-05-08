@@ -38,7 +38,7 @@ namespace unit
 		enum BasicUnitInteractionEvents { SET_TARGET };
 
 		void writeNetworkUpdate(int event_id, Buffer &buffer) override;
-		void recvNetworkInteraction(int event_id, Buffer &buffer) override;
+		void recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) override;
     };
 }
 

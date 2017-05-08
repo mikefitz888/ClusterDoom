@@ -57,7 +57,7 @@ namespace gameobject {
         this->MotionComponent::motionStep();
     }
     void GameObject::writeNetworkUpdate(int event_id, Buffer &buffer) {}
-    void GameObject::recvNetworkInteraction(int event_id, Buffer &buffer) {}
+    void GameObject::recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) {}
 
     int GameObject::_destroySelf() {
         manager->destroy(this);

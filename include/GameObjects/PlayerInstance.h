@@ -27,7 +27,7 @@ private:
 
     // Currency
     int currency = 0;
-    int max_currency = 0;
+    int max_currency = 10;
 
     // Network instance handling
     NetworkClient* network_client_instance = nullptr;
@@ -35,11 +35,11 @@ private:
     bool destroy = false;
 
     // Networking and events
-    int send_currency_timer_max = 15;
+    int send_currency_timer_max = 30;
     int send_currency_timer = send_currency_timer_max;
 
     // Currency rewarding
-    int currency_reward_timer_max = 10;
+    int currency_reward_timer_max = 45;
     int currency_reward_timer = currency_reward_timer_max;
 
 public:

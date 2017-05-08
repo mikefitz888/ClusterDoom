@@ -44,6 +44,9 @@ namespace network {
         // Network update functions
         void sendInstanceCreate(int instance_id, int instance_super_type, int instance_sub_type, int x, int y);
         void sendInstanceDestroy(int instance_id);
+
+    public:
+        smartpointers::slave_ptr<PlayerInstance> getPlayerInstance();
     };
 
     /// Network Manager
@@ -178,7 +181,7 @@ namespace network {
 				  key events 
         */
         virtual void writeNetworkUpdate(int event_id, Buffer &buffer) = 0;
-        virtual void recvNetworkInteraction(int event_id, Buffer &buffer) = 0;
+        virtual void recvNetworkInteraction(int event_id, Buffer &buffer, NetworkClient* interaction_connection_client) = 0;
 
     protected:
 	

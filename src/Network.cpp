@@ -377,7 +377,7 @@ namespace network {
                         // Check if object exists
                         gameobject_ptr obj = manager->getObjectById(object_id);
                         if (obj) {
-                            obj->recvNetworkInteraction(event_id, recv_buffer);
+                            obj->recvNetworkInteraction(event_id, recv_buffer, this);
                         }
                     } break;
 
@@ -470,6 +470,10 @@ namespace network {
 
         // Remove connection from the Networking main array
         network_manager->removeConnection(this);
+    }
+
+    smartpointers::slave_ptr<PlayerInstance> NetworkClient::getPlayerInstance() {
+        return this->player_instance;
     }
 
     //// -------------------------------------------------------------------------------- //////

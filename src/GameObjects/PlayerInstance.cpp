@@ -22,7 +22,7 @@ void PlayerInstance::step() {
         destroy = true;
     }
 
-    std::cout << "Network player handler: " << this->network_player_id << std::endl;
+    //std::cout << "Network player handler: " << this->network_player_id << std::endl;
 
     // Existence check
     if (destroy) {
@@ -73,6 +73,9 @@ int PlayerInstance::getAvailableCurrency() {
 
 void PlayerInstance::giveCurrency(int amount) {
     this->currency += amount;
+    if (this->currency > this->max_currency) {
+        this->currency = this->max_currency;
+    }
 }
 
 // Control and settings
@@ -87,6 +90,7 @@ void PlayerInstance::writeNetworkUpdate(int event_id, Buffer &buffer) {
         case SEND_CURRENCY:
             buffer << (unsigned int)currency;
             buffer << (unsigned int)max_currency;
+            std::cout << "SENDING CURRENCY " << currency << std::endl;
             break;
     }
 }

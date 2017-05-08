@@ -2,6 +2,8 @@
 #include "../../include/manager.h"
 #include "../../include/ResourceManager.h"
 #include "../../include/gamecontroller.h"
+#include "../../include/network/Network.h"
+#include "../../include/GameObjects/PlayerInstance.h"
 
 //using manager::Manager;
 
@@ -105,21 +107,37 @@ void Spawn::beginWave() {
 Spawn::unit_spawn::unit_spawn(unit::TYPE type, int d) : unit_type(type), delay(d) {}
 
 // NETWORK EVENTS
-void Spawn::recvNetworkInteraction(int event_id, Buffer &buffer) {
+void Spawn::recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) {
 
     // Switch on events
     switch (event_id) {
         case NetworkInteractionEvent::SPAWN_UNIT:
+
+            // Interaction information
             unsigned int unit_type = 0;
             int target = -1;
             buffer >> unit_type;
             buffer >> target;
             std::cout << "SPAWN RECEIVED";
 
-            // If multiplayer mode, spawn units
-            if (this->manager->getGameController()->getCurrentGameMode() == gamecontroller::GameMode::MULTI_PLAYER) {
-                smartpointers::slave_ptr<unit::Unit> unit = smartpointers::static_pointer_cast<unit::Unit>(manager->getGameController()->spawnUnitAt(getX(), getY(), (unit::TYPE)unit_type));
-                if (target != -1) game_controller->unitTargetMine(unit->getID(), target);
+            // Determine unit cost
+            int unit_cost = 10;
+
+
+
+            // Get spawner
+            smartpointers::slave_ptr<PlayerInstance> player = interaction_connection_client->getPlayerInstance();
+
+            if (player != nullptr && player) {
+                if (player->getAvailableCurrency() >= unit_cost) {
+                    if (player->useCurrency(unit_cost)) {
+                        // If multiplayer mode, spawn units
+                        if (this->manager->getGameController()->getCurrentGameMode() == gamecontroller::GameMode::MULTI_PLAYER) {
+                            smartpointers::slave_ptr<unit::Unit> unit = smartpointers::static_pointer_cast<unit::Unit>(manager->getGameController()->spawnUnitAt(getX(), getY(), (unit::TYPE)unit_type));
+                            if (target != -1) game_controller->unitTargetMine(unit->getID(), target);
+                        }
+                    }
+                }
             }
             break;
     }

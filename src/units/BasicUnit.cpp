@@ -221,7 +221,7 @@ namespace unit {
             break;
         }
     }
-    void BasicUnit::recvNetworkInteraction(int event_id, Buffer &buffer) {
+    void BasicUnit::recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) {
         // TODO: BasicUnit interaction events
     }
 }

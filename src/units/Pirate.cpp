@@ -37,7 +37,7 @@ namespace unit {
 
 		health = 3000;
 		maxHealth = 3000;
-		unitSpeed = 0.4f+glm::linearRand(0.0f, 0.35f);
+		unitSpeed = 0.35f+glm::linearRand(0.0f, 0.25f);
 
        /* Path path;
         path.push_back(vec2(100, 100));

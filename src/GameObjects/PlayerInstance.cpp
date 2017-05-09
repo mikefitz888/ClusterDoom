@@ -90,7 +90,49 @@ void PlayerInstance::writeNetworkUpdate(int event_id, Buffer &buffer) {
         case SEND_CURRENCY:
             buffer << (unsigned int)currency;
             buffer << (unsigned int)max_currency;
-            std::cout << "SENDING CURRENCY " << currency << std::endl;
+          //  std::cout << "SENDING CURRENCY " << currency << std::endl;
+            break;
+    }
+}
+
+void PlayerInstance::recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) {
+    switch (event_id) {
+        case SPAWN_ABILITY:
+            int target_x, target_y, ability;
+            buffer >> ability;
+            buffer >> target_x;
+            buffer >> target_y;
+            
+
+            bool can_spawn = false;
+            gameobject::OBJECT_TYPE ability_type = gameobject::OBJECT_TYPE::EFFECT_EMP;
+
+            if (ability >= 1 && ability <= 3) {
+                switch (ability) {
+                    case 1:
+                        ability_type = gameobject::OBJECT_TYPE::EFFECT_EMP;
+                        break;
+
+                    case 2:
+                        ability_type = gameobject::OBJECT_TYPE::EFFECT_HEAL;
+                        break;
+
+                    case 3:
+                        ability_type = gameobject::OBJECT_TYPE::EFFECT_DISRUPTION;
+                        break;
+
+                }
+                can_spawn = true;
+            }
+            
+            // Check if we have enough currency
+
+            // Spawn ability
+            if (can_spawn) {
+                manager->getGameController()->spawnObjectAt(ability_type, target_x, target_y);
+            }
+
+            std::cout << "AWDAWDUAWHDIAWHDIUAWDHIUAWHDI " << target_x << " " << target_y << std::endl;
             break;
     }
 }

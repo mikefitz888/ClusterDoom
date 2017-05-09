@@ -27,7 +27,7 @@ private:
 
     // Currency
     int currency = 0;
-    int max_currency = 10;
+    int max_currency = 100;
 
     // Network instance handling
     NetworkClient* network_client_instance = nullptr;
@@ -63,7 +63,11 @@ public:
 
     // Networking
     void writeNetworkUpdate(int event_id, Buffer &buffer) override;
+    void recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) override;
 
+    enum PlayerReceiveEvents : unsigned int {
+        SPAWN_ABILITY=0x00
+    };
     enum PlayerNetworkEvents : unsigned int{
         SEND_CURRENCY=0x00
     };

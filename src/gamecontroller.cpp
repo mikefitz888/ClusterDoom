@@ -7,6 +7,7 @@
 #include "../include/Towers/Base.h"
 #include "../include/Towers/SpecialTower.h"
 #include "../include/AttackerEffects.h"
+#include "../include/GameObjects/PlayerInstance.h"
 
 namespace gamecontroller {
 
@@ -1117,10 +1118,15 @@ namespace gamecontroller {
     }
 
     void GameController::unitTargetMine(id_t unit_id, id_t mine_id) {
-        auto unit = smartpointers::static_pointer_cast<unit::Unit>(manager->getObjectById(unit_id));
-        auto mine = smartpointers::static_pointer_cast<ResourceMine>(manager->getObjectById(mine_id));
-        if (unit && mine) {
-            unit->targetMine(mine);
+        gameobject_ptr o_obj = manager->getObjectById(unit_id);
+        gameobject_ptr o_mine = manager->getObjectById(mine_id);
+
+        if (o_obj != nullptr && o_mine != nullptr && o_obj && o_mine) {
+            auto unit_p = smartpointers::static_pointer_cast<unit::Unit>(o_obj);
+            auto mine_p = smartpointers::static_pointer_cast<ResourceMine>(o_mine);
+            if (unit_p && mine_p) {
+                unit_p->targetMine(mine_p);
+            }
         }
     }
 
@@ -1130,5 +1136,19 @@ namespace gamecontroller {
 
     GameMode GameController::getCurrentGameMode() {
         return this->current_gamemode;
+    }
+
+    void GameController::unitsMineDestroyed() {
+        // For all players
+        for (auto obj : manager->getObjects()) {
+            if (obj && obj->getSuperType() == gameobject::TYPE::OBJECT &&
+                obj->getSubType() == gameobject::OBJECT_TYPE::PLAYER_INSTANCE) {
+                smartpointers::slave_ptr<PlayerInstance> plyr = smartpointers::static_pointer_cast<PlayerInstance>(obj);
+                if (plyr) {
+                    plyr->increaseMaxCurrency(8);
+                    plyr->giveCurrency(5);
+                }
+            }
+        }
     }
 }

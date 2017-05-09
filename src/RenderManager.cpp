@@ -164,7 +164,7 @@ namespace graphics {
         world_matrix = glm::mat4(1.0);
 
         // Create Camera
-        camera = new GCameraOrtho(1280, 720, this);
+        camera = new GCameraOrtho(1280.0f, 720.0f, this);
 
         // Load resources
         this->loadResources();
@@ -190,7 +190,7 @@ namespace graphics {
         ctx.minorVersion = 1;
 #endif
 
-        fullscreen = false;
+        fullscreen = true;
         if (fullscreen) {
             width = sf::VideoMode::getDesktopMode().width;
             height = sf::VideoMode::getDesktopMode().height;
@@ -294,11 +294,11 @@ namespace graphics {
     }
 
     int RenderManager::getWindowHeight() const {
-        return height;
+        return this->window->getSize().y;
     }
 
     int RenderManager::getWindowWidth() const {
-        return width;
+        return this->window->getSize().x;
     }
 
 

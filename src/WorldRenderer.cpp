@@ -57,9 +57,10 @@ namespace worldrenderer {
         // Render Background
         textures[SCREEN::NONE]->render(0, 0);
 
-        float width = (float)render_manager->getWindowWidth();
-        float height = (float)render_manager->getWindowHeight();
-        float sf = width / 1920.0f;
+        float width  = (float)this->manager->getRenderManager()->getWindowWidth();
+        float height = (float)this->manager->getRenderManager()->getWindowHeight();
+        float sf = width / 1920.0f; //(1280.0f / 1920.0f) / (1366.0f / 1280.0f);//width / 1920.0f;
+        //std::cout << "WIDTH: " << width << std::endl;
 
         // If in-game, render obejcts
         if (!display_screen) {

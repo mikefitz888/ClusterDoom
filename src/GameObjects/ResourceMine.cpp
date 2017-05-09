@@ -57,6 +57,9 @@ void ResourceMine::step() {
 
     } else {
         // No resource available
+        if (last_hit_unit) {
+            this->manager->getGameController()->unitsMineDestroyed();
+        }
         destroySelf();
     }
 
@@ -113,7 +116,8 @@ void ResourceMine::release() {
     }
 }
 
-int ResourceMine::takeResource(int amt) {
+int ResourceMine::takeResource(bool isUnit, int amt) {
+    this->last_hit_unit = isUnit;
     int removed = std::min(current_resource, amt);
     current_resource -= removed;
     return removed;

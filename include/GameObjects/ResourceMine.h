@@ -24,6 +24,8 @@ private:
     int starting_resource;
     int current_resource;
 
+    bool last_hit_unit = false;
+
 public:
     // Constructor
     ResourceMine(id_t id, manager::Manager* m);
@@ -35,7 +37,7 @@ public:
     virtual void release() override;
     virtual void step() override;
 
-    int takeResource(int amt = 1);
+    int takeResource(bool isUnit, int amt = 1);
 };
 
 class ResourceMineSparkle {

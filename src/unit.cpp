@@ -145,7 +145,7 @@ namespace unit {
                 MINING FUNCTIONALITY
             */
             if (distanceTo(mine->getPosition()) < 100) {
-                mine->takeResource();
+                mine->takeResource(true);
             }
         } else {
             this->setDestination(target->getPosition(), unitSpeed);

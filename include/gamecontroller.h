@@ -121,7 +121,7 @@ namespace gamecontroller {
         void restart(); //Not yet implemented, clears towers + units
         Matching stableMatching(tower::TYPE type, std::vector<Point<float>>& detections);
         int getWeight(int x, int y);
-
+        void unitsMineDestroyed();
         //GameState Modifiers
         GameState getGameState();
         GameState stopGame();

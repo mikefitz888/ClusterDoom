@@ -130,15 +130,19 @@ void Spawn::recvNetworkInteraction(int event_id, Buffer &buffer, network::Networ
 
                 // Determine unit cost
                 int unit_cost = 9999;
+                int unit_num = 0;
                 switch (unit_type) {
                     case unit::TYPE::BASIC:
                         unit_cost = player->ROBOT_COST;
+                        unit_num = 3;
                         break;
                     case unit::TYPE::PIRATE:
                         unit_cost = player->PIRATE_COST;
+                        unit_num = 4;
                         break;
                     case unit::TYPE::WIZARD:
                         unit_cost = player->WIZARD_COST;
+                        unit_num = 2;
                         break;
                 }
 
@@ -147,8 +151,11 @@ void Spawn::recvNetworkInteraction(int event_id, Buffer &buffer, network::Networ
                     if (player->useCurrency(unit_cost)) {
                         // If multiplayer mode, spawn units
                         if (this->manager->getGameController()->getCurrentGameMode() == gamecontroller::GameMode::MULTI_PLAYER) {
-                            smartpointers::slave_ptr<unit::Unit> unit = smartpointers::static_pointer_cast<unit::Unit>(manager->getGameController()->spawnUnitAt(getX(), getY(), (unit::TYPE)unit_type));
-                            if (target != -1) game_controller->unitTargetMine(unit->getID(), target);
+                            
+                            for (int r = 0; r < unit_num; r++) {
+                                smartpointers::slave_ptr<unit::Unit> unit = smartpointers::static_pointer_cast<unit::Unit>(manager->getGameController()->spawnUnitAt(getX(), getY(), (unit::TYPE)unit_type));
+                                if (target != -1) game_controller->unitTargetMine(unit->getID(), target);
+                            }
                         }
                     }
                 }

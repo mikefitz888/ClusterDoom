@@ -74,7 +74,7 @@ void UnitHealEffect::step()
             fadeout += 0.025f;
         }
         for (auto unit : manager->getGameController()->getUnitsInRange(getPosition(), MAX_RANGE)) {
-            unit->heal(ceil((float)HEAL_STRENGTH/(float)healing_timer_max));
+            if (unit) unit->heal(ceil((float)HEAL_STRENGTH/(float)healing_timer_max));
         }
     } else {
         if (fadeout >= 0) {

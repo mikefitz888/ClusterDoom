@@ -171,7 +171,7 @@ namespace unit {
 
         int dist;
         for (auto tower : towers) {
-            if (tower->getHealth() > 0) {
+            if (tower && tower->getHealth() > 0) {
                 dist = distanceTo(smartpointers::dynamic_pointer_cast<GameObject>(tower));
                 //printf("dist: %d, minDist: %d\n", dist, minDist);
                 if (dist < minDist) {

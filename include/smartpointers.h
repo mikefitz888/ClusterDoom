@@ -345,7 +345,6 @@ namespace smartpointers {
         }
 
         ~slave_ptr() {
-            // Something seems fishy here, surely we must deallocate if we are some -ve number?
             if (this->validity) {
                 if (*this->validity == 1  || *this->validity == 0) delete this->validity;
                 else if (*this->validity > 0) --*this->validity;

@@ -45,6 +45,7 @@ namespace tower {
     }
 
     void Base::attacked(gameobject_ptr aggressor) {
+        if (!aggressor) return;
         //gameobject::OBJECT_TYPE::PROJECTILE_LASER
         if (exuhporoshun.find(aggressor->getSuperType()) != exuhporoshun.end() ) {
             //exuhporoshun[(unit::TYPE) aggressor->getSubType()]->render()

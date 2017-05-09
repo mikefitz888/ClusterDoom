@@ -190,7 +190,7 @@ namespace unit {
 
 	void Pirate::onCollision(gameobject_ptr other) {
 		// Push away from other objects:
-
+        if (!other) return;
 		switch (other->getSuperType()) {
 			// COLLISION WITH OTHER INSTANCES
 			case gameobject::TYPE::UNIT: {

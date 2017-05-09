@@ -48,7 +48,7 @@ void SpecialToken::step() {
     auto towers = this->manager->getGameController()->getTowersInRange(this->position, MAX_PICKUP_RANGE);
     for (auto tower : towers)
     {
-        if (tower->getSubType() == tower::TYPE::SPECIAL)
+        if (tower && tower->getSubType() == tower::TYPE::SPECIAL)
         {
             auto specialTower = smartpointers::static_pointer_cast<tower::SpecialTower>(tower);
             switch (type)

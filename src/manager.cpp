@@ -207,9 +207,9 @@ namespace manager {
             if (object) {
                 int id         = object->getID();
                 int super_type = object->getSuperType();
-				int sub_type   = object->getSubType();
-				int x          = (int) object->getX();
-				int y		   = (int) object->getY();
+                int sub_type   = object->getSubType();
+                int x          = (int) object->getX();
+                int y          = (int) object->getY();
                 network_manager->sendInstanceCreate(network_client, id, super_type, sub_type, x, y);
             }
         }
@@ -241,12 +241,12 @@ namespace manager {
         render_manager->setRenderParent(world_renderer);
         render_manager->init(this);
 
-		// Create splitmap
-		const int splitmap_cellsize = 64;
-		int splitmap_width, splitmap_height;
-		splitmap_width  = render_manager->getWindowWidth() / splitmap_cellsize;
-		splitmap_height = render_manager->getWindowHeight() / splitmap_cellsize;
-		splitmap		= new Splitmap(splitmap_cellsize, splitmap_width, splitmap_height);
+        // Create splitmap
+        const int splitmap_cellsize = 64;
+        int splitmap_width, splitmap_height;
+        splitmap_width  = render_manager->getWindowWidth() / splitmap_cellsize;
+        splitmap_height = render_manager->getWindowHeight() / splitmap_cellsize;
+        splitmap        = new Splitmap(splitmap_cellsize, splitmap_width, splitmap_height);
     }
 
     bool Manager::render() const {

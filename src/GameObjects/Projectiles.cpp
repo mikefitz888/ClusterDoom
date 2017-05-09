@@ -178,7 +178,6 @@ void ProjectileLaser::release() {};
 
 void ProjectileLaser::onCollision(gameobject_ptr other) {
     if (!other) return;
-    std::cout << "COLLISIONS: " << collisions << "\n";
     if (other->getSuperType() == collision_type) {
         if (collision_type == gameobject::TYPE::UNIT && collision_set.find(other->getID()) == collision_set.end()) {
             unit_ptr oth = smartpointers::static_pointer_cast<unit::Unit>(other);

@@ -156,3 +156,8 @@ void PlayerInstance::recvNetworkInteraction(int event_id, Buffer &buffer, networ
 void PlayerInstance::sendCosts() {
     sendNetworkUpdate(SEND_COSTS);
 }
+
+void PlayerInstance::increaseMaxCurrency(int amount) {
+    this->max_currency += amount;
+    this->max_currency = glm::clamp(this->max_currency, 0, this->max_currency_limit);
+}

@@ -26,7 +26,8 @@ class PlayerInstance : public GameObject {
 private:
     // Currency
     int currency = 0;
-    int max_currency = 100;
+    int max_currency = 10;
+    int max_currency_limit = 50;
 
     // Network instance handling
     NetworkClient* network_client_instance = nullptr;
@@ -71,6 +72,7 @@ public:
     bool useCurrency(int amount);
     int  getAvailableCurrency();
     void giveCurrency(int amount);
+    void increaseMaxCurrency(int amount);
 
     // Control and setting
     void setNetworkInstanceID(NetworkClient* client, int network_player_id);

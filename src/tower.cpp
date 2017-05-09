@@ -60,10 +60,30 @@ namespace tower {
 			render_manager->setActiveColour(255, 0, 0, (char)(255.0 * mod / 2));
 		}
 
+        // --- Disabled flash ---
+        if (disabled) {
+            flash_timer--;
+            if (flash_timer <= 0) {
+                flash_timer = flash_timer_max;
+                flash = !flash;
+            }
+        } else {
+            flash = false;
+        }
+
+        // --- Render circular bar ---
+        Colour col = RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(127, 0, 0, 255), game_controller->towerEfficiency(getPosition()) * 2 - 1);
+        if (flash) {
+            col = Colour(25, 25, 25, 255);
+        }
+        if (disabled) {
+            col.a = 75;
+        }
+
 		RenderUtils::render_circular_health((int) getXr(), (int) getYr(), (int)health, (int)max_health,
             //RenderUtils::colour_blend(
             //    Colour(55, 55, 55, 255),
-                RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(127, 0, 0, 255), game_controller->towerEfficiency(getPosition())*2-1)
+                col
             //    1.0f-std::min((float)game_controller->availableWealth() / max_power, 1.0f)
             //)
         );

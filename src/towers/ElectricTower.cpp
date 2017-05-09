@@ -47,6 +47,10 @@ namespace tower {
             sound_cooldown = 10;
         }
 
+        // Get efficiency
+        float eff = game_controller->towerEfficiency(getPosition());
+        disabled = (eff <= 0.0f);
+
         if (timer) {
             timer--; 
             return;
@@ -63,7 +67,7 @@ namespace tower {
         sound_cooldown--;
         if (current_target) {
             //float eff = requestEfficiency(cost_per_attack, 2.f);
-			float eff = game_controller->towerEfficiency(getPosition());
+			
             if (eff > 0.0f) {
                 //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
                 //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());

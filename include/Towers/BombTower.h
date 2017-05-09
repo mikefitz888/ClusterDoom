@@ -16,6 +16,9 @@ namespace tower
         //float damage = 350.0f;
         unit_ptr current_target = nullptr;
         std::vector<gameobject_ptr> bomb_queue;
+
+
+
     public:
         BombTower(id_t key, Manager* m);
         void init() override;

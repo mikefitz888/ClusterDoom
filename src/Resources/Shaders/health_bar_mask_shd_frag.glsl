@@ -21,5 +21,5 @@ void main(void) {
 	}
 
     out_Color = pass_Color*drawColour*base;
-	out_Color.a = alpha_fac*base.a;
+	out_Color.a = alpha_fac*base.a*drawColour.a;
 }

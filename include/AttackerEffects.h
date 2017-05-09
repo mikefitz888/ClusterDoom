@@ -23,8 +23,9 @@ class DisruptionEffect : public GameObject
 {
     const static double EFFICIENCY_MODIFIER;
     const static unsigned int DURATION;
+    float fadeout = 0.0f;
 
-    unsigned int ticks;
+    int ticks;
 
 public:
     DisruptionEffect(id_t id, manager::Manager* manager);

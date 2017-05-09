@@ -36,6 +36,13 @@ namespace tower {
 		float lastY;
 
         std::vector<unit_ptr> units;
+
+
+        // Disabled flash
+        bool disabled = false;
+        bool flash = false;
+        const int flash_timer_max = 15;
+        int flash_timer = flash_timer_max;
     public:
         Tower(id_t id, TYPE tower_type, Manager* m);
         virtual void init() override;

@@ -38,11 +38,11 @@ void EMPEffect::step()
     if (ticks > 0)
     {
         if (fadeout < 1.0f) {
-            fadeout += 0.025f;
+            fadeout += 0.01f;
         }
     } else {
         if (fadeout >= 0.0f) {
-            fadeout -= 0.025f;
+            fadeout -= 0.01f;
         } else {
             destroySelf();
         }
@@ -52,11 +52,14 @@ void EMPEffect::step()
 DisruptionEffect::DisruptionEffect(id_t id, manager::Manager* manager) : GameObject(id, gameobject::TYPE::OBJECT, gameobject::OBJECT_TYPE::EFFECT_DISRUPTION, manager)
 {
     ticks = DURATION;
+    this->setDepth(-10);
 }
 
 void DisruptionEffect::render()
 {
-
+    this->manager->getRenderManager()->setActiveColour(255, 255, 255, (int)glm::clamp(255.0f * fadeout*0.20f, 0.0f, 255.0f));
+    this->manager->getResourceManager()->getTexture("red")->render(0, 0, this->manager->getRenderManager()->getWindowWidth(), this->manager->getRenderManager()->getWindowHeight(), 0.0f);
+    this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
 }
 
 void DisruptionEffect::step()
@@ -66,7 +69,16 @@ void DisruptionEffect::step()
     if (ticks <= 0)
     {
         manager->getGameController()->setEfficiencyModifier(1.0);
-        destroySelf();
+
+        if (fadeout >= 0.0f) {
+            fadeout -= 0.01f;
+        } else {
+            destroySelf();
+        }
+    } else {
+        if (fadeout < 1.0f) {
+            fadeout += 0.01f;
+        }
     }
 }
 
@@ -90,14 +102,14 @@ void UnitHealEffect::step()
     if (healing_timer > 0) {
 
         if (fadeout < 1.0f) {
-            fadeout += 0.025f;
+            fadeout += 0.01f;
         }
         for (auto unit : manager->getGameController()->getUnitsInRange(getPosition(), MAX_RANGE)) {
             if (unit) unit->heal(ceil((float)HEAL_STRENGTH/(float)healing_timer_max));
         }
     } else {
         if (fadeout >= 0) {
-            fadeout -= 0.025f;
+            fadeout -= 0.01f;
         } else {
             destroySelf();
         }

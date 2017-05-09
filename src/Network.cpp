@@ -325,6 +325,9 @@ namespace network {
                         socket->setBlocking(true);
                         socket->send(send_buffer.getPtr(), size);
                         socket->setBlocking(false);
+
+                        // SEND COSTS
+                        this->player_instance->sendCosts();
                     }
                 
                 }

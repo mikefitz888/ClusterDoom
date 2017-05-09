@@ -120,8 +120,6 @@ void Spawn::recvNetworkInteraction(int event_id, Buffer &buffer, network::Networ
             buffer >> target;
             std::cout << "SPAWN RECEIVED";
 
-            // Determine unit cost
-            int unit_cost = 10;
 
 
 
@@ -129,6 +127,22 @@ void Spawn::recvNetworkInteraction(int event_id, Buffer &buffer, network::Networ
             smartpointers::slave_ptr<PlayerInstance> player = interaction_connection_client->getPlayerInstance();
 
             if (player != nullptr && player) {
+
+                // Determine unit cost
+                int unit_cost = 9999;
+                switch (unit_type) {
+                    case unit::TYPE::BASIC:
+                        unit_cost = player->ROBOT_COST;
+                        break;
+                    case unit::TYPE::PIRATE:
+                        unit_cost = player->PIRATE_COST;
+                        break;
+                    case unit::TYPE::WIZARD:
+                        unit_cost = player->WIZARD_COST;
+                        break;
+                }
+
+                // If we have enough money, spawn
                 if (player->getAvailableCurrency() >= unit_cost) {
                     if (player->useCurrency(unit_cost)) {
                         // If multiplayer mode, spawn units

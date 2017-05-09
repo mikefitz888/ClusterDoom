@@ -58,7 +58,7 @@ namespace tower {
         //float power = requestEfficiency(30.f /*Maximum power*/, 10.f /*minimum power*/);
 		float power = game_controller->towerEfficiency(getPosition())*2.0f;
 
-        if (current_target) {
+        if (current_target && power > 0.0f) {
             //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
             //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
 			smartpointers::slave_ptr<ProjectileLaser> obj = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY())));

@@ -176,7 +176,7 @@ namespace gamecontroller {
             */
             case GameState::START:
             {
-                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return) && !pressed) {
                     startGame();
 
                     if (!initial_spawns_occurred) {
@@ -202,13 +202,40 @@ namespace gamecontroller {
 
                         // Add notifier
                         spawnObjectAt(gameobject::OBJECT_TYPE::GAME_STATE_NOTIFIER, 0, 0);
+
+                        // Move into running state
+                        this->current_state = GameState::RUNNING;
                     }
 
                     frame_clock = 0;
                 } else {
+                    if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) {
+                        pressed = false;
+                    }
                     return true;
                 }
-            }
+            } break;
+
+            /*
+                TUTORIAL SCREEN
+                -----------------------------------
+                This is the game state for when the game is running.
+                All gameobject simulation, processing and rendering should be done when this state is live.
+             */
+            /*case GameState::PRE_GAME_TUTORIAL_SCREEN:
+            {
+
+                // If timer <= 0, goto game start
+                tutorial_screen_timer--;
+                if (tutorial_screen_timer <= 0) {
+                    tutorial_screen_timer = tutorial_screen_timer_max;
+                    this->current_state = GameState::START;
+                }
+
+
+            } break;*/
+
+
 
             /*
                 RUNNING STATE
@@ -490,8 +517,9 @@ namespace gamecontroller {
 
                         // Set gamemode to single player
                         current_gamemode = GameMode::SINGLE_PLAYER;
-
+                        pressed = true;
                         // Move into start state:
+                      //  tutorial_screen_timer = tutorial_screen_timer_max;
                         this->current_state = GameState::START;
 
                     }
@@ -512,8 +540,9 @@ namespace gamecontroller {
 
                         // Set gamemode to multiplayer
                         current_gamemode = GameMode::MULTI_PLAYER;
-
+                        pressed = true;
                         // Move into start state:
+                       // tutorial_screen_timer = tutorial_screen_timer_max;
                         this->current_state = GameState::START;
                     }
                 }

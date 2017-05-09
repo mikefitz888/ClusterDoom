@@ -44,12 +44,16 @@ namespace unit {
     }
 
     Wizard::~Wizard() {
-        this->manager->getAudioManager()->playSound("wizard_death");
+        
     }
 
     void Wizard::step() {
 
 		if (dead) {
+            if (dead != prev_dead) {
+                this->manager->getAudioManager()->playSound("wizard_death");
+                prev_dead = dead;
+            }
 			if (animationProgress >= 15.0f) {
 				destroySelf();
 			}

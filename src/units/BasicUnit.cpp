@@ -16,7 +16,7 @@ namespace unit {
     }
 
     BasicUnit::~BasicUnit() {
-        this->manager->getAudioManager()->playSound("robot_death");
+        
     }
 
     void BasicUnit::init() {
@@ -48,6 +48,10 @@ namespace unit {
         Unit::step();
 
 		if (dead) {
+            if (dead != prev_dead) {
+                this->manager->getAudioManager()->playSound("robot_death");
+                prev_dead = dead;
+            }
 			if (animationProgress >= 15.0f) {
 				destroySelf();
 			}

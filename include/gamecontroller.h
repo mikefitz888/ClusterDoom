@@ -37,7 +37,8 @@ namespace gamecontroller {
                                     LOSE,
                                     MAIN_MENU,
                                     MENU_LOBBY_SP,
-                                    MENU_LOBBY_MP};
+                                    MENU_LOBBY_MP/*,
+                                    PRE_GAME_TUTORIAL_SCREEN*/};
 
     enum GameMode : unsigned int { SINGLE_PLAYER = 0, MULTI_PLAYER = 1};
 
@@ -62,7 +63,7 @@ namespace gamecontroller {
         //Fixed tile dimensions
 
         TileNode nodes[TILE_W * TILE_H];
-
+        bool pressed = false;
         
         GameState current_state = GameState::MAIN_MENU;
         GameMode  current_gamemode = GameMode::SINGLE_PLAYER;
@@ -89,6 +90,7 @@ namespace gamecontroller {
         int wave = 0;
         int scenario = -1;
         float tower_efficiency = 0;
+        
 
         // Resource spawning
         const int resource_spawn_timer_max = 1500;

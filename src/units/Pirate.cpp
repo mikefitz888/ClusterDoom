@@ -16,12 +16,7 @@ namespace unit {
     }
 
     Pirate::~Pirate() {
-        int rand_res = rand() % 2;
-        if (rand_res == 0) {
-            this->manager->getAudioManager()->playSound("pirate_death_1");
-        } else if (rand_res == 1) {
-            this->manager->getAudioManager()->playSound("pirate_death_2");
-        }
+        
     }
 
     void Pirate::init(){
@@ -50,6 +45,15 @@ namespace unit {
     void Pirate::step() {
 
 		if (dead) {
+            if (dead != prev_dead) {
+                int rand_res = rand() % 2;
+                if (rand_res == 0) {
+                    this->manager->getAudioManager()->playSound("pirate_death_1");
+                } else if (rand_res == 1) {
+                    this->manager->getAudioManager()->playSound("pirate_death_2");
+                }
+                prev_dead = dead;
+            }
 			if (animationProgress >= 15.0f) {
 				destroySelf();
 			}

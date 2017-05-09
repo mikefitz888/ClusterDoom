@@ -98,6 +98,9 @@ namespace graphics {
         rm->textureLoad("btn_defenders_vs_ai", "src/Resources/Textures/Menu/btn_def_vs_ai.png");
         rm->textureLoad("btn_defenders_vs_att", "src/Resources/Textures/Menu/btn_def_vs_att.png");
 
+        // Tip screen
+        rm->textureLoad("tip_screen", "src/Resources/Textures/tip_screen.png")->setOriginCentre();
+
         // Attacker effects
         rm->textureLoad("healing_aura", "src/Resources/Textures/healing_aura.png")->setOriginCentre();
         rm->textureLoad("emp_inner", "src/Resources/Textures/EMP_InnerLayer.png")->setOriginCentre();

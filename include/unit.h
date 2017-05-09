@@ -38,6 +38,7 @@ namespace unit {
         graphics::Texture* unit_shadow, *unit_ice;
 
 		bool dead = false;
+        bool prev_dead = false;
 
     public:
         Unit(id_t id, TYPE unit_type, Manager* m);

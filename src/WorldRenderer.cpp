@@ -17,7 +17,7 @@ namespace worldrenderer {
 
 
         textures[SCREEN::NONE] = manager->getResourceManager()->getTexture("background");
-        textures[SCREEN::GAME_START] = manager->getResourceManager()->getTexture("begin");
+        textures[SCREEN::GAME_START] = manager->getResourceManager()->getTexture(/*"begin"*/"tip_screen");
         textures[SCREEN::GAME_LOSE] = manager->getResourceManager()->getTexture("lose");
         textures[SCREEN::GAME_WIN] = manager->getResourceManager()->getTexture("win");
         textures[SCREEN::MAIN_MENU] = manager->getResourceManager()->getTexture("main_menu_bg");

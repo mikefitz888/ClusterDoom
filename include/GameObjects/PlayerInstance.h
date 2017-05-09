@@ -24,10 +24,9 @@ using network::NetworkClient;
 class PlayerInstance : public GameObject {
 
 private:
-
     // Currency
     int currency = 0;
-    int max_currency = 10;
+    int max_currency = 100;
 
     // Network instance handling
     NetworkClient* network_client_instance = nullptr;
@@ -43,6 +42,21 @@ private:
     int currency_reward_timer = currency_reward_timer_max;
 
 public:
+    // ---------- COSTS & BALANCE ---------- //
+    /*
+    All of these values are automatically synced to
+    the app upon its connection.
+    This way, we can modify the balance entirely on
+    the server side.
+    */
+    const int ROBOT_COST = 5;
+    const int WIZARD_COST = 2;
+    const int PIRATE_COST = 3;
+    const int EMP_COST = 40;
+    const int DISRUPT_COST = 25;
+    const int REGEN_COST = 15;
+    // -------------------------------------- //
+
     // Constructor
     PlayerInstance(id_t id, manager::Manager* m);
 
@@ -61,11 +75,19 @@ public:
     // Control and setting
     void setNetworkInstanceID(NetworkClient* client, int network_player_id);
 
+    // Send costs
+    void sendCosts();
+
     // Networking
     void writeNetworkUpdate(int event_id, Buffer &buffer) override;
+    void recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) override;
 
+    enum PlayerReceiveEvents : unsigned int {
+        SPAWN_ABILITY=0x00
+    };
     enum PlayerNetworkEvents : unsigned int{
-        SEND_CURRENCY=0x00
+        SEND_CURRENCY=0x00,
+        SEND_COSTS=0x01
     };
 };
 

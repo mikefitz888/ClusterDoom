@@ -13,7 +13,7 @@ PlayerInstance::PlayerInstance(id_t id, manager::Manager* m) : GameObject(id, ga
 }
 
 void PlayerInstance::init() {
-
+    
 }
 
 void PlayerInstance::step() {
@@ -90,7 +90,69 @@ void PlayerInstance::writeNetworkUpdate(int event_id, Buffer &buffer) {
         case SEND_CURRENCY:
             buffer << (unsigned int)currency;
             buffer << (unsigned int)max_currency;
-            std::cout << "SENDING CURRENCY " << currency << std::endl;
+          //  std::cout << "SENDING CURRENCY " << currency << std::endl;
+            break;
+
+        case SEND_COSTS:
+            buffer << (unsigned int)ROBOT_COST;
+            buffer << (unsigned int)WIZARD_COST;
+            buffer << (unsigned int)PIRATE_COST;
+            buffer << (unsigned int)EMP_COST;
+            buffer << (unsigned int)DISRUPT_COST;
+            buffer << (unsigned int)REGEN_COST;
+    }
+}
+
+void PlayerInstance::recvNetworkInteraction(int event_id, Buffer &buffer, network::NetworkClient* interaction_connection_client) {
+    switch (event_id) {
+        case SPAWN_ABILITY:
+            int target_x, target_y, ability;
+            buffer >> ability;
+            buffer >> target_x;
+            buffer >> target_y;
+            
+
+            bool can_spawn = false;
+            gameobject::OBJECT_TYPE ability_type = gameobject::OBJECT_TYPE::EFFECT_EMP;
+            int cost = -1;
+
+            if (ability >= 1 && ability <= 3) {
+                switch (ability) {
+                    case 1:
+                        ability_type = gameobject::OBJECT_TYPE::EFFECT_EMP;
+                        cost = EMP_COST;
+                        break;
+
+                    case 2:
+                        ability_type = gameobject::OBJECT_TYPE::EFFECT_HEAL;
+                        cost = REGEN_COST;
+                        break;
+
+                    case 3:
+                        ability_type = gameobject::OBJECT_TYPE::EFFECT_DISRUPTION;
+                        cost = DISRUPT_COST;
+                        break;
+
+                }
+                can_spawn = true;
+            }
+            
+            // Check if we have enough currency
+            if (this->getAvailableCurrency() < cost) {
+                can_spawn = false;
+            }
+            // Spawn ability
+            if (can_spawn) {
+                if (this->useCurrency(cost)) {
+                    manager->getGameController()->spawnObjectAt(ability_type, target_x, target_y);
+                }
+            }
+
+            std::cout << "AWDAWDUAWHDIAWHDIUAWDHIUAWHDI " << target_x << " " << target_y << std::endl;
             break;
     }
+}
+
+void PlayerInstance::sendCosts() {
+    sendNetworkUpdate(SEND_COSTS);
 }

@@ -805,13 +805,20 @@ namespace gamecontroller {
 
                     recv_buffer->seek(0);
                     (*recv_buffer) >> number_of_positions;
+
+                    number_of_positions = glm::clamp(number_of_positions, 0, 5);
+
                     for (int c = 0; c < number_of_positions; c++) {
                         (*recv_buffer) >> x;
                         (*recv_buffer) >> y;
                         (*recv_buffer) >> marker_type;
+
+                        marker_type = glm::clamp(marker_type, 2, 5);
+
                         cvList[marker_type].push_back(Point<float>(x, y));
                         //std::cout << "\tReceived Point (" << x << "," << y << "): " << marker_type << std::endl;
                     }
+                    
 
                     // Separate cvList by marker_type, run stableMatching on each, merge matchings
                     std::vector<tower_ptr> delete_list;
@@ -853,8 +860,29 @@ namespace gamecontroller {
                         }
                     }
                     break;
-                }
-            }
+                }break;
+
+                case sf::TcpSocket::Disconnected:
+                case sf::TcpSocket::Error:
+
+                    // Disconnect client
+                    client->disconnect();
+                    delete client;
+                    client = new sf::TcpSocket();
+                    cvConnectionEstablished = false;
+                    std::cout << "Lost connection to CV interface" << std::endl;
+
+                    // Clear cv list
+                    for (auto& vec : cvList) {
+                        vec.clear();
+                    }
+
+                    break;
+
+
+            } 
+
+
         }
     }
 

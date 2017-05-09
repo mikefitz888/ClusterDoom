@@ -25,7 +25,7 @@ void Spawn::step() {
             spawn_queue.erase(
                 std::remove_if(spawn_queue.begin(), spawn_queue.end(), [this](const unit_spawn s) -> bool {
                 if (time > s.delay) {
-                    manager->getGameController()->spawnUnitAt(getX() + spawn_jitter(rng), getY() + spawn_jitter(rng), s.unit_type);
+                    manager->getGameController()->spawnUnitAt(getX() + spawn_jitter(rng), getY() + spawn_jitter(rng), s.unit_type)->setDifficulty(1.f + ((float)scenario * 3.f + (float)wave)/15.f);
                     return true;
                 }
                 return false;
@@ -57,7 +57,7 @@ void Spawn::startWave(int wave_number) {
 
 void Spawn::beginWave() {
     size_t offset = 0;
-    for (size_t number_of_spawn_attempts = 1 + scenario * scenario; number_of_spawn_attempts > 0; number_of_spawn_attempts--) {
+    for (size_t number_of_spawn_attempts = 2 + ((float)scenario * (float)scenario/3.f); number_of_spawn_attempts > 0; number_of_spawn_attempts--) {
         if (number_of_spawn_attempts > 2 && noSpawn(rng)) {
             continue;
         }

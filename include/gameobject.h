@@ -312,6 +312,6 @@ namespace gameobject {
 
 }
 
-#define destroySelf();  _destroySelf(); return;
+#define destroySelf() _destroySelf(); return
 
 #endif //GAMEOBJECT_H

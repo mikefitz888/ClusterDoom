@@ -33,6 +33,7 @@ namespace unit {
         size_t cooldown = 0;
 
 		float animationProgress = 0.0f;
+        float difficulty = 1.f;
 
         void deliverWealth(size_t amt);
         graphics::Texture* unit_shadow, *unit_ice;
@@ -59,6 +60,7 @@ namespace unit {
         virtual void attack(tower_ptr tower);
         virtual void attacked(gameobject_ptr aggressor);
         virtual void attacked(gameobject_ptr aggressor, float damage);
+        void setDifficulty(float d);
         void heal(float health_delta);
 
         virtual void targetMine(smartpointers::slave_ptr<ResourceMine> t_mine);

@@ -65,7 +65,10 @@ Longer range laser fired from the wizard towers
 */
 class ProjectileLaser : public GameObject {
     int damage = 50;
+    int max_collisions = 1;
+    int collisions = max_collisions;
     gameobject::TYPE collision_type = gameobject::TYPE::UNIT;
+    std::set<id_t> collision_set;
 public:
 
 	sf::String textureName = "redLaser";
@@ -84,6 +87,7 @@ public:
     // Property modifiers
     void setCollisionType(gameobject::TYPE type);
     void setDamage(int damage);
+    void setMaxCollisions(int collisions);
     int  getDamage();
 };
 

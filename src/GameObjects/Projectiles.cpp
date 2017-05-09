@@ -168,29 +168,36 @@ void ProjectileLaser::step() {
 
 void ProjectileLaser::render() {
     float angle = point_direction(glm::vec2(0.0f, 0.0f), this->getVelocity());
-    this->manager->getResourceManager()->getTexture(textureName)->render(this->getX(), this->getY(), 0.9f, 0.9f, angle);
+    this->manager->getResourceManager()->getTexture(textureName)->render(this->getX(), this->getY(), 
+        0.9f*((float)collisions/(float)max_collisions), 
+        0.9f*((float)collisions/(float)max_collisions), angle);
 };
 void ProjectileLaser::renderGUI() {};
 void ProjectileLaser::release() {};
 
 
 void ProjectileLaser::onCollision(gameobject_ptr other) {
+    if (!other) return;
+    std::cout << "COLLISIONS: " << collisions << "\n";
     if (other->getSuperType() == collision_type) {
-        if (collision_type == gameobject::TYPE::UNIT) {
+        if (collision_type == gameobject::TYPE::UNIT && collision_set.find(other->getID()) == collision_set.end()) {
             unit_ptr oth = smartpointers::static_pointer_cast<unit::Unit>(other);
 			if (!oth->isDead()) {
-				oth->attacked(this->getSharedPtr(), (float) this->getDamage());
-			}
+				oth->attacked(this->getSharedPtr(), (float) this->getDamage() * ((float)collisions / (float) max_collisions));
+                collision_set.emplace(other->getID());
+            }
+            else return;
         }
         else if (collision_type == gameobject::TYPE::TOWER) {
             tower::tower_ptr oth = smartpointers::static_pointer_cast<tower::Tower>(other);
             oth->attacked(this->getSharedPtr(), (float)(this->getDamage()));
             //std::cout << "tower attacked\n";
         }
+        else return;
         
         
         //destroyed = true;
-        destroySelf();
+        if((--collisions) <= 0) destroySelf();
     }
 }
 
@@ -205,6 +212,10 @@ void ProjectileLaser::setDamage(int damage) {
 
 int ProjectileLaser::getDamage() {
     return this->damage;
+}
+
+void ProjectileLaser::setMaxCollisions(int collisions) {
+    this->collisions = max_collisions = collisions;
 }
 
 // ****************************************************** //

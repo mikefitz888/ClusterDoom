@@ -73,7 +73,7 @@ namespace tower {
             float m = target[0].first / max_range;
             obj->setVelocity(m*(current_target->getX()-getX())/10, m*(current_target->getY()-getY())/10 );
 			//obj->setDamage(damage);
-            smartpointers::static_pointer_cast<ProjectileBomb>(obj)->setExplosionDamage((int) (3150 * eff));
+            smartpointers::static_pointer_cast<ProjectileBomb>(obj)->setExplosionDamage((int) (3750 * eff));
             timer = cooldown;
             bomb_queue.push_back(obj);
             //bomb_queue[obj] = Point<float>(current_target->getX(), current_target->getY());

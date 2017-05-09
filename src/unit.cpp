@@ -196,7 +196,7 @@ namespace unit {
     }
 
     void Unit::attacked(gameobject_ptr aggressor, float damage) {
-        health -= damage;
+        health -= damage / difficulty;
         if (damage > 0) {
             this->health_timer = 140;
             this->health_alpha = 1.0f;
@@ -241,6 +241,10 @@ namespace unit {
     void Unit::targetMine(smartpointers::slave_ptr<ResourceMine> t_mine) {
         mine = t_mine;
         mineIsTarget = true;
+    }
+
+    void Unit::setDifficulty(float d) {
+        difficulty = d;
     }
 
 	/*void Unit::getPath(Point<int> target) {

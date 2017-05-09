@@ -29,6 +29,7 @@ namespace tower
         typedef void (SpecialTower::*Effect)(bool);
 
         // Effect textures
+        float ticks_blend = 0.0f;
 
         // Ice effect ---------
         graphics::Texture* tx_ice_sweep = nullptr;

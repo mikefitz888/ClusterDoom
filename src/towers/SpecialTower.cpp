@@ -154,11 +154,23 @@ namespace tower {
 
         // Render tower
         //
+        graphics::RenderUtils::render_circular_health((int)getXr(), (int)getYr(), (float)1.0f, (float)1.0f,
+                                                      graphics::RenderUtils::colour_blend(graphics::Colour(128, 144, 255, 255), graphics::Colour(12, 36, 128, 255), ticks_blend)/*graphics::RenderUtils::colour_blend(graphics::Colour(0, 255, 0, 255), graphics::Colour(255, 0, 0, 255), (float)ticks / POWER_TIME)*/
+        );
         if (ticks) {
+            if (ticks_blend < 1.0f) {
+                ticks_blend += 0.025f;
+            }
             graphics::RenderUtils::render_circular_health((int)getXr(), (int)getYr(), (float)ticks, (float)POWER_TIME,
-                graphics::Colour(0, 0, 255, 255)/*graphics::RenderUtils::colour_blend(graphics::Colour(0, 255, 0, 255), graphics::Colour(255, 0, 0, 255), (float)ticks / POWER_TIME)*/
+                graphics::Colour(128, 128, 255, 200)/*graphics::RenderUtils::colour_blend(graphics::Colour(0, 255, 0, 255), graphics::Colour(255, 0, 0, 255), (float)ticks / POWER_TIME)*/
             );
-        } else Tower::render();
+        } else {
+            if (ticks_blend > 0.0f) {
+                ticks_blend -= 0.025f;
+            }
+        }
+        
+        //else Tower::render();
         //texture->render((int)getXr(), (int)getYr(), 96, 96);
     }
 

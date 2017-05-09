@@ -347,7 +347,7 @@ namespace gamecontroller {
                             sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                             if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                                 mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                                spawnObjectAt(gameobject::OBJECT_TYPE::EFFECT_EMP, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
+                                spawnObjectAt(gameobject::OBJECT_TYPE::EFFECT_DISRUPTION, Point<float>((float)mouse_pos.x, (float)mouse_pos.y));
 
                             }
 

@@ -12,7 +12,7 @@ GameStateNotifier::GameStateNotifier(id_t id, manager::Manager* m) : GameObject(
 
 // init
 void GameStateNotifier::init() {
-    this->setPosition(133333337, 133333337);
+    this->setPosition(133333337.0f, 133333337.0f);
 }
 void GameStateNotifier::render() {}
 void GameStateNotifier::renderGUI() {}

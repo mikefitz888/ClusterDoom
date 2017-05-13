@@ -1,7 +1,5 @@
 #include "../include/cvInterface.h"
 
-#define EXPERIMENTAL
-
 namespace cvinterface {
     int CVInterface::RED_THRESHOLD = 105;
     int CVInterface::NON_RED_THRESHOLD = 70;
@@ -21,30 +19,9 @@ namespace cvinterface {
 #define CALIB_BOTTOMRIGHT 2
 #define CALIB_BOTTOMLEFT 3
 
-/*struct CalibPoint{
-    int x, y;
-    CalibPoint(){
-        x = 0;
-        y = 0;
-    }
-    CalibPoint(int x, int y){
-        this->x = x;
-        this->y = y;
-    }
-};*/
+    cv::Point calibration_points[4];
+    int current_calibration_point_id = 0;
 
-cv::Point calibration_points[4];
-int current_calibration_point_id = 0;
-    /*struct Marker
-    {
-        int x, y, marker_type;
-        explicit Marker(int x, int y, int marker_type)
-        {
-            this->x = x;
-            this->y = y;
-            this->marker_type = marker_type;
-        }
-    };*/
     void mouseHandle(int event, int x, int y, int flags, void* userdata){
         if( event== cv::EVENT_LBUTTONDOWN){
 
@@ -56,9 +33,6 @@ int current_calibration_point_id = 0;
 
             calibration_points[current_calibration_point_id % 4] = cv::Point(x, y);
             current_calibration_point_id ++;
-            /*if( current_calibration_point_id >= 4 ){
-                current_calibration_point_id = 0;
-            }*/
         }
     }
 
@@ -66,13 +40,11 @@ int current_calibration_point_id = 0;
         
         if (!cascade.load("src/Resources/OpenCV/cascade.xml")) {
             std::cout << "Cannot load cascade!" << std::endl;
-            // Exit? This is pretty fatal!
         }
 
         camera = cv::VideoCapture(0);
         if(!camera.isOpened()) {
             std::cout << "Cannot open camera!" << std::endl;
-            // Exit? This is pretty fatal!
         }
 
         dWidth = camera.get(CV_CAP_PROP_FRAME_WIDTH);
@@ -89,7 +61,7 @@ int current_calibration_point_id = 0;
 
         std::vector<Square> squares;
 
-        while (running) { //Use this so main thread can stop it safely, no while(true) please
+        while (running) {
             step(squares);
         }
     }
@@ -124,9 +96,7 @@ int current_calibration_point_id = 0;
         pyrUp(pyr, timg, frame.size());
         std::vector<std::vector<cv::Point>> contours;
 
-        cv::Mat gray0/*(image.size(), CV_8U)*/, gray;
-        /*int ch[] = { 0, 0 };
-        mixChannels(&timg, 1, &gray0, 1, ch, 1);*/
+        cv::Mat gray0, gray;
         cvtColor(timg, gray0, CV_BGR2GRAY);
 
         // Perform canny, setting the lower threshold to 0 (which forces edges merging)
@@ -193,6 +163,7 @@ int current_calibration_point_id = 0;
               - integral.at<int>(x2, y1)
               + integral.at<int>(x1, y1)) / (size*size);
     }
+
     void decodeSquares(cv::Mat& frame, std::vector<Square>& squares, std::vector<Marker>& markers)
     {
         markers.clear();
@@ -275,7 +246,6 @@ int current_calibration_point_id = 0;
                 }
             }
             THRESHOLD /= (blob_size * blob_size);
-            //std::cout << "Threshold set at " << THRESHOLD << "\n";
 #endif
             cv::threshold(bounding_box_gray, bounding_box_gray, THRESHOLD, 255, CV_THRESH_BINARY);
             cv::integral(bounding_box_gray, sum);
@@ -328,19 +298,7 @@ int current_calibration_point_id = 0;
                                           miny + border_offset + blob_size * 2,
                                           miny + border_offset + blob_size * 3,
                                      blob_size) < 128;
-            int marker_type = blob0 + /*blob1 +*/ blob2 + /*blob3 +*/ /*blob5 +*/ blob6 + /*blob7 +*/ blob8;
-           /* std::cout << "Found marker (" 
-                      << blob0// << ", " 
-                      << blob1// << ", " 
-                      << blob2// << ", " 
-                      << blob3// << ", " 
-#ifdef STATIC_THRESHOLD
-                      << blob4// << ", "
-#endif
-                      << blob5// << ", " 
-                      << blob6// << ", " 
-                      << blob7// << ", " 
-                      << blob8 << ") = " << marker_type << "\n";*/
+            int marker_type = blob0 + blob2 + blob6 + blob8;
             markers.push_back(Marker(cx, cy, marker_type));
         }
     }
@@ -352,26 +310,19 @@ int current_calibration_point_id = 0;
         blobs.clear();
 
         bool success = camera.read(frame);
-        if (!success) {
-            // std::cout << "Cannot read frame from video stream!" << std::endl;
-            return;
-        }
+        if (!success) return;
 
-#ifdef EXPERIMENTAL
         const int MIN_BLOB = 4;
         const int MAX_BLOB = 30;
-#endif
 
-        
-        //resize(frame, frame, cv::Size(frame.cols * 2, frame.rows * 2), 0, 0, cv::INTER_NEAREST);
-        if(current_calibration_point_id >= 4){
-            //findSquares(frame, squares);
-            // std::cout << "There were " << squares.size() << " squares detected\n";
-            //decodeSquares(frame, squares, markers);
+        if(current_calibration_point_id >= 4)
+        {
             cvtColor(frame, frame, CV_BGR2GRAY);
             cv::threshold(frame, frame, 15, 255, 0); //was 5
-            for (size_t i = 0; i < (unsigned) frame.rows; i++) {
-                for (size_t j = 0; j < (unsigned) frame.cols; j++) {
+            for (size_t i = 0; i < (unsigned) frame.rows; i++) 
+            {
+                for (size_t j = 0; j < (unsigned) frame.cols; j++) 
+                {
                     uint32_t x = 0;
                     uint32_t y = 0;
                     uint32_t num_points = 0;
@@ -379,8 +330,10 @@ int current_calibration_point_id = 0;
                     while (!flood.empty()) {
                         auto point = flood.front();
                         flood.pop();
-                        if (frame.at<uint8_t>(point.first, point.second) > 0) {
-                            if (visited.find(point) == visited.end()) {
+                        if (frame.at<uint8_t>(point.first, point.second) > 0) 
+                        {
+                            if (visited.find(point) == visited.end()) 
+                            {
                                 visited.emplace(point);
                                 x += point.first;
                                 y += point.second;
@@ -389,12 +342,14 @@ int current_calibration_point_id = 0;
                                 bool left = point.first > 0;
                                 bool up = point.second + 1 < (unsigned) frame.cols;
                                 bool down = point.second > 0;
-                                if (right) {
+                                if (right) 
+                                {
                                     flood.push(std::make_pair(point.first + 1, point.second));
                                     if (up) flood.push(std::make_pair(point.first + 1, point.second + 1));
                                     if (down) flood.push(std::make_pair(point.first + 1, point.second - 1));
                                 }
-                                if (left) {
+                                if (left) 
+                                {
                                     flood.push(std::make_pair(point.first - 1, point.second));
                                     if (up) flood.push(std::make_pair(point.first - 1, point.second + 1));
                                     if (down) flood.push(std::make_pair(point.first - 1, point.second - 1));
@@ -404,11 +359,7 @@ int current_calibration_point_id = 0;
                             }
                         }
                     }
-#ifndef EXPERIMENTAL
-                    if (num_points > 0) 
-#else
                     if (num_points > MIN_BLOB && num_points < MAX_BLOB)
-#endif
                     {
                         blobs.push_back(std::make_pair(y / num_points, x / num_points));
                     }
@@ -417,10 +368,13 @@ int current_calibration_point_id = 0;
 
             const int MIN_DIST = 30;
             markers.clear();
-            for (auto& blob : blobs) {
+            for (auto& blob : blobs) 
+            {
                 bool merged = false;
-                for (auto& marker : markers) {
-                    if (std::hypot(marker.x - (int)blob.first, marker.y - (int)blob.second) < MIN_DIST) {
+                for (auto& marker : markers) 
+                {
+                    if (std::hypot(marker.x - (int)blob.first, marker.y - (int)blob.second) < MIN_DIST) 
+                    {
                         marker.x = (marker.x * marker.marker_type + blob.first) / (marker.marker_type + 1);
                         marker.y = (marker.y * marker.marker_type + blob.second) / (marker.marker_type + 1);
                         marker.marker_type++;
@@ -428,23 +382,16 @@ int current_calibration_point_id = 0;
                         break;
                     }
                 }
-                if (!merged) {
-                    markers.push_back(Marker(blob.first, blob.second, 1));
-                }
-                //std::cout << "(" << blob.first << ", " << blob.second << ")" << std::endl;
-                //cv::circle(frame, cv::Point(blob.first, blob.second), 10, cv::Scalar(128, 128, 128));
+                if (!merged) markers.push_back(Marker(blob.first, blob.second, 1));
             }
 
             for (auto& marker : markers) {
-                std::cout << "(" << marker.x << ", " << marker.y << "): " << marker.marker_type << std::endl;
+                //std::cout << "(" << marker.x << ", " << marker.y << "): " << marker.marker_type << std::endl;
                 cv::circle(frame, cv::Point(marker.x, marker.y), 2, cv::Scalar(128, 128, 128), 2);
             }
             
             networkSendTowerPositions();
         }
-
-      //  std::cout << "There were " << squares.size() << " squares detected\n";
-        //drawSquares(frame, squares);
 
         // DRAW CALIBRATION POINTS
         circle(frame, calibration_points[0], 16, cv::Scalar(255.0,255.0,255.0), 4);
@@ -455,61 +402,10 @@ int current_calibration_point_id = 0;
 
         cv::setMouseCallback("WebCam", mouseHandle, NULL);
         imshow("WebCam", frame);
-        
-        //findTowers2();
-        //cv::imshow("WebCam", frame);
-         // This is essential as if we leave it, the main thread will receive multiple packets of data containing updated lists every frame.
-         // (Realistically, this only needs to run at 24 fps, as this is the maximum performance of the camera.)
-        /*Marker marker1(200, 400, 2);
-        Marker marker2(500, 200, 3);
-        Marker marker3(800, 400, 2);
-
-        send_buffer.seek(0);
-        send_buffer << (int)3;
-        send_buffer << (int)marker1.x;
-        send_buffer << (int)marker1.y;
-        send_buffer << (int)marker1.marker_type;
-        send_buffer << (int)marker2.x;
-        send_buffer << (int)marker2.y;
-        send_buffer << (int)marker2.marker_type;
-        send_buffer << (int)marker3.x;
-        send_buffer << (int)marker3.y;
-        send_buffer << (int)marker3.marker_type;
-
-        socket->send(send_buffer.getPtr(), send_buffer.tell());
-
-        //std::cout << "Sent markers" << std::endl;*/
-        cv::waitKey(42); //42
-        //while (true);
+        cv::waitKey(42);
     }
 
-/*
-std::vector<Square> squares;
-    while (true)
-    {
-        auto t = std::chrono::steady_clock::now();
-
-        if (webcam.read(frame))
-        {
-            // As we have spare performance, we can work on higher resolution images to get smaller detections
-            resize(frame, frame, cv::Size(frame.cols * 2, frame.rows * 2), 0, 0, cv::INTER_NEAREST);
-
-            findSquares(frame, squares);
-            std::cout << "There were " << squares.size() << " squares detected\n";
-            drawSquares(frame, squares);
-
-            imshow("Webcam", frame);
-
-            auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - t);
-            std::cout << "FPS: " << 1000 / duration.count() << "\n";
-            cvWaitKey(20); //was 42
-        }
-    }
-*/    
-
-    void CVInterface::release() {
-        //send_buffer.release();
-    }
+    void CVInterface::release() {}
 
     void CVInterface::findTowers2() {
         cv::Mat frame2 = frame.clone();
@@ -532,7 +428,6 @@ std::vector<Square> squares;
 
 
         std::vector<cv::Vec3f> circles;
-        // void HoughCircles(InputArray image, OutputArray circles, int method, double dp, double minDist, double param1=100, double param2=100, int minRadius=0, int maxRadius=0 )
         cv::HoughCircles(red_hue_image, circles, CV_HOUGH_GRADIENT, 1, red_hue_image.rows / 8, 100, 20, 20, 200);
 
         tower_locations.clear();
@@ -542,9 +437,6 @@ std::vector<Square> squares;
             int radius = std::lround(circles[i][2]);
             cv::circle(frame, center, radius, cv::Scalar(0, 255, 0), 5);
             tower_locations.push_back(gameobject::Point<int>((int) circles[i][0], (int) circles[i][1]));
-
-            //cv::rectangle(frame, cv::Point(objects[i].x, objects[i].y), cv::Point(objects[i].x + objects[i].width, objects[i].y + objects[i].height), cv::Scalar(0, 255, 0), 2);
-            //tower_locations.push_back(gameobject::Point<int>(objects[i].x + objects[i].width / 2, objects[i].y + objects[i].height / 2));
         }
 
         networkSendTowerPositions();
@@ -566,19 +458,16 @@ std::vector<Square> squares;
                 }
             }
         }
-        //imshow("thresholded", frame2);
         cv::cvtColor(frame2, frame_gray, CV_BGR2GRAY);
         cv::equalizeHist(frame_gray, frame_gray);
 
         cascade.detectMultiScale(frame_gray, objects, 1.1, 1, CV_HAAR_SCALE_IMAGE, cv::Size(50, 50), cv::Size(500, 500));
-        //std::cout << "Objects detected: " << objects.size() << std::endl;
 
         tower_locations.clear();
         // Next step is to commit the findings to the tower_locations list...
         for (size_t i = 0; i < objects.size(); i++)
         {
             cv::rectangle(frame, cv::Point(objects[i].x, objects[i].y), cv::Point(objects[i].x + objects[i].width, objects[i].y + objects[i].height), cv::Scalar(0, 255, 0), 2);
-            //TODO: calibrate using corners: calibration_points[0]
             tower_locations.push_back(gameobject::Point<int>(objects[i].x + objects[i].width/2, objects[i].y + objects[i].height/2));
         }
         
@@ -594,7 +483,6 @@ std::vector<Square> squares;
     }
 
     void CVInterface::networkSendTowerPositions() {
-        //std::cout << "[CV] Sending towers to control thread: Count: " << tower_locations.size() << std::endl;
 
         int marker_count = markers.size();
         if (marker_count > 5) { marker_count = 5; }
@@ -603,8 +491,8 @@ std::vector<Square> squares;
         send_buffer.seek(0);
         send_buffer << marker_count;
 
-        //for (auto& marker : markers) {
-        for( int cc=0; cc < marker_count; cc++ ){
+        for (int cc=0; cc < marker_count; cc++)
+        {
             auto marker = markers[cc];
 
             cv::Point i,j;
@@ -617,8 +505,6 @@ std::vector<Square> squares;
             i =(calibration_points[1] - calibration_points[0]);
             j = (calibration_points[3] - calibration_points[0]);
 
-            //float magA = sqrt((float) (i.x*i.x + i.y*i.y));
-            //float magB = sqrt((float) (j.x*j.x + j.y*j.y));
             float magA = std::hypot((float) i.x, (float) i.y);
             float magB = std::hypot((float) j.x, (float) j.y);
             // normalize
@@ -639,32 +525,20 @@ std::vector<Square> squares;
 
             marker.x = 1280-(int)newx;
             marker.y = (int)newy;
-            //width = frame.cols
-            //height = frame.rows
 
             marker.marker_type++;
 
             // Marker type shielding
 
             if (marker.marker_type > 5 || marker.marker_type < 2) {
-#ifndef EXPERIMENTAL
-                marker.marker_type = 2;
-#else
                 // Don't even send if the clusters aren't qualified
                 continue; 
-#endif
             }
 
-
-            //send_buffer << marker;
             send_buffer << (int)marker.x;
             send_buffer << (int)marker.y;
             send_buffer << (int)marker.marker_type;
 
-            
-
-
-            //std::cout << "MARKER TYPE: " << marker.marker_type << std::endl;
             cv::circle(frame, cv::Point(marker.x, marker.y), 6, cv::Scalar(0, 128, 0), 5);
         }
 

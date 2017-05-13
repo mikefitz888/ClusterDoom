@@ -154,8 +154,8 @@ namespace gamecontroller {
         void clearTowers() const;
         void spawnTowers(std::vector<std::pair<Point<float>, int>> tower_list) const;
         std::vector<tower_ptr> findNearestTowers(Point<float> point);
-        std::vector<unit_ptr> getUnitsInRange(glm::vec2 position, int radius);
-        std::vector<tower_ptr> getTowersInRange(glm::vec2 position, int radius);
+        std::vector<unit_ptr> getUnitsInRange(glm::vec2 position, double radius);
+        std::vector<tower_ptr> getTowersInRange(glm::vec2 position, double radius);
         std::vector<std::pair<float, unit_ptr>> getNNearestUnits(glm::vec2 position, int N, int maxrange);
         tower_ptr& getBase();
         void parseCVList(std::vector<std::pair<Point<float>, int>> list);
@@ -169,7 +169,7 @@ namespace gamecontroller {
         void addEfficiency(unsigned int amt = 1);
         float towerEfficiency();
         float towerEfficiency(glm::vec2 position);
-        void setEfficiencyModifier(float mod);
+        void setEfficiencyModifier(double mod);
         void diminishEfficiency();
 
         sf::Time timeUntilNextWave();

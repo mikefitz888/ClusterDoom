@@ -179,17 +179,6 @@ namespace smartpointers {
         }
 
     public:
-        /*master_ptr(){
-            //this->invalidate();
-        }
-
-        void prepare(T* ptr) {
-            this->validity = new int(1);
-            this->payload = ptr;
-            this->name = "object";
-        }*/
-
-
         master_ptr(std::nullptr_t ptr) : name("object") {
             throw InvalidatedSmartPointerException("master", name);
         }
@@ -216,6 +205,7 @@ namespace smartpointers {
 
         ~master_ptr() { reset(); }
 
+        // Use this to destroy a master_ptr and it's contents, will signify to all slave_ptrs that the object is no longer valid
         inline void invalidate() {
             reset();
         }
@@ -297,7 +287,6 @@ namespace smartpointers {
             this->payload = payload;
             this->name = ptr.name;
             this->validity = ptr.validity;
-            // This seems dangerous, but we have to roll with it for now
             if (this->validity) {
                 if (*this->validity > 0) ++*this->validity;
                 else --*this->validity;
@@ -536,9 +525,6 @@ namespace std
     template <typename T, typename U>
     struct hash<std::pair<T, U>> {
         size_t operator () (const std::pair<T, U> & p) const {
-            //return (hash<smartpointers::slave_ptr<T>>()(p.first) + hash<smartpointers::slave_ptr<T>>()(p.second) * 458481);
-            //return std::hash<T>(p.first)()+ std::hash<U>(p.second)() * 458481;//std::hash<T*>()(p.first.get()) + std::hash<U*>()(p.second.get()) * 458481;
-            //return std::hash<T*>()(p.get())
             if (p.first && p.second) { // Need an existence check here
                 return hash<T>()(p.first) + hash<U>()(p.second) * 458481;
             } else {

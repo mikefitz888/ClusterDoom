@@ -23,22 +23,11 @@ namespace tower {
 	void BombTower::render() {
 
 		Tower::render();
-	//	texture->render((int) getXr(), (int) getYr(), 96, 96);
 
-		/*float mod = (200.0f - delete_queue) / 200.0f;
-		int size = (int)(96.0f);
-		//setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) 
-		render_manager->setActiveColour(255, 255, 255, (char)(255.0 * mod));
-		if (health <= 0) {
-			render_manager->setActiveColour(255, 0, 0, (char)(255.0 * mod / 2));
-		}
-		texture->render(getXr(), getYr(), size, size);
-
-		RenderUtils::render_circular_health(getXr(), getYr(), (int) health, (int) max_health, RenderUtils::colour_blend(Colour(0,255,0,255), Colour(255,0,0,255), health/max_health));
-		*/
 	}
 
     void BombTower::step() {
+        //Simulates deceleration on the bomb, bomb is removed from vector once it explodes.
         bomb_queue.erase(std::remove_if(bomb_queue.begin(), bomb_queue.end(), [this](const gameobject_ptr& bomb) -> bool {
             if (!bomb) return true;
             bomb->addVelocity(glm::vec2(-bomb->getVelocityX() / 15.f, -bomb->getVelocityY() / 15.f));
@@ -67,8 +56,7 @@ namespace tower {
             //float eff = requestEfficiency(1000, 100);
 			
             if (eff <= 0.f) return;
-            //std::cout << current_target->getID() << " " << current_target->distanceTo(position) << "\n";
-            //printf("(%f, %f) - (%f, %f)\n", position.x, position.y, (float)current_target->getX(), (float)current_target->getY());
+
             gameobject_ptr obj = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_BOMB, Point<float>(getX(), getY()));
             float m = target[0].first / max_range;
             obj->setVelocity(m*(current_target->getX()-getX())/10, m*(current_target->getY()-getY())/10 );

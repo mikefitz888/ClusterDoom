@@ -21,21 +21,6 @@ namespace tower {
     }
 
 	void BasicTower::render() {
-
 		Tower::render();
-	//	texture->render((int) getXr(), (int) getYr(), 96, 96);
-
-		/*float mod = (200.0f - delete_queue) / 200.0f;
-		int size = (int)(96.0f);
-		//setActiveColour(unsigned char r, unsigned char g, unsigned char b, unsigned char a) 
-		render_manager->setActiveColour(255, 255, 255, (char)(255.0 * mod));
-        
-		if (health <= 0) {
-			render_manager->setActiveColour(255, 0, 0, (char)(255.0 * mod / 2));
-		}
-		texture->render(getXr(), getYr(), size, size);
-
-		RenderUtils::render_circular_health(getXr(), getYr(), (int) health, (int) max_health, RenderUtils::colour_blend(Colour(0,255,0,255), Colour(255,0,0,255), health/max_health));
-		*/
 	}
 }

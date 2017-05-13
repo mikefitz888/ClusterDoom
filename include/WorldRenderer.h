@@ -5,6 +5,10 @@
 
 #include "RenderManager.h"
 
+/*
+    WorldRenderer: Controls overall display based on game state
+*/
+
 namespace worldrenderer {
     using graphics::IRenderable;
     using graphics::RenderManager;

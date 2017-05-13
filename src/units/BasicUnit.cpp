@@ -34,12 +34,6 @@ namespace unit {
         maxHealth = 8000;
         unitSpeed = 0.25f;
 
-        /* Path path;
-        path.push_back(vec2(100, 100));
-        path.push_back(vec2(500, 50));
-        path.push_back(vec2(250, 300));
-        path.push_back(vec2(1280, 720));
-        this->setPath(path, 10);*/
     }
 
     void BasicUnit::step() {
@@ -47,6 +41,7 @@ namespace unit {
         // Perform parent step
         Unit::step();
 
+        //Play death animations and delete self when finished
 		if (dead) {
             if (dead != prev_dead) {
                 this->manager->getAudioManager()->playSound("robot_death");
@@ -61,7 +56,7 @@ namespace unit {
 		}
 
 
-
+        //Legacy code; Used to control unit movements
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
             if (!pressed) {
                 Path _path;

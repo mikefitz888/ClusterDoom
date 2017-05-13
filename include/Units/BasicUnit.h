@@ -6,6 +6,10 @@
 #include "../tower.h"
 #include "../unit.h"
 
+/*
+    Simplest unit type, others may derive from this
+*/
+
 namespace unit
 {
     class BasicUnit : public Unit {
@@ -17,6 +21,8 @@ namespace unit
         int network_update_position_timer = network_update_position_timer_max;
 
         bool pressed = false; //TEMP;
+
+        //Units are drawn towards special tower based on the magneticVelocity
         Point<float> magneticVelocity = Point<float>(0.0f, 0.0f);
 
     public:

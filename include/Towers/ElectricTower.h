@@ -5,6 +5,10 @@
 #include "../tower.h"
 #include "../GameObjects/Projectiles.h"
 
+/*
+    ElectricTower: Fires lightning forks that can spread to nearby n-ary targets
+*/
+
 namespace tower
 {
     class ElectricTower : public Tower {

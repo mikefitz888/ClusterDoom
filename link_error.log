@@ -1,0 +1,7 @@
+e:/Program Files/Haskell Platform/7.10.3/mingw/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: cannot find -lGL
+e:/Program Files/Haskell Platform/7.10.3/mingw/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: cannot find -lGLEW
+e:/Program Files/Haskell Platform/7.10.3/mingw/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: cannot find -lsfml-graphics
+e:/Program Files/Haskell Platform/7.10.3/mingw/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: cannot find -lsfml-window
+e:/Program Files/Haskell Platform/7.10.3/mingw/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: cannot find -lsfml-system
+e:/Program Files/Haskell Platform/7.10.3/mingw/bin/../lib/gcc/x86_64-w64-mingw32/5.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: cannot find -lsfml-network
+collect2.exe: error: ld returned 1 exit status

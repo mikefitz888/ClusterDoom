@@ -46,19 +46,17 @@ namespace tower {
         float power = game_controller->towerEfficiency(getPosition())*2.0f;
         disabled = (power <= 0.0f);
 
+        //Limit how often attacks can occur
         if (timer) {
             timer--; 
             return;
         }
         
-        //getUnits(1);
-        //if (!current_target || current_target->distanceTo(position) > max_range) {
         auto target = this->manager->getGameController()->getNNearestUnits(this->position, 1, max_range);
         if (!target.size()) return;
 
         current_target = target[0].second;
 
-        //std::cout << "ELECTRICITY!!" << std::endl;
 
         //float power = requestEfficiency(30.f /*Maximum power*/, 10.f /*minimum power*/);
 		
@@ -69,11 +67,11 @@ namespace tower {
 			obj->textureName = "blueLaser";
 			auto dir = glm::normalize((current_target->getPosition() + current_target->getVelocity() * target[0].first / 7.f) - obj->getPosition());
 			auto sdir = glm::vec2(-dir.y, dir.x) * 7.0f;
+
+            //Alternate which side bullet fires from
 			if (leftFire) {
 				obj->setPosition(getPosition() + sdir);
 				leftFire = false;
-
-                
                 this->manager->getAudioManager()->playSound("laser");
 			}
 			else {
@@ -84,6 +82,8 @@ namespace tower {
 			obj->setVelocity(dir * 9.f);
             auto& laser = smartpointers::static_pointer_cast<ProjectileLaser>(obj);
             laser->setDamage((int)(power * 150));
+
+            //Specify how many units the bullet can pass through
             laser->setMaxCollisions(3);
 			timer = cooldown;
         }

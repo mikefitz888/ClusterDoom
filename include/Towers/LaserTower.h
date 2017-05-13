@@ -5,6 +5,10 @@
 #include "../tower.h"
 #include "../GameObjects/Projectiles.h"
 
+/*
+    LaserTower: Shoots bullets with piercing effect, i.e. can hit a few units in a line
+*/
+
 namespace tower
 {
     class LaserTower : public Tower {

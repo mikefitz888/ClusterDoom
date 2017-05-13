@@ -18,22 +18,23 @@ namespace tower {
         game_controller = manager->getGameController();
         health = max_health;
         exuhporoshun[gameobject::TYPE::OBJECT][gameobject::OBJECT_TYPE::PROJECTILE_LASER] = manager->getResourceManager()->getAnimatedTexture("explosion4");
-        //exuhporoshun[unit::TYPE::WIZARD] = manager->getResourceManager()->getAnimatedTexture("explosion2");
+        
 		//Get Screen dims and position in center
         this->collision_profile.setTypeCircle(180);
 
 	}
 
 	void Base::render() {
-
 		int size = 100;
-		//texture->render((int) getXr(), (int) getYr(), size, size);
+        // Step through frames of any active animations and delete any that have finished.
         animations.erase(std::remove_if(animations.begin(), animations.end(), [this](std::pair<graphics::AnimatedTexture*, std::pair<float, Point<int>>>& a)->bool {
             if (a.second.first > a.first->getTotalFrames()) return true;
             a.second.first += 1.0f;
             a.first->render((int)a.second.first, a.second.second.x, a.second.second.y, 0.5f, 0.5f);
             return false;
         }), animations.end());
+
+        //Render the health of the base as a ring segment with color green at full fading to red at min.
         graphics::RenderUtils::render_circular_health((int)getXr(), (int)getYr(), (int)health, (int)max_health,
             graphics::RenderUtils::colour_blend(graphics::Colour(0, 255, 0, 255), graphics::Colour(255, 0, 0, 255), health / max_health)
         );
@@ -46,9 +47,9 @@ namespace tower {
 
     void Base::attacked(gameobject_ptr aggressor) {
         if (!aggressor) return;
-        //gameobject::OBJECT_TYPE::PROJECTILE_LASER
+        //Check if explosion animation entries exist for aggressor's super-type
         if (exuhporoshun.find(aggressor->getSuperType()) != exuhporoshun.end() ) {
-            //exuhporoshun[(unit::TYPE) aggressor->getSubType()]->render()
+            //Find animation entry for agressor-sub type, where available, and add it to active animations
             if ( exuhporoshun[aggressor->getSuperType()].find(aggressor->getSubType()) != exuhporoshun[aggressor->getSuperType()].end() ) {
                 auto r = glm::linearRand(-glm::vec2(20), glm::vec2(20));
                 auto pair = std::make_pair<float, Point<int>>(0.f, Point<int>((int) getX() + (int) r.x, (int) getY() + (int) r.y));

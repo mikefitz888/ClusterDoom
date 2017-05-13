@@ -5,6 +5,10 @@
 #include "../tower.h"
 #include "../GameObjects/Projectiles.h"
 
+/*
+    BombTower: Fires a bomb which damages units within a radius
+*/
+
 namespace tower
 {
     class BombTower : public Tower {

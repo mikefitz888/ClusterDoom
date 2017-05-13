@@ -15,7 +15,7 @@ namespace worldrenderer {
         this->setDepth(1000);
         render_manager = manager->getRenderManager();
 
-
+        //Fetch required textures
         textures[SCREEN::NONE] = manager->getResourceManager()->getTexture("background");
         textures[SCREEN::GAME_START] = manager->getResourceManager()->getTexture(/*"begin"*/"tip_screen");
         textures[SCREEN::GAME_LOSE] = manager->getResourceManager()->getTexture("lose");
@@ -35,6 +35,7 @@ namespace worldrenderer {
         auto game_state = manager->getGameController()->getGameState();
 
         //If any of these screens need animations just do it in renderGUI()
+        //Display background texture based on GameState
         switch (game_state) {
             case gamecontroller::GameState::LOSE:
                 display_screen = SCREEN::GAME_LOSE;

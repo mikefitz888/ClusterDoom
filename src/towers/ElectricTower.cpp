@@ -51,19 +51,20 @@ namespace tower {
         float eff = game_controller->towerEfficiency(getPosition());
         disabled = (eff <= 0.0f);
 
+        //Limit how often attacks occur
         if (timer) {
             timer--; 
             return;
         }
         
-        //getUnits(1);
+        // If current target is out of range / doesn't exist, find a target if possible
         if (!current_target || (unsigned) current_target->distanceTo(position) > max_range) {
             auto units_nearby = this->manager->getGameController()->getNNearestUnits(this->position, 1, max_range);
             if (units_nearby.size()) current_target = units_nearby[0].second;
             else current_target = nullptr;
         }
 
-        //std::cout << "ELECTRICITY!!" << std::endl;
+        //Attack with electricity with provided parameters
         sound_cooldown--;
         if (current_target) {
             //float eff = requestEfficiency(cost_per_attack, 2.f);

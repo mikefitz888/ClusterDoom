@@ -4,6 +4,10 @@
 #include "../gamecore.h"
 #include "../tower.h"
 
+/*
+    Simplest tower type, others may derive from this.
+*/
+
 namespace tower
 {
     class BasicTower : public Tower {

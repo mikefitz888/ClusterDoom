@@ -4,6 +4,10 @@
 #include "../gamecore.h"
 #include "../tower.h"
 
+/*
+    Base: The Structure being defended during gameplay.
+*/
+
 namespace tower
 {
 	class Base : public Tower {

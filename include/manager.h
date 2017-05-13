@@ -4,6 +4,13 @@
 #include "gamecore.h"
 #include "../include/smartpointers.h"
 
+/*
+    Manager: 
+        Controls how the largest game components interact as well as acting as the root for step functions.
+        Maintains master_ptrs and delivers slave_ptrs on request; preventing memory leaks as these ptrs are managed.
+        Provides methods for destroying/creating GameObjects.
+*/
+
 namespace manager {
     using gameobject::GameObject;
     using smartpointers::master_ptr;

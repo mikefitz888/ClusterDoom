@@ -12,6 +12,7 @@
 
 namespace manager {
     using smartpointers::static_pointer_cast;
+    //Create all Game Components
     Manager::Manager() {
         tower_logic      = new TowerLogic(this);
         unit_logic       = new UnitLogic(this);
@@ -20,6 +21,23 @@ namespace manager {
         network_manager  = new NetworkManager(this);
         resource_manager = new ResourceManager(this);
         audio_manager    = new AudioManager(this);
+    }
+
+    //Initialize components that require it
+    void Manager::init()
+    {
+        game_controller->init();
+    }
+
+    //Step components that require it
+    bool Manager::step()
+    {
+        audio_manager->stepSounds();
+        network_manager->networkStep();
+        bool gc = game_controller->step();
+
+        return render() && gc;
+        //return render();
     }
 
     // Object Methods
@@ -46,6 +64,18 @@ namespace manager {
 
     bool Manager::getObjectExists(unsigned int id) {
         return (this->game_object_pool.find(id) != this->game_object_pool.end());
+    }
+
+    std::vector<slave_ptr<GameObject>> Manager::getObjects() const
+    {
+        std::vector<slave_ptr<GameObject>> objs;
+        for (auto map_elem = game_object_pool.begin(); map_elem != game_object_pool.end(); map_elem++) {
+            gameobject_ptr obj = *(map_elem->second);
+            if (obj) {
+                objs.push_back(obj);
+            }
+        }
+        return objs;
     }
 
     //Tower Methods
@@ -104,17 +134,6 @@ namespace manager {
 
     std::vector<slave_ptr<Unit>> Manager::getUnits() const {
         return unit_logic->getUnits();
-    }
-
-    std::vector<slave_ptr<GameObject>> Manager::getObjects() const {
-        std::vector<slave_ptr<GameObject>> objs;
-        for (auto map_elem = game_object_pool.begin(); map_elem != game_object_pool.end(); map_elem++) {
-            gameobject_ptr obj = *(map_elem->second);
-            if (obj) {
-                objs.push_back(obj);
-            }
-        }
-        return objs;
     }
 
     //Game Controller Methods
@@ -198,9 +217,7 @@ namespace manager {
         }
     }
 
-    /*std::vector<master_ptr<GameObject>>& Manager::getObjectPool() {
-        return game_object_pool;
-    }*/
+    //Share details of all existing GameObjects with connected clients
     void Manager::sendAllInstancesToClient(network::NetworkClient *network_client) {
         for (auto map_elem = game_object_pool.begin(); map_elem != game_object_pool.end(); map_elem++) {
             slave_ptr<GameObject> object = *map_elem->second;
@@ -222,19 +239,8 @@ namespace manager {
         return free_id;
     }
 
-    void Manager::init() {
-        game_controller->init();
-    }
-
-    bool Manager::step(){
-        audio_manager->stepSounds();
-        network_manager->networkStep();
-        bool gc = game_controller->step(); 
-
-        return render() && gc;
-        //return render();
-    }
-
+    
+    //Prepares the RenderManager component
     void Manager::initRenderManager(RenderManager &rm) {
         render_manager=&rm;
         world_renderer = new WorldRenderer(this);
@@ -249,6 +255,7 @@ namespace manager {
         splitmap        = new Splitmap(splitmap_cellsize, splitmap_width, splitmap_height);
     }
 
+    //Begins the chain of render events
     bool Manager::render() const {
         //if( stepc % 2 == 0){ render_manager->clear(); return true; }
         if(render_manager) {
@@ -277,6 +284,7 @@ namespace manager {
         return network_manager;
     }
 
+    //Clears any memory before destruction
     void Manager::release() {
         render_manager->release();
         render_manager = nullptr;
@@ -350,6 +358,7 @@ namespace manager {
         
     }
 
+    //Begin chain of step events for all objects
     void Manager::stepAll() {
         //std::cout << "stepAll()" << std::endl;
         std::vector<slave_ptr<GameObject>> copy;

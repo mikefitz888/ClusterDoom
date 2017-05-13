@@ -13,7 +13,12 @@
 #define TILE_W 20
 #define TILE_H 20
 
+/*
+    gamecontroller: controls gameplay, e.g. resources/enemy spawns/GameState changes/tower positions
+*/
+
 namespace gamecontroller {
+    //Enemy spawns are split into scenarios, with enemies spawning at each wave in a scenario, time in frames but game runs at 60fps
     const float time_per_scenario = 60.f;
     const int waves_per_scenario = 3;
 
@@ -49,6 +54,7 @@ namespace gamecontroller {
         std::vector<Point<float>> new_towers;
     };
 
+    //Legacy, path-finding code
     class TileNode : public paths::AStarNode {
         float distanceTo(AStarNode* node) const override;
     public:

@@ -1,6 +1,11 @@
 #ifndef _CORE_HEADER
 #define _CORE_HEADER
 
+/*
+    Collection of headers and forward-declarations shared by all files to
+    prevent the occurence of cyclic-includes.
+*/
+
 // Standard library headers
 #include <algorithm>
 #include <climits>

@@ -13,7 +13,6 @@ namespace gamecontroller {
 
     /*
         Generate grid linkage
-
     */
     void GameController::preparePathfindingGrid() {
         for (int i = 0; i < TILE_W * TILE_H; i++) {
@@ -52,15 +51,14 @@ namespace gamecontroller {
         preparePathfindingGrid();
     }
 
+    //Returns weight of AStar node
     int GameController::getWeight(int x, int y) {
         //Return negative for an obstacle
         return 0;
     }
 
     unit_ptr GameController::spawnUnitAt(float x, float y, unit::TYPE type) const {
-        auto unit = manager->createUnit(type, x, y);
-        //unit->setPosition(x, y);
-        return unit;
+        return manager->createUnit(type, x, y);
     }
 
     unit_ptr GameController::spawnUnitAt(Point<float> position, unit::TYPE type) const {
@@ -69,12 +67,10 @@ namespace gamecontroller {
 
 
     tower_ptr GameController::spawnTowerAt(float x, float y, tower::TYPE type) const {
-        auto tower = manager->createTower(type, x, y);
-        //printf("Tower spawned at: %d %d\n", x, y);
-        //tower->setPosition(x, y);
-        return tower;
+       return manager->createTower(type, x, y);
     }
 
+    //Spawn tower at target with jitter correction
     tower_ptr GameController::spawnTowerAt(Point<float> position, tower::TYPE type) const {
         tower_ptr tower = spawnTowerAt(round((position.x) / 64.0f)*64.0f, round((position.y) / 64.0f)*64.0f, type);
         tower->setJitter((int)(position.x - tower->getX()), (int)(position.y - tower->getY()));
@@ -82,9 +78,7 @@ namespace gamecontroller {
     }
 
     gameobject_ptr GameController::spawnObjectAt(gameobject::OBJECT_TYPE type, float x, float y) const {
-        // TODO: Make spawn
-        gameobject_ptr game_object = manager->createObject(type, x, y);
-        return game_object;
+        return manager->createObject(type, x, y);
     }
 
     gameobject_ptr GameController::spawnObjectAt(gameobject::OBJECT_TYPE type, Point<float> position) const {
@@ -92,7 +86,6 @@ namespace gamecontroller {
     }
 
     void GameController::restart()  {
-
         // Destroy all game objects
         for (auto& obj : manager->getObjects()) {
             obj->demoDestroy();
@@ -101,11 +94,11 @@ namespace gamecontroller {
         // Clean manager
         manager->reset();
 
-
         // Reset spawn flags to trigger respawn
         initial_spawns_occurred = false;
     }
 
+    //Legacy; Spawned a set of towers based on a stable matching
     void GameController::spawnTowers(std::vector<std::pair<Point<float>, int>> tower_list) const {
         for (auto location : tower_list) {
             switch (location.second) {
@@ -563,7 +556,6 @@ namespace gamecontroller {
             stopGame();
             wave = 0;
             scenario = 0;
-            //TODO: clear towers/units
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
                 //Exit Game
@@ -887,6 +879,10 @@ namespace gamecontroller {
         }
     }
 
+    /*
+        Semi-Legacy; Still used albeit less often since our setup had 1 of each tower. Used to determine which tower to move when
+        multiple of the same type exist. Implementation of Munkres algorithm.
+    */
     Matching GameController::stableMatching(tower::TYPE type, std::vector<Point<float>>& detections) {
         std::vector<deque<int>> point_prefs;
         std::vector<std::vector<int>> tower_prefs;
@@ -1020,6 +1016,7 @@ namespace gamecontroller {
         return (0.5f + std::fmin(tower_efficiency / eff_factor, 0.5f)) * efficiencyModifier;
     }
     
+    //Get tower efficiency at a given position; this allows area-of-effect abilites to modify efficiency
     float GameController::towerEfficiency(glm::vec2 position){
         const float eff_thresh = 0.f;
         const float eff_factor = 50.f;
@@ -1041,6 +1038,7 @@ namespace gamecontroller {
         efficiencyModifier = mod;
     }
 
+    //Legacy; find AStar path between two points
     bool GameController::getPath(ivec2 start, ivec2 end, std::vector<vec2>& ret_path) {
         if (start.x < 0 || start.x >= manager->getRenderManager()->getWindowWidth() ||
             start.y < 0 || start.y >= manager->getRenderManager()->getWindowHeight() ||
@@ -1097,7 +1095,7 @@ namespace gamecontroller {
 
 
     ///Display Methods
-
+    //Retired; not deleted in case networked app asks for it
     sf::Time GameController::timeUntilNextWave() {
         //const float time_per_scenario = 20.f;
         //const int waves_per_scenario = 3;
@@ -1138,6 +1136,7 @@ namespace gamecontroller {
         return this->current_gamemode;
     }
 
+    //Increase app players wealth if they manage to destroy a mine
     void GameController::unitsMineDestroyed() {
         // For all players
         for (auto obj : manager->getObjects()) {

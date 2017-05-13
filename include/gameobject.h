@@ -7,6 +7,10 @@
 #include "smartpointers.h"
 #include "network/Network.h"
 
+/*
+    GameObject: Super-most class of towers/units/projectiles/spawns/tokens/mines
+*/
+
 
 // This is already defined in the CSTDLib
 //#define MAX(x,y) (x>y)?x:y

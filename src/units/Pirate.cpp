@@ -19,6 +19,7 @@ namespace unit {
         
     }
 
+    //Load animations and textures
     void Pirate::init(){
 
 		Unit::init();
@@ -34,16 +35,11 @@ namespace unit {
 		maxHealth = 3000;
 		unitSpeed = 0.35f+glm::linearRand(0.0f, 0.25f);
 
-       /* Path path;
-        path.push_back(vec2(100, 100));
-        path.push_back(vec2(500, 50));
-        path.push_back(vec2(250, 300));
-        path.push_back(vec2(1280, 720));
-        this->setPath(path, 10);*/
     }
 
     void Pirate::step() {
 
+        //Play death sounds and animations
 		if (dead) {
             if (dead != prev_dead) {
                 int rand_res = rand() % 2;
@@ -65,6 +61,7 @@ namespace unit {
         // Perform parent step
         Unit::step();
 
+        //Debug motion controlling code
         if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Right)) {
             if (!pressed) {
                 Path _path;
@@ -103,22 +100,16 @@ namespace unit {
         }*/
         
         auto& base = game_controller->getBase();
+        //Can't attack if frozen, provides animations/attack implementation
         if (!this->isUnderGlacialEffect()) {
             if (distanceTo(base->getPosition()) < 180 && cooldownGun-- == 0) {
-                //gameobject_ptr obj1 = game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<int>(getX(), getY()));
-                //smartpointers::static_pointer_cast<unit::Unit>(other);
                 smartpointers::slave_ptr<ProjectileLaser> obj1 = smartpointers::static_pointer_cast<ProjectileLaser>(game_controller->spawnObjectAt(gameobject::OBJECT_TYPE::PROJECTILE_LASER, Point<float>(getX(), getY())));
                 obj1->textureName = "musketShot";
                 obj1->setCollisionType(gameobject::TYPE::TOWER);
                 //std::cout << "unit fired\n";
                 auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
                 obj1->setVelocity(dir * 7.f);
-                //auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
-                //obj1->setPosition(getPosition() + sdir);
-                //obj2->setPosition(getPosition() - sdir);
 
-
-                //attack(base);
                 cooldownGun = 420;
             }
             if (distanceTo(base->getPosition()) < 100 && cooldown-- == 0) {
@@ -130,19 +121,14 @@ namespace unit {
                 //std::cout << "unit fired\n";
                 auto dir = glm::normalize((base->getPosition()) - obj1->getPosition());
                 obj1->setVelocity(dir * 1.f);
-                //auto sdir = glm::vec2(-dir.y, dir.x) * 10.f;
-                //obj1->setPosition(getPosition() + sdir);
-                //obj2->setPosition(getPosition() - sdir);
 
-
-                //attack(base);
                 cooldown = 80;
             }
         }
     }
 
+    //Draws the pirate unit
     void Pirate::render() {
-
 		Unit::render();
 
 		if (!dead) {
@@ -157,32 +143,6 @@ namespace unit {
 		else {
 			renderAnimation(deathTexture, 0.15f, 0.36f, 16, 1.0f, 0.0f);
 		}
-
-        /*render_manager = manager->getRenderManager();
-
-
-        float rotation = (float)(atan2(render_facing.y - getYr(), render_facing.x - getXr()) - M_PI / 2);
-		float animationSpeed = 0.3f;
-        animation_progress = animation_progress + animationSpeed;
-        int m = 1;
-        if (this->getAtDestination()) m = 0;
-
-       
-        texture->render(m*((int)animation_progress) % 12, (int) getXr(), (int) getYr(), 0.22f, 0.22f, rotation);*/
-
-        // ******************************************************************************************************//
-        // DRAW PATH
-        /*graphics::Texture* _red = manager->getResourceManager()->getTexture("red");
-        Path _path = this->getPath();
-        if (this->getFollowingPath() && _path.size() > 0) {
-            for (unsigned int n = 0; n < _path.size() - 1; n++) {
-                vec2 n1 = _path[n];
-                vec2 n2 = _path[n + 1];
-                graphics::RenderUtils::draw_line(n1.x, n1.y, n2.x, n2.y, 3, graphics::Colour(255,255,255,255));
-                _red->render(n2.x, n2.y, 0.10f, 0.10f, 0.0f);
-            }
-        }*/
-        // ******************************************************************************************************//
 
         if (this->glacial_effect_vis > 0.0f) {
             float factor = (1.0f - this->glacial_effect_vis);
@@ -223,31 +183,4 @@ namespace unit {
 		}
 	}
 
-    /*Point<float> BasicUnit::getMagneticVelocity()
-    {
-        return magneticVelocity;
-    }
-
-    void BasicUnit::setMagneticVelocity(const Point<float> v)
-    {
-        magneticVelocity = v;
-    }
-
-	// NETWORKING
-	void BasicUnit::writeNetworkUpdate(int event_id, Buffer &buffer) {
-		switch (event_id) {
-			case BasicUnitUpdateEvents::SEND_POSITION:
-				buffer << (int)getX();
-				buffer << (int)getY();
-                //std::cout << "[NETWORK::BasicUnit] Sending Position to clients" << std::endl;
-				break;
-
-			case BasicUnitUpdateEvents::SEND_HEALTH:
-				buffer << (unsigned int)100;
-				break;
-		}
-	}
-	void BasicUnit::recvNetworkInteraction(int event_id, Buffer &buffer) {
-		// TODO: BasicUnit interaction events
-	}*/
 }

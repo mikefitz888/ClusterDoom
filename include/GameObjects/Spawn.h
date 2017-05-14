@@ -6,6 +6,11 @@
 #include "../../include/unit.h"
 #include "../../include/gameobject.h"
 
+/*
+    Spawn: Controls how units spawn during a wave/scenario. Randomness is involved.
+    GameController triggers the spawning of new waves.
+*/
+
 class Spawn : public GameObject {
 
 protected:

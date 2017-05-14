@@ -6,6 +6,10 @@
 #include "../tower.h"
 #include "../unit.h"
 
+/*
+    Pirate: Overrides and implements behaviour/rendering and parameters for the Pirate unit.
+*/
+
 namespace unit
 {
     class Pirate : public Unit {

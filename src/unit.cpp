@@ -17,42 +17,19 @@ namespace unit {
     Unit::Unit(id_t id, TYPE unit_type, Manager* m) :
         GameObject(id, gameobject::TYPE::UNIT, unit_type, m) {}
 
+    //Load textures and animations
     void Unit::init() {
         render_manager = manager->getRenderManager();
 
-        /*texture = new sf::Texture();
-        if (!texture->loadFromFile("src/Resources/Textures/pawn.png")) {
-            std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
-        }*/
         texture = manager->getResourceManager()->getAnimatedTexture("robot_unit");
 		deathTexture = manager->getResourceManager()->getAnimatedTexture("robot_death");
 
-
-        /*red = new sf::Texture();
-        if (!red->loadFromFile("src/Resources/Textures/red.png")) {
-            std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
-        }*/
         red = manager->getResourceManager()->getTexture("red");
 
-        /*shader = render_manager->createShaderFromFile("src/Resources/Shaders/Render2D_vert.glsl", "src/Resources/Shaders/Render2D_frag.glsl");
-        if (shader == nullptr) {
-            std::cout << "[ERROR] FAILED TO LOAD SHADER (Tower)" << std::endl;
-        }
-        else {
-            std::cout << "Loaded shader" << std::endl;
-        }*/
         shader = manager->getResourceManager()->getShader("default");
 
         unit_shadow = manager->getResourceManager()->getTexture("unit_shadow");
         unit_ice = manager->getResourceManager()->getTexture("ice_effect_frozen");
-       // vbuff = new graphics::VertexBuffer();
-       // hpbar_buff = new graphics::VertexBuffer();
-
-      //  vbuff->addQuad(-100.0f, -56.2f, 100.0f, 56.2f);
-      //  hpbar_buff->addQuadRGBA(-32.0f, -2.0f, 32.0f, 2.0f, 1.0f, 0.0f, 0.0f, 1.0f);
-
-      //  vbuff->freeze();
-      //  hpbar_buff->freeze();
         
     }
 
@@ -66,26 +43,13 @@ namespace unit {
             render_manager->setActiveColour(graphics::Colour(77, 166, 255, 255));
         }
         glacial_effect_vis += (this->glacialEffectModifier - glacial_effect_vis)*0.035f;
-        /*render_manager->setActiveShader(shader);
-        render_manager->setTexture(texture);
 
-        render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
-        glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY(), 0.0));
-        render_manager->setWorldMatrix(transform);
-        vbuff->render();
-
-        render_manager->setTexture(red);
-        render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
-        transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY()-30.0f, 0.0f) );
-        transform = glm::scale(transform, glm::vec3(health/maxHealth, 1.0f, 1.0f));
-        render_manager->setWorldMatrix(transform);
-        hpbar_buff->render();*/
     }
     void Unit::renderGUI() {
         if (this->health_alpha > 0.0f) {
             //red->render(getXr() - 26, getYr() - 30, 0.4f*health / maxHealth, 0.07f, 0.0f, 0.0f);
 
-            // Base
+            // Render health-bar
             int alpha = (int)(this->health_alpha*255.0f);
             this->render_manager->setActiveColour(graphics::Colour(96, 96, 96, alpha));
             red->render((int) getXr() - 16, (int) getYr() - 30, 32, 5);
@@ -153,17 +117,9 @@ namespace unit {
 
         render_facing = getDestination();//target->getPosition();
 
-        //float distance = (target->getX() - getX())*(target->getX() - getX()) + (target->getY() - getY())*(target->getY() - getY());
-        /*ivec2 destination = getDestination();
-        int distance = DIST_SQ(getX(), destination.x, getY(), destination.y);*/
-        /*if (distanceTo(target->getPosition()) < 100 && cooldown-- == 0) {
-           attack(target);
-           cooldown = 40;
-        }*/
     }
 
     tower_ptr Unit::getNearestTower() const
-    //Not actually implemented correctly, just prototype
     {
         auto towers = manager->getTowers();
         int minDist = INT_MAX;
@@ -195,6 +151,7 @@ namespace unit {
         this->attacked(aggressor, 1);
     }
 
+    //Control attack interations, deliver gold on dealth
     void Unit::attacked(gameobject_ptr aggressor, float damage) {
         health -= damage / difficulty;
         if (damage > 0) {

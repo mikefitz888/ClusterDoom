@@ -21,6 +21,7 @@ void Spawn::step() {
 
         //Potential to get accurate game_time from game_controller
         int t = time;
+        //Steps through the spawn queue counting down the timer on any delayed-spawns, removes any that have spawned.
         if (running && manager->getTowers().size() >= 0 && manager->getUnits().size() < 1000) {
             spawn_queue.erase(
                 std::remove_if(spawn_queue.begin(), spawn_queue.end(), [this](const unit_spawn s) -> bool {

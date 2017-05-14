@@ -6,6 +6,10 @@
 #include "gameobject.h"
 #include "unit.h"
 
+/*
+    Tower: Implements the default behaviour/rendering and parameters for the towers, incl. the Base
+*/
+
 namespace tower {
     using graphics::IRenderable;
     using gameobject::GameObject;

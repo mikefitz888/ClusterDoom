@@ -14,19 +14,14 @@ namespace tower {
     Tower::Tower(id_t id, TYPE tower_type, Manager* m) :
         GameObject(id, gameobject::TYPE::TOWER, tower_type, m) {}
 
+    //Load textures/animations
     void Tower::init(){
         render_manager = manager->getRenderManager();
         game_controller = manager->getGameController();
 
         texture = manager->getResourceManager()->getTexture("blackTower");
-        /*if(!texture->loadFromFile("src/Resources/Textures/chess_piece_rook.png")){
-            std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
-        }*/
 
         red = manager->getResourceManager()->getTexture("red");
-        /*if (!red->loadFromFile("src/Resources/Textures/red.png")) {
-            std::cout << "[ERROR] Could not load texture! (Tower)" << std::endl;
-        }*/
 
 		rangeTexture = manager->getResourceManager()->getTexture("rangeCircle");
 
@@ -91,23 +86,6 @@ namespace tower {
 		if (isMoving()) {
 			rangeTexture->render((int)getXr(), (int)getYr(), 0.5f, 0.5f, 0.0f, 0.0f); //2*maxRange(200)/textureWidth(800) = 0.5f
 		}
-
-        /*render_manager->setActiveShader(shader);
-        render_manager->setTexture(texture);
-
-        render_manager->setActiveColour(Colour(0, 0, 255, 255));
-        glm::mat4 transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY(), 0.0));
-        render_manager->setWorldMatrix(transform);
-        vbuff->render();
-        render_manager->setActiveColour(Colour(255, 255, 255, 255));
-
-        render_manager->setTexture(red);
-        float hp = (float) health / 100;
-        transform = glm::translate(glm::mat4(), glm::vec3(getX(), getY()-50, 0.0));
-        transform = glm::scale(transform, glm::vec3(hp, 1.0f, 1.0f));
-        render_manager->setWorldMatrix(transform);
-        hpbar_buff->render();*/
-
     }
 
     void Tower::renderGUI(){
@@ -185,6 +163,7 @@ namespace tower {
 
     void Tower::attacked(gameobject_ptr aggressor, float damage){}
 
+    //Returns current tower efficiency
     float Tower::requestEfficiency() {
         return game_controller->towerEfficiency(getPosition());
     }

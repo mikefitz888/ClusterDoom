@@ -3,6 +3,10 @@
 
 #include "gamecore.h"
 
+/*
+    Acts as an interface with manager for the creation/destuction of units.
+*/
+
 namespace unitlogic {
     using unit::Unit;
     using manager::Manager;

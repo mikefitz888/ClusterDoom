@@ -6,6 +6,10 @@
 #include "../tower.h"
 #include "../unit.h"
 
+/*
+    Wizard: Controls the behaviour/rendering of the wizard unit.
+*/
+
 namespace unit
 {
     class Wizard : public Unit {

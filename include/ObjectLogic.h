@@ -2,7 +2,9 @@
 #define _OBJECT_LOGIC_H
 
 #include "gamecore.h"
-
+/*
+    ObjectLogic: Provides an interfaces with manager for creating/destroying objects.
+*/
 class ObjectLogic {
     std::vector<gameobject_ptr> game_objects;
     manager::Manager* manager;

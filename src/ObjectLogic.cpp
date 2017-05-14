@@ -9,6 +9,7 @@
 #include "../include/AttackerEffects.h"
 #include "../include/GameObjects/PlayerInstance.h"
 
+//Factory method for creating new objects
 GameObject* ObjectLogic::createObject(id_t key, gameobject::OBJECT_TYPE type) {
     switch (type) {
     case gameobject::OBJECT_TYPE::SPAWN:

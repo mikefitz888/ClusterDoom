@@ -13,6 +13,7 @@ namespace unitlogic
         return units;
     }
 
+    //Remove invalid ptrs from the cache
     void UnitLogic::clean() {
         units.erase(std::remove_if(units.begin(), units.end(), [](unit_ptr &x)
         {
@@ -24,6 +25,7 @@ namespace unitlogic
         return manager->createUnit(type, x, y);
     }
 
+    //Factory method for unit construction
     Unit* UnitLogic::createUnit(id_t key, unit::TYPE type) const {
         switch(type)
         {
@@ -40,6 +42,7 @@ namespace unitlogic
         }
     }
 
+    //Share slave_ptrs with the unit they correspond to, this is only for convenience with other features
     void UnitLogic::giveSlavePtr(unit_ptr unitptr) {
         //Look for free place in units pool
         for (auto unit = units.begin(); unit != units.end(); ++unit) {

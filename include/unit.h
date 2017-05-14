@@ -5,6 +5,11 @@
 #include "gameobject.h"
 #include "GameObjects\ResourceMine.h"
 
+/*
+    Unit: base class from which all units derive.
+    Provides default behaviour/rendering and parameters.
+*/
+
 namespace unit {
     enum TYPE : unsigned int {BASE=0, BASIC, WIZARD, PIRATE};
 

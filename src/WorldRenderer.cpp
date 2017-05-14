@@ -80,7 +80,7 @@ namespace worldrenderer {
             case gamecontroller::GameState::MAIN_MENU: {
                 // Render mode buttons
                 sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                mouse_pos.x = width - mouse_pos.x;
+                mouse_pos.x = (int) (width - mouse_pos.x);
 
                 bool hoverbtn1 = false;
                 bool hoverbtn2 = false;
@@ -95,13 +95,13 @@ namespace worldrenderer {
                 if (hoverbtn1) {
                     render_manager->setActiveColour(255, 255, 255, 128);
                 }
-                manager->getResourceManager()->getTexture("btn_defenders_vs_ai")->render(244 * sf, 577 * sf, sf, sf, 0.0f);
+                manager->getResourceManager()->getTexture("btn_defenders_vs_ai")->render((int) (244 * sf), (int) (577 * sf), sf, sf, 0.0f);
 
                 render_manager->setActiveColour(255, 255, 255, 255);
                 if (hoverbtn2) {
                     render_manager->setActiveColour(255, 255, 255, 128);
                 }
-                manager->getResourceManager()->getTexture("btn_defenders_vs_att")->render(1164 * sf, 577 * sf, sf, sf, 0.0f);
+                manager->getResourceManager()->getTexture("btn_defenders_vs_att")->render((int) (1164 * sf), (int)(577 * sf), sf, sf, 0.0f);
                 render_manager->setActiveColour(255, 255, 255, 255);
             } break;
 
@@ -109,21 +109,21 @@ namespace worldrenderer {
 
                 // Render Single player Lobby
                 menu_ui_bars->render((int)width / 2, (int)height / 2, (int)width, (int)height);
-                manager->getResourceManager()->getTexture("defenders_vs_ai")->render((731.0f/1920.0f)*width, (513.0f/1080.0f)*height, sf, sf, 0.0f);
-                manager->getResourceManager()->getTexture("ai_logo")->render((76.0f/1920.0f)*width, (678.0f/1080.0f)*height, sf, sf, 0.0f);
+                manager->getResourceManager()->getTexture("defenders_vs_ai")->render((int) ((731.0f/1920.0f)*width), (int) ((513.0f/1080.0f)*height), sf, sf, 0.0f);
+                manager->getResourceManager()->getTexture("ai_logo")->render((int) ((76.0f/1920.0f)*width), (int) ((678.0f/1080.0f)*height), sf, sf, 0.0f);
 
                 break;
             case gamecontroller::GameState::MENU_LOBBY_MP:
 
                 // Render Multiplayer lobby
                 menu_ui_bars->render((int)width / 2, (int)height / 2, (int)width, (int)height);
-                manager->getResourceManager()->getTexture("menu_attackers_v_defenders")->render((613.0f / 1920.0f)*width, (513.0f / 1080.0f)*height, sf, sf, 0.0f);
+                manager->getResourceManager()->getTexture("menu_attackers_v_defenders")->render((int) ((613.0f / 1920.0f)*width), (int) ((513.0f / 1080.0f)*height), sf, sf, 0.0f);
                 int num_players = manager->getNetworkManager()->getNumConnections();
                 float yy = 668.0f;
                 float xx = 91.0f;
                 for (int i = 0; i < num_players; i++) {
                     // Draw
-                    manager->getResourceManager()->getTexture("phone_logo")->render(xx*sf, yy*sf, sf, sf, 0.0f);
+                    manager->getResourceManager()->getTexture("phone_logo")->render((int) (xx*sf), (int) (yy*sf), sf, sf, 0.0f);
 
                     // Adjust position
                     yy += 106.0f;
@@ -138,9 +138,9 @@ namespace worldrenderer {
         // CV connection status
         if (game_state == gamecontroller::GameState::MENU_LOBBY_SP || game_state == gamecontroller::GameState::MENU_LOBBY_MP) {
             if (this->manager->getGameController()->getCVReady()) {
-                manager->getResourceManager()->getTexture("camera_connected")->render(1215.0f*sf, 784.0f*sf, sf, sf, 0.0f);
+                manager->getResourceManager()->getTexture("camera_connected")->render((int) (1215.0f*sf), (int) (784.0f*sf), sf, sf, 0.0f);
             } else {
-                manager->getResourceManager()->getTexture("camera_disconnected")->render(1215.0f*sf, 784.0f*sf, sf, sf, 0.0f);
+                manager->getResourceManager()->getTexture("camera_disconnected")->render((int) (1215.0f*sf), (int) (784.0f*sf), sf, sf, 0.0f);
             }
         }
         manager->getRenderManager()->setRenderFlipped(false);

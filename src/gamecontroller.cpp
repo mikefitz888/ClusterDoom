@@ -154,7 +154,7 @@ namespace gamecontroller {
     }
 
     bool GameController::step() {
-        srand(time(NULL));
+        srand((unsigned int) time(NULL));
        
         //In general, step() should be frame-based.
 
@@ -179,7 +179,7 @@ namespace gamecontroller {
                             std::cout << "ERROR! There should not be any towers existing at this point, before base has spawned." << std::endl;
                         }
 
-                        tower_ptr t = spawnTowerAt(manager->getRenderManager()->getWindowWidth() / 2, manager->getRenderManager()->getWindowHeight() / 2, tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
+                        tower_ptr t = spawnTowerAt((float) (manager->getRenderManager()->getWindowWidth() / 2), (float) (manager->getRenderManager()->getWindowHeight() / 2), tower::TYPE::BASE); /* !!!VERY IMPORTANT: DO NOT SPAWN ANY TOWERS BEFORE THIS LINE */
 
                         // Ensure spawn list is clear
                         spawn_points.clear();
@@ -314,7 +314,7 @@ namespace gamecontroller {
                             sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
                             if (mouse_pos.x >= 0 && mouse_pos.x <= manager->getRenderManager()->getWindowWidth() &&
                                 mouse_pos.y >= 0 && mouse_pos.y <= manager->getRenderManager()->getWindowHeight()) {
-                                spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, mouse_pos.x, mouse_pos.y);
+                                spawnObjectAt(gameobject::OBJECT_TYPE::RESOURCE_MINE, (float) mouse_pos.x, (float) mouse_pos.y);
                             }
                             spawned = true;
                         }
@@ -468,7 +468,7 @@ namespace gamecontroller {
                     float height = (float)this->manager->getRenderManager()->getWindowHeight();
                     float sf = width / 1920.0f;
                     sf::Vector2i mouse_pos = sf::Mouse::getPosition(*(manager->getRenderManager()->getWindow()));
-                    mouse_pos.x = width - mouse_pos.x;
+                    mouse_pos.x = (int) (width - mouse_pos.x);
 
                     // Btn presses
                     bool hoverbtn1 = false;
@@ -618,7 +618,7 @@ namespace gamecontroller {
     }
 
     // Returns a list of the units within range
-    std::vector<unit_ptr> GameController::getUnitsInRange(glm::vec2 position, int radius) {
+    std::vector<unit_ptr> GameController::getUnitsInRange(glm::vec2 position, double radius) {
         std::vector<unit_ptr> units_in_range;
         units_in_range.clear();
         for (unit_ptr unit : manager->getUnits()) {
@@ -630,7 +630,7 @@ namespace gamecontroller {
     }
 
     // Returns a list of the towers within range
-    std::vector<tower_ptr> GameController::getTowersInRange(glm::vec2 position, int radius) {
+    std::vector<tower_ptr> GameController::getTowersInRange(glm::vec2 position, double radius) {
         std::vector<tower_ptr> towers_in_range;
         towers_in_range.clear();
         for (tower_ptr tower : manager->getTowers()) {
@@ -808,7 +808,7 @@ namespace gamecontroller {
 
                         marker_type = glm::clamp(marker_type, 2, 5);
 
-                        cvList[marker_type].push_back(Point<float>(x, y));
+                        cvList[marker_type].push_back(Point<float>((float) x, (float) y));
                         //std::cout << "\tReceived Point (" << x << "," << y << "): " << marker_type << std::endl;
                     }
                     
@@ -1004,7 +1004,7 @@ namespace gamecontroller {
 
     void GameController::diminishEfficiency() {
         //Tower efficiency will drop towards 0.5
-        const float diminishing_factor = 0.10;
+        const float diminishing_factor = 0.10f;
         size_t tower_count = manager->getTowers().size();
         tower_efficiency -= 1.0f * diminishing_factor * tower_count;
         if (tower_efficiency < 0.f) tower_efficiency = 0.f;
@@ -1013,7 +1013,7 @@ namespace gamecontroller {
     float GameController::towerEfficiency() {
         const float eff_thresh = 0.f;
         const float eff_factor = 50.f;
-        return (0.5f + std::fmin(tower_efficiency / eff_factor, 0.5f)) * efficiencyModifier;
+        return (0.5f + std::fmin(tower_efficiency / eff_factor, 0.5f)) * (float) efficiencyModifier;
     }
     
     //Get tower efficiency at a given position; this allows area-of-effect abilites to modify efficiency
@@ -1030,10 +1030,10 @@ namespace gamecontroller {
                 }
             }
         }
-        return (0.5f + std::fmin(tower_efficiency / eff_factor, 0.5f)) * efficiencyModifier;
+        return (0.5f + std::fmin(tower_efficiency / eff_factor, 0.5f)) * (float) efficiencyModifier;
     }
 
-    void GameController::setEfficiencyModifier(float mod)
+    void GameController::setEfficiencyModifier(double mod)
     {
         efficiencyModifier = mod;
     }

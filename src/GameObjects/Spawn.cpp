@@ -58,7 +58,7 @@ void Spawn::startWave(int wave_number) {
 
 void Spawn::beginWave() {
     size_t offset = 0;
-    for (size_t number_of_spawn_attempts = 2 + ((float)scenario * (float)scenario/3.f); number_of_spawn_attempts > 0; number_of_spawn_attempts--) {
+    for (size_t number_of_spawn_attempts = 2 + (size_t) ((float)scenario * (float)scenario/3.f); number_of_spawn_attempts > 0; number_of_spawn_attempts--) {
         if (number_of_spawn_attempts > 2 && noSpawn(rng)) {
             continue;
         }

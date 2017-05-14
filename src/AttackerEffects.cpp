@@ -22,11 +22,11 @@ void EMPEffect::render()
 {
     float scale = MAX_RANGE / 150.0f;
     this->manager->getRenderManager()->setActiveColour(255, 255, 255, (int)glm::clamp(255.0f * fadeout*0.50f, 0.0f, 255.0f));
-    this->manager->getResourceManager()->getTexture("emp_outer")->render(getX(), getY(), scale, scale, 0.0f);
+    this->manager->getResourceManager()->getTexture("emp_outer")->render((int) getX(), (int) getY(), scale, scale, 0.0f);
 
     float rot = (float)ticks*0.01f;
-    this->manager->getResourceManager()->getTexture("emp_inner")->render(getX(), getY(), scale, scale, rot);
-    this->manager->getResourceManager()->getTexture("emp_inner")->render(getX(), getY(), scale, scale, -rot);
+    this->manager->getResourceManager()->getTexture("emp_inner")->render((int) getX(), (int) getY(), scale, scale, rot);
+    this->manager->getResourceManager()->getTexture("emp_inner")->render((int) getX(), (int) getY(), scale, scale, -rot);
    // this->manager->getResourceManager()->getTexture("emp_inner")->render(getX(), getY(), scale, scale, rot + glm::pi<float>()/2);
    // this->manager->getResourceManager()->getTexture("emp_inner")->render(getX(), getY(), scale, scale, -rot + glm::pi<float>() / 2);
     this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
@@ -91,7 +91,7 @@ void UnitHealEffect::render()
 {
     float scale = MAX_RANGE / 120.0f;
     this->manager->getRenderManager()->setActiveColour(255, 255, 255, (int)glm::clamp(255.0f * fadeout*0.5f, 0.0f, 255.0f));
-    this->manager->getResourceManager()->getTexture("healing_aura")->render(getX(), getY(), scale, scale, 0.0f);
+    this->manager->getResourceManager()->getTexture("healing_aura")->render((int) getX(), (int) getY(), scale, scale, 0.0f);
     this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
 }
 

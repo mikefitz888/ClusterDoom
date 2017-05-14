@@ -66,7 +66,7 @@ void ResourceMine::step() {
 }
 
 void ResourceMine::render() {  
-    this->mine_texture->render(this->getX(), this->getY()/*, scale, scale, 0.0f*/);
+    this->mine_texture->render((int) this->getX(), (int) this->getY()/*, scale, scale, 0.0f*/);
 }
 void ResourceMine::renderGUI(){
     float progress = ((float)current_resource / (float)starting_resource);
@@ -80,7 +80,7 @@ void ResourceMine::renderGUI(){
 
         float angle = point_direction(this->position, t->getPosition());
         this->mining_effect_texture->render((int)midpoint.x, (int)midpoint.y, dist + 2, this->mining_effect_texture->getSize().y, angle);
-        this->mining_effect_section_end->render(getX(), getY());
+        this->mining_effect_section_end->render((int) getX(), (int) getY());
 
         // Draw orbs
         //float distance_factor = dist / (float)max_tower_mine_range;
@@ -93,7 +93,7 @@ void ResourceMine::renderGUI(){
         for (int i = 0; i < MAX_ORBS; i++) {
             float factor = glm::mod((float)i/(float)MAX_ORBS - progress*7.5f/*distance_factor*/, 1.0f);
             glm::vec2 pos = position + to*factor;
-            this->mining_effect_section_end->render(pos.x, pos.y);
+            this->mining_effect_section_end->render((int) pos.x, (int) pos.y);
         }
     }
 
@@ -102,7 +102,7 @@ void ResourceMine::renderGUI(){
         float alpha = p->alpha;
         if (alpha > 0.0f) {
             this->manager->getRenderManager()->setActiveColour(graphics::Colour(0xAAAAAA, (int)(110.0f*alpha)));
-            this->sparkle_texture->render(p->draw_position.x, p->draw_position.y, p->target_scale, p->target_scale, p->angle);
+            this->sparkle_texture->render((int) p->draw_position.x, (int) p->draw_position.y, p->target_scale, p->target_scale, p->angle);
         }
     }
     this->manager->getRenderManager()->setActiveColour(graphics::Colour(0xFFFFFF, 255));

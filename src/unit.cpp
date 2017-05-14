@@ -42,7 +42,7 @@ namespace unit {
         {
             render_manager->setActiveColour(graphics::Colour(77, 166, 255, 255));
         }
-        glacial_effect_vis += (this->glacialEffectModifier - glacial_effect_vis)*0.035f;
+        glacial_effect_vis += ((float)this->glacialEffectModifier - glacial_effect_vis)*0.035f;
 
     }
     void Unit::renderGUI() {

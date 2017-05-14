@@ -70,15 +70,11 @@ void SpecialToken::step() {
 }
 
 void SpecialToken::renderGUI() {
-    this->tokenTexture->render(this->getX(), this->getY()/*, scale, scale, 0.0f*/);
+    this->tokenTexture->render((int) this->getX(), (int) this->getY());
 
-	RenderUtils::render_circular_health((int)getXr(), (int)getYr(), (int)cooldown, (int)maxCooldown,
-		//RenderUtils::colour_blend(
-		//    Colour(55, 55, 55, 255),
-		RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), (float)cooldown / maxCooldown),0.5f
-		//    1.0f-std::min((float)game_controller->availableWealth() / max_power, 1.0f)
-		//)
-	);
+    RenderUtils::render_circular_health((int)getXr(), (int)getYr(), (int)cooldown, (int)maxCooldown,
+        RenderUtils::colour_blend(Colour(0, 255, 0, 255), Colour(255, 0, 0, 255), (float)cooldown / maxCooldown),0.5f
+    );
 }
 
 void SpecialToken::render() {}

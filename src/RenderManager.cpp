@@ -14,10 +14,10 @@ namespace graphics {
         /// Load Textures
         //Temp
         rm->textureLoad("blackTower", "src/Resources/Textures/rookBlack.png")->setOriginCentre();
-		rm->textureLoad("blueTower", "src/Resources/Textures/rookBlue.png")->setOriginCentre();
-		rm->textureLoad("greenTower", "src/Resources/Textures/rookGreen.png")->setOriginCentre();
-		rm->textureLoad("redTower", "src/Resources/Textures/rookRed.png")->setOriginCentre();
-		rm->textureLoad("yellowTower", "src/Resources/Textures/rookYellow.png")->setOriginCentre();
+        rm->textureLoad("blueTower", "src/Resources/Textures/rookBlue.png")->setOriginCentre();
+        rm->textureLoad("greenTower", "src/Resources/Textures/rookGreen.png")->setOriginCentre();
+        rm->textureLoad("redTower", "src/Resources/Textures/rookRed.png")->setOriginCentre();
+        rm->textureLoad("yellowTower", "src/Resources/Textures/rookYellow.png")->setOriginCentre();
 
         rm->textureLoad("base_image", "src/Resources/Textures/base.png")->setOriginCentre();
 
@@ -26,18 +26,18 @@ namespace graphics {
 
         //Units
         rm->textureLoad("basic_unit", "src/Resources/Textures/pawn.png")->setOriginCentre();
-		//robot
+        //robot
         rm->animatedTextureLoad("robot_unit", "src/Resources/Textures/robotAnimation.png", true, 4, 3, 12)->setOriginCentre();
-		rm->animatedTextureLoad("robot_death", "src/Resources/Textures/robotDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
-		rm->animatedTextureLoad("robot_attack", "src/Resources/Textures/robotAttackAnimation.png", true, 4, 3, 12)->setOriginCentre();
-		//wizard
+        rm->animatedTextureLoad("robot_death", "src/Resources/Textures/robotDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
+        rm->animatedTextureLoad("robot_attack", "src/Resources/Textures/robotAttackAnimation.png", true, 4, 3, 12)->setOriginCentre();
+        //wizard
         rm->animatedTextureLoad("wizard_unit", "src/Resources/Textures/wizardAnimation.png", true, 4, 3, 12)->setOriginCentre();
-		rm->animatedTextureLoad("wizard_death", "src/Resources/Textures/wizardDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
-		rm->animatedTextureLoad("wizard_attack", "src/Resources/Textures/wizardAttackAnimation.png", true, 4, 4, 16)->setOriginCentre();
-		//pirate
-		rm->animatedTextureLoad("pirate_unit", "src/Resources/Textures/pirateAnimation.png", true, 4, 3, 12)->setOriginCentre();
-		rm->animatedTextureLoad("pirate_death", "src/Resources/Textures/pirateDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
-		rm->animatedTextureLoad("pirate_attack", "src/Resources/Textures/pirateAttackAnimation.png", true, 4, 4, 16)->setOriginCentre();
+        rm->animatedTextureLoad("wizard_death", "src/Resources/Textures/wizardDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
+        rm->animatedTextureLoad("wizard_attack", "src/Resources/Textures/wizardAttackAnimation.png", true, 4, 4, 16)->setOriginCentre();
+        //pirate
+        rm->animatedTextureLoad("pirate_unit", "src/Resources/Textures/pirateAnimation.png", true, 4, 3, 12)->setOriginCentre();
+        rm->animatedTextureLoad("pirate_death", "src/Resources/Textures/pirateDeathAnimation.png", true, 4, 4, 16)->setOriginCentre();
+        rm->animatedTextureLoad("pirate_attack", "src/Resources/Textures/pirateAttackAnimation.png", true, 4, 4, 16)->setOriginCentre();
 
         rm->textureLoad("unit_shadow", "src/Resources/Textures/unitShadow.png")->setOriginCentre();
 
@@ -45,7 +45,7 @@ namespace graphics {
         //UI Elements
         rm->textureLoad("health_bar_progress_mask", "src/Resources/Textures/UI/healthbar_mask.png")->setOriginCentre();
         rm->textureLoad("health_bar_diffuse_mask", "src/Resources/Textures/UI/healthbar_diffuse.png")->setOriginCentre();
-		rm->textureLoad("red", "src/Resources/Textures/red.png");
+        rm->textureLoad("red", "src/Resources/Textures/red.png");
         rm->textureLoad("white", "src/Resources/Textures/white.png");// ->setOriginCentre();
        
         //Game Screens
@@ -64,12 +64,12 @@ namespace graphics {
         rm->textureLoad("mining_beam_segment", "src/Resources/Textures/mining_beam.png")->setOriginCentre();
         rm->textureLoad("mining_beam_ball", "src/Resources/Textures/mining_beam_end.png")->setOriginCentre();
 
-		rm->textureLoad("redLaser", "src/Resources/Textures/redLaser.png")->setOriginCentre();
-		rm->textureLoad("blueLaser", "src/Resources/Textures/blueLaser.png")->setOriginCentre();
-		rm->textureLoad("musketShot", "src/Resources/Textures/musketShot.png")->setOriginCentre();
-		rm->textureLoad("meleeEffect", "src/Resources/Textures/meleeEffect.png")->setOriginCentre();
+        rm->textureLoad("redLaser", "src/Resources/Textures/redLaser.png")->setOriginCentre();
+        rm->textureLoad("blueLaser", "src/Resources/Textures/blueLaser.png")->setOriginCentre();
+        rm->textureLoad("musketShot", "src/Resources/Textures/musketShot.png")->setOriginCentre();
+        rm->textureLoad("meleeEffect", "src/Resources/Textures/meleeEffect.png")->setOriginCentre();
 
-		rm->textureLoad("rangeCircle", "src/Resources/Textures/rangeCircle.png")->setOriginCentre();
+        rm->textureLoad("rangeCircle", "src/Resources/Textures/rangeCircle.png")->setOriginCentre();
         rm->textureLoad("token_windy", "src/Resources/Textures/WindyToken.png")->setOriginCentre();
         rm->textureLoad("token_glacial", "src/Resources/Textures/GlacialToken.png")->setOriginCentre();
         rm->textureLoad("token_magnetic", "src/Resources/Textures/MagnetToken.png")->setOriginCentre();
@@ -164,7 +164,7 @@ namespace graphics {
         world_matrix = glm::mat4(1.0);
 
         // Create Camera
-        camera = new GCameraOrtho(1280.0f, 720.0f, this);
+        camera = new GCameraOrtho(1280, 720, this);
 
         // Load resources
         this->loadResources();
@@ -189,8 +189,6 @@ namespace graphics {
         ctx.majorVersion = 3;
         ctx.minorVersion = 1;
 #endif
-
-        fullscreen = true;
         if (fullscreen) {
             width = sf::VideoMode::getDesktopMode().width;
             height = sf::VideoMode::getDesktopMode().height;

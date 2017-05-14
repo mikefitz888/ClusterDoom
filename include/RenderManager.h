@@ -80,7 +80,6 @@ namespace graphics {
         void setWindowFullScreen(bool fullscreen);
         void setWindowTitle(const sf::String title) const;
         void setWindowSize(int width, int height);
-        void clear();
         int getWindowWidth() const;
         int getWindowHeight() const;
         bool render();
@@ -117,7 +116,7 @@ namespace graphics {
         Colour active_colour = Colour(255, 255, 255, 255);
         sf::Window *window = nullptr;
         sf::Shader *active_shader = nullptr;        /* Whilst shaders can be changed, it needs to be done through the RenderManager
-                                        so that binding textures/other graphics resources know which shader uniforms to modify */
+                                                       so that binding textures/other graphics resources know which shader uniforms to modify */
         IRenderable *render_parent = nullptr;        /* The top-most node in the composite rendering pattern (This should render any children in its own render method)*/
         Manager *manager;
 

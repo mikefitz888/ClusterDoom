@@ -101,7 +101,7 @@ void ProjectileBomb::render() {
     if (!this->exploded) {
         this->bomb_texture->render((int) getX(), (int) getY());
         int anim_alpha = (int)(255.0f*glm::clamp(glm::sin(animation_progress), 0.0f, 1.0f));
-        this->manager->getRenderManager()->setActiveColour(255, 128, 128, anim_alpha*0.7f);
+        this->manager->getRenderManager()->setActiveColour(255, 128, 128, (unsigned char) (anim_alpha*0.7f));
         this->bomb_white_texture->render((int) getX(), (int) getY());
         this->manager->getRenderManager()->setActiveColour(255, 255, 255, 255);
     } else {
@@ -159,8 +159,8 @@ void ProjectileLaser::step() {
 
     // Bounds check
     int x, y;
-    x = this->getX();
-    y = this->getY();
+    x = (int) this->getX();
+    y = (int) this->getY();
     if (x < 32 || y < 32 || x > manager->getGameController()->getScreenWidth() + 32 || y > manager->getGameController()->getScreenHeight() + 32) {
         destroySelf();
     }
@@ -168,7 +168,7 @@ void ProjectileLaser::step() {
 
 void ProjectileLaser::render() {
     float angle = point_direction(glm::vec2(0.0f, 0.0f), this->getVelocity());
-    this->manager->getResourceManager()->getTexture(textureName)->render(this->getX(), this->getY(), 
+    this->manager->getResourceManager()->getTexture(textureName)->render((int) this->getX(), (int) this->getY(), 
         0.9f*((float)collisions/(float)max_collisions), 
         0.9f*((float)collisions/(float)max_collisions), angle);
 };

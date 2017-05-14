@@ -146,8 +146,8 @@ namespace unit {
 
         if (this->glacial_effect_vis > 0.0f) {
             float factor = (1.0f - this->glacial_effect_vis);
-            render_manager->setActiveColour(graphics::Colour(255, 255, 255, 200 * factor));
-            unit_ice->render(getXr(), getYr(), 0.35f*factor, 0.35f*factor, 0.0f);
+            render_manager->setActiveColour(graphics::Colour(255, 255, 255, (unsigned char) (200 * factor)));
+            unit_ice->render((int) getXr(), (int) getYr(), 0.35f*factor, 0.35f*factor, 0.0f);
             render_manager->setActiveColour(graphics::Colour(255, 255, 255, 255));
         }
     }

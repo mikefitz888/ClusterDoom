@@ -144,7 +144,7 @@ void PlayerInstance::recvNetworkInteraction(int event_id, Buffer &buffer, networ
             // Spawn ability
             if (can_spawn) {
                 if (this->useCurrency(cost)) {
-                    manager->getGameController()->spawnObjectAt(ability_type, target_x, target_y);
+                    manager->getGameController()->spawnObjectAt(ability_type, (float) target_x, (float) target_y);
                 }
             }
 

@@ -40,10 +40,10 @@ void SpecialToken::init() {
 
 void SpecialToken::step() {
 
-	cooldown--;
-	if (cooldown <= 0) {
-		destroySelf();
-	}
+    cooldown--;
+    if (cooldown <= 0) {
+        destroySelf();
+    }
     // Find nearby special towers
     auto towers = this->manager->getGameController()->getTowersInRange(this->position, MAX_PICKUP_RANGE);
     for (auto tower : towers)

@@ -6,7 +6,16 @@
 
 namespace tower
 {
+    /*
+      This class represents every type of special tower.
+      The towers are distinguished by use of the decorator pattern,
+      realised in a functional fashion using function pointers.
 
+      However, to fix a bug where the effect would be wiped if
+      the tower was covered up and therefore removed from play,
+      the effect decorators are now static and the special tower
+      is singleton.
+    */
     class SpecialTowerMagnetEffect {
 
         // Visual variables
@@ -94,10 +103,13 @@ namespace tower
         void glacial(bool cancel);
         // Radius of effect
         static const double MAX_RANGE_GLACIAL;
+        // Slowdown for Robot
         static const double ROBOT_MODIFIER;
+        // Slowdown for Wizard
         static const double WIZARD_MODIFIER;
+        // Slowdown for Pirate
         static const double PIRATE_MODIFIER;
-        // Time before natural that
+        // Time before natural thaw
         static const unsigned int GLACIAL_TICKS;
 
         // WINDY EFFECTS

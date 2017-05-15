@@ -7,6 +7,7 @@
 
 namespace cvinterface {
 
+    /* This class encapsulates the parameters of a detected marker. */
     struct Marker
     {
         int x, y, marker_type;
@@ -17,6 +18,8 @@ namespace cvinterface {
             this->marker_type = marker_type;
         }
     };
+
+    typedef std::vector<cv::Point> Square;
 
     class CVInterface {
     private:
@@ -41,16 +44,20 @@ namespace cvinterface {
     public:
         void init();
         inline void stop() { running = false; }
+        // This method runs the new detection algorithm
         void step(std::vector<std::vector<cv::Point>>& squares);
         void release();
         // These are both essentially final! Consider them const!
         static int RED_THRESHOLD;
         static int NON_RED_THRESHOLD;
     private:
+        // DEPRECATED
         void findTowers();
         void findTowers2();
+        void findSquares(const cv::Mat& frame, std::vector<Square>& squares);
+        void decodeSquares(cv::Mat& frame, std::vector<Square>& squares, std::vector<Marker>& markers);
 
-        // Network stuff
+        // Network stuff (for sending the towers to the main server)
         void networkConnect();
         void networkSendTowerPositions();
     };

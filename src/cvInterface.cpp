@@ -12,8 +12,6 @@ namespace cvinterface {
     const double lengthError = 0.15; // 15%
     const int maxCloseness = 40;
 
-    typedef std::vector<cv::Point> Square;
-
 #define CALIB_TOPLEFT 0
 #define CALIB_TOPRIGHT 1
 #define CALIB_BOTTOMRIGHT 2
@@ -85,7 +83,7 @@ namespace cvinterface {
 
     // returns sequence of squares detected on the image.
     // the sequence is stored in the specified memory storage
-    void findSquares(const cv::Mat& frame, std::vector<Square>& squares)
+    void CVInterface::findSquares(const cv::Mat& frame, std::vector<Square>& squares)
     {
         squares.clear();
 
@@ -164,7 +162,7 @@ namespace cvinterface {
               + integral.at<int>(x1, y1)) / (size*size);
     }
 
-    void decodeSquares(cv::Mat& frame, std::vector<Square>& squares, std::vector<Marker>& markers)
+    void CVInterface::decodeSquares(cv::Mat& frame, std::vector<Square>& squares, std::vector<Marker>& markers)
     {
         markers.clear();
         // We know the four points of a square
@@ -303,7 +301,7 @@ namespace cvinterface {
         }
     }
 
-
+    /* FINAL ALGORITHM */
     void CVInterface::step(std::vector<Square>& squares)
     {
         visited.clear();
@@ -318,7 +316,8 @@ namespace cvinterface {
         if(current_calibration_point_id >= 4)
         {
             cvtColor(frame, frame, CV_BGR2GRAY);
-            cv::threshold(frame, frame, 15, 255, 0); //was 5
+            // Filter out all dark pixels, leaving only the LED light
+            cv::threshold(frame, frame, 15, 255, 0);
             for (size_t i = 0; i < (unsigned) frame.rows; i++) 
             {
                 for (size_t j = 0; j < (unsigned) frame.cols; j++) 
@@ -326,12 +325,16 @@ namespace cvinterface {
                     uint32_t x = 0;
                     uint32_t y = 0;
                     uint32_t num_points = 0;
+                    // Perform a breadth-first flood fill to fill in white blobs
                     flood.push(std::make_pair(i, j));
                     while (!flood.empty()) {
                         auto point = flood.front();
                         flood.pop();
+                        // Black pixels are not part of blobs 
+                        // (we prefer this to visited check on the outside, because array query is faster than set query)
                         if (frame.at<uint8_t>(point.first, point.second) > 0) 
                         {
+                            // If we've already seen this pixel, it must already be classified (PERFORMANCE OPTIMISATION)
                             if (visited.find(point) == visited.end()) 
                             {
                                 visited.emplace(point);
@@ -359,6 +362,7 @@ namespace cvinterface {
                             }
                         }
                     }
+                    // Filter the blobs to remove those that are too small or too big
                     if (num_points > MIN_BLOB && num_points < MAX_BLOB)
                     {
                         blobs.push_back(std::make_pair(y / num_points, x / num_points));
@@ -368,11 +372,13 @@ namespace cvinterface {
 
             const int MIN_DIST = 30;
             markers.clear();
+            // Cluster blobs, recalculating centre point each time
             for (auto& blob : blobs) 
             {
                 bool merged = false;
                 for (auto& marker : markers) 
                 {
+                    // If they cluster, then merge it into the marker we are dealing with
                     if (std::hypot(marker.x - (int)blob.first, marker.y - (int)blob.second) < MIN_DIST) 
                     {
                         marker.x = (marker.x * marker.marker_type + blob.first) / (marker.marker_type + 1);
@@ -382,6 +388,7 @@ namespace cvinterface {
                         break;
                     }
                 }
+                // Otherwise we need to add this as a new marker
                 if (!merged) markers.push_back(Marker(blob.first, blob.second, 1));
             }
 

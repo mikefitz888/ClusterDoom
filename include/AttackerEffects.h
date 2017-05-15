@@ -4,6 +4,9 @@
 #include "gamecore.h"
 #include "gameobject.h"
 
+// This class represents the EMP Attacker Effect, the effect is
+// performed by the game controller, this class' step just ensures
+// the effect dies after the allotted time
 class EMPEffect : public GameObject
 {
     const static unsigned int DURATION;
@@ -19,6 +22,9 @@ public:
     virtual void step() override;
 };
 
+// This class represents the Disruption Effect.
+// Its step sets a flag in game controller if the effect
+// is active, and disables it upon effect timeout.
 class DisruptionEffect : public GameObject
 {
     const static double EFFICIENCY_MODIFIER;
@@ -34,6 +40,9 @@ public:
     virtual void step() override;
 };
 
+// This class represents the Unit Heal Attacker Effect
+// Its step method will find all units in range and heal
+// them by the amount in the HEAL_STRENGTH variable
 class UnitHealEffect : public GameObject
 {
     const static double MAX_RANGE;

@@ -5,6 +5,28 @@
 #include "../../include/gameobject.h"
 #include "../../include/smartpointers.h"
 
+/*
+    Resource Mine
+    -------------
+
+    The resource mine is a game object that will continuously spawn throughout a round. The mines can be collected by both units and towers.
+    When a tower collects a mine, this will boost the efficiency of all towers (implemented in GameController).
+        - Note: In this implementation, the Mine itself determines whether a tower is mining it, rather than having this check in the towers.
+
+    An interface to allow anything else to claim resource is also provided. The takeResource(..) function can be called by anything to reduce
+    the amount of available resource. This is used in practise by units. The function returns the amount of resource gathered.
+        - Note: IF something requests to take more resource than is available, it will take all the remaining resource and the
+                return value will correspond to that amount.
+
+    Constant properties:
+        - The properties of the mine can be modified in this header. This includes the range of potential resource value offered by a mine, and
+          the distance at which a tower can gather/rate of gather.
+
+
+
+
+*/
+
 class ResourceMine : public GameObject {
 
 private:

@@ -1,6 +1,40 @@
 #ifndef VERTEX_BUFFER_H
 #define VERTEX_BUFFER_H
 
+/*
+    Vertex Buffer
+    -------------
+
+    This class is responsible for both maintaining the CPU-side data and openGL instance for a collection of triangles.
+    The vertex buffer class will allow the writing of vertices:
+        - Vertices contain a few pieces of information:
+            x,y,z,w (positions and re-scaling/normalization component w)
+            r,g,b,a (per-vertex colours and alpha)
+            u,v (per-vertex texture coordinates)
+            normal x,y,z (per-vertex normals)
+
+    - The vertex buffer class offers methods for generating geometry:
+            void addVertex(Vertex v);
+            void addVertex(float x, float y, float z, float r, float g, float b, float a, float u, float v, float nx, float ny, float nz);
+            void addFloor(float x1, float y1, float x2, float y2, float z);
+            void addQuad(float x1, float y1, float x2, float y2);
+            void addQuadRGBA(float x1, float y1, float x2, float y2, float r, float g, float b, float a);
+            void addQuadExt(float x1, float y1, float x2, float y2, float tx1, float ty1, float tx2, float ty2);
+
+    - Methods for debugging:
+            void renderImmediate() const;
+
+    - Methods for sending finalized static buffer to the gpu:
+            void freeze();
+
+    - Methods for controlling GPU render state. 
+            void bindBuffers() const;       -- Binds the buffer to the active openGL vertex buffer object. 
+            void unbindBuffers();
+            void enableAttributes();        -- Enables vertex attributes. This is used internally in openGL to define the vertex format and information (as described above)
+            void disableAttributes();
+            void render();                  -- Binds vertex buffer and sends a draw call to OpenGL.  (Can only be called once freeze() has been called).
+*/
+
 #include "gamecore.h"
 
 namespace graphics {

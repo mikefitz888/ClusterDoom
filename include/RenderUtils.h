@@ -2,6 +2,13 @@
 #define _RENDER_UTILS_H
 #include "RenderManager.h"
 
+/*
+    RenderUtils
+    -----------
+
+    Class for a collection of general-purpose rendering utility functions that can be re-used by multiple components of the game.
+*/
+
 namespace graphics {
 
 	class RenderUtils {

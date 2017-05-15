@@ -1,6 +1,19 @@
 #ifndef _AUDIO_MANAGER_H
 #define _AUDIO_MANAGER_H
 
+/*
+    AUDIO MANAGER
+    -------------
+
+    The audio manager controls the playing of sounds by maintaining a list of live sound instances.
+    - A sound instance is a currently playing sound effect.
+
+    The audio manager ensures that no memory is leaked by having other components of the game create
+    sound instances. All instances for sound should be instantiated by calling the playSound method.
+
+
+*/
+
 #include "gamecore.h"
 
 class AudioManager {

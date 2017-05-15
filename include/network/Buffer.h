@@ -3,6 +3,26 @@
 
 #include "../gamecore.h"
 
+/*
+    Buffer
+    ---------------
+
+    A generic class designed to allow easy reading and writing of data. This is created as a system for handling packets and network data.
+    The buffer will automatically resize if it overflows on writing.
+
+    The buffer  works by allocating a block of memory, which is maintained by a writing head. Any atomic data (Fixed sized structs, literal types etc) can be written 
+    to a buffer, along with null-terminated strings.
+
+    This buffer is then passed into the packet functions, using the current writing position to dictate size.
+
+    The writing/reading head is shared for both modes and can be moved using:
+    - seek(position) : Jump to a specific byte location in the buffer
+    - tell() : Returns the current byte reading location in the buffer.
+
+
+
+*/
+
 class Buffer {
 private:
     int   max_size = 1024;
